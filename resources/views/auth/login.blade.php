@@ -1,19 +1,11 @@
 @extends('layouts.authentication.master')
-
+@section('title', 'Login')
 @section('content')
 <div class="card">
     <div class="card-body">
-        <!-- Logo -->
-        <div class="app-brand justify-content-center">
-            <a href="{{ route('home') }}" class="app-brand-link gap-2">
-                <span class="app-brand-logo demo">
-                    <img src="{{asset('assets/img/jgu.png')}}" width="150">
-                </span>
-            </a>
-        </div>
         <!-- /Logo -->
-        <h4 class="mb-2">Beban Kerja Dosen JGU</h4>
-        <p class="mb-4">Selamat datang pada Sistem Beban Kerja Dosen JGU</p>
+        <p class="mb-2 text-center">Selamat datang pada Sistem<br></p>
+        <h5 class="mb-4 text-center">URL Shortener & QRCode Generator</h5>
         @error('msg')
         <b class="text-danger m-0">{{ $message }}</b>
         @enderror
@@ -85,7 +77,7 @@
 @endsection
 
 @php
-$login_name = "JGU Shortener";
+$login_name = "URL Shortener and QRCode Generator";
 $api_key = Crypt::encrypt("JGU".gmdate('Y/m/d'));
 Session::put('klas2_api_key', $api_key);
 $callback_url = route('sso_klas2');

@@ -13,7 +13,7 @@
  -->
 <!-- beautify ignore:start -->
 <html
-  lang="en"
+  lang="{{ str_replace('_', '-', app()->getLocale()) }}"
   class="light-style customizer-hide"
   dir="ltr"
   data-theme="theme-default"
@@ -21,14 +21,13 @@
   data-template="vertical-menu-template-free"
 >
   <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ config('app.name') }} - @yield('title')</title>
-
+    <title>@yield('title') | {{ config('app.name') }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="" />
 
     <!-- Favicon -->
@@ -68,6 +67,14 @@
     <div class="container-xxl">
       <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner">
+        <!-- Logo -->
+        <div class="app-brand justify-content-center mb-3">
+            <a href="{{ route('index') }}" class="app-brand-link gap-2">
+                <span class="app-brand-logo demo">
+                    <img src="{{asset('assets/img/jgu.png')}}" width="150">
+                </span>
+            </a>
+        </div>
           <!-- Register -->
           @yield('content')
           <!-- /Register -->

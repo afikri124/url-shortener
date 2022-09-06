@@ -36,14 +36,10 @@ class GoogleController extends Controller
             return redirect()->route('login')->withErrors(['msg' => $e->getMessage() ]);
         }
         try {
-     
             $user = Socialite::driver('google')->user();
-      
             $finduser = User::where('google_id', $user->id)->first();
-      
             if($finduser){
                 Auth::loginUsingId($finduser->id);
-                Auth::user()->user_avatar = $user->avatar;
                 return redirect()->route('home');
             }else{
                 $findemail = User::where('email', $user->email)->first();

@@ -15,7 +15,7 @@ class UserRole extends Model
         'user_id', 'role_id',
     ];
     public static $role_attach_roles = [
-        'roles' => 'required|array|min:1|exists:roles,id'
+        'roles' => 'required|array|min:1|exists:roles'
     ];
 
     public function user(){
@@ -23,6 +23,6 @@ class UserRole extends Model
     }
 
     public function role(){
-        return $this->hasOne('App\Models\Role', 'id', 'user_id');
+        return $this->hasOne('App\Models\Role', 'id', 'role_id');
     }
 }

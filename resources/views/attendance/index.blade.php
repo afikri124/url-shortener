@@ -83,10 +83,10 @@
                         @enderror
                     </form>
                     <div class="mb-3 text-center">
-                        <a class="btn btn-danger w-100" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        <button class="btn btn-danger w-100" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                             <i class="bx bx-x-circle me-2"></i>Keluar
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>

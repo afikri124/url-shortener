@@ -29,7 +29,7 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function attendance(Request $request)
+    public function attendance($idd, Request $request)
     {
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
@@ -50,27 +50,23 @@ class HomeController extends Controller
                 'location' => $request->location,
                 'created_at' => Carbon::now()
             ]);
-            return redirect()->route('attendance')->with('msg','Absensi berhasil!');
+            return redirect()->route('attendance', ['id' => $idd])->with('msg','Absensi berhasil!');
         }
-        return view('attendance.index');
+        $location = $idd;
+        return view('attendance.index', compact('location'));
     }
 
     public function sso_klas2(Request $request)
     {
         try {
             if(Session::get('klas2_api_key') != $request->api_key){
-                return redirect()->route('login')->withErrors(['msg' => 'API key expired, please try again!']);
+                return redirect()->route('login')->withErrors(['msg' => 'Token API kedaluwarsa, silakan ulangi lagi!']);
             }
             Session::put('klas2_api_key', null);
             if($request->token == md5($request->api_key.$request->id) && "S.JGU".gmdate('Y/m/d') == Crypt::decrypt($request->api_key)){
                 $user = User::where('username', $request->id)->first();
                 if ($user != null) { //login
                     Auth::loginUsingId($user->id);
-                    if(Auth::user()->password == null || Auth::user()->email == null){
-                        return redirect()->route('update_account');
-                    } else {
-                        return redirect()->route('home');
-                    }
                 } else { //register
                     $user = User::where('email',$request->email)->first();
                     if($request->email == null){
@@ -82,7 +78,7 @@ class HomeController extends Controller
                             $request->email = null;
                         }
                         $new_user=User::insert([
-                                'name' => $request->name,
+                                'name' => strtoupper($request->name),
                                 'email' => $request->email,
                                 'username' => $request->id,
                                 'password'=> Hash::make($request->id),
@@ -92,9 +88,7 @@ class HomeController extends Controller
                         
                         if($new_user){
                             $user = User::where('username', $request->id)->first();
-                            // if($request->dept_id == "ACAD"){
-                                $user->roles()->attach(Role::where('id', 'ST')->first());
-                            // }
+                            $user->roles()->attach(Role::where('id', 'ST')->first());
                         }  
                     } else {
                         $old_user = $user->update([
@@ -106,22 +100,22 @@ class HomeController extends Controller
                         
                         if($old_user){
                             $user = User::where('username', $request->id)->first();
-                            if(
-                                // $request->dept_id == "ACAD" && 
-                                !$user->hasRole('ST')){
+                            if(!$user->hasRole('ST')){
                                 $user->roles()->attach(Role::where('id', 'ST')->first());
                             }
                         }  
                     }
                     Auth::loginUsingId($user->id);
-                    if(Auth::user()->username == null){
-                        return redirect()->route('update_account');
-                    } else {
-                        return redirect()->route('my_profile');
-                    }
+                }
+                if( session()->has('url.intended')){
+                    $link = session('url.intended');
+                    session(['url.intended' => null]);
+                    return redirect($link);
+                } else {
+                    return redirect()->route('home');
                 }
             } else {
-                abort(403, "Cannot access to restricted page!");
+                abort(403, "Tidak dapat mengakses halaman terbatas!");
             }
         } catch (\Exception $e) {
             $msg = $e->getMessage();

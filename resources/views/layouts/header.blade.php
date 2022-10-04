@@ -27,43 +27,6 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item" href="{{ route('user.profil') }}">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar avatar-online">
-                                        <img src="{{ Auth::user()->image() }}" 
-                                            class="w-40 h-40 rounded-circle" style="object-fit: cover;">
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <span class="fw-semibold d-block">{{ Auth::user()->nama }}</span>
-                                    <small class="text-muted">{{ Auth::user()->email }}</small>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <div class="dropdown-divider"></div>
-                    </li>
-                    <li class="">
-                        <a class="dropdown-item {{ Route::currentRouteName()=='user.profil' ? 'active' : '' }}" href="{{ route('user.profil') }}">
-                            <i class="bx bx-user me-2"></i>
-                            <span class="align-middle">Profil Saya</span>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="dropdown-item {{ Route::currentRouteName()=='user.pengaturan' ? 'active' : '' }}" href="{{ route('user.pengaturan') }}">
-                            <i class="bx bx-cog  me-2"></i>
-                            <span class="align-middle">Pengaturan Profil</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" target="_blank" href="https://helpdesk.jgu.ac.id/">
-                            <i class="bx bx-support me-2"></i>
-                            <span class="align-middle">Bantuan</span>
-                        </a>
-                    </li>
-                    <li>
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>

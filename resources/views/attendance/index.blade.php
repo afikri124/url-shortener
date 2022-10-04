@@ -40,9 +40,7 @@
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                                 name="email" @if(Auth::user()->email != null) readonly @endif
-                                value="{{ (old('email') == null ? 
-                                    ( strstr(Auth::user()->email, Auth::user()->username) == false ? Auth::user()->email : '') 
-                                    : old('email')) }}"
+                                value="{{ (old('email') == null ? Auth::user()->email : old('email')) }}"
                                 placeholder="Masukkan Email"  />
                             @error('email')
                             <span class="invalid-feedback" role="alert">
@@ -54,7 +52,7 @@
                         <div class="mb-3">
                             <label for="user" class="form-label">Username / NIK / Matrix</label>
                             <input type="username" class="form-control @error('username') is-invalid @enderror"
-                                id="user" name="username" value="{{ Auth::user()->username  }}"
+                                id="user" name="username" value="{{ (old('username') == null ? Auth::user()->username : old('username')) }}"
                                 placeholder="Masukkan Username"  @if(Auth::user()->username != null) readonly @endif />
                             @error('username')
                             <span class="invalid-feedback" role="alert">
@@ -66,8 +64,8 @@
                         <div class="mb-3">
                             <label for="user" class="form-label">Lokasi</label>
                             <input type="location" class="form-control @error('location') is-invalid @enderror"
-                                id="user" name="location" value="{{ old('location')  }}"
-                                placeholder="Masukkan Lokasi"/>
+                                id="user" name="location" value="{{ (old('location') == null ? $location : old('location')) }}"
+                                placeholder="Masukkan Lokasi" @if($location != null) readonly @endif/>
                             @error('location')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -76,15 +74,16 @@
                         </div>
                         <hr>
                         <div class="mb-3 text-center">
-                            <button class="btn btn-primary  w-100" type="submit" name="attendance"><i
-                                    class="bx bx-log-in-circle me-2"></i>Absen Sekarang</button>
+                            <button class="btn btn-primary w-100" type="submit" name="attendance"
+                            @if(session('msg')) disabled @endif
+                            ><i class="bx bx-log-in-circle me-2"></i>Absen Sekarang</button>
                         </div>
                         @error('msg')
                         <b class="text-danger text-center m-0">{!! $message !!}</b>
                         @enderror
                     </form>
                     <div class="mb-3 text-center">
-                        <a class="btn btn-light w-100" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        <a class="btn btn-danger w-100" href="{{ route('logout') }}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                             <i class="bx bx-x-circle me-2"></i>Keluar
                         </a>

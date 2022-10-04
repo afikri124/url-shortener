@@ -19,9 +19,9 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 
-Route::any('/home', [App\Http\Controllers\HomeController::class, 'attendance'])->name('home');
+Route::any('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['auth']);
 
-Route::any('/attendance', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
+Route::any('/attendance/{id}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
 
 
 Route::get('/login/sso_klas2/', [App\Http\Controllers\HomeController::class, 'sso_klas2'])->name('sso_klas2');

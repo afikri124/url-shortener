@@ -7,9 +7,11 @@ use Socialite;
 use Auth;
 use Exception;
 use App\Models\User;
+use App\Models\Role;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class GoogleController extends Controller
 {
@@ -41,7 +43,6 @@ class GoogleController extends Controller
             $finduser = User::where('google_id', $user->id)->first();
             if($finduser){
                 Auth::loginUsingId($finduser->id);
-                return redirect()->route('home');
             }else{
                 $findemail = User::where('email', $user->email)->first();
                 if($findemail){
@@ -52,7 +53,6 @@ class GoogleController extends Controller
                     if($update_user){
                         Auth::loginUsingId($finduser->id);
                         Auth::user()->user_avatar = $user->avatar;
-                        return redirect()->route('home');
                     } else {
                         abort(403, "Cannot access to restricted page!");
                     }
@@ -60,20 +60,34 @@ class GoogleController extends Controller
                     $email = explode("@",$user->email);
                     if($email[1] == "jgu.ac.id" || $email[1] == "student.jgu.ac.id" ){
                         $data=User::create([
-                            'name' => $user->name,
+                            'name' => strtoupper($user->name),
                             'email' => $user->email,
                             'username' => null,
                             'password'=> Hash::make($user->email),
                             'email_verified_at' => Carbon::now(),
                             'created_at' => Carbon::now()
                         ]);
+                        if($data){
+                            $user = User::where('id', $data->id)->first();
+                            if($email[1] == "student.jgu.ac.id"){
+                                $user->roles()->attach(Role::where('id', 'ST')->first()); //Staff
+                            } else {
+                                $user->roles()->attach(Role::where('id', 'SD')->first()); //Student
+                            }
+                        }  
                         Auth::loginUsingId($data->id);
-                        return redirect()->route('home');
                     } else {
                         $msg = "Maaf, $user->email tidak terdaftar.<br>Silahkan login menggunakan email resmi JGU!";
                         return redirect()->route('login')->withErrors(['msg' => $msg]);
                     }
                 }
+            }
+            if( session()->has('url.intended')){
+                $link = session('url.intended');
+                session(['url.intended' => null]);
+                return redirect($link);
+            } else {
+                return redirect()->route('home');
             }
         } catch (Exception $e) {
             return redirect()->route('login')->withErrors(['msg' => 'Sesi Kedaluwarsa, silahkan ulangi lagi!']);

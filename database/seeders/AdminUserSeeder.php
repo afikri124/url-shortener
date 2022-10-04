@@ -17,7 +17,7 @@ class AdminUserSeeder extends Seeder
         User::create([
             'name' => 'admin',
             'username' => 'admin',
-            'email' => 'admin@jgu.ac.id',
+            'email' => 'no-reply@jgu.ac.id',
             'password' => bcrypt('adminadmin'),
         ]);
     }

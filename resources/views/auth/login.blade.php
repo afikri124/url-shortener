@@ -15,7 +15,7 @@
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <h4 class="mb-2 text-center">s.jgu.ac.id</h4>
+                    <h4 class="mb-2 text-center">Login s.jgu.ac.id</h4>
                     <!-- <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="mb-3">
@@ -100,6 +100,11 @@
 @endsection
 
 @php
+
+if(!session()->has('url.intended'))
+{
+    session(['url.intended' => url()->previous()]);
+}
 $login_name = "S.JGU";
 $api_key = Crypt::encrypt("S.JGU".gmdate('Y/m/d'));
 Session::put('klas2_api_key', $api_key);

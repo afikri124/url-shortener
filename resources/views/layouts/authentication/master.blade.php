@@ -1,17 +1,4 @@
 <!DOCTYPE html>
-
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
-
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-
-=========================================================
- -->
-<!-- beautify ignore:start -->
 <html
   lang="{{ str_replace('_', '-', app()->getLocale()) }}"
   class="light-style customizer-hide"
@@ -21,13 +8,15 @@
   data-template="vertical-menu-template-free"
 >
   <head>
-    
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
 
-    <title>@yield('title') | {{ config('app.name') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title') - {{ config('app.name') }}</title>
+
     <meta name="description" content="" />
 
     <!-- Favicon -->
@@ -63,25 +52,7 @@
 
   <body>
     <!-- Content -->
-
-    <div class="container-xxl">
-      <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner">
-        <!-- Logo -->
-        <div class="app-brand justify-content-center mb-3">
-            <a href="{{ route('index') }}" class="app-brand-link gap-2">
-                <span class="app-brand-logo demo">
-                    <img src="{{asset('assets/img/jgu.png')}}" width="150">
-                </span>
-            </a>
-        </div>
-          <!-- Register -->
-          @yield('content')
-          <!-- /Register -->
-        </div>
-      </div>
-    </div>
-
+    @yield('content')
     <!-- / Content -->
 
     <!-- Core JS -->

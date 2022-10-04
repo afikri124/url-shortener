@@ -17,9 +17,13 @@ Route::get('/', function () {
     return view('welcome');
 })->name('index');
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::any('/home', [App\Http\Controllers\HomeController::class, 'attendance'])->name('home');
+
+Route::any('/attendance', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
+
+
 Route::get('/login/sso_klas2/', [App\Http\Controllers\HomeController::class, 'sso_klas2'])->name('sso_klas2');
 Route::get('/login/google', [App\Http\Controllers\GoogleController::class, 'redirectToGoogle']);
 Route::get('/login/google/callback', [App\Http\Controllers\GoogleController::class, 'handleCallback']);

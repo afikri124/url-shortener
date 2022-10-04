@@ -9,6 +9,7 @@ use Exception;
 use App\Models\User;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Support\Facades\Hash;
 
 class GoogleController extends Controller
 {
@@ -56,14 +57,26 @@ class GoogleController extends Controller
                         abort(403, "Cannot access to restricted page!");
                     }
                 } else {
-                    // echo "User tidak terdaftar";
-                    $img = "<img style='max-width: 100px;border-radius: 50%;' src='$user->avatar'>";
-                    $msg = "$img<br><br>Sorry, $user->name ($user->email)<br>is not registered.<br>Please contact the administrator!";
-                    return view('user.error', compact('msg'));
+                    $email = explode("@",$user->email);
+                    if($email[1] == "jgu.ac.id" || $email[1] == "student.jgu.ac.id" ){
+                        $data=User::create([
+                            'name' => $user->name,
+                            'email' => $user->email,
+                            'username' => null,
+                            'password'=> Hash::make($user->email),
+                            'email_verified_at' => Carbon::now(),
+                            'created_at' => Carbon::now()
+                        ]);
+                        Auth::loginUsingId($data->id);
+                        return redirect()->route('home');
+                    } else {
+                        $msg = "Maaf, $user->email tidak terdaftar.<br>Silahkan login menggunakan email resmi JGU!";
+                        return redirect()->route('login')->withErrors(['msg' => $msg]);
+                    }
                 }
             }
         } catch (Exception $e) {
-            return redirect()->route('login')->withErrors(['msg' => 'Session ended, please try again!']);
+            return redirect()->route('login')->withErrors(['msg' => 'Sesi Kedaluwarsa, silahkan ulangi lagi!']);
         }
     }
 }

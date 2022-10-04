@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Attendance;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
@@ -28,6 +29,32 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function attendance(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $this->validate($request, [ 
+                'email'=> ['required'],
+                'username' => ['required'],
+                'location' => ['required'],
+            ]);
+
+            if(Auth::user()->username == null){
+                User::where('id', Auth::user()->id)->update([
+                    'username'=> $request->username,
+                    'updated_at' => Carbon::now()
+                ]);
+            }
+
+            $data = Attendance::create([
+                'username' => $request->username,
+                'location' => $request->location,
+                'created_at' => Carbon::now()
+            ]);
+            return redirect()->route('attendance')->with('msg','Absensi berhasil!');
+        }
+        return view('attendance.index');
+    }
+
     public function sso_klas2(Request $request)
     {
         try {
@@ -35,7 +62,7 @@ class HomeController extends Controller
                 return redirect()->route('login')->withErrors(['msg' => 'API key expired, please try again!']);
             }
             Session::put('klas2_api_key', null);
-            if($request->token == md5($request->api_key.$request->id) && "JGU".gmdate('Y/m/d') == Crypt::decrypt($request->api_key)){
+            if($request->token == md5($request->api_key.$request->id) && "S.JGU".gmdate('Y/m/d') == Crypt::decrypt($request->api_key)){
                 $user = User::where('username', $request->id)->first();
                 if ($user != null) { //login
                     Auth::loginUsingId($user->id);

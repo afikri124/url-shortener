@@ -15,7 +15,7 @@
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <h4 class="mb-2 text-center">Login s.jgu.ac.id</h4>
+                    <!-- <h4 class="mb-2 text-center">Login</h4> -->
                     <!-- <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="mb-3">
@@ -74,7 +74,7 @@
                             <br><span class="text-danger text-center">{!! $message !!}</span>
                             @enderror
                         </div>
-                        <div class="col-lg-6 col-sm-12 mb-1">
+                        <div class="col-6 mb-1">
                             <div class="btn-showcase">
                                 <button class="btn btn-light btn-block w-100" onclick="Klas2Login()">
                                     <img style="max-height: 20px;" src="{{asset('assets/img/favicon.png')}}">
@@ -82,7 +82,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-sm-12 mb-1">
+                        <div class="col-6 mb-1">
                             <div class="btn-showcase">
                                 <a class="btn btn-light btn-block w-100" href="{{ url('login/google') }}">
                                     <img style="max-height: 20px;"
@@ -103,8 +103,11 @@
 
 if(!session()->has('url.intended'))
 {
-    session(['url.intended' => url()->previous()]);
+    if(url()->previous() != route('index')."/"){
+        session(['url.intended' => url()->previous()]);
+    }
 }
+
 $login_name = "S.JGU";
 $api_key = Crypt::encrypt("S.JGU".gmdate('Y/m/d'));
 Session::put('klas2_api_key', $api_key);

@@ -24,7 +24,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::any('/attendance/{id}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
 
-
 Route::get('/login/sso_klas2/', [App\Http\Controllers\HomeController::class, 'sso_klas2'])->name('sso_klas2');
 Route::get('/login/google', [App\Http\Controllers\GoogleController::class, 'redirectToGoogle']);
 Route::get('/login/google/callback', [App\Http\Controllers\GoogleController::class, 'handleCallback']);
+
+//URL Shortener
+Route::group(['prefix' => 'URL','middleware' => ['auth']], function () {
+  Route::any('/', [App\Http\Controllers\DataController::class, 'index'])->name('url.index');
+  Route::get('/data', [App\Http\Controllers\DataController::class, 'data'])->name('url.data');
+  Route::any('/ubah/{id}', [App\Http\Controllers\DataController::class, 'ubah'])->name('url.ubah');
+  Route::delete('/hapus', [App\Http\Controllers\DataController::class, 'hapus'])->name('url.hapus');
+});
+//Tarok paling bawah
+Route::get('/{id}', [App\Http\Controllers\DataController::class, 'url'])->name('url.url');

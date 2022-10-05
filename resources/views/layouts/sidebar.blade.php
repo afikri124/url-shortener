@@ -19,7 +19,25 @@
         <li class="menu-item {{ Route::currentRouteName()=='home' ? 'active' : '' }}">
             <a href="{{ route('home') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Dashboards">Halaman Utama</div>
+                <div data-i18n="Dashboards">Home</div>
+            </a>
+        </li>
+        <li class="menu-item {{ Route::currentRouteName()=='url.index' ? 'active' : '' }}">
+            <a href="{{ route('url.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-link"></i>
+                <div>URL Shortener</div>
+            </a>
+        </li>
+        <li class="menu-item ">
+            <a href="" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-qr"></i>
+                <div>QR Generator</div>
+            </a>
+        </li>
+        <li class="menu-item ">
+            <a href="" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-task"></i>
+                <div>Event Attendance</div>
             </a>
         </li>
 

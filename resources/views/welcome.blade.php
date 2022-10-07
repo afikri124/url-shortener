@@ -21,12 +21,12 @@
                 <div class="app-brand justify-content-center mb-4">
                     <a href="https://jgu.ac.id/" target="_blank" class="app-brand-link gap-2">
                         <span class="app-brand-logo demo">
-                            <img src="{{asset('assets/img/jgu.png')}}" width="150">
+                            <img src="{{asset('assets/img/logo-sjgu.png')}}" width="150">
                         </span>
                     </a>
                 </div>
                 <!-- /Logo -->
-                <h2 class="mb-3">{{ config('app.name') }}</h2>
+                <!-- <h2 class="mb-3">{{ config('app.name') }}</h2> -->
                 <p>Make your long links shorter by using the official domain <strong>s.jgu.ac.id</strong>, or you can
                     also easily generate a QR Code.</p>
                 <p>👉 for an example like below</p>
@@ -34,17 +34,14 @@
                     <input type="url" class="form-control" value="http://s.jgu.ac.id/something">
                     <button class="btn btn-outline-primary" type="button" id="button-addon2">Make it Now!</button>
                 </div>
-                <div class="mb-3 text-center">
-                    <p class="mt-4">sign in with</p>
-                </div>
-
-
-
                 @if (Route::has('login'))
                 @auth
                 <a href="{{ route('home') }}" class="btn btn-primary text-white text-center w-50"><i
                         class="bx bx-home me-2"></i>Dashboard</a>
                 @else
+                <div class="mb-3 text-center">
+                    <p class="mt-4">sign in with</p>
+                </div>
                 <a href="{{ route('login') }}" class="btn btn-primary text-white text-center w-50"><i
                         class="bx bx-log-in-circle me-2"></i>Log in</a>
                 @endauth

@@ -3,7 +3,7 @@
     <div class="app-brand demo ">
         <a href="{{ route('index') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <img src="{{asset('assets/img/logo.png')}}" height="50">
+                <img src="{{asset('assets/img/logo-sjgu.png')}}" height="50">
             </span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">

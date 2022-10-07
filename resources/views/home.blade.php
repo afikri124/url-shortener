@@ -17,6 +17,14 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+                
+                <div class="app-brand justify-content-center mb-4">
+                    <a href="https://jgu.ac.id/" target="_blank" class="app-brand-link gap-2">
+                        <span class="app-brand-logo demo">
+                            <img src="{{route('qrcode')}}" width="150">
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

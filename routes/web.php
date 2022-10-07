@@ -36,6 +36,7 @@ Route::group(['prefix' => 'URL','middleware' => ['auth']], function () {
   Route::delete('/hapus', [App\Http\Controllers\DataController::class, 'hapus'])->name('url.hapus');
 });
 
+//Membuat QR-JGU
 Route::get('/qrcode', [App\Http\Controllers\QrController::class, 'qrcode'])->name('qrcode');
 
 

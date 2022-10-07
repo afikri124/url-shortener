@@ -35,5 +35,9 @@ Route::group(['prefix' => 'URL','middleware' => ['auth']], function () {
   Route::any('/ubah/{id}', [App\Http\Controllers\DataController::class, 'ubah'])->name('url.ubah');
   Route::delete('/hapus', [App\Http\Controllers\DataController::class, 'hapus'])->name('url.hapus');
 });
+
+Route::get('/qrcode', [App\Http\Controllers\QrController::class, 'qrcode'])->name('qrcode');
+
+
 //Tarok paling bawah
 Route::get('/{id}', [App\Http\Controllers\DataController::class, 'url'])->name('url.url');

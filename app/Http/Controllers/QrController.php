@@ -17,7 +17,7 @@ class QrController extends Controller
 {
     public function qrcode(Request $request)
     {
-        $data = route('qrcode')."?data=XXX";
+        $data = route('qrcode')."?data=X";
         if($request->data){
             $data = $request->data;
         }
@@ -27,18 +27,22 @@ class QrController extends Controller
         $qrCode = QrCode::create($data)
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
-            ->setSize(400)
-            ->setMargin(15)
+            ->setSize(350)
+            ->setMargin(0)
             ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
             ->setForegroundColor(new Color(0, 0, 0))
             ->setBackgroundColor(new Color(255, 255, 255));
 
         // Create generic logo
-        $logo = Logo::create(public_path('/assets/img/logo-jgu-white.png'))->setResizeToWidth(75);       
+        $logo = Logo::create(public_path('/assets/img/logo-jgu-white.png'))->setResizeToWidth(80);       
 
         if(!$request->data){
             // Create generic label
             $label = Label::create($data)
+            ->setTextColor(new Color(255, 0, 0));
+            $result = $writer->write($qrCode, $logo, $label);
+        } elseif($request->label) {
+            $label = Label::create($request->label)
             ->setTextColor(new Color(255, 0, 0));
             $result = $writer->write($qrCode, $logo, $label);
         } else {

@@ -32,13 +32,17 @@ Route::get('/login/google/callback', [App\Http\Controllers\GoogleController::cla
 Route::group(['prefix' => 'URL','middleware' => ['auth']], function () {
   Route::any('/', [App\Http\Controllers\DataController::class, 'index'])->name('url.index');
   Route::get('/data', [App\Http\Controllers\DataController::class, 'data'])->name('url.data');
-  Route::any('/ubah/{id}', [App\Http\Controllers\DataController::class, 'ubah'])->name('url.ubah');
-  Route::delete('/hapus', [App\Http\Controllers\DataController::class, 'hapus'])->name('url.hapus');
+  Route::any('/edit/{id}', [App\Http\Controllers\DataController::class, 'edit'])->name('url.edit');
+  Route::delete('/delete', [App\Http\Controllers\DataController::class, 'delete'])->name('url.delete');
 });
 
-//Membuat QR-JGU
+//QR-JGU
+Route::group(['prefix' => 'QR','middleware' => ['auth']], function () {
+  Route::get('/', [App\Http\Controllers\QrController::class, 'index'])->name('qr.index');
+});
+//Rest API QR-JGU
 Route::get('/qrcode', [App\Http\Controllers\QrController::class, 'qrcode'])->name('qrcode');
 
 
-//Tarok paling bawah
+//letakkan di paling bawah
 Route::get('/{id}', [App\Http\Controllers\DataController::class, 'url'])->name('url.url');

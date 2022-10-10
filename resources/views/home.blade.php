@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Home')
+@section('title', 'Dashboard')
 
 @section('content')
 <div class="row justify-content-center">
@@ -20,7 +20,7 @@
             <div class="app-brand justify-content-center mb-4">
                 <a href="https://jgu.ac.id/" target="_blank" class="app-brand-link gap-2">
                     <span class="app-brand-logo demo">
-                        <img src="{{route('qrcode')}}">
+                        <!-- <img src="{{route('qrcode')}}"> -->
                     </span>
                 </a>
             </div>

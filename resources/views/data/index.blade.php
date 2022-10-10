@@ -20,19 +20,18 @@
         vertical-align: middle;
     }
 
-    table.dataTable td:nth-child(2) {
-        max-width: 100px;
-    }
-
     table.dataTable td:nth-child(3) {
         max-width: 200px;
     }
 
     table.dataTable td:nth-child(4) {
-        max-width: 30px;
+        max-width: 20px;
     }
 
     table.dataTable td:nth-child(5) {
+        max-width: 50px;
+    }
+    table.dataTable td:nth-child(6) {
         max-width: 50px;
     }
 
@@ -53,86 +52,49 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
-<div class="card">
-    <div class="card-datatable table-responsive">
-        <div class="card-header flex-column flex-md-row pb-0">
-            <div class="row">
-                <div class="col-12 pt-3 pt-md-0">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="offset-md-9 col-md-3 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                                    data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
-                                    aria-controls="DataTables_Table_0" type="button"><span><i
-                                            class="bx bx-plus me-sm-2"></i>
-                                        <span>Create New</span></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
-                aria-labelledby="offcanvasEndLabel">
-                <div class="offcanvas-header">
-                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Create New</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body my-auto mx-0 flex-grow-1">
-                    <form class="add-new-record pt-2 row g-2 fv-plugins-bootstrap5 fv-plugins-framework"
-                        enctype="multipart/form-data" id="form-add-new-record" method="POST" action="">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label class="form-label">Shortlink</label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    @if(Auth::user()->hasRole("SD"))
-                                    s.jgu.ac.id/s/
-                                    @else
-                                    s.jgu.ac.id/
-                                    @endif
-                                </span>
-                                <input type="text" name="shortlink" class="form-control @error('shortlink') is-invalid @enderror" 
-                                value="{{ old('shortlink') }}">
-                                @error('shortlink')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Long URL</label>
-                            <div class="input-group input-group-merge has-validation">
-                                <input type="url" class="form-control @error('url') is-invalid @enderror" name="url"
-                                    placeholder="http://.." value="{{ old('url') }}">
-                                @error('url')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 mt-4 text-end">
-                            <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
-                            <button type="reset" class="btn btn-outline-secondary"
-                                data-bs-dismiss="offcanvas">Cancel</button>
-                        </div>
-                    </form>
-
-                </div>
+<div class="card mb-4">
+    <form class="row p-3" method="POST" action="">
+        @csrf
+        <div class="col-md-6">
+            <label class="form-label">Shortlink</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    s.jgu.ac.id/
+                </span>
+                <input type="text" name="shortlink" class="form-control @error('shortlink') is-invalid @enderror"
+                    value="{{ old('shortlink') }}" placeholder="something">
+                @error('shortlink')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
             </div>
         </div>
+        <div class="col-md-6">
+            <label class="form-label">Long URL</label>
+            <div class="input-group mb-3">
+                <input type="url" class="form-control @error('url') is-invalid @enderror" name="url"
+                    placeholder="http://.." value="{{ old('url') }}">
+                <button class="btn btn-outline-primary" type="submit" id="button-addon2">Make it Now!</button>
+                @error('url')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+        </div>
+    </form>
+</div>
+<div class="card">
+    <div class="card-datatable table-responsive">
         <table class="table table-hover table-sm" id="datatable" width="100%">
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Link</th>
+                    <th data-priority="2">Shortlink</th>
                     <th>Long URL</th>
-                    <th>QR</th>
+                    <th>QRCode</th>
+                    <th>Maker</th>
                     <th width="85px">Action</th>
                 </tr>
             </thead>
@@ -182,8 +144,7 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Search link..',
-                url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
+                searchPlaceholder: 'Search shortlink..',
             },
             ajax: {
                 url: "{{ route('url.data') }}",
@@ -206,25 +167,44 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.shortlink;
+                        return '<button class="btn m-0 p-0" title="Copy" onclick=navigator.clipboard.writeText("s.jgu.ac.id/' + row.shortlink + '")><i class="bx bx-copy"></i></button> ' + 
+                        `<a class="text-primary" target="_blank" href="{{ url('` +
+                            row.shortlink + `') }}">` +  row.shortlink +`</a>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.url;
+                        return `<a class="text-primary" target="_blank" href="` + row.url + `">` + row.url + `</a>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return "x";
+                        var x = `{{ url('` + row.shortlink + `') }}`;
+                        var l = 's.jgu.ac.id/' + row.shortlink;
+                        return `<a class="text-dark" target="_blank" href="{{ url('qrcode?data=` +
+                            x + `&label=` + l + `') }}" title="View QRCode"><i class="bx bx-qr-scan"></i></a>`;
+                    },
+                    className: "text-md-center"
+                },
+                
+                {
+                    render: function (data, type, row, meta) {
+                        if(row.user != null){
+                            return html = row.user.name;
+                        }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-success" title="Ubah" href="{{ url('URL/ubah/` +
-                            row.idd + `') }}"><i class="bx bxs-edit"></i></a>
-                            <a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
-                            `)" ><i class="bx bx-trash"></i></a>`;
+                        if(row.user_id == "{{Auth::user()->id}}"){
+                            return `<a class="text-success" title="Edit" href="{{ url('URL/edit/` +
+                                row.idd + `') }}"><i class="bx bxs-edit"></i></a>
+                                <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
+                                `)" ><i class="bx bx-trash"></i></a>`;
+                        } else {
+                            return `<a class="text-muted"><i class="bx bxs-edit"></i></a>
+                                <a class="text-muted"><i class="bx bx-trash"></i></a>`;
+                        }
                     },
                     className: "text-md-center"
                 }
@@ -235,8 +215,8 @@
 
     function DeleteId(id) {
         swal({
-                title: "Anda yakin?",
-                text: "Setelah dihapus, data tidak dapat dipulihkan!",
+                title: "Are you sure?",
+                text: "Once deleted, the data cannot be recovered!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
@@ -244,7 +224,7 @@
             .then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: "{{ route('url.hapus') }}",
+                        url: "{{ route('url.delete') }}",
                         type: "DELETE",
                         data: {
                             "id": id,

@@ -14,12 +14,12 @@
     <ul class="menu-inner py-1">
         <!-- Dashboards -->
         <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Dashboard</span>
+            <span class="menu-header-text">Menu</span>
         </li>
         <li class="menu-item {{ Route::currentRouteName()=='home' ? 'active' : '' }}">
             <a href="{{ route('home') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Dashboards">Home</div>
+                <div data-i18n="Dashboards">Dashboard</div>
             </a>
         </li>
         <li class="menu-item {{ Route::currentRouteName()=='url.index' ? 'active' : '' }}">
@@ -28,10 +28,10 @@
                 <div>URL Shortener</div>
             </a>
         </li>
-        <li class="menu-item ">
-            <a href="" class="menu-link">
+        <li class="menu-item {{ Route::currentRouteName()=='qr.index' ? 'active' : '' }}">
+            <a href="{{ route('qr.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-qr"></i>
-                <div>QR Generator</div>
+                <div>QRCode Generator</div>
             </a>
         </li>
         <li class="menu-item ">

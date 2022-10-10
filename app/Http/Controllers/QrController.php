@@ -15,6 +15,11 @@ use Intervention\Image\Facades\Image;
 
 class QrController extends Controller
 {
+    public function index(Request $request)
+    {
+        return view('qr.index');            
+    }
+
     public function qrcode(Request $request)
     {
         $data = route('qrcode')."?data=X";
@@ -28,7 +33,7 @@ class QrController extends Controller
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
             ->setSize(350)
-            ->setMargin(0)
+            ->setMargin(2)
             ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
             ->setForegroundColor(new Color(0, 0, 0))
             ->setBackgroundColor(new Color(255, 255, 255));

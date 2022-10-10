@@ -10,8 +10,10 @@ use App\Models\Data;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
+use Illuminate\Validation\Rule;
 
 class DataController extends Controller
 {
@@ -24,7 +26,21 @@ class DataController extends Controller
     public function index(Request $request)
     {
         if ($request->isMethod('post')) {
-            echo "Dalam Development";
+            $this->validate($request, [ 
+                'shortlink'=> ['required', 'string', 'max:191', Rule::unique('data')],
+                'url' => ['required'],
+            ]);
+
+            $data = Data::create([
+                'shortlink' => $request->shortlink,
+                'url' => $request->url,
+                'user_id' => Auth::user()->id
+            ]);
+            if($data){
+                return redirect()->route('url.index')->with('msg','Data added successfully');
+            }else{
+                return redirect()->route('url.index')->with('msg','Data failed to add!');
+            }
         }else{
             $data = "";
             return view('data.index', compact('data'));
@@ -34,8 +50,7 @@ class DataController extends Controller
 
     public function data(Request $request)
     {
-        $data = Data::where("user_id", Auth::user()->id)
-            ->select('*')->orderByDesc("id");
+        $data = Data::with('user')->select('*')->orderByDesc("id");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
@@ -53,19 +68,59 @@ class DataController extends Controller
                     ->make(true);
     }
 
-    public function hapus(Request $request) {
+    public function delete(Request $request) {
         $data = Data::find($request->id);
-        if($data){
+        if($data && $data->user_id == Auth::user()->id){
             $data->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Data berhasil dihapus!'
+                'message' => 'Data deleted successfully!'
             ]);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Tidak diizinkan menghapus data ini!'
+                'message' => 'Not allowed to delete this data!'
             ]);
+        }
+    }
+
+    public function url($id, Request $request) {
+        $data = Data::where("shortlink",$id)->first();
+        if($data){
+            return redirect($data->url);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function edit($idd, Request $request) {
+        try {
+            $id = Crypt::decrypt($idd);
+        } catch (DecryptException $e) {
+            return redirect()->route('url.index');
+        }
+        if ($request->isMethod('post')) {
+            $this->validate($request, [ 
+                'shortlink'=> ['required', 'string', 'max:191', Rule::unique('data')->ignore($id, 'id')],
+                'url' => ['required'],
+            ]);
+            $data = Data::findOrFail($id);
+            $d = $data->update([ 
+                'shortlink' => $request->shortlink,
+                'url' => $request->url,
+            ]);
+            if($d){
+                return redirect()->route('url.index')->with('msg','Data changed successfully!');
+            }else{
+                return redirect()->route('url.index')->with('msg','Data failed to change!');
+            }
+        }
+        
+        $data = Data::findOrFail($id);
+        if($data->user_id != Auth::user()->id){
+            abort(403);
+        } else {
+            return view('data.edit', compact('data'));
         }
     }
 

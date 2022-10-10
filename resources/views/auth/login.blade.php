@@ -10,7 +10,7 @@
                     <div class="app-brand justify-content-center">
                         <a href="{{ route('index') }}" class="app-brand-link gap-2">
                             <span class="app-brand-logo demo">
-                                <img src="{{asset('assets/img/jgu.png')}}" width="150">
+                                <img src="{{asset('assets/img/logo-sjgu.png')}}" width="150">
                             </span>
                         </a>
                     </div>
@@ -69,22 +69,22 @@
                     </form> -->
                     <div class="row">
                         <div class="divider my-2">
-                            <div class="divider-text">Pilih Metode Login</div>
+                            <div class="divider-text mb-2">Pilih Metode Login</div>
                             @error('msg')
                             <br><span class="text-danger text-center">{!! $message !!}</span>
                             @enderror
                         </div>
                         <div class="col-6 mb-1">
                             <div class="btn-showcase">
-                                <button class="btn btn-light btn-block w-100" onclick="Klas2Login()">
+                                <button class="btn btn-dark btn-block w-100" onclick="Klas2Login()" title="Single Sign-On JGU">
                                     <img style="max-height: 20px;" src="{{asset('assets/img/favicon.png')}}">
-                                    <span>SSO Klas2</span>
+                                    <span>SSO JGU</span>
                                 </button>
                             </div>
                         </div>
                         <div class="col-6 mb-1">
                             <div class="btn-showcase">
-                                <a class="btn btn-light btn-block w-100" href="{{ url('login/google') }}">
+                                <a class="btn btn-dark btn-block w-100" href="{{ url('login/google') }}" title="Email JGU">
                                     <img style="max-height: 20px;"
                                         src="https://avatars.githubusercontent.com/u/19180220?s=200&v=4">
                                     <span>Google</span>

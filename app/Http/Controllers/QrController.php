@@ -12,6 +12,7 @@ use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Writer\PngWriter;
 use Intervention\Image\Facades\Image;
+use App\Models\Data;
 
 class QrController extends Controller
 {
@@ -57,5 +58,14 @@ class QrController extends Controller
         $dataUri = $result->getDataUri();
 
         return Image::make($dataUri)->response();
+    }
+
+    public function url($id, Request $request) {
+        $data = Data::where("shortlink",$id)->first();
+        if($data){
+            return redirect($data->url);
+        } else {
+            abort(404);
+        }
     }
 }

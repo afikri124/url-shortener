@@ -40,9 +40,9 @@ Route::group(['prefix' => 'URL','middleware' => ['auth']], function () {
 Route::group(['prefix' => 'QR','middleware' => ['auth']], function () {
   Route::get('/', [App\Http\Controllers\QrController::class, 'index'])->name('qr.index');
 });
+
+
 //Rest API QR-JGU
 Route::get('/qrcode', [App\Http\Controllers\QrController::class, 'qrcode'])->name('qrcode');
-
-
 //letakkan di paling bawah
-Route::get('/{id}', [App\Http\Controllers\DataController::class, 'url'])->name('url.url');
+Route::get('/{id}', [App\Http\Controllers\QrController::class, 'url'])->name('url.url');

@@ -84,15 +84,6 @@ class DataController extends Controller
         }
     }
 
-    public function url($id, Request $request) {
-        $data = Data::where("shortlink",$id)->first();
-        if($data){
-            return redirect($data->url);
-        } else {
-            abort(404);
-        }
-    }
-
     public function edit($idd, Request $request) {
         try {
             $id = Crypt::decrypt($idd);

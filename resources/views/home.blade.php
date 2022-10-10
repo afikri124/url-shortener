@@ -16,15 +16,17 @@
 
                 {{ __('You are logged in!') }}
             </div>
-
-            <div class="app-brand justify-content-center mb-4">
-                <a href="https://jgu.ac.id/" target="_blank" class="app-brand-link gap-2">
-                    <span class="app-brand-logo demo">
-                        <!-- <img src="{{route('qrcode')}}"> -->
-                    </span>
-                </a>
-            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="app-brand justify-content-center mb-4">
+            <a href="https://jgu.ac.id/" target="_blank" class="app-brand-link gap-2">
+                <span class="">
+                    <img src="{{asset('assets/img/girl-unlock-password-light.png')}}" style="width: 100%;">
+                </span>
+            </a>
         </div>
     </div>
 </div>
+
 @endsection

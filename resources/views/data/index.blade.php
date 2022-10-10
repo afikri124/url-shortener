@@ -39,6 +39,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+        word-wrap: break-word;
     }
 
 </style>
@@ -95,7 +96,7 @@
                     <th>Long URL</th>
                     <th>QRCode</th>
                     <th>Maker</th>
-                    <th width="85px">Action</th>
+                    <th width="85px" data-priority="3">Action</th>
                 </tr>
             </thead>
         </table>
@@ -206,7 +207,7 @@
                                 <a class="text-muted"><i class="bx bx-trash"></i></a>`;
                         }
                     },
-                    className: "text-md-center"
+                    className: "text-center"
                 }
 
             ]

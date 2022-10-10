@@ -18,8 +18,8 @@ Route::get('/', function () {
 })->name('index');
 
 Auth::routes([
-    'register' => false, // Registration Routes...
-  ]);
+  'register' => false, // Registration Routes...
+]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['auth']);
 
 Route::any('/attendance/{id}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);

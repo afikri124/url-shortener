@@ -21,13 +21,13 @@
                 <div class="app-brand justify-content-center mb-4">
                     <a href="https://jgu.ac.id/" target="_blank" class="app-brand-link gap-2">
                         <span class="app-brand-logo demo">
-                            <img src="{{asset('assets/img/logo-sjgu.png')}}" width="150">
+                            <img src="{{asset('assets/img/jgu.png')}}" width="150">
                         </span>
                     </a>
                 </div>
                 <!-- /Logo -->
                 <!-- <h2 class="mb-3">{{ config('app.name') }}</h2> -->
-                <p>Make your long links shorter by using the official domain <strong>s.jgu.ac.id</strong>, you can also easily generate a Official QRCode JGU, and you can also make event/meeting attendance.</p>
+                <p>Make your long links shorter by using<br>the official domain <strong>s.jgu.ac.id</strong>,<br>you can also easily generate a Official QRCode JGU,<br>and you can also make<br>event/meeting attendance.</p>
                 <!-- <p>👉 for an example like below</p>
                 <div class="input-group mb-3">
                     <input type="url" class="form-control" value="http://s.jgu.ac.id/something">
@@ -38,7 +38,7 @@
                 <a href="{{ route('home') }}" class="btn btn-danger text-white text-center w-50"><i
                         class="bx bx-home me-2"></i>Dashboard</a>
                 @else
-                <a href="{{ route('login') }}" class="btn btn-primary text-white text-center w-50"><i
+                <a href="{{ route('login') }}" class="btn btn-dark text-white text-center w-50"><i
                         class="bx bx-log-in-circle me-2"></i>Log in</a>
                 @endauth
                 @endif

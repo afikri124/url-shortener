@@ -43,7 +43,7 @@
                         @enderror
                     </div>
                     <div class="mt-2">
-                        <button type="submit" name="ubah" class="btn btn-primary me-2">Submit</button>
+                        <button type="submit" name="ubah" class="btn btn-primary me-2">Save</button>
                         <a class="btn btn-outline-secondary" href="{{ route('url.index') }}">Back</a>
                     </div>
                 </div>

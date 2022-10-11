@@ -36,6 +36,21 @@ Route::group(['prefix' => 'URL','middleware' => ['auth']], function () {
   Route::delete('/delete', [App\Http\Controllers\DataController::class, 'delete'])->name('url.delete');
 });
 
+Route::group(['prefix' => 'ATT','middleware' => ['auth']], function () {
+  Route::any('/', [App\Http\Controllers\AttController::class, 'index'])->name('att.index');
+  Route::get('/data', [App\Http\Controllers\AttController::class, 'data'])->name('att.data');
+  Route::any('/edit/{id}', [App\Http\Controllers\AttController::class, 'edit'])->name('att.edit');
+  Route::delete('/delete', [App\Http\Controllers\AttController::class, 'delete'])->name('att.delete');
+});
+
+
+
+
+
+
+
+
+
 //QR-JGU
 Route::group(['prefix' => 'QR','middleware' => ['auth']], function () {
   Route::get('/', [App\Http\Controllers\QrController::class, 'index'])->name('qr.index');

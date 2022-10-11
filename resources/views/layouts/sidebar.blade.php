@@ -34,8 +34,8 @@
                 <div>QRCode Generator</div>
             </a>
         </li>
-        <li class="menu-item ">
-            <a href="" class="menu-link">
+        <li class="menu-item {{ Route::currentRouteName()=='att.index' ? 'active' : '' }} ">
+            <a href="{{ route('att.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-task"></i>
                 <div>Event Attendance</div>
             </a>

@@ -82,6 +82,8 @@ class HomeController extends Controller
                                 'email' => $request->email,
                                 'username' => $request->id,
                                 'password'=> Hash::make($request->id),
+                                'job'=> $request->job,
+                                'gender'=> $request->gender,
                                 'email_verified_at' => Carbon::now(),
                                 'created_at' => Carbon::now()
                         ]);
@@ -95,6 +97,8 @@ class HomeController extends Controller
                             'name' => $request->name,
                             'email' => $request->email,
                             'username' => $request->id,
+                            'job'=> $request->job,
+                            'gender'=> $request->gender,
                             'updated_at' => Carbon::now()
                         ]);
                         

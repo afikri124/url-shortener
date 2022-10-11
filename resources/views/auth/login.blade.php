@@ -69,7 +69,7 @@
                     </form> -->
                     <div class="row">
                         <div class="divider my-2">
-                            <div class="divider-text mb-2">Pilih Metode Login</div>
+                            <div class="divider-text mb-2">Login Method</div>
                             @error('msg')
                             <br><span class="text-danger text-center">{!! $message !!}</span>
                             @enderror

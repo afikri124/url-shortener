@@ -43,14 +43,6 @@ Route::group(['prefix' => 'ATT','middleware' => ['auth']], function () {
   Route::delete('/delete', [App\Http\Controllers\AttController::class, 'delete'])->name('att.delete');
 });
 
-
-
-
-
-
-
-
-
 //QR-JGU
 Route::group(['prefix' => 'QR','middleware' => ['auth']], function () {
   Route::get('/', [App\Http\Controllers\QrController::class, 'index'])->name('qr.index');

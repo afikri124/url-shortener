@@ -40,6 +40,7 @@ class GoogleController extends Controller
         }
         try {
             $user = Socialite::driver('google')->user();
+            dd($user);
             $finduser = User::where('google_id', $user->id)->first();
             if($finduser){
                 Auth::loginUsingId($finduser->id);
@@ -70,14 +71,14 @@ class GoogleController extends Controller
                         if($data){
                             $user = User::where('id', $data->id)->first();
                             if($email[1] == "student.jgu.ac.id"){
-                                $user->roles()->attach(Role::where('id', 'ST')->first()); //Staff
-                            } else {
                                 $user->roles()->attach(Role::where('id', 'SD')->first()); //Student
+                            } else {
+                                $user->roles()->attach(Role::where('id', 'ST')->first()); //Staff
                             }
                         }  
                         Auth::loginUsingId($data->id);
                     } else {
-                        $msg = "Maaf, $user->email tidak terdaftar.<br>Silahkan login menggunakan email resmi JGU!";
+                        $msg = "Sorry, $user->email not registered.<br>Please login using the official JGU email!";
                         return redirect()->route('login')->withErrors(['msg' => $msg]);
                     }
                 }
@@ -90,7 +91,7 @@ class GoogleController extends Controller
                 return redirect()->route('home');
             }
         } catch (Exception $e) {
-            return redirect()->route('login')->withErrors(['msg' => 'Sesi Kedaluwarsa, silahkan ulangi lagi!']);
+            return redirect()->route('login')->withErrors(['msg' => 'Session Expired, please try again!']);
         }
     }
 }

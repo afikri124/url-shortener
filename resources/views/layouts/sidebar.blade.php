@@ -34,12 +34,14 @@
                 <div>QRCode Generator</div>
             </a>
         </li>
+        @if(Auth::user()->hasRole('ST'))
         <li class="menu-item {{ Route::currentRouteName()=='att.index' ? 'active' : '' }} ">
             <a href="{{ route('att.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-task"></i>
                 <div>Event Attendance</div>
             </a>
         </li>
+        @endif
 
      </ul>
 

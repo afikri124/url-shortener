@@ -66,7 +66,18 @@ class HomeController extends Controller
             if($request->token == md5($request->api_key.$request->id) && "S.JGU".gmdate('Y/m/d') == Crypt::decrypt($request->api_key)){
                 $user = User::where('username', $request->id)->first();
                 if ($user != null) { //login
+                    if(($request->dept_id  != "STUDENT" && $user->back_title == null) || $user->job == null){
+                        User::where('id',$user->id)->update([
+                            'front_title' => $request->front_title,
+                            'back_title' => $request->back_title,
+                            'job'=> $request->job,
+                            'gender'=> $request->gender,
+                            'updated_at' => Carbon::now()
+                        ]);
+                        // dd($request);
+                    }
                     Auth::loginUsingId($user->id);
+
                 } else { //register
                     $user = User::where('email',$request->email)->first();
                     if($request->email == null){
@@ -79,6 +90,8 @@ class HomeController extends Controller
                         }
                         $new_user=User::insert([
                                 'name' => strtoupper($request->name),
+                                'front_title' => $request->front_title,
+                                'back_title' => $request->back_title,
                                 'email' => $request->email,
                                 'username' => $request->id,
                                 'password'=> Hash::make($request->id),
@@ -90,11 +103,17 @@ class HomeController extends Controller
                         
                         if($new_user){
                             $user = User::where('username', $request->id)->first();
-                            $user->roles()->attach(Role::where('id', 'ST')->first());
+                            if($request->dept_id == "ACAD" || $request->dept_id == "NACAD"){
+                                $user->roles()->attach(Role::where('id', 'ST')->first());
+                            } elseif ($request->dept_id == "STUDENT") {
+                                $user->roles()->attach(Role::where('id', 'SD')->first());
+                            }
                         }  
                     } else {
                         $old_user = $user->update([
                             'name' => $request->name,
+                            'front_title' => $request->front_title,
+                            'back_title' => $request->back_title,
                             'email' => $request->email,
                             'username' => $request->id,
                             'job'=> $request->job,
@@ -104,8 +123,10 @@ class HomeController extends Controller
                         
                         if($old_user){
                             $user = User::where('username', $request->id)->first();
-                            if(!$user->hasRole('ST')){
+                            if(($request->dept_id == "ACAD" || $request->dept_id == "NACAD") && !$user->hasRole('ST')){
                                 $user->roles()->attach(Role::where('id', 'ST')->first());
+                            } else if($request->dept_id == "STUDENT" && !$user->hasRole('SD')){
+                                $user->roles()->attach(Role::where('id', 'SD')->first());
                             }
                         }  
                     }
@@ -119,7 +140,7 @@ class HomeController extends Controller
                     return redirect()->route('home');
                 }
             } else {
-                abort(403, "Tidak dapat mengakses halaman terbatas!");
+                abort(403, "Unable to access restricted pages!");
             }
         } catch (\Exception $e) {
             $msg = $e->getMessage();

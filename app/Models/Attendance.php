@@ -11,6 +11,11 @@ class Attendance extends Model
     protected $fillable = [
         'id',
         'username',
-        'location',
+        'activity_id',
     ];
+
+    public function activity()
+    {
+        return $this->belongsTo(User::class, 'activity_id');
+    }
 }

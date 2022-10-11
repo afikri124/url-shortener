@@ -23,6 +23,10 @@ class User extends Authenticatable
         'google_id',
         'email',
         'password',
+        'job',
+        'gender',
+        'front_title',
+        'back_title',
     ];
 
     /**
@@ -82,6 +86,10 @@ class User extends Authenticatable
 
     public function getUserAvatarAttribute()
     { 
-      return asset('assets/img/avatars/user.png');
+      if($this->gender == 'M'){
+        return asset('assets/img/avatars/user.png');
+      } else {
+        return asset('assets/img/avatars/user-f.png');
+      }
     }
 }

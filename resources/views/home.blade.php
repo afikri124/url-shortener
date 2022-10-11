@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-12">
+    <!-- <div class="col-md-12">
         <div class="card">
             <div class="card-header">{{ __('Dashboard') }}</div>
 
@@ -17,7 +17,7 @@
                 {{ __('You are logged in!') }}
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="col-12">
         <div class="app-brand justify-content-center mb-4">
             <a href="https://jgu.ac.id/" target="_blank" class="app-brand-link gap-2">

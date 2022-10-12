@@ -89,7 +89,7 @@
                             <label class="form-label" for="basicDate">Title</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('title') is-invalid @enderror" name="title"
-                                    placeholder="" value="{{ old('title') }}">
+                                    placeholder="Event Title" value="{{ old('title') }}">
                                 @error('title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -101,7 +101,7 @@
                             <label class="form-label" for="basicDate">Sub-Title</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('sub_title') is-invalid @enderror" name="sub_title"
-                                    placeholder="" value="{{ old('sub_title') }}">
+                                    placeholder="Event Sub-Title" value="{{ old('sub_title') }}">
                                 @error('sub_title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -125,7 +125,7 @@
                             <label class="form-label" for="basicDate">Location</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('location') is-invalid @enderror" name="location"
-                                    placeholder="" value="{{ old('location') }}">
+                                    placeholder="Room Name" value="{{ old('location') }}">
                                 @error('location')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -137,7 +137,7 @@
                             <label class="form-label" for="basicDate">Host</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('host') is-invalid @enderror" name="host"
-                                    placeholder="" value="{{ old('host') }}">
+                                    placeholder="Your Event Manager Name" value="{{ old('host') }}">
                                 @error('host')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -149,7 +149,7 @@
                             <label class="form-label" for="basicDate">Participant</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('participant') is-invalid @enderror" name="participant"
-                                    placeholder="" value="{{ old('participant') }}">
+                                    placeholder="The Department As A Participant Name" value="{{ old('participant') }}">
                                 @error('participant')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -287,15 +287,11 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if (row.user_id == "{{Auth::user()->id}}") {
-                            return `<a class="text-success" title="Edit" href="{{ url('URL/edit/` +
+                            return `<a class="text-primary" title="Print" href="{{ url('ATT/` +
+                                row.id + `/` + row.token + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('ATT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a>`;
-                        } else {
-                            return `<a class="text-muted"><i class="bx bxs-edit"></i></a>
-                                <a class="text-muted"><i class="bx bx-trash"></i></a>`;
-                        }
                     },
                     className: "text-center"
                 }
@@ -315,7 +311,7 @@
             .then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: "{{ route('url.delete') }}",
+                        url: "{{ route('att.delete') }}",
                         type: "DELETE",
                         data: {
                             "id": id,

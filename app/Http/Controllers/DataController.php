@@ -68,7 +68,8 @@ class DataController extends Controller
                     ->make(true);
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request) 
+    {
         $data = Data::find($request->id);
         if($data && $data->user_id == Auth::user()->id){
             $data->delete();
@@ -84,7 +85,8 @@ class DataController extends Controller
         }
     }
 
-    public function edit($idd, Request $request) {
+    public function edit($idd, Request $request) 
+    {
         try {
             $id = Crypt::decrypt($idd);
         } catch (DecryptException $e) {

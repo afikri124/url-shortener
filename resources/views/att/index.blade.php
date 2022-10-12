@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'URL Shortener')
+@section('title', 'Event Attendance')
 
 @section('breadcrumb-items')
 <!-- <span class="text-muted fw-light">Pusat Data /</span> -->
@@ -56,22 +56,129 @@
 @endif
 
 <div class="card">
-<div class="col-12 pt-3 pt-md-0">
-            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#newrecord"
-                aria-controls="offcanvasEnd" tabindex="0" aria-controls="DataTables_Table_0" type="button"><span><i
-                        class="bx bx-plus me-sm-2"></i>
-                    <span>Tambah Data</span></span>
-            </button>
-        </div>
     <div class="card-datatable table-responsive">
+        <div class="card-header flex-column flex-md-row pb-0">
+            <div class="row">
+                <div class="col-12 pt-3 pt-md-0">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="offset-md-9 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                                    data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
+                                    aria-controls="DataTables_Table_0" type="button"><span><i
+                                            class="bx bx-plus me-sm-2"></i>
+                                        <span>Add New</span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
+                aria-labelledby="offcanvasEndLabel">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Add New</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body my-auto mx-0 flex-grow-1">
+                    <form class="add-new-record pt-0 row g-2 fv-plugins-bootstrap5 fv-plugins-framework"
+                        enctype="multipart/form-data" id="form-add-new-record" method="POST" action="">
+                        @csrf
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Title</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('title') is-invalid @enderror" name="title"
+                                    placeholder="" value="{{ old('title') }}">
+                                @error('title')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Sub-Title</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('sub_title') is-invalid @enderror" name="sub_title"
+                                    placeholder="" value="{{ old('sub_title') }}">
+                                @error('sub_title')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Date</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="date" class="form-control @error('date') is-invalid @enderror" name="date"
+                                    placeholder="" value="{{ old('date') }}">
+                                @error('date')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Location</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('location') is-invalid @enderror" name="location"
+                                    placeholder="" value="{{ old('location') }}">
+                                @error('location')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Host</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('host') is-invalid @enderror" name="host"
+                                    placeholder="" value="{{ old('host') }}">
+                                @error('host')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Participant</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('participant') is-invalid @enderror" name="participant"
+                                    placeholder="" value="{{ old('participant') }}">
+                                @error('participant')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
+                            <button type="reset" class="btn btn-outline-secondary"
+                                data-bs-dismiss="offcanvas">Cancel</button>
+                        </div>
+                        <div></div><input type="hidden">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
         <table class="table table-hover table-sm" id="datatable" width="100%">
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Shortlink</th>
-                    <th>Long URL</th>
-                    <th>QRCode</th>
-                    <th>Maker</th>
+                    <th data-priority="2">Title</th>
+                    <th>Sub Title</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Host</th>
+                    <th>Participant</th>
                     <th width="85px" data-priority="3">Action</th>
                 </tr>
             </thead>
@@ -121,10 +228,10 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Search shortlink..',
+                searchPlaceholder: 'Search..',
             },
             ajax: {
-                url: "{{ route('url.data') }}",
+                url: "{{ route('att.data') }}",
                 data: function (d) {
                     d.select_dosen = $('#select_dosen').val(),
                         d.select_kategori = $('#select_kategori').val(),
@@ -144,35 +251,39 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return '<button class="btn m-0 p-0" title="Copy" onclick=navigator.clipboard.writeText("s.jgu.ac.id/' +
-                            row.shortlink + '")><i class="bx bx-copy"></i></button> ' +
-                            `<a class="text-primary" target="_blank" href="{{ url('` +
-                            row.shortlink + `') }}">` + row.shortlink + `</a>`;
-                    },
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return `<a class="text-primary" target="_blank" href="` + row.url +
-                            `">` + row.url + `</a>`;
-                    },
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        var x = `{{ url('` + row.shortlink + `') }}`;
-                        var l = 's.jgu.ac.id/' + row.shortlink;
-                        return `<a class="text-dark" target="_blank" href="{{ url('qrcode?data=` +
-                            x + `&label=` + l +
-                            `') }}" title="View QRCode"><i class="bx bx-qr-scan"></i></a>`;
+                        return row.title;
                     },
                     className: "text-md-center"
                 },
-
                 {
                     render: function (data, type, row, meta) {
-                        if (row.user != null) {
-                            return html = row.user.name;
-                        }
+                        return row.sub_title;
                     },
+                    className: "text-md-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        var x = row.date;
+                        return x;
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return row.location;
+                    },
+                    className: "text-md-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return row.host;
+                    },
+                    className: "text-md-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return row.participant;
+                    },
+                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {

@@ -26,13 +26,7 @@
                     </a>
                 </div>
                 <!-- /Logo -->
-                <!-- <h2 class="mb-3">{{ config('app.name') }}</h2> -->
-                <p>Make your long links shorter by using<br>the official domain <strong>s.jgu.ac.id</strong>,<br>you can also easily generate a Official QRCode JGU,<br>and you can also make<br>event/meeting attendance.</p>
-                <!-- <p>👉 for an example like below</p>
-                <div class="input-group mb-3">
-                    <input type="url" class="form-control" value="http://s.jgu.ac.id/something">
-                    <button class="btn btn-outline-primary" type="button" id="button-addon2">Make it Now!</button>
-                </div> -->
+                <i class="mb-2">Make your long links shorter by using<br>the official domain <strong>s.jgu.ac.id</strong>,<br> easily generate an JGU Official <strong>QRCode</strong>,<br>and you can also make<br>event/meeting <strong>attendance</strong>.</i><br><br>
                 @if (Route::has('login'))
                 @auth
                 <a href="{{ route('home') }}" class="btn btn-danger text-white text-center w-50"><i

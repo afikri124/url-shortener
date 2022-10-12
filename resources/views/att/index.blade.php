@@ -287,8 +287,8 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-primary" title="Print" href="{{ url('ATT/` +
-                                row.id + `/` + row.token + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('ATT/edit/` +
+                            return `<a class="text-primary" title="Print" href="{{ url('ATT/print/` +
+                                row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('ATT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a>`;

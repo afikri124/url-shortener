@@ -137,18 +137,19 @@ class AttController extends Controller
         }
     }
 
-    public function print($id, $token) {
+    public function print($idd) {
+        try {
+            $id = Crypt::decrypt($idd);
+        } catch (DecryptException $e) {
+            return redirect()->route('att.index');
+        }
         $x = AttendanceActivity::findOrFail($id);
         $tok = $x->type."".$x->user_id."".$x->id;
-        if($tok == $token){
             $data = AttendanceActivity::with('user')->findOrFail($id);
-            $link = route('att.print', ['id' => $id, 'token' => $tok] );
+            $link = route('att.att', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-            // $pdf = PDF::loadview('att.pdf', compact('qr','data'));
+            // $pdf = PDF::loadview('att.pdf', compact('qr','data','link'));
             // return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
-            return view('att.pdf', compact('qr','data'));
-        } else {
-            abort(403, "Attendace not found!");
-        }
+            return view('att.pdf', compact('qr','data','link'));
     }
 }

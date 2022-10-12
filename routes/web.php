@@ -42,7 +42,8 @@ Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:SD,ST']], functio
   Route::get('/data', [App\Http\Controllers\AttController::class, 'data'])->name('att.data');
   Route::any('/edit/{id}', [App\Http\Controllers\AttController::class, 'edit'])->name('att.edit');
   Route::delete('/delete', [App\Http\Controllers\AttController::class, 'delete'])->name('att.delete');
-  Route::get('/{id}/{token}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
+  Route::get('/print/{id}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
+  Route::get('/{id}/{token}', [App\Http\Controllers\AttController::class, 'att'])->name('att.att');
 });
 
 //MT ATT

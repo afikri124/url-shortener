@@ -37,7 +37,7 @@ Route::group(['prefix' => 'URL','middleware' => ['auth']], function () {
 });
 
 //ACT ATT
-Route::group(['prefix' => 'ATT','middleware' => ['auth']], function () {
+Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:SD,ST']], function () {
   Route::any('/', [App\Http\Controllers\AttController::class, 'index'])->name('att.index');
   Route::get('/data', [App\Http\Controllers\AttController::class, 'data'])->name('att.data');
   Route::any('/edit/{id}', [App\Http\Controllers\AttController::class, 'edit'])->name('att.edit');
@@ -45,7 +45,7 @@ Route::group(['prefix' => 'ATT','middleware' => ['auth']], function () {
 });
 
 //MT ATT
-Route::group(['prefix' => 'MT','middleware' => ['auth']], function () {
+Route::group(['prefix' => 'MT','middleware' => ['auth','role:ST']], function () {
   Route::any('/', [App\Http\Controllers\MtController::class, 'index'])->name('mt.index');
   Route::get('/data', [App\Http\Controllers\MtController::class, 'data'])->name('mt.data');
   Route::any('/edit/{id}', [App\Http\Controllers\MtController::class, 'edit'])->name('mt.edit');

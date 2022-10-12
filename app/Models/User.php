@@ -86,10 +86,10 @@ class User extends Authenticatable
 
     public function getUserAvatarAttribute()
     { 
-      if($this->gender == 'M'){
-        return asset('assets/img/avatars/user.png');
-      } else {
+      if($this->gender == 'F'){
         return asset('assets/img/avatars/user-f.png');
+      } else {
+        return asset('assets/img/avatars/user.png');
       }
     }
 }

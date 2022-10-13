@@ -147,7 +147,8 @@ class AttController extends Controller
         $tok = $x->type."".$x->user_id."".$x->id;
             $data = AttendanceActivity::with('user')->findOrFail($id);
             $link = route('att.att', ['id' => $id, 'token' => $tok] );
-            $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
+            $qr = "https://s.jgu.ac.id/qrcode?data=".$link."&label=".$link;
+
             // $pdf = PDF::loadview('att.pdf', compact('qr','data','link'));
             // return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
             return view('att.pdf', compact('qr','data','link'));

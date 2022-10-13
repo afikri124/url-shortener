@@ -45,7 +45,7 @@
         @if(Auth::user()->hasRole('ST'))
         <li class="menu-item {{ Route::currentRouteName()=='mt.index' ? 'active' : '' }} ">
             <a href="{{ route('mt.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-task"></i>
+                <i class="menu-icon tf-icons bx bx-calendar-event"></i>
                 <div>Meeting Attendance</div>
             </a>
         </li>

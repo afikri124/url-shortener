@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Event Attendance')
+@section('title', 'Meeting Attendance')
 
 @section('breadcrumb-items')
 <!-- <span class="text-muted fw-light">Pusat Data /</span> -->
@@ -89,7 +89,7 @@
                             <label class="form-label" for="basicDate">Title</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('title') is-invalid @enderror" name="title"
-                                    placeholder="Event Title" value="{{ old('title') }}">
+                                    placeholder="Meeting Title" value="{{ old('title') }}">
                                 @error('title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -101,7 +101,7 @@
                             <label class="form-label" for="basicDate">Sub-Title</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('sub_title') is-invalid @enderror" name="sub_title"
-                                    placeholder="Event Sub-Title" value="{{ old('sub_title') }}">
+                                    placeholder="Meeting Sub-Title" value="{{ old('sub_title') }}">
                                 @error('sub_title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -137,7 +137,7 @@
                             <label class="form-label" for="basicDate">Host</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('host') is-invalid @enderror" name="host"
-                                    placeholder="Your Event Manager Name" value="{{ old('host') }}">
+                                    placeholder="Your Meeting Manager Name" value="{{ old('host') }}">
                                 @error('host')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -231,7 +231,7 @@
                 searchPlaceholder: 'Search..',
             },
             ajax: {
-                url: "{{ route('att.data') }}",
+                url: "{{ route('mt.data') }}",
                 data: function (d) {
                     d.select_dosen = $('#select_dosen').val(),
                         d.select_kategori = $('#select_kategori').val(),
@@ -287,12 +287,11 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-primary" title="List" href="{{ url('ATT/list/` +
-                                row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-primary" title="Print" href="{{ url('ATT/print/` +
-                                row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('ATT/edit/` +
+                            return `<a class="text-primary" title="Print" href="{{ url('MT/print/` +
+                                row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('MT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
-                                `)" ><i class="bx bx-trash"></i></a> `;
+                                `)" ><i class="bx bx-trash"></i></a>`;
                     },
                     className: "text-center"
                 }

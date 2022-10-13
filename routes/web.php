@@ -43,6 +43,7 @@ Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:SD,ST']], functio
   Route::any('/edit/{id}', [App\Http\Controllers\AttController::class, 'edit'])->name('att.edit');
   Route::delete('/delete', [App\Http\Controllers\AttController::class, 'delete'])->name('att.delete');
   Route::get('/print/{id}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
+  Route::get('/list/{id}', [App\Http\Controllers\AttController::class, 'list'])->name('att.list');
   Route::get('/{id}/{token}', [App\Http\Controllers\AttController::class, 'att'])->name('att.att');
 });
 

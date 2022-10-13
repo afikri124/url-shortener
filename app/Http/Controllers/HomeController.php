@@ -44,20 +44,24 @@ class HomeController extends Controller
                     'username'=> $request->username,
                     'updated_at' => Carbon::now()
                 ]);
+            } else if(Auth::user()->email == null){
+                User::where('id', Auth::user()->id)->update([
+                    'email'=> $request->email,
+                    'updated_at' => Carbon::now()
+                ]);
             }
 
             $data = Attendance::create([
-                'username' => Auth::user()->username,
-                'activity_id' => $idd,
-                'created_at' => Carbon::now()
+                'username' => (Auth::user()->username == null ? $request->username : Auth::user()->username),
+                'activity_id' => $idd
             ]);
-            return redirect()->route('attendance', ['id' => $idd, 'token' => $token])->with('msg','Attendance is successful!');
+            return redirect()->route('attendance', ['id' => $idd, 'token' => $token])->with('msg','Attendance is successful !');
         }
         $data = AttendanceActivity::findOrFail($idd);
         $tok = $data->type."".$data->user_id."".($data->id+3);
         $check = Attendance::where('username',Auth::user()->username)->where('activity_id', $idd)->first();
         if($tok != $token){
-            abort(403, "Invalid token!");
+            abort(403, "Invalid token !");
         } else {
             return view('attendance.index', compact('data','check'));
         }

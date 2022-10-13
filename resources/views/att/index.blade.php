@@ -287,7 +287,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-primary" title="List" href="{{ url('ATT/list/` +
+                            return `<a class="text-dark" title="List" href="{{ url('ATT/list/` +
                                 row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-primary" title="Print" href="{{ url('ATT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('ATT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>

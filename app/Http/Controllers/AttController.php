@@ -153,4 +153,15 @@ class AttController extends Controller
             // return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
             return view('att.pdf', compact('qr','data','link'));
     }
+
+    public function list(Request $request)
+    {
+        if ($request->isMethod('post')) {
+           //TO DO PRINT
+        }else{
+            $data = "";
+            return view('att.list', compact('data'));
+        }
+            
+    }
 }

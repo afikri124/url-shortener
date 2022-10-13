@@ -49,7 +49,7 @@
             <div class="row">
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
-                    <form method="POST" class="row" target="_blank" action="">
+                        <form method="POST" class="row" target="_blank" action="">
                             @csrf
                             <div class="offset-md-9 col-md-3 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-primary" type="submit"><i class="bx bx-printer me-sm-2"></i>
@@ -120,7 +120,7 @@
                 searchPlaceholder: 'Search..',
             },
             ajax: {
-                url: "{{ route('att.list_data', ['id' => $id]) }}",
+                url: "{{ route('mt.list_data', ['id' => $id]) }}",
                 data: function (d) {
                     d.select_dosen = $('#select_dosen').val(),
                         d.select_kategori = $('#select_kategori').val(),
@@ -141,7 +141,8 @@
                 {
                     render: function (data, type, row, meta) {
                         if (row.user != null) {
-                            return "<span title='" + row.user.name + "'>" + row.user.name_with_title +
+                            return "<span title='" + row.user.name + "'>" + row.user
+                                .name_with_title +
                                 "</span>";
                         }
                     },
@@ -157,7 +158,7 @@
                 {
                     render: function (data, type, row, meta) {
                         return "<span title='" + row.created_at + "'>" + row.date +
-                                "</span>";
+                            "</span>";
                     },
                 },
             ]

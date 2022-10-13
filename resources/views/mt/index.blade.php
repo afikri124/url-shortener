@@ -19,13 +19,16 @@
     table.dataTable tbody td {
         vertical-align: middle;
     }
-
-    table.dataTable td:nth-child(3) {
+    table.dataTable td:nth-child(2) {
         max-width: 200px;
     }
 
+    table.dataTable td:nth-child(3) {
+        max-width: 150px;
+    }
+
     table.dataTable td:nth-child(4) {
-        max-width: 20px;
+        max-width: 50px;
     }
 
     table.dataTable td:nth-child(5) {
@@ -34,6 +37,14 @@
 
     table.dataTable td:nth-child(6) {
         max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(7) {
+        max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(8) {
+        max-width: 60px;
     }
 
     table.dataTable td {
@@ -162,7 +173,7 @@
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('notulen') is-invalid @enderror" name="notulen"
                                     placeholder="Username/NIK Notulen" value="{{ old('notulen') }}">
-                                @error('participant')
+                                @error('notulen')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -191,6 +202,7 @@
                     <th>Location</th>
                     <th>Host</th>
                     <th>Participant</th>
+                    <th>Notulen</th>
                     <th width="85px" data-priority="3">Action</th>
                 </tr>
             </thead>
@@ -263,48 +275,48 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.title;
-                    },
-                    className: "text-md-center"
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return row.sub_title;
-                    },
-                    className: "text-md-center"
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        var x = row.date;
-                        return x;
+                        return `<a href="{{ url('MT/list/` +
+                                row.idd + `') }}"><span title='` + row.title + `'>` + row.title + `</span>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.location;
+                        return "<span title='" + row.sub_title + "'>" + row.sub_title + "</span>";
                     },
-                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.host;
+                        return row.date;
                     },
-                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.participant;
+                      return "<span title='" + row.location + "'>" + row.location + "</span>";
                     },
-                    className: "text-md-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return "<span title='" + row.host + "'>" + row.host + "</span>";
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return "<span title='" + row.participant + "'>" + row.participant + "</span>";
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return "<span title='" + row.notulen_username + "'>" + row.notulen_username + "</span>";
+                    },
                 },
                 {
                     render: function (data, type, row, meta) {
                             return `<a class="text-primary" title="List" href="{{ url('MT/list/` +
-                                row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-info" title="Print" href="{{ url('MT/print/` +
+                                row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-info" target="_blank" title="Print" href="{{ url('MT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('MT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
-                                `)" ><i class="bx bx-trash"></i></a>`;
+                                `)" ><i class="bx bx-trash"></i></a> `;
                     },
                     className: "text-center"
                 }
@@ -324,7 +336,7 @@
             .then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: "{{ route('att.delete') }}",
+                        url: "{{ route('mt.delete') }}",
                         type: "DELETE",
                         data: {
                             "id": id,

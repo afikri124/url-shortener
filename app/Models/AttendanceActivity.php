@@ -18,6 +18,7 @@ class AttendanceActivity extends Model
         'host',
         'participant',
         'user_id',
+        'notulen_username'
     ];
     
     public function user()

@@ -83,7 +83,7 @@ class AttController extends Controller
         try {
             $id = Crypt::decrypt($idd);
         } catch (DecryptException $e) {
-            return redirect()->route('url.index');
+            return redirect()->route('att.index');
         }
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
@@ -158,6 +158,20 @@ class AttController extends Controller
     {
         if ($request->isMethod('post')) {
            //TO DO PRINT
+            try {
+                $id = Crypt::decrypt($idd);
+            } catch (DecryptException $e) {
+                return redirect()->route('mt.index');
+            }
+            $x = AttendanceActivity::findOrFail($id);
+            $tok = $x->type."".$x->user_id."".($x->id+3);
+            $data = AttendanceActivity::with('user')->findOrFail($id);
+            $link = route('attendance', ['id' => $id, 'token' => $tok] );
+            $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
+            $al = Attendance::where('activity_id', $id)->with('user')->select('*')->orderBy("id")->get();
+            $pdf = PDF::loadview('att.print', compact('qr','data','link','tok', 'al'));
+            return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
+            // return view('att.print', compact('qr','data','link', 'tok', 'al'));
         }else{
             try {
                 $id = Crypt::decrypt($idd);
@@ -181,7 +195,7 @@ class AttController extends Controller
                         }
                     })
                     ->addColumn('date', function($x){
-                        return date('d M Y h:i', strtotime($x['created_at']));
+                        return date('d M Y H:i', strtotime($x['created_at']));
                       }) 
                     ->rawColumns(['date'])
                     ->make(true);

@@ -36,13 +36,13 @@ class MtController extends Controller
                 'user_id'       => Auth::user()->id
             ]);
             if($data){
-                return redirect()->route('att.index')->with('msg','Activity added successfully');
+                return redirect()->route('mt.index')->with('msg','Activity added successfully');
             }else{
-                return redirect()->route('att.index')->with('msg','Activity failed to add!');
+                return redirect()->route('mt.index')->with('msg','Activity failed to add!');
             }
         }else{
             $data = "";
-            return view('att.index', compact('data'));
+            return view('mt.index', compact('data'));
         }
             
     }

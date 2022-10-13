@@ -157,6 +157,18 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Notulen</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('notulen') is-invalid @enderror" name="notulen"
+                                    placeholder="Username/NIK Notulen" value="{{ old('notulen') }}">
+                                @error('participant')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="col-sm-12 mt-4">
                             <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
                             <button type="reset" class="btn btn-outline-secondary"
@@ -287,7 +299,8 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-primary" title="Print" href="{{ url('MT/print/` +
+                            return `<a class="text-primary" title="List" href="{{ url('MT/list/` +
+                                row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-info" title="Print" href="{{ url('MT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('MT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +

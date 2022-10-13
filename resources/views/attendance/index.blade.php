@@ -15,7 +15,7 @@
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <p class="mb-4 text-center">Silahkan Isi Absensi Anda</p>
+                    <p class="mb-4 text-center">Please Fill Your Attendance</p>
                     @if(session('msg'))
                     <div class="alert alert-success alert-dismissible" role="alert">
                         {{session('msg')}}
@@ -25,23 +25,16 @@
                     <form id="formAuthentication" class="mb-3" action="" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="nama" class="form-label">Nama Lengkap</label>
+                            <label for="nama" class="form-label">Name</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="nama"
-                                name="name" value="{{ Auth::user()->name }}" placeholder="Masukkan Nama" autofocus
-                                disabled  />
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
+                                name="name" value="{{ Auth::user()->name_with_title }}" disabled  />
                         </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                                 name="email" @if(Auth::user()->email != null) readonly @endif
-                                value="{{ (old('email') == null ? Auth::user()->email : old('email')) }}"
-                                placeholder="Masukkan Email"  />
+                                value="{{ (old('email') == null ? Auth::user()->email : old('email')) }}" />
                             @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -50,10 +43,9 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="user" class="form-label">Username / NIK / Matrix</label>
-                            <input type="username" class="form-control @error('username') is-invalid @enderror"
-                                id="user" name="username" value="{{ (old('username') == null ? Auth::user()->username : old('username')) }}"
-                                placeholder="Masukkan Username"  @if(Auth::user()->username != null) readonly @endif />
+                            <label for="user" class="form-label">Username / NIK / NIM / Matrix</label>
+                            <input type="text" class="form-control @error('username') is-invalid @enderror"
+                                id="user" name="username" value="{{ (old('username') == null ? Auth::user()->username : old('username')) }}"  @if(Auth::user()->username != null) readonly @endif />
                             @error('username')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -62,10 +54,20 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="user" class="form-label">Lokasi</label>
-                            <input type="location" class="form-control @error('location') is-invalid @enderror"
-                                id="user" name="location" value="{{ (old('location') == null ? $location : old('location')) }}"
-                                placeholder="Masukkan Lokasi" @if($location != null) readonly @endif/>
+                            <label class="form-label">Activity</label>
+                            <input type="text" class="form-control @error('activity') is-invalid @enderror"
+                                name="activity" value="{{ (old('activity') == null ? $data->title : old('activity')) }}"  @if($data->title != null) readonly @endif/>
+                            @error('activity')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control @error('location') is-invalid @enderror"
+                                name="location" value="{{ (old('location') == null ? $data->location : old('location')) }}"  @if($data->location != null) readonly @endif/>
                             @error('location')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -76,18 +78,15 @@
                         <div class="mb-3 text-center">
                             <button class="btn btn-primary w-100" type="submit" name="attendance"
                             @if(session('msg')) disabled @endif
-                            ><i class="bx bx-log-in-circle me-2"></i>Absen Sekarang</button>
+                            ><i class="bx bx-log-in-circle me-2"></i>Attend Now</button>
                         </div>
-                        @error('msg')
-                        <b class="text-danger text-center m-0">{!! $message !!}</b>
-                        @enderror
+                        <div class="mb-3 text-center">
+                            <button class="btn btn-danger w-100" onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                <i class="bx bx-x-circle me-2"></i>Keluar
+                            </button>
+                        </div>
                     </form>
-                    <div class="mb-3 text-center">
-                        <button class="btn btn-danger w-100" onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();">
-                            <i class="bx bx-x-circle me-2"></i>Keluar
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>

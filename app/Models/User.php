@@ -28,7 +28,7 @@ class User extends Authenticatable
         'front_title',
         'back_title',
     ];
-
+    protected $appends = ['name_with_title'];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -91,5 +91,11 @@ class User extends Authenticatable
       } else {
         return asset('assets/img/avatars/user.png');
       }
+    }
+
+    public function getNameWithTitleAttribute()
+    { 
+      $name_with_title = ($this->front_title==null?"":$this->front_title." ").$this->name.($this->back_title==null?"":", ".$this->back_title);
+      return $name_with_title;
     }
 }

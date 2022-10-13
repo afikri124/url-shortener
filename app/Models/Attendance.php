@@ -16,6 +16,11 @@ class Attendance extends Model
 
     public function activity()
     {
-        return $this->belongsTo(User::class, 'activity_id');
+        return $this->belongsTo(AttendanceActivity::class, 'activity_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'username', 'username');
     }
 }

@@ -7,10 +7,12 @@ use Auth;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\AttendanceActivity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\DataTables;
 
 class HomeController extends Controller
 {
@@ -29,7 +31,7 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function attendance($idd, Request $request)
+    public function attendance($idd, $token, Request $request)
     {
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
@@ -52,8 +54,13 @@ class HomeController extends Controller
             ]);
             return redirect()->route('attendance', ['id' => $idd])->with('msg','Absensi berhasil!');
         }
-        $location = $idd;
-        return view('attendance.index', compact('location'));
+        $data = AttendanceActivity::findOrFail($idd);
+        $tok = $data->type."".$data->user_id."".$data->id;
+        if($tok != $token){
+            abort(404);
+        } else {
+            return view('attendance.index', compact('data'));
+        }
     }
 
     public function sso_klas2(Request $request)
@@ -146,5 +153,18 @@ class HomeController extends Controller
             $msg = $e->getMessage();
             return redirect()->route('login')->withErrors(['msg' => $msg]);
         }
+    }
+
+    public function data(Request $request)
+    {
+        $data = Attendance::with('user')->select('*')->orderByDesc("id");
+            return Datatables::of($data)
+                    ->filter(function ($instance) use ($request) {
+                        if (!empty($request->get('search'))) {
+                            $search = $request->get('search');
+                            $instance->where('username', 'LIKE', "%$search%");
+                        }
+                    })
+                    ->make(true);
     }
 }

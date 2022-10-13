@@ -66,8 +66,8 @@
                                 <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
-                                            class="bx bx-plus me-sm-2"></i>
-                                        <span>Add New</span></span>
+                                            class="bx bx-printer me-sm-2"></i>
+                                        <span>Print</span></span>
                                 </button>
                             </div>
                         </div>
@@ -179,40 +179,6 @@
             ]
         });
     });
-
-    function DeleteId(id) {
-        swal({
-                title: "Are you sure?",
-                text: "Once deleted, the data cannot be recovered!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    $.ajax({
-                        url: "{{ route('att.delete') }}",
-                        type: "DELETE",
-                        data: {
-                            "id": id,
-                            "_token": $("meta[name='csrf-token']").attr("content"),
-                        },
-                        success: function (data) {
-                            if (data['success']) {
-                                swal(data['message'], {
-                                    icon: "success",
-                                });
-                                $('#datatable').DataTable().ajax.reload();
-                            } else {
-                                swal(data['message'], {
-                                    icon: "error",
-                                });
-                            }
-                        }
-                    })
-                }
-            })
-    }
 
 </script>
 @endsection

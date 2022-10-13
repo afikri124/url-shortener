@@ -121,8 +121,9 @@ $url."?login_to=".route('login')."&login_name=$login_name&api_key=$api_key&callb
 <script>
     function Klas2Login() {
         // alert("SSO");
-        window.open("{!!$link!!}", "LOGIN SSO JGU",
-            "location=no, titlebar=no, toolbar=no, fullscreen='yes', resizable=no, scrollbars=yes");
+        // window.open("{!!$link!!}", "LOGIN SSO JGU",
+        //     "location=no, titlebar=no, toolbar=no, fullscreen='yes', resizable=no, scrollbars=yes");
+        window.location.href = "{!!$link!!}";
     }
 
 </script>

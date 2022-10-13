@@ -7,6 +7,7 @@ use Auth;
 use PDF;
 use Carbon\Carbon;
 use App\Models\AttendanceActivity;
+use App\Models\Attendance;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -144,24 +145,45 @@ class AttController extends Controller
             return redirect()->route('att.index');
         }
         $x = AttendanceActivity::findOrFail($id);
-        $tok = $x->type."".$x->user_id."".$x->id;
+        $tok = $x->type."".$x->user_id."".($x->id+3);
             $data = AttendanceActivity::with('user')->findOrFail($id);
-            $link = route('att.att', ['id' => $id, 'token' => $tok] );
-            $qr = "https://s.jgu.ac.id/qrcode?data=".$link."&label=".$link;
+            $link = route('attendance', ['id' => $id, 'token' => $tok] );
+            $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
 
-            // $pdf = PDF::loadview('att.pdf', compact('qr','data','link'));
-            // return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
-            return view('att.pdf', compact('qr','data','link'));
+            $pdf = PDF::loadview('att.pdf', compact('qr','data','link'));
+            return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
+            // return view('att.pdf', compact('qr','data','link'));
     }
 
-    public function list(Request $request)
+    public function list($idd, Request $request)
     {
         if ($request->isMethod('post')) {
            //TO DO PRINT
         }else{
-            $data = "";
-            return view('att.list', compact('data'));
-        }
-            
+            try {
+                $id = Crypt::decrypt($idd);
+            } catch (DecryptException $e) {
+                return redirect()->route('att.list');
+            }
+            return view('att.list', compact('id'));
+        }     
     }
+
+    public function list_data($id, Request $request)
+    {
+        $data = Attendance::where('activity_id', $id)->with('user')->select('*')->orderByDesc("id");
+            return Datatables::of($data)
+                    ->filter(function ($instance) use ($request) {
+                        if (!empty($request->get('search'))) {
+                            $search = $request->get('search');
+                            $instance->where('username', 'LIKE', "%$search%");
+                        }
+                    })
+                    ->addColumn('date', function($x){
+                        return date('d M Y h:i', strtotime($x['created_at']));
+                      }) 
+                    ->rawColumns(['date'])
+                    ->make(true);
+    }
+
 }

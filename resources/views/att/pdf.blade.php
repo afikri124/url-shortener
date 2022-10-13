@@ -41,32 +41,40 @@
     </table>
     <br>
     <center>
-        <b style="font-size:50px">{{$data->title}}</b>
+        <b style="font-size:40px">{{$data->title}}</b>
         <br>
-        <b style="font-size:100px">SCAN HERE</b>
+        <b style="font-size:80px">SCAN HERE</b>
         <br>
-        <b style="font-size:30px;">BEFORE YOU JOIN THIS EVENT!</b>
+        <b style="font-size:20px;">BEFORE YOU JOIN THIS EVENT!</b>
         <br>
-        <a href="{{$link}}" target="_blank" ><img src="{!! $qr !!}" style="height: 350px;margin:75px 0;"></a>
+        <a href="{{$link}}" target="_blank" ><img src="{!! $qr !!}" style="height: 300px;margin:60px 0;"></a>
         <br>
-        <b style="font-size:50px ">{{$data->location}}</b>
+        <b style="font-size:20px ">{{$data->location}}</b>
+        <br>
+        <i style="font-size:15px ">{{date('l, d F Y', strtotime($data->date))}}</i>
       <hr>
         <br>
-        <b style="font-size:20px ">HOW TO SCAN THE QR CODE</b>
+        <b style="font-size:15px ">HOW TO SCAN THE QR CODE</b>
+        <br>
+        <br>
     </center>
-    <table width="100%">
+    <table width="100%"  style="font-size:13px;">
         <tr>
-            <td width="30%" valign="top">
-            <b style="font-size:20px;">1. Using barcode scanner</b>
+            <td width="30%" style="text-align: center;">
+            <h1>1.</h1>
+            <p>Using barcode scanner</p>
             </td>
             <td width="40%" style="text-align: center;">
-            <b style="font-size:20px;">2. Login with your account</b>
+            <h1>2.</h1>
+            <p>Login with your account</p>
             </td>
-            <td width="30%" style="text-align:right;">
-            <b style="font-size:20px;">3. Fill up the details</b>
+            <td width="30%" style="text-align:center;">
+            <h1>3.</h1>
+            <p>Fill up the details</p>
             </td>
         </tr>
     </table>
+    <hr>
 </body>
 
 </html>

@@ -37,7 +37,6 @@ class HomeController extends Controller
             $this->validate($request, [ 
                 'email'=> ['required'],
                 'username' => ['required'],
-                'location' => ['required'],
             ]);
 
             if(Auth::user()->username == null){
@@ -48,18 +47,19 @@ class HomeController extends Controller
             }
 
             $data = Attendance::create([
-                'username' => $request->username,
-                'location' => $request->location,
+                'username' => Auth::user()->username,
+                'activity_id' => $idd,
                 'created_at' => Carbon::now()
             ]);
-            return redirect()->route('attendance', ['id' => $idd])->with('msg','Absensi berhasil!');
+            return redirect()->route('attendance', ['id' => $idd, 'token' => $token])->with('msg','Attendance is successful!');
         }
         $data = AttendanceActivity::findOrFail($idd);
-        $tok = $data->type."".$data->user_id."".$data->id;
+        $tok = $data->type."".$data->user_id."".($data->id+3);
+        $check = Attendance::where('username',Auth::user()->username)->where('activity_id', $idd)->first();
         if($tok != $token){
-            abort(404);
+            abort(403, "Invalid token!");
         } else {
-            return view('attendance.index', compact('data'));
+            return view('attendance.index', compact('data','check'));
         }
     }
 
@@ -155,16 +155,4 @@ class HomeController extends Controller
         }
     }
 
-    public function data(Request $request)
-    {
-        $data = Attendance::with('user')->select('*')->orderByDesc("id");
-            return Datatables::of($data)
-                    ->filter(function ($instance) use ($request) {
-                        if (!empty($request->get('search'))) {
-                            $search = $request->get('search');
-                            $instance->where('username', 'LIKE', "%$search%");
-                        }
-                    })
-                    ->make(true);
-    }
 }

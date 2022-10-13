@@ -253,37 +253,33 @@
                     render: function (data, type, row, meta) {
                         return row.title;
                     },
-                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {
                         return row.sub_title;
                     },
-                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {
                         var x = row.date;
                         return x;
                     },
+                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {
                         return row.location;
                     },
-                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {
                         return row.host;
                     },
-                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {
                         return row.participant;
                     },
-                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {

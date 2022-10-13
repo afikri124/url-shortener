@@ -20,20 +20,8 @@
         vertical-align: middle;
     }
 
-    table.dataTable td:nth-child(3) {
+    table.dataTable td:nth-child(2) {
         max-width: 200px;
-    }
-
-    table.dataTable td:nth-child(4) {
-        max-width: 20px;
-    }
-
-    table.dataTable td:nth-child(5) {
-        max-width: 50px;
-    }
-
-    table.dataTable td:nth-child(6) {
-        max-width: 50px;
     }
 
     table.dataTable td {
@@ -82,7 +70,7 @@
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Name</th>
                     <th>Job</th>
-                    <th>Date</th>
+                    <th data-priority="3" width="100px">Attend Date</th>
                 </tr>
             </thead>
         </table>
@@ -134,7 +122,7 @@
                 searchPlaceholder: 'Search..',
             },
             ajax: {
-                url: "{{ route('att.data') }}",
+                url: "{{ route('att.list_data', ['id' => $id]) }}",
                 data: function (d) {
                     d.select_dosen = $('#select_dosen').val(),
                         d.select_kategori = $('#select_kategori').val(),
@@ -155,7 +143,7 @@
                 {
                     render: function (data, type, row, meta) {
                         if (row.user != null) {
-                            var html = "<span title='" + row.user.name + "'>" + row.user.name +
+                            return "<span title='" + row.user.name + "'>" + row.user.name_with_title +
                                 "</span>";
                         }
                     },
@@ -163,17 +151,15 @@
                 {
                     render: function (data, type, row, meta) {
                         if (row.user != null) {
-                            var html = "<span title='" + row.user.job + "'>" + row.user.job +
+                            return "<span title='" + row.user.job + "'>" + row.user.job +
                                 "</span>";
                         }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if (row.user != null) {
-                            var html = "<span title='" + row.user.created_by + "'>" + row.user.created_by +
+                        return "<span title='" + row.created_at + "'>" + row.date +
                                 "</span>";
-                        }
                     },
                 },
             ]

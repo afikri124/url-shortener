@@ -76,12 +76,12 @@
                         </div>
                         <hr>
                         <div class="mb-3 text-center">
-                            <button class="btn btn-primary w-100" type="submit" name="attendance"
-                            @if(session('msg')) disabled @endif
+                            <button class="btn btn-success w-100" type="submit" name="attendance"
+                            @if($check != null) disabled @endif
                             ><i class="bx bx-log-in-circle me-2"></i>Attend Now</button>
                         </div>
                         <div class="mb-3 text-center">
-                            <button class="btn btn-danger w-100" onclick="event.preventDefault();
+                            <button class="btn btn-dark w-100" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
                                 <i class="bx bx-x-circle me-2"></i>Keluar
                             </button>

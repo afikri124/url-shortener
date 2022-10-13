@@ -62,7 +62,7 @@ class AttController extends Controller
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
                             $search = $request->get('search');
-                            $instance->where('shortlink', 'LIKE', "%$search%");
+                            $instance->where('title', 'LIKE', "%$search%");
                         }
                     })
                     ->addColumn('idd', function($x){
@@ -149,8 +149,7 @@ class AttController extends Controller
             $data = AttendanceActivity::with('user')->findOrFail($id);
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-
-            $pdf = PDF::loadview('att.pdf', compact('qr','data','link'));
+            $pdf = PDF::loadview('att.pdf', compact('qr','data','link','tok'));
             return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
             // return view('att.pdf', compact('qr','data','link'));
     }
@@ -171,12 +170,14 @@ class AttController extends Controller
 
     public function list_data($id, Request $request)
     {
-        $data = Attendance::where('activity_id', $id)->with('user')->select('*')->orderByDesc("id");
+        $data = Attendance::where('activity_id', $id)->with('user')->select('*')->orderBy("id");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
-                            $search = $request->get('search');
-                            $instance->where('username', 'LIKE', "%$search%");
+                            $s = $request->get('search');
+                            $instance->whereHas('user', function($q) use($s){
+                                $q->where('name', 'LIKE', "%$s%");
+                            });
                         }
                     })
                     ->addColumn('date', function($x){

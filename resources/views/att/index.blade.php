@@ -19,13 +19,16 @@
     table.dataTable tbody td {
         vertical-align: middle;
     }
-
-    table.dataTable td:nth-child(3) {
+    table.dataTable td:nth-child(2) {
         max-width: 200px;
     }
 
+    table.dataTable td:nth-child(3) {
+        max-width: 150px;
+    }
+
     table.dataTable td:nth-child(4) {
-        max-width: 20px;
+        max-width: 50px;
     }
 
     table.dataTable td:nth-child(5) {
@@ -33,6 +36,10 @@
     }
 
     table.dataTable td:nth-child(6) {
+        max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(7) {
         max-width: 50px;
     }
 
@@ -251,40 +258,39 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.title;
+                        return `<a href="{{ url('ATT/list/` +
+                                row.idd + `') }}"><span title='` + row.title + `'>` + row.title + `</span>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.sub_title;
+                        return "<span title='" + row.sub_title + "'>" + row.sub_title + "</span>";
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var x = row.date;
-                        return x;
-                    },
-                    className: "text-md-center"
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return row.location;
+                        return row.date;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.host;
+                      return "<span title='" + row.location + "'>" + row.location + "</span>";
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.participant;
+                        return "<span title='" + row.host + "'>" + row.host + "</span>";
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-dark" title="List" href="{{ url('ATT/list/` +
-                                row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-primary" title="Print" href="{{ url('ATT/print/` +
+                        return "<span title='" + row.participant + "'>" + row.participant + "</span>";
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                            return `<a class="text-primary" title="List" href="{{ url('ATT/list/` +
+                                row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-info" target="_blank" title="Print" href="{{ url('ATT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('ATT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +

@@ -42,10 +42,12 @@ Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:SD,ST']], functio
   Route::get('/data', [App\Http\Controllers\AttController::class, 'data'])->name('att.data');
   Route::any('/edit/{id}', [App\Http\Controllers\AttController::class, 'edit'])->name('att.edit');
   Route::delete('/delete', [App\Http\Controllers\AttController::class, 'delete'])->name('att.delete');
-  Route::get('/print/{id}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
   Route::get('/list/{id}', [App\Http\Controllers\AttController::class, 'list'])->name('att.list');
   Route::get('/list/data/{id}', [App\Http\Controllers\AttController::class, 'list_data'])->name('att.list_data');
 });
+//Generate PDF QR
+Route::get('/ATT/print/{id}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
+//User absen pakai QR
 Route::any('/A/{id}/{token}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
 
 //MT ATT

@@ -22,7 +22,7 @@ Auth::routes([
 ]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['auth']);
 
-Route::any('/attendance/{id}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
+// Route::any('/attendance/{id}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
 
 Route::get('/login/sso_klas2/', [App\Http\Controllers\HomeController::class, 'sso_klas2'])->name('sso_klas2');
 Route::get('/login/google', [App\Http\Controllers\GoogleController::class, 'redirectToGoogle']);
@@ -44,8 +44,9 @@ Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:SD,ST']], functio
   Route::delete('/delete', [App\Http\Controllers\AttController::class, 'delete'])->name('att.delete');
   Route::get('/print/{id}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
   Route::get('/list/{id}', [App\Http\Controllers\AttController::class, 'list'])->name('att.list');
-  Route::get('/{id}/{token}', [App\Http\Controllers\AttController::class, 'att'])->name('att.att');
 });
+Route::any('ATT/{id}/{token}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('att.att')->middleware(['auth']);
+Route::get('/TES/data/{id}', [App\Http\Controllers\HomeController::class, 'data'])->name('home.data'); //for test
 
 //MT ATT
 Route::group(['prefix' => 'MT','middleware' => ['auth','role:ST']], function () {

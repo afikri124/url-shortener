@@ -79,7 +79,7 @@
                         @endif
 
                         <div class="mb-3">
-                            <label class="form-label">@if($data->type == "M") Meeting Title @else Event @endif Title</label>
+                            <label class="form-label">@if($data->type == "M") Meeting @else Event @endif Title</label>
                             <input type="text" class="form-control"
                                 name="activity" value="{{ $data->title }}" readonly/>
                         </div>

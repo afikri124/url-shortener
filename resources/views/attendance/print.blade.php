@@ -39,7 +39,7 @@
                 <img src="{{ public_path('assets/img/jgu.png') }}" style="height: 60px;" alt="">
             </td>
             <td valign="top" colspan="2" style="text-align:center;" width="55%">
-                <p>{{$data->title}}</p>
+                <p><b>{{$data->title}}<b></p>
             </td>
             <td style="text-align:center; vertical-align:middle;" rowspan='6' width="20%">
                 <p>FM/JGU/L.007</p>
@@ -47,7 +47,7 @@
         </tr>
         <tr>
             <td valign="top" colspan="2" style="text-align:center;">
-                <p>{{$data->sub_title}}</p>
+                <p><b>{{$data->sub_title}}</b></p>
             </td>
         </tr>
         <tr>
@@ -104,13 +104,13 @@
                 <p>{{$key+1}}</p>
             </td>
             <td>
-                <p>{{$d->user->name}}</p>
+                <p>{{$d->user->name_with_title}}</p>
             </td>
             <td>
                 <p>{{$d->user->job}}</p>
             </td>
             <td style="text-align:center;">
-                <p>{{$d->user->created_at}}</p>
+                <p>{{$d->created_at}}</p>
             </td>
         </tr>
         @endforeach
@@ -121,7 +121,7 @@
         <tr>
             <td width="60%">
             </td>
-            <td width="40%">Event Host <br><br><br><br><b>{{$data->host}}</b></td>
+            <td width="40%">@if($data->type =='E') Event @elseif($data->type =='M') Meeting @endif Host <br><br><br><br><b>{{$data->host}}</b></td>
         </tr>
     </table>
 </body>

@@ -149,9 +149,9 @@ class AttController extends Controller
             $data = AttendanceActivity::with('user')->findOrFail($id);
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-            $pdf = PDF::loadview('att.pdf', compact('qr','data','link','tok'));
+            $pdf = PDF::loadview('attendance.qr', compact('qr','data','link','tok'));
             return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
-            // return view('att.pdf', compact('qr','data','link'));
+            // return view('attendance.qr', compact('qr','data','link'));
     }
 
     public function list($idd, Request $request)
@@ -169,9 +169,9 @@ class AttController extends Controller
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
             $al = Attendance::where('activity_id', $id)->with('user')->select('*')->orderBy("id")->get();
-            $pdf = PDF::loadview('att.print', compact('qr','data','link','tok', 'al'));
+            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al'));
             return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
-            // return view('att.print', compact('qr','data','link', 'tok', 'al'));
+            // return view('attendance.print', compact('qr','data','link', 'tok', 'al'));
         }else{
             try {
                 $id = Crypt::decrypt($idd);
@@ -199,6 +199,23 @@ class AttController extends Controller
                       }) 
                     ->rawColumns(['date'])
                     ->make(true);
+    }
+
+    public function list_delete(Request $request) 
+    {
+        $data = Attendance::find($request->id);
+        if($data){
+            $data->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Data deleted successfully!'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Not allowed to delete this data!'
+            ]);
+        }
     }
 
 }

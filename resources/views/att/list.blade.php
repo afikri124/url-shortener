@@ -68,7 +68,8 @@
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Name</th>
                     <th>Job</th>
-                    <th data-priority="3" width="100px">Attend Date</th>
+                    <th data-priority="4" width="100px">Attend Date</th>
+                    <th data-priority="3" width="50px">Action</th>
                 </tr>
             </thead>
         </table>
@@ -160,9 +161,50 @@
                                 "</span>";
                     },
                 },
+                {
+                    render: function (data, type, row, meta) {
+                            return `<a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
+                                `)" ><i class="bx bx-trash"></i></a> `;
+                    },
+                    className: "text-center"
+                }
             ]
         });
     });
+
+    function DeleteId(id) {
+        swal({
+                title: "Are you sure?",
+                text: "Once deleted, the data cannot be recovered!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "{{ route('att.list_delete') }}",
+                        type: "DELETE",
+                        data: {
+                            "id": id,
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                        },
+                        success: function (data) {
+                            if (data['success']) {
+                                swal(data['message'], {
+                                    icon: "success",
+                                });
+                                $('#datatable').DataTable().ajax.reload();
+                            } else {
+                                swal(data['message'], {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    })
+                }
+            })
+    }
 
 </script>
 @endsection

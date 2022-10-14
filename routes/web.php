@@ -37,13 +37,14 @@ Route::group(['prefix' => 'URL','middleware' => ['auth']], function () {
 });
 
 //ACT ATT
-Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:SD,ST']], function () {
+Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:ST']], function () {
   Route::any('/', [App\Http\Controllers\AttController::class, 'index'])->name('att.index');
   Route::get('/data', [App\Http\Controllers\AttController::class, 'data'])->name('att.data');
   Route::any('/edit/{id}', [App\Http\Controllers\AttController::class, 'edit'])->name('att.edit');
   Route::delete('/delete', [App\Http\Controllers\AttController::class, 'delete'])->name('att.delete');
-  Route::any('/list/{id}', [App\Http\Controllers\AttController::class, 'list'])->name('att.list');
   Route::get('/list/data/{id}', [App\Http\Controllers\AttController::class, 'list_data'])->name('att.list_data');
+  Route::delete('/list/delete', [App\Http\Controllers\AttController::class, 'list_delete'])->name('att.list_delete');
+  Route::any('/list/{id}', [App\Http\Controllers\AttController::class, 'list'])->name('att.list');
   Route::get('/print/{id}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
 });
 
@@ -56,8 +57,9 @@ Route::group(['prefix' => 'MT','middleware' => ['auth','role:ST']], function () 
   Route::get('/data', [App\Http\Controllers\MtController::class, 'data'])->name('mt.data');
   Route::any('/edit/{id}', [App\Http\Controllers\MtController::class, 'edit'])->name('mt.edit');
   Route::delete('/delete', [App\Http\Controllers\MtController::class, 'delete'])->name('mt.delete');
-  Route::any('/list/{id}', [App\Http\Controllers\MtController::class, 'list'])->name('mt.list');
   Route::get('/list/data/{id}', [App\Http\Controllers\MtController::class, 'list_data'])->name('mt.list_data');
+  Route::delete('/list/delete', [App\Http\Controllers\MtController::class, 'list_delete'])->name('mt.list_delete');
+  Route::any('/list/{id}', [App\Http\Controllers\MtController::class, 'list'])->name('mt.list');
   Route::get('/print/{id}', [App\Http\Controllers\MtController::class, 'print'])->name('mt.print');
 });
 

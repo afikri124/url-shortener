@@ -41,13 +41,15 @@
     </table>
     <br>
     <center>
-        <b style="font-size:40px">{{$data->title}}</b>
+        <b style="font-size:30px">{{$data->title}}</b>
         <br>
-        <b style="font-size:80px">SCAN HERE</b>
+        <b style="font-size:70px">SCAN HERE</b>
         <br>
-        <b style="font-size:20px;">BEFORE YOU JOIN THIS EVENT!</b>
+        <b style="font-size:20px;">BEFORE YOU JOIN THIS @if($data->type =='E') EVENT @elseif($data->type =='M') MEETING @endif !</b>
         <br>
-        <a href="{{$link}}" target="_blank" ><img src="{!! $qr !!}" style="height: 300px;margin:60px 0;"></a>
+        <a href="{{$link}}" target="_blank" ><img src="{!! $qr !!}" style="height: 300px;margin:40px 0 20px 0;"></a>
+        <br>
+        <h4>[ <code>{{$link}}</code> ]</h4>
         <br>
         <b style="font-size:20px ">{{$data->location}}</b>
         <br>

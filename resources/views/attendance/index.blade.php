@@ -23,7 +23,7 @@
                     @else
                         @if($check !=null)
                         <div class="alert alert-success alert-dismissible" role="alert">
-                            You have been absent on<br>{{ date('l, d F Y H:i', strtotime($check->created_at)) }}
+                            You have been attend on<br>{{ date('l, d F Y H:i', strtotime($check->created_at)) }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         @else

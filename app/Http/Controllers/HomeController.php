@@ -44,9 +44,18 @@ class HomeController extends Controller
                     'username'=> $request->username,
                     'updated_at' => Carbon::now()
                 ]);
-            } else if(Auth::user()->email == null){
+            }
+            
+            if(Auth::user()->email == null){
                 User::where('id', Auth::user()->id)->update([
                     'email'=> $request->email,
+                    'updated_at' => Carbon::now()
+                ]);
+            }
+            
+            if(Auth::user()->job == null){
+                User::where('id', Auth::user()->id)->update([
+                    'job'=> $request->job,
                     'updated_at' => Carbon::now()
                 ]);
             }

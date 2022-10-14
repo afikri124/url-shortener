@@ -15,12 +15,20 @@
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <p class="mb-4 text-center">Please Fill Your Attendance</p>
                     @if(session('msg'))
                     <div class="alert alert-success alert-dismissible" role="alert">
                         {{session('msg')}}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                    @else
+                        @if($check !=null)
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            You have been absent on<br>{{ date('l, d F Y H:i', strtotime($check->created_at)) }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        @else
+                        <p class="mb-4 text-center">Please Fill Your Attendance</p>
+                        @endif
                     @endif
                     <form id="formAuthentication" class="mb-3" action="" method="POST">
                         @csrf
@@ -42,7 +50,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3 @if(Auth::user()->hasRole('GS')) d-none @endif">
                             <label for="user" class="form-label">Username</label>
                             <input type="text" class="form-control @error('username') is-invalid @enderror" id="user"
                                 name="username" placeholder="NIK / NIM / Matrix ID"
@@ -55,8 +63,23 @@
                             @enderror
                         </div>
 
+                        @if(Auth::user()->hasRole('GS') || Auth::user()->job == null)
                         <div class="mb-3">
-                            <label class="form-label">Activity (Event/Meeting)</label>
+                            <label for="job" class="form-label">Job</label>
+                            <input type="text" class="form-control @error('job') is-invalid @enderror" id="job"
+                                name="job" value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" 
+                                @if($check !=null) readonly @endif
+                                />
+                            @error('job')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        @endif
+
+                        <div class="mb-3">
+                            <label class="form-label">@if($data->type == "M") Meeting Title @else Event @endif Title</label>
                             <input type="text" class="form-control"
                                 name="activity" value="{{ $data->title }}" readonly/>
                         </div>
@@ -82,7 +105,7 @@
                         <div class="mb-3 text-center">
                             <button class="btn btn-dark w-100" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
-                                <i class="bx bx-x-circle me-2"></i>Keluar
+                                <i class="bx bx-x-circle me-2"></i>Logout
                             </button>
                         </div>
                     </form>

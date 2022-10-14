@@ -50,7 +50,7 @@ class DataController extends Controller
 
     public function data(Request $request)
     {
-        $data = Data::with('user')->select('*')->orderByDesc("id");
+        $data = Data::where('user_id',Auth::user()->id)->with('user')->select('*')->orderByDesc("id");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {

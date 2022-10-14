@@ -22,6 +22,7 @@
                 <div data-i18n="Dashboards">Dashboard</div>
             </a>
         </li>
+        @if(Auth::user()->hasRole('ST') || Auth::user()->hasRole('SD'))
         <li class="menu-item {{ Route::currentRouteName()=='url.index' ? 'active' : '' }}">
             <a href="{{ route('url.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-link"></i>
@@ -34,6 +35,7 @@
                 <div>QRCode Generator</div>
             </a>
         </li>
+        @endif
         @if(Auth::user()->hasRole('ST'))
         <li class="menu-item {{ Route::currentRouteName()=='att.index' ? 'active' : '' }} ">
             <a href="{{ route('att.index') }}" class="menu-link">
@@ -41,8 +43,6 @@
                 <div>Event Attendance</div>
             </a>
         </li>
-        @endif
-        @if(Auth::user()->hasRole('ST'))
         <li class="menu-item {{ Route::currentRouteName()=='mt.index' ? 'active' : '' }} ">
             <a href="{{ route('mt.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-calendar-event"></i>

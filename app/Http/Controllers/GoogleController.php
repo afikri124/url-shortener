@@ -78,8 +78,22 @@ class GoogleController extends Controller
                         }  
                         Auth::loginUsingId($data->id);
                     } else {
-                        $msg = "Sorry, $user->email not registered.<br>Please login using the official JGU email!";
-                        return redirect()->route('login')->withErrors(['msg' => $msg]);
+                        $data=User::create([
+                            'name' => strtoupper($user->name),
+                            'email' => $user->email,
+                            'username' => $user->email,
+                            'google_id' => $user->id,
+                            'password'=> Hash::make($user->email),
+                            'email_verified_at' => Carbon::now(),
+                            'created_at' => Carbon::now()
+                        ]);
+                        if($data){
+                            $user = User::where('id', $data->id)->first();
+                            $user->roles()->attach(Role::where('id', 'GS')->first()); //Guest
+                        }  
+                        Auth::loginUsingId($data->id);
+                        // $msg = "Sorry, $user->email not registered.<br>Please login using the official JGU email!";
+                        // return redirect()->route('login')->withErrors(['msg' => $msg]);
                     }
                 }
             }

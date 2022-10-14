@@ -7,13 +7,16 @@
             <div class="card">
                 <div class="card-body">
                     <!-- Logo -->
-                    <div class="app-brand justify-content-center">
+                    <div class="app-brand justify-content-center mb-2">
                         <a href="{{ route('index') }}" class="app-brand-link gap-2">
                             <span class="app-brand-logo demo">
                                 <img src="{{asset('assets/img/logo-sjgu.png')}}" width="150">
                             </span>
                         </a>
                     </div>
+                    <br>
+                    <center><p><b>JGU Academician</b> login<br> using Single Sign-On (SSO) JGU,<br><b>Guest</b> login using Google Account.</p></center>
+                    
                     <!-- /Logo -->
                     <!-- <h4 class="mb-2 text-center">Login</h4> -->
                     <!-- <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">

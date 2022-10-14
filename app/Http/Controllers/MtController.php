@@ -11,6 +11,7 @@ use App\Models\Attendance;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Log;
 
 class MtController extends Controller
 {
@@ -126,6 +127,7 @@ class MtController extends Controller
     {
         $data = AttendanceActivity::find($request->id);
         if($data && $data->user_id == Auth::user()->id){
+            Log::warning(Auth::user()->name." delete data #".$data->id.", ".$data->title);
             $data->delete();
             return response()->json([
                 'success' => true,
@@ -206,6 +208,7 @@ class MtController extends Controller
     {
         $data = Attendance::find($request->id);
         if($data){
+            Log::warning(Auth::user()->name." delete data #".$data->id.", ".$data->username);
             $data->delete();
             return response()->json([
                 'success' => true,

@@ -68,6 +68,7 @@ Route::group(['prefix' => 'QR','middleware' => ['auth']], function () {
   Route::get('/', [App\Http\Controllers\QrController::class, 'index'])->name('qr.index');
 });
 
+Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware(['auth', 'role:AD']);
 
 //Rest API QR-JGU
 Route::get('/qrcode', [App\Http\Controllers\QrController::class, 'qrcode'])->name('qrcode');

@@ -18,13 +18,13 @@
         <div class="col-md-6">
             <label class="form-label">Data</label>
             <div class="input-group mb-3">
-                <input type="text" name="data" id="data" olaceholder="Data/URL" class="form-control" >
+                <input type="text" name="data" id="data" placeholder="Data/URL" class="form-control" >
             </div>
         </div>
         <div class="col-md-6">
             <label class="form-label">Label</label>
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="label" id="label">
+                <input type="text" class="form-control" name="label" placeholder="Label under QR"  id="label">
                 <button class="btn btn-outline-primary" type="button" onclick="GenerateQR()" id="button-addon2">Generate Now!</button>
             </div>
         </div>

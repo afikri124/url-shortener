@@ -51,6 +51,18 @@
         </li>
         @endif
 
+        @if(Auth::user()->hasRole('AD'))
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Setting</span>
+        </li>
+        <li class="menu-item {{ Route::currentRouteName()=='setting_account' ? 'active' : '' }}">
+            <a href="{{ route('setting_account') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                <div data-i18n="Account">Account</div>
+            </a>
+        </li>
+        @endif
+
      </ul>
 
 

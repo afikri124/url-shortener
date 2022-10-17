@@ -65,6 +65,12 @@ Route::group(['prefix' => 'QR','middleware' => ['auth','role:ST,SD']], function 
   Route::get('/', [App\Http\Controllers\QrController::class, 'index'])->name('qr.index');
 });
 
+Route::group(['prefix' => 'setting','middleware' => ['auth','role:AD']], function () {
+  Route::get('account', [App\Http\Controllers\SettingController::class, 'account'])->name('setting_account');
+  Route::get('account/data', [App\Http\Controllers\SettingController::class, 'account_data'])->name('setting_account_data');
+  Route::any('account/edit/{id}', [App\Http\Controllers\SettingController::class, 'account_edit'])->name('setting_account_edit');
+});
+
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware(['auth', 'role:AD']);
 
 //Rest API QR-JGU

@@ -18,4 +18,22 @@ class Role extends Model
   {
       return $this->belongsToMany(User::class, 'user_roles');
   }
+
+  protected $appends = ['color'];
+
+  public function getColorAttribute(){
+      $x = "";
+      if($this->id == "AD"){
+          $x = "secondary";
+      } else if($this->id == "SD"){
+          $x = "warning";
+      } else if($this->id == "ST"){
+          $x = "danger";
+      } else if($this->id == "GS"){
+          $x = "info";
+      } else {
+          $x = "muted";
+      }
+      return $x;
+  }
 }

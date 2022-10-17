@@ -162,7 +162,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = `<a class=" text-success" title="Ubah" href="{{ url('pengaturan/akun/ubah/` +
+                        var html = `<a class=" text-success" title="Ubah" href="{{ url('setting/account/edit/` +
                             row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
                         if (row.id != 1) {
                             return html;

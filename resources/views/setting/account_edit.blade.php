@@ -25,7 +25,7 @@
         </div>
         @endif
         <div class="card mb-4">
-            <h5 class="card-header"><img src="{{ $data->image() }}" class="w-40 h-40 rounded-circle" style="width:40px; height:40px;object-fit: cover; margin-right:10px;"> Perbarui Akun </h5>
+            <h5 class="card-header"><img src="{{ $data->image() }}" class="w-40 h-40 rounded-circle" style="width:40px; height:40px;object-fit: cover; margin-right:10px;"> Edit Account </h5>
             <!-- Account -->
             <hr class="my-0">
             <div class="card-body">
@@ -56,11 +56,34 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
+                            <label for="front_title" class="form-label">Front Title</label>
+                            <input type="front_title" class="form-control @error('front_title') is-invalid @enderror" id="front_title"
+                                name="front_title" value="{{ (old('front_title') == null ?  $data->front_title : old('front_title')) }}" placeholder="Enter Front Title"  />
+                            @error('front_title')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label for="back_title" class="form-label">Back Title</label>
+                            <input type="back_title" class="form-control @error('back_title') is-invalid @enderror" id="back_title"
+                                name="back_title" value="{{ (old('back_title') == null ?  $data->back_title : old('back_title')) }}" placeholder="Enter BAck Title"  />
+                            @error('back_title')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+
+                        <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                                 name="email" value="{{ (old('email') == null ? 
                                     ( strstr($data->email, $data->username) == false ? $data->email : '') 
-                                    : old('email')) }}" placeholder="Masukkan Email"  />
+                                    : old('email')) }}" placeholder="Enter Email"  />
                             @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -70,23 +93,20 @@
 
                         <div class="mb-3 col-md-6">
                             <label for="job" class="form-label">Job</label>
-                            <select class="select2 form-select col-sm-12 @error('job') is-invalid @enderror"
-                                name="jabatan" id="jabatan">
-                                <option value=""
-                                    {{ (old('jabatan') == null  ? 'selected' : ($data->jabatan == null ? 'selected' : '' ))}}
-                                    disabled>Jabatan
-                                    Akademik</option>
-                                <option
-                                    {{ (old('jabatan') == "Dosen"  ? 'selected' : ($data->jabatan == "Dosen" ? 'selected' : '')) }}>
-                                    Dosen</option>
-                                <option
-                                    {{ (old('jabatan') == "Ketua Program Studi"  ? 'selected' : ($data->jabatan == "Ketua Program Studi" ? 'selected' : '')) }}>
-                                    Ketua Program Studi</option>
-                                <option
-                                    {{ (old('jabatan') == "Dekan"  ? 'selected' : ($data->jabatan == "Dekan" ? 'selected' : '' ))}}>
-                                    Dekan</option>
-                            </select>
-                            @error('jabatan')
+                            <input type="job" class="form-control @error('job') is-invalid @enderror" id="job"
+                                name="job" value="{{ (old('job') == null ? $data->job : old('job')) }}" placeholder="Enter Job"  />
+                            @error('job')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                       
+                        <div class="mb-3 col-md-6">
+                            <label for="gender" class="form-label">Gender</label>
+                            <input type="gender" class="form-control @error('gender') is-invalid @enderror" id="gender"
+                                name="gender" value="{{ (old('gender') == null ? $data->gender : old('gender')) }}" placeholder="Enter Gender M/F"  />
+                            @error('gender')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -94,79 +114,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label for="unit_kerja" class="form-label">Unit Kerja</label>
-                            <select class="select2 form-select col-sm-12 @error('unit_kerja') is-invalid @enderror"
-                                name="unit_kerja" id="unit_kerja">
-                                <option value=""
-                                    {{ (old('unit_kerja') == null  ? 'selected' : ($data->unit_kerja == null ? 'selected' : '')) }}
-                                    disabled>Unit Kerja</option>
-                                <option
-                                    {{ (old('unit_kerja') == "Teknik Sipil"  ? 'selected' : ($data->unit_kerja == "Teknik Sipil" ? 'selected' : '')) }}>
-                                    Teknik Sipil
-                                </option>
-                                <option
-                                    {{ (old('unit_kerja') == "Teknik Mesin"  ? 'selected' : ($data->unit_kerja == "Teknik Mesin" ? 'selected' : '')) }}>
-                                    Teknik Mesin
-                                </option>
-                                <option
-                                    {{ (old('unit_kerja') == "Teknik Elektro"  ? 'selected' : ($data->unit_kerja == "Teknik Elektro" ? 'selected' : '')) }}>
-                                    Teknik Elektro</option>
-                                <option
-                                    {{ (old('unit_kerja') == "Teknik Informatika"  ? 'selected' : ($data->unit_kerja == "Teknik Informatika" ? 'selected' : '')) }}>
-                                    Teknik Informatika</option>
-                                <option
-                                    {{ (old('unit_kerja') == "Teknik Industri"  ? 'selected' : ($data->unit_kerja == "Teknik Industri" ? 'selected' : '')) }}>
-                                    Teknik Industri</option>
-                                <option
-                                    {{ (old('unit_kerja') == "Farmasi"  ? 'selected' : ($data->unit_kerja == "Farmasi" ? 'selected' : '')) }}>
-                                    Farmasi</option>
-                                <option
-                                    {{ (old('unit_kerja') == "Akuntansi"  ? 'selected' : ($data->unit_kerja == "Akuntansi" ? 'selected' : '')) }}>
-                                    Akuntansi
-                                </option>
-                                <option
-                                    {{ (old('unit_kerja') == "Manajemen"  ? 'selected' : ($data->unit_kerja == "Manajemen" ? 'selected' : '')) }}>
-                                    Manajemen
-                                </option>
-                                <option
-                                    {{ (old('unit_kerja') == "Bisnis Digital"  ? 'selected' : ($data->unit_kerja == "Bisnis Digital" ? 'selected' : '')) }}>
-                                    Bisnis Digital</option>
-                                <option
-                                    {{ (old('unit_kerja') == "S2 Teknik Elektro"  ? 'selected' : ($data->unit_kerja == "S2 Teknik Elektro" ? 'selected' : '')) }}>
-                                    S2 Teknik Elektro</option>
-                            </select>
-                            @error('unit_kerja')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3 col-md-6">
-                            <label for="fakultas" class="form-label">Fakultas</label>
-                            <select class="select2 form-select col-sm-12 @error('fakultas') is-invalid @enderror"
-                                name="fakultas" id="fakultas">
-                                <option value="" {{ $data->fakultas == null ? 'selected' : '' }} disabled>
-                                    Fakultas</option>
-                                <option
-                                    {{ (old('fakultas') == "Teknik dan Ilmu Komputer"  ? 'selected' : ($data->fakultas == "Teknik dan Ilmu Komputer" ? 'selected' : '')) }}>
-                                    Teknik dan Ilmu Komputer</option>
-                                <option
-                                    {{ (old('fakultas') == "Ekonomi dan Bisnis"  ? 'selected' : ($data->fakultas == "Ekonomi dan Bisnis" ? 'selected' : '')) }}>
-                                    Ekonomi dan Bisnis</option>
-                                <option
-                                    {{ (old('fakultas') == "Farmasi"  ? 'selected' : ($data->fakultas == "Farmasi" ? 'selected' : '')) }}>
-                                    Farmasi</option>
-                            </select>
-                            @error('fakultas')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3 col-md-6">
-                            <label class="form-label">Hak Akses</label>
+                            <label class="form-label">Access</label>
                             <select class="select2 form-select" multiple="multiple" name="roles[]" id="select2Dark"
                                 >
                                 @foreach($roles as $role)
@@ -177,8 +125,8 @@
                         </div>
                     </div>
                     <div class="mt-2">
-                        <button type="submit" class="btn btn-primary me-2">Simpan</button>
-                        <a class="btn btn-outline-secondary" href="{{ route('pengaturan.akun') }}">Kembali</a>
+                        <button type="submit" class="btn btn-primary me-2">Save</button>
+                        <a class="btn btn-outline-secondary" href="{{ route('setting_account') }}">Cancel</a>
                     </div>
                 </form>
             </div>

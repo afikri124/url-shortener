@@ -18,7 +18,7 @@
         <div class="col-md-6">
             <label class="form-label">Data</label>
             <div class="input-group mb-3">
-                <input type="text" name="data" id="data" class="form-control" >
+                <input type="text" name="data" id="data" olaceholder="Data/URL" class="form-control" >
             </div>
         </div>
         <div class="col-md-6">

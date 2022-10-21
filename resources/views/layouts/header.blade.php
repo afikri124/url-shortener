@@ -22,17 +22,18 @@
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                        <img src="{{ Auth::user()->image() }}" alt class="w-40 h-40 rounded-circle" style="object-fit: cover;">
+                        <img src="{{ Auth::user()->image() }}" alt class="w-40 h-40 rounded-circle"
+                            style="object-fit: cover;">
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item" href="">
+                        <a class="dropdown-item" href="{{ route('user.profile') }}">
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar avatar-online">
-                                        <img src="{{ Auth::user()->image() }}" 
-                                            class="w-40 h-40 rounded-circle" style="object-fit: cover;">
+                                        <img src="{{ Auth::user()->image() }}" class="w-40 h-40 rounded-circle"
+                                            style="object-fit: cover;">
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
@@ -40,6 +41,19 @@
                                     <small class="text-muted">{{ Auth::user()->email }}</small>
                                 </div>
                             </div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="dropdown-item {{ Route::currentRouteName()=='user.profile' ? 'active' : '' }}"
+                            href="{{ route('user.profile') }}">
+                            <i class="bx bx-user me-2"></i>
+                            <span class="align-middle">My Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" target="_blank" href="https://wa.me/6285159211558">
+                            <i class="bx bx-support me-2"></i>
+                            <span class="align-middle">Support</span>
                         </a>
                     </li>
                     <li>

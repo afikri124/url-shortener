@@ -25,6 +25,14 @@ Route::get('/login/sso_klas2/', [App\Http\Controllers\HomeController::class, 'ss
 Route::get('/login/google', [App\Http\Controllers\GoogleController::class, 'redirectToGoogle']);
 Route::get('/login/google/callback', [App\Http\Controllers\GoogleController::class, 'handleCallback']);
 
+//User
+Route::group(['middleware' => ['auth']], function () {
+  Route::get('/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('user.profile');
+  Route::get('/profile/data', [App\Http\Controllers\UserController::class, 'data'])->name('user.data');
+  Route::get('/profile/{id}', [App\Http\Controllers\UserController::class, 'profile_by_id'])->name('user.profile_by_id');
+  Route::get('/profile/data/{id}', [App\Http\Controllers\UserController::class, 'data_by_id'])->name('user.data_by_id');
+});
+
 //URL Shortener
 Route::group(['prefix' => 'URL','middleware' => ['auth', 'role:ST,SD']], function () {
   Route::any('/', [App\Http\Controllers\DataController::class, 'index'])->name('url.index');

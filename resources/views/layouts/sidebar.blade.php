@@ -32,22 +32,29 @@
         <li class="menu-item {{ Route::currentRouteName()=='qr.index' ? 'active' : '' }}">
             <a href="{{ route('qr.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-qr"></i>
-                <div>QRCode Generator</div>
+                <div>QR Generator</div>
             </a>
         </li>
         @endif
         @if(Auth::user()->hasRole('ST'))
-        <li class="menu-item {{ Route::currentRouteName()=='att.index' ? 'active' : '' }} ">
-            <a href="{{ route('att.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-task"></i>
-                <div>Event Attendance</div>
-            </a>
-        </li>
-        <li class="menu-item {{ Route::currentRouteName()=='mt.index' ? 'active' : '' }} ">
-            <a href="{{ route('mt.index') }}" class="menu-link">
+        <li
+            class="menu-item {{ request()->route()->getPrefix() == '/MT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/ATT' ? 'open' : '' }}">
+            <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-calendar-event"></i>
-                <div>Meeting Attendance</div>
+                <div>Attendance</div>
             </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ Route::currentRouteName()=='att.index' ? 'active' : '' }}">
+                    <a href="{{ route('att.index') }}" class="menu-link">
+                        <div>Event</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Route::currentRouteName()=='mt.index' ? 'active' : '' }}">
+                    <a href="{{ route('mt.index') }}" class="menu-link">
+                        <div>Meeting</div>
+                    </a>
+                </li>
+            </ul>
         </li>
         @endif
 
@@ -63,7 +70,7 @@
         </li>
         @endif
 
-     </ul>
+    </ul>
 
 
 

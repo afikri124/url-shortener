@@ -1,8 +1,8 @@
 @extends('layouts.master')
-@section('title', 'Event Attendance')
+@section('title', 'Event')
 
 @section('breadcrumb-items')
-<!-- <span class="text-muted fw-light">Pusat Data /</span> -->
+<span class="text-muted fw-light">Attendance /</span>
 @endsection
 
 @section('css')

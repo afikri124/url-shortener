@@ -57,7 +57,7 @@
     <form class="row p-3" method="POST" action="">
         @csrf
         <div class="col-md-6">
-            <label class="form-label">Shortlink</label>
+            <label class="form-label">Shortlink <i class="text-danger">*</i></label>
             <div class="input-group mb-3">
                 <span class="input-group-text">
                     s.jgu.ac.id/
@@ -72,7 +72,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <label class="form-label">Long URL</label>
+            <label class="form-label">Long URL <i class="text-danger">*</i></label>
             <div class="input-group mb-3">
                 <input type="url" class="form-control @error('url') is-invalid @enderror" name="url"
                     placeholder="http://.." value="{{ old('url') }}">
@@ -169,8 +169,7 @@
                 {
                     render: function (data, type, row, meta) {
                         return '<button class="btn m-0 p-0" title="Copy" onclick=navigator.clipboard.writeText("s.jgu.ac.id/' + row.shortlink + '")><i class="bx bx-copy"></i></button> ' + 
-                        `<a class="text-primary" target="_blank" href="{{ url('` +
-                            row.shortlink + `') }}">` +  row.shortlink +`</a>`;
+                        `<span class="text-muted">s.jgu.ac.id/</span><b>` +  row.shortlink +`</b>`;
                     },
                 },
                 {

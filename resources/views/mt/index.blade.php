@@ -1,8 +1,8 @@
 @extends('layouts.master')
-@section('title', 'Meeting Attendance')
+@section('title', 'Meeting')
 
 @section('breadcrumb-items')
-<!-- <span class="text-muted fw-light">Pusat Data /</span> -->
+<span class="text-muted fw-light">Attendance /</span>
 @endsection
 
 @section('css')
@@ -44,7 +44,7 @@
     }
 
     table.dataTable td:nth-child(8) {
-        max-width: 60px;
+        max-width: 50px;
     }
 
     table.dataTable td {
@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
+            <div class="offcanvas offcanvas-end @if($errors->all()) show @endif"  id="newrecord"
                 aria-labelledby="offcanvasEndLabel">
                 <div class="offcanvas-header">
                     <h5 id="offcanvasEndLabel" class="offcanvas-title">Add New</h5>
@@ -171,13 +171,12 @@
                         <div class="col-sm-12 fv-plugins-icon-container">
                             <label class="form-label" for="basicDate">Notulen</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('notulen') is-invalid @enderror" name="notulen"
-                                    placeholder="Username/NIK Notulen" value="{{ old('notulen') }}">
-                                @error('notulen')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
+                                <select class="form-select select2-modal" data-placeholder="Notulen" name="notulen">
+                                    <option value="">--Select Notulen--</option>
+                                    @foreach($user as $d)
+                                    <option value="{{ $d->username }}">{{ $d->name }} - {{ $d->username }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-4">
@@ -306,13 +305,13 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return "<span title='" + row.notulen_username + "'>" + row.notulen_username + "</span>";
+                        return "<span title='" + row.notulen_username + "'>" + row.notulen + "</span>";
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
                             return `<a class="text-primary" title="List" href="{{ url('MT/list/` +
-                                row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-info" target="_blank" title="Print" href="{{ url('MT/print/` +
+                                row.idd + `') }}"><i class="bx bx-spreadsheet"></i></a> <a class="text-info" target="_blank" title="Print" href="{{ url('MT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('MT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +

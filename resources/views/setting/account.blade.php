@@ -44,10 +44,10 @@
                                 </select>
                             </div>
                             <div class=" col-md-3">
-                                <select id="select_user" class="select2 form-select" data-placeholder="User">
-                                    <option value="">User</option>
-                                    @foreach($user as $d)
-                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                <select id="select_job" class="select2 form-select" data-placeholder="Job">
+                                    <option value="">Job</option>
+                                    @foreach($job as $d)
+                                    <option value="{{ $d->job }}">{{ $d->job }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -109,7 +109,7 @@
                 url: "{{ route('setting_account_data') }}",
                 data: function (d) {
                         d.select_role = $('#select_role').val(),
-                        d.select_user = $('#select_user').val(),
+                        d.select_job = $('#select_job').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -127,7 +127,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = `<a class="text-primary" title="` + row.name + `" href="{{ url('p/` +
+                        var html = `<a class="text-primary" title="` + row.name + `" href="{{ url('profile/` +
                             row.idd + `') }}">` + row.name + `</a>`;
                         return html;
                     },
@@ -142,9 +142,10 @@
 
                 {
                     render: function (data, type, row, meta) {
-                        var html = "<span title='" + row.job + "'>" + row.job +
-                            "</span>";
-                        return html;
+                        if(row.job != null){
+                            return "<span title='" + row.job + "'>" + row.job + "</span>";
+                        }
+                        
                     },
                 },
                 {
@@ -177,7 +178,7 @@
         $('#select_role').change(function () {
             table.draw();
         });
-        $('#select_user').change(function () {
+        $('#select_job').change(function () {
             table.draw();
         });
     });

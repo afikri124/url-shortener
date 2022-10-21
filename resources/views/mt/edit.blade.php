@@ -84,8 +84,13 @@
                     </div>
                     <div class="mb-3 col-md-12">
                     <label class="form-label" for="basicDate">Notulen</label>
-                        <input type="text" class="form-control @error('notulen') is-invalid @enderror" name="notulen"
-                            placeholder="" value="{{ $data->notulen_username }}">
+                        <select class="form-select select2 col-sm-12 @error('notulen') is-invalid @enderror" name="notulen">
+                            <option value="" selected disabled>--Select Notulen--</option>
+                            @foreach($user as $d)
+                            <option value="{{ $d->username }}" {{ ($d->username==$data->notulen_username ? "selected": "") }}>
+                            {{ $d->name }} - {{ $d->username }}</option>
+                            @endforeach
+                        </select>
                         @error('notulen')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

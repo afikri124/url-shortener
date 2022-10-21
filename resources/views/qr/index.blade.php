@@ -16,15 +16,15 @@
 <div class="card mb-4">
     <form class="row p-3">
         <div class="col-md-6">
-            <label class="form-label">Data</label>
+            <label class="form-label">Data <i class="text-danger">*</i></label>
             <div class="input-group mb-3">
-                <input type="text" name="data" id="data" placeholder="Data/URL" class="form-control" >
+                <input type="text" name="data" id="data" placeholder="URL/Email/Phone/Text" class="form-control" >
             </div>
         </div>
         <div class="col-md-6">
             <label class="form-label">Label</label>
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="label" placeholder="Label under QR"  id="label">
+                <input type="text" class="form-control" name="label" placeholder="Label under QR-Code"  id="label">
                 <button class="btn btn-outline-primary" type="button" onclick="GenerateQR()" id="button-addon2">Generate Now!</button>
             </div>
         </div>
@@ -41,6 +41,7 @@
     function GenerateQR() {
         if($('#data').val() == ""){
             swal("Data cannot be empty!", { icon: "error",});
+            document.getElementById("qrcode").innerHTML = "";
         } else {
             document.getElementById("qrcode").innerHTML = "<img src='{{ url('qrcode')}}?data=" + $('#data').val() + "&label="+ $('#label').val() + "'>";
         }

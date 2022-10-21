@@ -27,8 +27,8 @@ class SettingController extends Controller
     public function account(Request $request)
     {
             $roles          = Role::get();
-            $user          = User::where('username','!=', 'admin')->get();
-            return view('setting.account', compact('user','roles'));      
+            $job            = User::select('job')->groupBy('job')->get();
+            return view('setting.account', compact('roles','job'));      
     }
 
     public function account_data(Request $request)
@@ -44,8 +44,8 @@ class SettingController extends Controller
                             $q->where('role_id', $request->get('select_role'));
                         });
                     }
-                    if (!empty($request->get('select_user'))) {
-                        $instance->where('id', $request->get('select_user'));
+                    if (!empty($request->get('select_job'))) {
+                        $instance->where('job', $request->get('select_job'));
                     }
                     if (!empty($request->get('search'))) {
                          $instance->where(function($w) use($request){

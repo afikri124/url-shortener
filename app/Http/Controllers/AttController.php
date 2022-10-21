@@ -45,9 +45,9 @@ class AttController extends Controller
                 'user_id'       => Auth::user()->id
             ]);
             if($data){
-                return redirect()->route('att.index')->with('msg','Activity added successfully');
+                return redirect()->route('att.index')->with('msg','Attendance added successfully');
             }else{
-                return redirect()->route('att.index')->with('msg','Activity failed to add!');
+                return redirect()->route('att.index')->with('msg','Attendance failed to add!');
             }
         }else{
             $data = "";

@@ -12,6 +12,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 class MtController extends Controller
 {
@@ -45,20 +46,22 @@ class MtController extends Controller
                 'user_id'            => Auth::user()->id
             ]);
             if($data){
-                return redirect()->route('mt.index')->with('msg','Activity added successfully');
+                return redirect()->route('mt.index')->with('msg','Attendance added successfully');
             }else{
-                return redirect()->route('mt.index')->with('msg','Activity failed to add!');
+                return redirect()->route('mt.index')->with('msg','Attendance failed to add!');
             }
         }else{
-            $data = "";
-            return view('mt.index', compact('data'));
+            $user            = User::select('username','name')->get();
+            return view('mt.index', compact('user'));
         }
             
     }
 
     public function data(Request $request)
     {
-        $data = AttendanceActivity::where('type','M')->where('user_id', Auth::user()->id)->select('*')->orderByDesc("id");
+        $data = AttendanceActivity::leftJoin('users', 'users.username', '=', 'attendance_activities.notulen_username')
+        ->where('type','M')
+        ->where('user_id', Auth::user()->id)->select('attendance_activities.*', "users.name as notulen")->orderByDesc("id");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
@@ -114,12 +117,12 @@ class MtController extends Controller
                 return redirect()->route('mt.index')->with('msg','Data failed to change!');
             }
         }
-        
-        $data = AttendanceActivity::findOrFail($id);
+        $user            = User::select('username','name')->get();
+        $data            = AttendanceActivity::findOrFail($id);
         if($data->user_id != Auth::user()->id){
             abort(403);
         } else {
-            return view('mt.edit', compact('data'));
+            return view('mt.edit', compact('data','user'));
         }
     }
 

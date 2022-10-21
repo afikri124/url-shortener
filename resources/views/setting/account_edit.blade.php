@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', $data->nama )
+@section('title', $data->name )
 @section('breadcrumb-items')
 <span class="text-muted fw-light">Setting / Account / </span>
 @endsection
@@ -35,7 +35,7 @@
                         <div class="mb-3 col-md-6">
                             <label for="name" class="form-label">Full Name</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                name="name" value="{{ $data->name }}" placeholder="Enter Name" autofocus />
+                                name="name" value="{{ $data->name }}" placeholder="Enter Full Name" autofocus />
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -47,7 +47,7 @@
                             <label for="user" class="form-label">Username</label>
                             <input type="username" class="form-control @error('username') is-invalid @enderror"
                                 id="user" name="username" value="{{ $data->username  }}"
-                                placeholder="Masukkan Username" />
+                                placeholder="Username (NIK/NIM)" />
                             @error('username')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -58,7 +58,7 @@
                         <div class="mb-3 col-md-6">
                             <label for="front_title" class="form-label">Front Title</label>
                             <input type="front_title" class="form-control @error('front_title') is-invalid @enderror" id="front_title"
-                                name="front_title" value="{{ (old('front_title') == null ?  $data->front_title : old('front_title')) }}" placeholder="Enter Front Title"  />
+                                name="front_title" value="{{ (old('front_title') == null ?  $data->front_title : old('front_title')) }}" placeholder="Enter Front Title (Ir. /Dr.)"  />
                             @error('front_title')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -69,7 +69,7 @@
                         <div class="mb-3 col-md-6">
                             <label for="back_title" class="form-label">Back Title</label>
                             <input type="back_title" class="form-control @error('back_title') is-invalid @enderror" id="back_title"
-                                name="back_title" value="{{ (old('back_title') == null ?  $data->back_title : old('back_title')) }}" placeholder="Enter BAck Title"  />
+                                name="back_title" value="{{ (old('back_title') == null ?  $data->back_title : old('back_title')) }}" placeholder="Enter Back Title (S.Kom)"  />
                             @error('back_title')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -114,7 +114,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Access</label>
+                            <label class="form-label">Role Access</label>
                             <select class="select2 form-select" multiple="multiple" name="roles[]" id="select2Dark"
                                 >
                                 @foreach($roles as $role)

@@ -49,7 +49,7 @@
         <br>
         <a href="{{$link}}" target="_blank" ><img src="{!! $qr !!}" style="height: 300px;margin:40px 0 20px 0;"></a>
         <br>
-        <h4>[ <code>{{$link}}</code> ]</h4>
+        <h4>[ <code style="color:red">{{$link}}</code> ]</h4>
         <br>
         <b style="font-size:20px ">{{$data->location}}</b>
         <br>

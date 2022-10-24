@@ -1,8 +1,8 @@
 @extends('layouts.master')
-@section('title', 'List Attendance')
+@section('title', $data->title )
 
 @section('breadcrumb-items')
-<!-- <span class="text-muted fw-light">Pusat Data /</span> -->
+<span class="text-muted fw-light">Attendance / Meeting /</span>
 @endsection
 
 @section('css')
@@ -144,6 +144,9 @@
                         if (row.user != null) {
                             return "<span title='" + row.user.name + "'>" + row.user
                                 .name_with_title +
+                                "</span>";
+                        } else {
+                            return "<span class='text-danger' title='unregistered user'>" + row.username +
                                 "</span>";
                         }
                     },

@@ -28,7 +28,7 @@
                                     <i class='bx bx-briefcase'></i> {{ $data->job }}
                                 </li>
                                 <li class="list-inline-item fw-semibold">
-                                    <i class='bx bx-certification'></i> {{ $data->gender }}
+                                    <i class='bx bx-face'></i> {{ $data->gender }}
                                 </li>
                             </ul>
                         </div>

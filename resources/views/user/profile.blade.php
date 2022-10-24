@@ -51,7 +51,7 @@
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-briefcase"></i><span
                             class="fw-semibold mx-2">Job:</span>
                         <span>{{ Auth::user()->job }}</span></li>
-                    <li class="d-flex align-items-center mb-3"><i class="bx bx-certification"></i><span
+                    <li class="d-flex align-items-center mb-3"><i class="bx bx-face"></i><span
                             class="fw-semibold mx-2">Gender:</span>
                         <span>{{ Auth::user()->gender }}</span></li>
                 </ul>

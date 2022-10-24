@@ -129,18 +129,26 @@ class MtController extends Controller
     public function delete(Request $request) 
     {
         $data = AttendanceActivity::find($request->id);
-        if($data && $data->user_id == Auth::user()->id){
-            Log::warning(Auth::user()->name." delete data #".$data->id.", ".$data->title);
-            $data->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Data deleted successfully!'
-            ]);
-        } else {
+        $att = Attendance::where("activity_id", $request->id)->count();
+        if($att != 0){
             return response()->json([
                 'success' => false,
-                'message' => 'Not allowed to delete this data!'
+                'message' => 'This attendance is already used, please delete the list first!'
             ]);
+        } else {
+            if($data && $data->user_id == Auth::user()->id){
+                Log::warning(Auth::user()->name." delete AttendanceActivity #".$data->id.", ".$data->title);
+                $data->delete();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data deleted successfully!'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Not allowed to delete this data!'
+                ]);
+            }
         }
     }
 
@@ -184,7 +192,8 @@ class MtController extends Controller
             } catch (DecryptException $e) {
                 return redirect()->route('mt.index');
             }
-            return view('mt.list', compact('id'));
+            $data = AttendanceActivity::findOrFail($id);
+            return view('mt.list', compact('id','data'));
         }     
     }
 
@@ -211,7 +220,7 @@ class MtController extends Controller
     {
         $data = Attendance::find($request->id);
         if($data){
-            Log::warning(Auth::user()->name." delete data #".$data->id.", ".$data->username);
+            Log::warning(Auth::user()->name." delete Attendance #".$data->id.", ".$data->username);
             $data->delete();
             return response()->json([
                 'success' => true,

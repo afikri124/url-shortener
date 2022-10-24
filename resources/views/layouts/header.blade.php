@@ -50,6 +50,12 @@
                             <span class="align-middle">My Profile</span>
                         </a>
                     </li>
+                    <li class="">
+                        <a class="dropdown-item {{ Route::currentRouteName()=='user.edit' ? 'active' : '' }}" href="{{ route('user.edit') }}">
+                            <i class="bx bx-cog  me-2"></i>
+                            <span class="align-middle">Edit Profile</span>
+                        </a>
+                    </li>
                     <li>
                         <a class="dropdown-item" target="_blank" href="https://wa.me/6285159211558">
                             <i class="bx bx-support me-2"></i>

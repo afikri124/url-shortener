@@ -42,7 +42,8 @@
                 <p><b>{{$data->title}}<b></p>
             </td>
             <td style="text-align:center; vertical-align:middle;" rowspan='6' width="20%">
-                <p>FM/JGU/L.007</p>
+                <p style="margin-bottom: 5px;">FM/JGU/L.007</p>
+                <a href="{{ $link }}"><img src="{{ $qr }}" style="height: 85px;"></a>
             </td>
         </tr>
         <tr>
@@ -104,10 +105,10 @@
                 <p>{{$key+1}}</p>
             </td>
             <td>
-                <p>{{$d->user->name_with_title}}</p>
+                <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}</p>
             </td>
             <td>
-                <p>{{$d->user->job}}</p>
+                <p>{{($d->user != null ? $d->user->job : "-")}}</p>
             </td>
             <td style="text-align:center;">
                 <p>{{$d->created_at}}</p>
@@ -115,7 +116,6 @@
         </tr>
         @endforeach
     </table>
-    <br>
     <br>
     <table width="100%">
         <tr>

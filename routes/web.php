@@ -29,8 +29,9 @@ Route::get('/login/google/callback', [App\Http\Controllers\GoogleController::cla
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('user.profile');
   Route::get('/profile/data', [App\Http\Controllers\UserController::class, 'data'])->name('user.data');
-  Route::get('/profile/{id}', [App\Http\Controllers\UserController::class, 'profile_by_id'])->name('user.profile_by_id');
   Route::get('/profile/data/{id}', [App\Http\Controllers\UserController::class, 'data_by_id'])->name('user.data_by_id');
+  Route::any('/profile/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+  Route::get('/profile/{id}', [App\Http\Controllers\UserController::class, 'profile_by_id'])->name('user.profile_by_id');
 });
 
 //URL Shortener

@@ -61,6 +61,7 @@
                 <tr>
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Name</th>
+                    <th>Username</th>
                     <th>Email</th>
                     <th>Job</th>
                     <th>Access</th>
@@ -134,6 +135,13 @@
                 },
                 {
                     render: function (data, type, row, meta) {
+                        var html = "<span title='" + row.username + "'>" + row.username +
+                            "</span>";
+                        return html;
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
                         var html = "<span title='" + row.email + "'>" + row.email +
                             "</span>";
                         return html;
@@ -163,8 +171,10 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = `<a class=" text-success" title="Ubah" href="{{ url('setting/account/edit/` +
-                            row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
+                        var html = `<a class=" text-success" title="Edit" href="{{ url('setting/account/edit/` +
+                            row.idd + `') }}"><i class="bx bxs-edit"></i></a> 
+                            <a class=" text-danger" title="Delete" onclick="DeleteId(` + row
+                            .id + `)" ><i class="bx bx-trash"></i></a>`;
                         if (row.id != 1) {
                             return html;
                         } else {
@@ -183,6 +193,38 @@
         });
     });
 
-
+    function DeleteId(id) {
+        swal({
+                title: "Are you sure?",
+                text: "Once deleted, the data cannot be recovered!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "{{ route('setting_account_delete') }}",
+                        type: "DELETE",
+                        data: {
+                            "id": id,
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                        },
+                        success: function (data) {
+                            if (data['success']) {
+                                swal(data['message'], {
+                                    icon: "success",
+                                });
+                                $('#datatable').DataTable().ajax.reload();
+                            } else {
+                                swal(data['message'], {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    })
+                }
+            })
+    }
 </script>
 @endsection

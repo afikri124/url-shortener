@@ -51,7 +51,13 @@ class MtController extends Controller
                 return redirect()->route('mt.index')->with('msg','Attendance failed to add!');
             }
         }else{
-            $user            = User::select('username','name')->get();
+            $user            = User::select('username','name')
+                                ->whereHas('roles', function($q){
+                                    $q->where('role_id', "ST");
+                                })
+                                ->where('username','!=', 'admin')
+                                ->orderBy('name')
+                                ->get();
             return view('mt.index', compact('user'));
         }
             

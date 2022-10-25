@@ -290,7 +290,7 @@
                 {
                     render: function (data, type, row, meta) {
                             return `<a class="text-primary" title="List" href="{{ url('ATT/list/` +
-                                row.idd + `') }}"><i class="bx bx-list-ul"></i></a> <a class="text-info" target="_blank" title="Print" href="{{ url('ATT/print/` +
+                                row.idd + `') }}"><i class="bx bx-spreadsheet"></i></a> <a class="text-info" target="_blank" title="Print QR" href="{{ url('ATT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('ATT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +

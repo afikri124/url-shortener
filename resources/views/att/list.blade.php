@@ -51,9 +51,13 @@
                     <div class="col-12">
                     <form method="POST" class="row" target="_blank" action="">
                             @csrf
-                            <div class="offset-md-9 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                            <div class="col-md-12 text-md-end text-center pt-3 pt-md-0">
+                                <a href="{{ route('att.print', ['id' => Crypt::encrypt($data->id) ]) }}" target="_blank"
+                                    class="btn btn-primary"><i class="bx bx-qr-scan me-sm-2"></i>
+                                    <span>QR-Code</span>
+                                </a>
                                 <button class="btn btn-primary" type="submit"><i class="bx bx-printer me-sm-2"></i>
-                                    <span>Print</span>
+                                    <span>Print Report</span>
                                 </button>
                             </div>
                         </form>

@@ -21,21 +21,27 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     @else
-                        @if($check !=null)
-                        <div class="alert alert-success alert-dismissible" role="alert">
-                            You have been attend on<br>{{ date('l, d F Y H:i', strtotime($check->created_at)) }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        @else
-                        <p class="mb-4 text-center">Please Fill Your Attendance</p>
-                        @endif
+                    @if($check !=null)
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        You have been attend on<br>{{ date('l, d F Y H:i', strtotime($check->created_at)) }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    @else
+                    <p class="mb-4 text-center">Please Fill Your Attendance</p>
+                    @endif
                     @endif
                     <form id="formAuthentication" class="mb-3" action="" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="nama" class="form-label">Name</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="nama"
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror"
                                 name="name" value="{{ Auth::user()->name_with_title }}" disabled />
+                            @if(Auth::user()->hasRole('GS'))
+                            <small class="text-mute">
+                                <strong class="text-danger">*</strong> if you want to update your name
+                                <a href="{{ route('user.edit') }}" target="_blank"><strong>click here</strong></a>
+                            </small>
+                            @endif
                         </div>
 
                         <div class="mb-3">
@@ -67,9 +73,8 @@
                         <div class="mb-3">
                             <label for="job" class="form-label">Job</label>
                             <input type="text" class="form-control @error('job') is-invalid @enderror" id="job"
-                                name="job" value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" 
-                                @if($check !=null) readonly @endif
-                                />
+                                name="job" value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}"
+                                @if($check !=null) readonly @endif />
                             @error('job')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -80,8 +85,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">@if($data->type == "M") Meeting @else Event @endif Title</label>
-                            <input type="text" class="form-control"
-                                name="activity" value="{{ $data->title }}" readonly/>
+                            <input type="text" class="form-control" name="activity" value="{{ $data->title }}"
+                                readonly />
                         </div>
 
                         <div class="mb-3">
@@ -105,7 +110,7 @@
                         <div class="mb-3 text-center">
                             <button class="btn btn-dark w-100" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
-                                <i class="bx bx-x-circle me-2"></i>Logout
+                                <i class="bx bx-log-out-circle me-2"></i>Logout
                             </button>
                         </div>
                     </form>

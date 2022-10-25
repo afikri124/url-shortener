@@ -65,7 +65,7 @@ class SettingController extends Controller
     }
 
     public function account_edit ($idd, Request $request)
-   {
+    {
         try {
             $id = Crypt::decrypt($idd);
         } catch (DecryptException $e) {
@@ -100,5 +100,22 @@ class SettingController extends Controller
             abort(403, "Access not allowed!");
         }
         return view('setting.account_edit', compact('data','roles'));
+    }
+
+    public function account_delete(Request $request) {
+        $user = User::find($request->id);
+        if($user){
+            Log::warning(Auth::user()->username." deleted user #".$user->id.", username : ".$user->username.", name : ".$user->name);
+            $user->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Record deleted successfully!'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'User failed to delete!'
+            ]);
+        }
     }
 }

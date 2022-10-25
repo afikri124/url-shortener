@@ -6,7 +6,7 @@
                 <img src="{{asset('assets/img/logo-sjgu.png')}}" height="50">
             </span>
         </a>
-        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-md-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>

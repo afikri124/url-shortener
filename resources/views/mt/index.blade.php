@@ -311,7 +311,7 @@
                 {
                     render: function (data, type, row, meta) {
                             return `<a class="text-primary" title="List" href="{{ url('MT/list/` +
-                                row.idd + `') }}"><i class="bx bx-spreadsheet"></i></a> <a class="text-info" target="_blank" title="Print" href="{{ url('MT/print/` +
+                                row.idd + `') }}"><i class="bx bx-spreadsheet"></i></a> <a class="text-info" target="_blank" title="Print QR" href="{{ url('MT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('MT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +

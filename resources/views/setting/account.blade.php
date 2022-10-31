@@ -1,8 +1,8 @@
 @extends('layouts.master')
-@section('title', 'Account')
+@section('title', 'Akun')
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Setting /</span>
+<span class="text-muted fw-light">Pengaturan /</span>
 @endsection
 
 @section('css')
@@ -36,16 +36,16 @@
                     <div class="col-12">
                         <div class="row">
                         <div class=" col-md-3">
-                                <select id="select_role" class="select2 form-select" data-placeholder="Roles">
-                                    <option value="">Roles</option>
+                                <select id="select_role" class="select2 form-select" data-placeholder="Hak Akses">
+                                    <option value="">Hak Akses</option>
                                     @foreach($roles as $d)
                                     <option value="{{ $d->id }}">{{ $d->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class=" col-md-3">
-                                <select id="select_job" class="select2 form-select" data-placeholder="Job">
-                                    <option value="">Job</option>
+                                <select id="select_job" class="select2 form-select" data-placeholder="Jabatan">
+                                    <option value="">Jabatan</option>
                                     @foreach($job as $d)
                                     <option value="{{ $d->job }}">{{ $d->job }}</option>
                                     @endforeach
@@ -60,12 +60,12 @@
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Name</th>
+                    <th data-priority="2">Nama</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Job</th>
-                    <th>Access</th>
-                    <th width="20px" data-priority="3">Action</th>
+                    <th>Jabatan</th>
+                    <th>Hak Akses</th>
+                    <th width="40px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -103,7 +103,7 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Search..',
+                searchPlaceholder: 'Cari..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
@@ -195,8 +195,8 @@
 
     function DeleteId(id) {
         swal({
-                title: "Are you sure?",
-                text: "Once deleted, the data cannot be recovered!",
+                title: "Apa kamu yakin?",
+                text: "Setelah dihapus, data tidak dapat dipulihkan!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,

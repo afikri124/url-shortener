@@ -26,29 +26,28 @@ class MtController extends Controller
     {
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
-                'title'         => ['required'],
-                'sub_title'     => ['required'],
-                'date'          => ['required', 'date'],
-                'location'      => ['required'],
-                'sub_title'     => ['required'],
-                'host'          => ['required'],
-                'participant'   => ['required'],
+                'judul'             => ['required'],
+                'judul_tambahan'    => ['required'],
+                'tanggal'           => ['required', 'date'],
+                'lokasi'            => ['required'],
+                'pimpinan_rapat'    => ['required'],
+                'peserta'           => ['required'],
             ]);
             $data = AttendanceActivity::create([
                 'type'               => 'M',
-                'title'              => $request->title,
-                'sub_title'          => $request->sub_title,
-                'date'               => date('Y-m-d', strtotime($request->date)),
-                'location'           => $request->location,
-                'host'               => $request->host,
-                'participant'        => $request->participant,
+                'title'              => $request->judul,
+                'sub_title'          => $request->judul_tambahan,
+                'date'               => date('Y-m-d', strtotime($request->tanggal)),
+                'location'           => $request->lokasi,
+                'host'               => $request->pimpinan_rapat,
+                'participant'        => $request->peserta,
                 'notulen_username'   => $request->notulen,
                 'user_id'            => Auth::user()->id
             ]);
             if($data){
-                return redirect()->route('mt.index')->with('msg','Attendance added successfully');
+                return redirect()->route('mt.index')->with('msg','Absensi berhasil dibuat!');
             }else{
-                return redirect()->route('mt.index')->with('msg','Attendance failed to add!');
+                return redirect()->route('mt.index')->with('msg','Absensi gagal dibuat!');
             }
         }else{
             $user            = User::select('username','name')
@@ -118,9 +117,9 @@ class MtController extends Controller
                 'user_id'            => Auth::user()->id
             ]);
             if($d){
-                return redirect()->route('mt.index')->with('msg','Data changed successfully!');
+                return redirect()->route('mt.index')->with('msg','Data berhasil diubah!');
             }else{
-                return redirect()->route('mt.index')->with('msg','Data failed to change!');
+                return redirect()->route('mt.index')->with('msg','Data gagal diubah!');
             }
         }
         $user            = User::select('username','name')->get();
@@ -139,7 +138,7 @@ class MtController extends Controller
         if($att != 0){
             return response()->json([
                 'success' => false,
-                'message' => 'This attendance is already used, please delete the list first!'
+                'message' => 'Absensi ini sudah terpakai, mohon hapus dulu daftar pesertanya!'
             ]);
         } else {
             if($data && $data->user_id == Auth::user()->id){
@@ -147,12 +146,12 @@ class MtController extends Controller
                 $data->delete();
                 return response()->json([
                     'success' => true,
-                    'message' => 'Data deleted successfully!'
+                    'message' => 'Data berhasil dihapus!'
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Not allowed to delete this data!'
+                    'message' => 'Tidak diizinkan untuk menghapus data ini!'
                 ]);
             }
         }
@@ -230,12 +229,12 @@ class MtController extends Controller
             $data->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Data deleted successfully!'
+                'message' => 'Data berhasil dihapus!'
             ]);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Not allowed to delete this data!'
+                'message' => 'Tidak diizinkan untuk menghapus data ini!'
             ]);
         }
     }

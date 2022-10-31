@@ -1,7 +1,7 @@
 @extends('layouts.master')
-@section('title', 'Edit Profile')
+@section('title', 'Edit Profil')
 @section('breadcrumb-items')
-<span class="text-muted fw-light">User / </span>
+<span class="text-muted fw-light">Akun / </span>
 @endsection
 
 @section('css')
@@ -27,7 +27,7 @@
         </div>
         @endif
         <div class="card mb-4">
-            <h5 class="card-header">Edit Profile</h5>
+            <h5 class="card-header">Edit Profil</h5>
             <!-- Account -->
             <hr class="my-0">
             <div class="card-body">
@@ -35,9 +35,9 @@
                     <div class="row">
                         @csrf
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Name</label>
+                            <label class="form-label">Nama</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                                value="{{ Auth::user()->name }}" placeholder="Full Name" autofocus />
+                                value="{{ Auth::user()->name }}" placeholder="Nama Lengkap" autofocus />
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -49,7 +49,7 @@
                             <label class="form-label">Username</label>
                             <input type="text" class="form-control @error('username') is-invalid @enderror"
                                 name="username" value="{{ Auth::user()->username }}" placeholder="NIK/NIM"
-                                @if(Auth::user()->username != null ) readonly title="Please contact Administrator" @endif />
+                                @if(Auth::user()->username != null ) readonly title="Silahkan hubungi Admin" @endif />
                             @error('username')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Front Title (Prefix)</label>
+                            <label class="form-label">Gelar Depan</label>
                             <input type="text" class="form-control @error('front_title') is-invalid @enderror"
                                 name="front_title" value="{{ Auth::user()->front_title }}" />
                             @error('front_title')
@@ -69,7 +69,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Back Title (Academic Degree)</label>
+                            <label class="form-label">Gelar Belakang</label>
                             <input type="text" class="form-control @error('back_title') is-invalid @enderror"
                                 name="back_title" value="{{ Auth::user()->back_title }}" />
                             @error('back_title')
@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Job</label>
+                            <label class="form-label">Jabatan</label>
                             <input type="text" class="form-control @error('job') is-invalid @enderror" name="job"
                                 value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" />
                             @error('job')
@@ -103,13 +103,13 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Gender</label>
+                            <label class="form-label">Jenis Kelamin</label>
                             <select class="select2 form-select col-sm-12 @error('gender') is-invalid @enderror"
                                 name="gender">
                                 <option value="" {{ (Auth::user()->gender == null ? 'selected' : '') }} disabled>
                                     Select</option>
                                 @foreach($gender as $g)
-                                <option {{ ((Auth::user()->gender == $g) ? 'selected' : ''); }}> {{$g}}</option>
+                                <option {{ ((Auth::user()->gender == $g['id']) ? 'selected' : ''); }}> {{$g['title']}}</option>
                                 @endforeach
 
                             </select>
@@ -121,7 +121,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Role Access</label>
+                            <label class="form-label">Hak Akses</label>
                             <select class="select2 form-select" multiple="multiple" name="roles[]" id="select2Dark"
                                 disabled>
                                 @foreach($roles as $role)
@@ -132,7 +132,7 @@
                         </div>
                     </div>
                     <div class="mt-2">
-                        <button type="submit" class="btn btn-primary me-2">Save</button>
+                        <button type="submit" class="btn btn-primary me-2">Simpan</button>
                     </div>
                 </form>
             </div>

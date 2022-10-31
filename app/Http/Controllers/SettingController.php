@@ -93,7 +93,7 @@ class SettingController extends Controller
             $detach = User::find($id)->roles()->detach();
             $attach = User::find($id)->roles()->attach($request->roles);
             Log::info(Auth::user()->name." update user profile #".$id.", ".$request->name);
-            return redirect()->route('setting_account_edit', ['id'=>$idd])->with('msg','Profile '.$request->name.' updated');
+            return redirect()->route('setting_account_edit', ['id'=>$idd])->with('msg','Profil '.$request->name.' diperbarui!');
         }
         $data = User::find($id);
         if($id == 1 || $data == null){
@@ -109,12 +109,12 @@ class SettingController extends Controller
             $user->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Record deleted successfully!'
+                'message' => 'Akun berhasil dihapus!'
             ]);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'User failed to delete!'
+                'message' => 'Akun gagal dihapus!'
             ]);
         }
     }

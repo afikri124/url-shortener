@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Event Attendances {{ $data->id."-".$tok }} | {{ Date::now()->format('j F Y') }}
+    <title>QR Absensi {{ $data->id."-".$tok }} | {{ Date::now()->format('j F Y') }}
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -43,9 +43,9 @@
     <center>
         <b style="font-size:30px">{{$data->title}}</b>
         <br>
-        <b style="font-size:70px">SCAN HERE</b>
+        <b style="font-size:70px">SCAN DISINI</b>
         <br>
-        <b style="font-size:20px;">BEFORE YOU JOIN THIS @if($data->type =='E') EVENT @elseif($data->type =='M') MEETING @endif !</b>
+        <b style="font-size:20px;">UNTUK MELAKUKAN ABSENSI @if($data->type =='E') ACARA @elseif($data->type =='M') RAPAT @endif</b>
         <br>
         <a href="{{$link}}" target="_blank" ><img src="{!! $qr !!}" style="height: 300px;margin:40px 0 20px 0;"></a>
         <br>
@@ -56,7 +56,7 @@
         <i style="font-size:15px ">{{date('l, d F Y', strtotime($data->date))}}</i>
       <hr>
         <br>
-        <b style="font-size:15px ">HOW TO SCAN THE QR CODE</b>
+        <b style="font-size:15px ">LANGKAH MELAKUKAN ABSENSI</b>
         <br>
         <br>
     </center>
@@ -64,15 +64,15 @@
         <tr>
             <td width="30%" style="text-align: center;">
             <h1>1.</h1>
-            <p>Using barcode scanner</p>
+            <p>Menggunakan pemindai kode QR</p>
             </td>
             <td width="40%" style="text-align: center;">
             <h1>2.</h1>
-            <p>Login with your account</p>
+            <p>Masuk dengan akun Anda</p>
             </td>
             <td width="30%" style="text-align:center;">
             <h1>3.</h1>
-            <p>Fill up the details</p>
+            <p>Lengkapi detail datanya</p>
             </td>
         </tr>
     </table>

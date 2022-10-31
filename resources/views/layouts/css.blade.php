@@ -41,4 +41,14 @@
     </script>
     <!-- Custom notification for demo -->
     <!-- beautify ignore:end -->
+    <style>
+        #template-customizer .template-customizer-open-btn {
+            bottom: 10px;
+            top: auto;
+            background: #33333324;
+        }
+        #template-customizer .template-customizer-open-btn:hover {
+            background: #333;
+        }
+    </style>
     @yield('css')

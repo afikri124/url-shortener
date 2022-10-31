@@ -11,7 +11,7 @@
 @endsection
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">URL / </span>
+<span class="text-muted fw-light">Penyingkat URL / </span>
 @endsection
 
 
@@ -33,7 +33,7 @@
                         @enderror
                     </div>
                     <div class="mb-3 col-md-12">
-                        <label for="link" class="form-label">Long URL <i class="text-danger">*</i></label>
+                        <label for="link" class="form-label">URL Panjang <i class="text-danger">*</i></label>
                         <input type="url" name="url" value="{{ (old('url') != null ? old('url') : $data->url) }}"
                             class="form-control @error('url') is-invalid @enderror" placeholder="http://..">
                         @error('url')
@@ -43,8 +43,8 @@
                         @enderror
                     </div>
                     <div class="mt-2">
-                        <button type="submit" name="ubah" class="btn btn-primary me-2">Save</button>
-                        <a class="btn btn-outline-secondary" href="{{ route('url.index') }}">Back</a>
+                        <button type="submit" name="ubah" class="btn btn-primary me-2">Simpan</button>
+                        <a class="btn btn-outline-secondary" href="{{ route('url.index') }}">Kembali</a>
                     </div>
                 </div>
             </form>

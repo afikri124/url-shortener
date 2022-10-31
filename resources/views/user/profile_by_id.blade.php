@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title', $data->name )
 @section('breadcrumb-items')
-<span class="text-muted fw-light">User / Profile / </span>
+<span class="text-muted fw-light">Akun / Profil / </span>
 @endsection
 
 @section('css')
@@ -53,7 +53,7 @@
                 <div class="card-header flex-column pb-0">
                     <div class="row">
                         <div class="col-md-7">
-                            <h5>Attendances</h5>
+                            <h5>Daftar Absensi</h5>
                         </div>
                     </div>
                 </div>
@@ -61,10 +61,10 @@
                     <thead>
                         <tr>
                             <th width="20px" data-priority="1">No</th>
-                            <th data-priority="2">Activity</th>
-                            <th>Location</th>
-                            <th>Host</th>
-                            <th data-priority="3" width="80px">date</th>
+                            <th data-priority="2">Aktivitas</th>
+                            <th>Lokasi</th>
+                            <th>Pimpinan Rapat/Acara</th>
+                            <th data-priority="3" width="80px">Tanggal</th>
                         </tr>
                     </thead>
                 </table>
@@ -102,7 +102,8 @@
             ordering: false,
             // bFilter: false,
             language: {
-                searchPlaceholder: 'Search..'
+                searchPlaceholder: 'Cari..',
+                url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
                 url: "{{ route('user.data_by_id', ['id' => $data->username]) }}",

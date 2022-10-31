@@ -11,7 +11,7 @@
 @endsection
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Attendance / </span>
+<span class="text-muted fw-light">Absensi / Rapat / </span>
 @endsection
 
 
@@ -23,7 +23,7 @@
                 @csrf
                 <div class="row">
                     <div class="mb-3 col-md-12">
-                        <label class="form-label" for="basicDate">Title</label>
+                        <label class="form-label" for="basicDate">Judul</label>
                         <input type="text" class="form-control @error('title') is-invalid @enderror" name="title"
                             placeholder="" value="{{ $data->title }}">
                         @error('title')
@@ -33,7 +33,7 @@
                         @enderror
                     </div>
                     <div class="mb-3 col-md-12">
-                    <label class="form-label" for="basicDate">Sub Title</label>
+                    <label class="form-label" for="basicDate">Judul Tambahan</label>
                         <input type="text" class="form-control @error('sub_title') is-invalid @enderror" name="sub_title"
                             placeholder="" value="{{ $data->sub_title }}">
                         @error('title')
@@ -43,7 +43,7 @@
                         @enderror
                     </div>
                     <div class="mb-3 col-md-12">
-                    <label class="form-label" for="basicDate">Date</label>
+                    <label class="form-label" for="basicDate">Tanggal</label>
                         <input type="date" class="form-control @error('date') is-invalid @enderror" name="date"
                             placeholder="" value="{{ $data->date }}">
                         @error('date')
@@ -53,7 +53,7 @@
                         @enderror
                     </div>
                     <div class="mb-3 col-md-12">
-                    <label class="form-label" for="basicDate">Location</label>
+                    <label class="form-label" for="basicDate">Lokasi</label>
                         <input type="text" class="form-control @error('location') is-invalid @enderror" name="location"
                             placeholder="" value="{{ $data->location }}">
                         @error('location')
@@ -63,7 +63,7 @@
                         @enderror
                     </div>
                     <div class="mb-3 col-md-12">
-                    <label class="form-label" for="basicDate">Host</label>
+                    <label class="form-label" for="basicDate">Pimpinan Rapat</label>
                         <input type="text" class="form-control @error('host') is-invalid @enderror" name="host"
                             placeholder="" value="{{ $data->host }}">
                         @error('host')
@@ -73,7 +73,7 @@
                         @enderror
                     </div>
                     <div class="mb-3 col-md-12">
-                    <label class="form-label" for="basicDate">Participant</label>
+                    <label class="form-label" for="basicDate">Peserta</label>
                         <input type="text" class="form-control @error('participant') is-invalid @enderror" name="participant"
                             placeholder="" value="{{ $data->participant }}">
                         @error('participant')
@@ -99,8 +99,8 @@
                     </div>
 
                     <div class="mt-2">
-                        <button type="submit" name="ubah" class="btn btn-primary me-2">Save</button>
-                        <a class="btn btn-outline-secondary" href="{{ route('att.index') }}">Back</a>
+                        <button type="submit" name="ubah" class="btn btn-primary me-2">Simpan</button>
+                        <a class="btn btn-outline-secondary" href="{{ route('mt.index') }}">Kembali</a>
                     </div>
                 </div>
             </form>

@@ -1,7 +1,7 @@
 @extends('layouts.master')
-@section('title', 'Profile')
+@section('title', 'Profil')
 @section('breadcrumb-items')
-<span class="text-muted fw-light">User /</span>
+<span class="text-muted fw-light">Akun /</span>
 @endsection
 
 @section('css')
@@ -37,10 +37,10 @@
         <!-- About User -->
         <div class="card mb-4">
             <div class="card-body">
-                <small class="text-muted text-uppercase">About</small>
+                <small class="text-muted text-uppercase">Tentang Saya</small>
                 <ul class="list-unstyled mb-4 mt-3">
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-user"></i><span
-                            class="fw-semibold mx-2">Name:</span>
+                            class="fw-semibold mx-2">Nama:</span>
                         <span>{{ Auth::user()->name }}</span></li>
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-user-check"></i><span
                             class="fw-semibold mx-2">Username:</span>
@@ -49,11 +49,11 @@
                             class="fw-semibold mx-2">Email:</span>
                         <span>{{ Auth::user()->email }}</span></li>
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-briefcase"></i><span
-                            class="fw-semibold mx-2">Job:</span>
+                            class="fw-semibold mx-2">Jabatan:</span>
                         <span>{{ Auth::user()->job }}</span></li>
-                    <li class="d-flex align-items-center mb-3"><i class="bx bx-face"></i><span
-                            class="fw-semibold mx-2">Gender:</span>
-                        <span>{{ Auth::user()->gender }}</span></li>
+                    <li class="d-flex align-items-center mb-3"><i class="bx bx-male-sign"></i><span
+                            class="fw-semibold mx-2">Jenis Kelamin:</span>
+                        <span>{{ Auth::user()->getJK() }}</span></li>
                 </ul>
             </div>
         </div>
@@ -61,11 +61,11 @@
         <!-- Profile Overview -->
         <div class="card mb-4">
             <div class="card-body">
-                <small class="text-muted text-uppercase">Role Access</small><br>
+                <small class="text-muted text-uppercase">Hak Akses</small><br>
                 <ul class="list-unstyled mb-4 mt-3">
                     <span>
                         @if(Auth::user()->roles->count() == 0)
-                        <p class="p-0 mb-0 text-danger">You don't have access rights, please contact the administrator!</p>
+                        <p class="p-0 mb-0 text-danger">Anda tidak memiliki hak akses, harap hubungi administrator!</p>
                         @else
                         @foreach(Auth::user()->roles as $x)
                         <i class="badge bg-{{ $x->color }} m-0">{{ $x->title }}</i>
@@ -84,7 +84,7 @@
                 <div class="card-header flex-column pb-0">
                     <div class="row">
                         <div class="col-md-5">
-                            <h5>Attendances</h5>
+                            <h5>Daftar Absensi</h5>
                         </div>
                     </div>
                 </div>
@@ -92,8 +92,8 @@
                     <thead>
                         <tr>
                             <th width="20px" data-priority="1">No</th>
-                            <th data-priority="2">Activity</th>
-                            <th width="40px" data-priority="3">Date</th>
+                            <th data-priority="2">Aktivitas</th>
+                            <th width="40px" data-priority="3">Tanggal</th>
                         </tr>
                     </thead>
                 </table>
@@ -131,7 +131,7 @@
             ordering: false,
             // bFilter: false,
             language: {
-                searchPlaceholder: 'Search..',
+                searchPlaceholder: 'Cari..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {

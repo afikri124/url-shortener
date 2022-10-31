@@ -26,10 +26,15 @@ class DataController extends Controller
     public function index(Request $request)
     {
         if ($request->isMethod('post')) {
-            $this->validate($request, [ 
-                'shortlink'=> ['required', 'string', 'max:191', Rule::unique('data')],
-                'url' => ['required'],
-            ]);
+            $this->validate($request, 
+                [ 
+                    'shortlink'=> ['required', 'string', 'max:191', Rule::unique('data')],
+                    'url' => ['required','url'],
+                ],
+                [
+                    'shortlink.unique' => 'Link ini sudah ada yang menggunakan, silahkan gunakan yang lain.',
+                ]
+            );
 
             $data = Data::create([
                 'shortlink' => $request->shortlink,
@@ -37,9 +42,9 @@ class DataController extends Controller
                 'user_id' => Auth::user()->id
             ]);
             if($data){
-                return redirect()->route('url.index')->with('msg','Data added successfully');
+                return redirect()->route('url.index')->with('msg','Data berhasil ditambahkan');
             }else{
-                return redirect()->route('url.index')->with('msg','Data failed to add!');
+                return redirect()->route('url.index')->with('msg','Data gagal ditambahkan!');
             }
         }else{
             $data = "";
@@ -51,6 +56,9 @@ class DataController extends Controller
     public function data(Request $request)
     {
         $data = Data::where('user_id',Auth::user()->id)->with('user')->select('*')->orderByDesc("id");
+        if(Auth::user()->hasRole('AD')){
+            $data = Data::with('user')->select('*')->orderByDesc("id");
+        }
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
@@ -75,12 +83,12 @@ class DataController extends Controller
             $data->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Data deleted successfully!'
+                'message' => 'Data berhasil dihapus!'
             ]);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Not allowed to delete this data!'
+                'message' => 'Tidak diizinkan untuk menghapus data ini!'
             ]);
         }
     }
@@ -93,19 +101,24 @@ class DataController extends Controller
             return redirect()->route('url.index');
         }
         if ($request->isMethod('post')) {
-            $this->validate($request, [ 
-                'shortlink'=> ['required', 'string', 'max:191', Rule::unique('data')->ignore($id, 'id')],
-                'url' => ['required'],
-            ]);
+            $this->validate($request, 
+                [ 
+                    'shortlink'=> ['required', 'string', 'max:191', Rule::unique('data')->ignore($id, 'id')],
+                    'url' => ['required','url'],
+                ],
+                [
+                    'shortlink.unique' => 'Link ini sudah ada yang menggunakan, silahkan gunakan yang lain.',
+                ]
+            );
             $data = Data::findOrFail($id);
             $d = $data->update([ 
                 'shortlink' => $request->shortlink,
                 'url' => $request->url,
             ]);
             if($d){
-                return redirect()->route('url.index')->with('msg','Data changed successfully!');
+                return redirect()->route('url.index')->with('msg','Data berhasil diubah!');
             }else{
-                return redirect()->route('url.index')->with('msg','Data failed to change!');
+                return redirect()->route('url.index')->with('msg','Data gagal diubah!');
             }
         }
         

@@ -93,6 +93,15 @@ class User extends Authenticatable
       }
     }
 
+    public function getJK()
+    { 
+      if($this->gender == 'F'){
+        return "Wanita";
+      } else {
+        return "Pria";
+      }
+    }
+
     public function getNameWithTitleAttribute()
     { 
       $name_with_title = ($this->front_title==null?"":$this->front_title." ").$this->name.($this->back_title==null?"":", ".$this->back_title);

@@ -21,20 +21,20 @@
         <li class="menu-item {{ Route::currentRouteName()=='home' ? 'active' : '' }}">
             <a href="{{ route('home') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Dashboards">Dashboard</div>
+                <div data-i18n="Dashboards">Halaman Utama</div>
             </a>
         </li>
         @if(Auth::user()->hasRole('ST') || Auth::user()->hasRole('SD'))
         <li class="menu-item {{ Route::currentRouteName()=='url.index' ? 'active' : '' }}">
             <a href="{{ route('url.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-link"></i>
-                <div>URL Shortener</div>
+                <div>Penyingkat URL</div>
             </a>
         </li>
         <li class="menu-item {{ Route::currentRouteName()=='qr.index' ? 'active' : '' }}">
             <a href="{{ route('qr.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-qr"></i>
-                <div>QR Generator</div>
+                <div>Pembuat QR-Code</div>
             </a>
         </li>
         @endif
@@ -43,17 +43,17 @@
             class="menu-item {{ request()->route()->getPrefix() == '/MT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/ATT' ? 'open' : '' }}">
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-calendar-event"></i>
-                <div>Attendance</div>
+                <div>Absensi</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item {{ Route::currentRouteName()=='att.index' ? 'active' : '' }}">
                     <a href="{{ route('att.index') }}" class="menu-link">
-                        <div>Event</div>
+                        <div>Acara/Kegiatan</div>
                     </a>
                 </li>
                 <li class="menu-item {{ Route::currentRouteName()=='mt.index' ? 'active' : '' }}">
                     <a href="{{ route('mt.index') }}" class="menu-link">
-                        <div>Meeting</div>
+                        <div>Rapat</div>
                     </a>
                 </li>
             </ul>
@@ -62,12 +62,12 @@
 
         @if(Auth::user()->hasRole('AD'))
         <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Setting</span>
+            <span class="menu-header-text">Pengaturan</span>
         </li>
         <li class="menu-item {{ Route::currentRouteName()=='setting_account' ? 'active' : '' }}">
             <a href="{{ route('setting_account') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Account">Account</div>
+                <div data-i18n="Account">Akun</div>
             </a>
         </li>
         @endif

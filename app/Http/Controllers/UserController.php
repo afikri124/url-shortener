@@ -85,9 +85,9 @@ class UserController extends Controller
                 'email'=> $request->email,
                 'gender'=> $request->gender,
             ]);
-            return redirect()->route('user.edit')->with('msg','Profile has been updated!');
+            return redirect()->route('user.edit')->with('msg','Profil telah diperbarui!');
         }
-        $gender = ['M', 'F'];
+        $gender = [['id' => 'M', 'title' => "Pria"], ['id' => 'F', 'title' => "Wanita"]];
         return view('user.edit', compact('roles','gender'));
     }
 

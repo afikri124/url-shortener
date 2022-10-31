@@ -1,8 +1,8 @@
 @extends('layouts.master')
-@section('title', 'URL Shortener')
+@section('title', 'Penyingkat URL')
 
 @section('breadcrumb-items')
-<!-- <span class="text-muted fw-light">Pusat Data /</span> -->
+<!-- <span class="text-muted fw-light">Data /</span> -->
 @endsection
 
 @section('css')
@@ -59,7 +59,7 @@
         <div class="col-md-6">
             <label class="form-label">Shortlink <i class="text-danger">*</i></label>
             <div class="input-group mb-3">
-                <span class="input-group-text">
+                <span class="input-group-text @error('shortlink') btn-danger @enderror">
                     s.jgu.ac.id/
                 </span>
                 <input type="text" name="shortlink" class="form-control @error('shortlink') is-invalid @enderror"
@@ -72,11 +72,11 @@
             </div>
         </div>
         <div class="col-md-6">
-            <label class="form-label">Long URL <i class="text-danger">*</i></label>
+            <label class="form-label">URL panjang <i class="text-danger">*</i></label>
             <div class="input-group mb-3">
-                <input type="url" class="form-control @error('url') is-invalid @enderror" name="url"
-                    placeholder="http://.." value="{{ old('url') }}">
-                <button class="btn btn-outline-primary" type="submit" id="button-addon2">Make it Now!</button>
+                <input type="text" class="form-control @error('url') is-invalid @enderror" name="url"
+                    placeholder="https://..." value="{{ old('url') }}">
+                <button class="btn btn-outline-primary" type="submit" id="button-addon2">Buat Sekarang!</button>
                 @error('url')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -93,10 +93,10 @@
                 <tr>
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Shortlink</th>
-                    <th>Long URL</th>
+                    <th>URL Panjang</th>
                     <th>QRCode</th>
-                    <th>Maker</th>
-                    <th width="85px" data-priority="3">Action</th>
+                    <th>Pembuat</th>
+                    <th width="85px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -145,7 +145,8 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Search shortlink..',
+                searchPlaceholder: 'Cari Shortlink..',
+                url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
                 url: "{{ route('url.data') }}",
@@ -168,7 +169,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return '<button class="btn m-0 p-0" title="Copy" onclick=navigator.clipboard.writeText("s.jgu.ac.id/' + row.shortlink + '")><i class="bx bx-copy"></i></button> ' + 
+                        return '<button class="btn m-0 p-0" title="Salin" onclick=navigator.clipboard.writeText("s.jgu.ac.id/' + row.shortlink + '")><i class="bx bx-copy"></i></button> ' + 
                         `<span class="text-muted">s.jgu.ac.id/</span><b>` +  row.shortlink +`</b>`;
                     },
                 },
@@ -199,7 +200,7 @@
                         if(row.user_id == "{{Auth::user()->id}}"){
                             return `<a class="text-success" title="Edit" href="{{ url('URL/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
-                                <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
+                                <a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a>`;
                         } else {
                             return `<a class="text-muted"><i class="bx bxs-edit"></i></a>
@@ -215,8 +216,8 @@
 
     function DeleteId(id) {
         swal({
-                title: "Are you sure?",
-                text: "Once deleted, the data cannot be recovered!",
+                title: "Apa kamu yakin?",
+                text: "Setelah dihapus, data tidak dapat dipulihkan!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,

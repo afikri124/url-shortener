@@ -2,7 +2,7 @@
 @section('title', $data->title )
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Attendance / Meeting /</span>
+<span class="text-muted fw-light">Absensi / Rapat /</span>
 @endsection
 
 @section('css')
@@ -51,7 +51,13 @@
                     <div class="col-12">
                         <form method="POST" class="row" target="_blank" action="">
                             @csrf
-                            <div class="col-md-12 text-md-end text-center pt-3 pt-md-0">
+                            <div class="col-md-6 text-md-start text-center pt-3 pt-md-0">
+                                <a href="{{ route('mt.index') }}" 
+                                    class="btn btn-outline-secondary"><i class="bx bx-chevron-left me-sm-2"></i>
+                                    <span>Kembali</span>
+                                </a>
+                            </div>
+                            <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
                                 <a href="{{ route('mt.print', ['id' => Crypt::encrypt($data->id) ]) }}" target="_blank"
                                     class="btn btn-primary"><i class="bx bx-qr-scan me-sm-2"></i>
                                     <span>QR-Code</span>
@@ -70,10 +76,10 @@
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Name</th>
-                    <th>Job</th>
-                    <th data-priority="4" width="100px">Attend Date</th>
-                    <th data-priority="3" width="50px">Action</th>
+                    <th data-priority="2">Nama</th>
+                    <th>Jabatan</th>
+                    <th data-priority="4" width="120px">Waktu Absensi</th>
+                    <th data-priority="3" width="50px">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -122,7 +128,8 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Search..',
+                searchPlaceholder: 'Cari..',
+                url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
                 url: "{{ route('mt.list_data', ['id' => $id]) }}",
@@ -171,7 +178,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
+                            return `<a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a> `;
                     },
                     className: "text-center"
@@ -182,8 +189,8 @@
 
     function DeleteId(id) {
         swal({
-                title: "Are you sure?",
-                text: "Once deleted, the data cannot be recovered!",
+                title: "Apa kamu yakin?",
+                text: "Setelah dihapus, data tidak dapat dipulihkan!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,

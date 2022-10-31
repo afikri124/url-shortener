@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title> Attendances {{ $data->id."-".$tok }} | {{ Date::now()->format('j F Y') }}
+    <title>Absensi {{ $data->id."-".$tok }} | {{ Date::now()->format('j F Y') }}
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -53,7 +53,7 @@
         </tr>
         <tr>
             <td valign="top" width="20%">
-                <p>Date</p>
+                <p>Hari/Tgl.</p>
             </td>
             <td valign="top" width="35%">
                 <p>{{ date('l, d F Y', strtotime($data->date))}}</p>
@@ -61,7 +61,7 @@
         </tr>
         <tr>
             <td valign="top">
-                <p>Location</p>
+                <p>Tempat</p>
             </td>
             <td valign="top">
                 <p> {{$data->location}}</p>
@@ -69,7 +69,7 @@
         </tr>
         <tr>
             <td valign="top">
-                <p>Host</p>
+                <p>Pimpinan Rapat</p>
             </td>
             <td valign="top">
                 <p> {{$data->host}}</p>
@@ -77,7 +77,7 @@
         </tr>
         <tr>
             <td valign="top">
-                <p>Participant</p>
+                <p>Peserta Rapat</p>
             </td>
             <td valign="top">
                 <p> {{$data->participant}}</p>
@@ -90,13 +90,13 @@
                 <p>No</p>
             </td>
             <td style="text-align:center;" width="40%">
-                <p>Name</p>
+                <p>Nama</p>
             </td>
             <td style="text-align:center;" width="35%">
-                <p>Job</p>
+                <p>Jabatan</p>
             </td>
             <td style="text-align:center;" width="20%">
-                <p>Date Sign</p>
+                <p>Paraf</p>
             </td>
         </tr>
         @foreach($al as $key => $d)
@@ -121,7 +121,7 @@
         <tr>
             <td width="60%">
             </td>
-            <td width="40%">@if($data->type =='E') Event @elseif($data->type =='M') Meeting @endif Host <br><br><br><br><b>{{$data->host}}</b></td>
+            <td width="40%">Pimpinan @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif <br><br><br><br><b>{{$data->host}}</b></td>
         </tr>
     </table>
 </body>

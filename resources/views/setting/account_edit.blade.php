@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title', $data->name )
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Setting / Account / </span>
+<span class="text-muted fw-light">Pengaturan / Akun / </span>
 @endsection
 
 @section('css')
@@ -25,7 +25,7 @@
         </div>
         @endif
         <div class="card mb-4">
-            <h5 class="card-header"><img src="{{ $data->image() }}" class="w-40 h-40 rounded-circle" style="width:40px; height:40px;object-fit: cover; margin-right:10px;"> Edit Account </h5>
+            <h5 class="card-header"><img src="{{ $data->image() }}" class="w-40 h-40 rounded-circle" style="width:40px; height:40px;object-fit: cover; margin-right:10px;"> Edit Akun </h5>
             <!-- Account -->
             <hr class="my-0">
             <div class="card-body">
@@ -33,9 +33,9 @@
                     <div class="row">
                         @csrf
                         <div class="mb-3 col-md-6">
-                            <label for="name" class="form-label">Full Name</label>
+                            <label for="name" class="form-label">Nama Lengkap</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                name="name" value="{{ $data->name }}" placeholder="Enter Full Name" autofocus />
+                                name="name" value="{{ $data->name }}" autofocus />
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -56,9 +56,9 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label for="front_title" class="form-label">Front Title</label>
+                            <label for="front_title" class="form-label">Gelar Depan</label>
                             <input type="front_title" class="form-control @error('front_title') is-invalid @enderror" id="front_title"
-                                name="front_title" value="{{ (old('front_title') == null ?  $data->front_title : old('front_title')) }}" placeholder="Enter Front Title (Ir. /Dr.)"  />
+                                name="front_title" value="{{ (old('front_title') == null ?  $data->front_title : old('front_title')) }}" placeholder="(Ir. /Dr.)"  />
                             @error('front_title')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -67,9 +67,9 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label for="back_title" class="form-label">Back Title</label>
+                            <label for="back_title" class="form-label">Gelar Belakang</label>
                             <input type="back_title" class="form-control @error('back_title') is-invalid @enderror" id="back_title"
-                                name="back_title" value="{{ (old('back_title') == null ?  $data->back_title : old('back_title')) }}" placeholder="Enter Back Title (S.Kom)"  />
+                                name="back_title" value="{{ (old('back_title') == null ?  $data->back_title : old('back_title')) }}" placeholder="(S.Kom)"  />
                             @error('back_title')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -83,7 +83,7 @@
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                                 name="email" value="{{ (old('email') == null ? 
                                     ( strstr($data->email, $data->username) == false ? $data->email : '') 
-                                    : old('email')) }}" placeholder="Enter Email"  />
+                                    : old('email')) }}" placeholder="Email"  />
                             @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -92,9 +92,9 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label for="job" class="form-label">Job</label>
+                            <label for="job" class="form-label">Jabatan</label>
                             <input type="job" class="form-control @error('job') is-invalid @enderror" id="job"
-                                name="job" value="{{ (old('job') == null ? $data->job : old('job')) }}" placeholder="Enter Job"  />
+                                name="job" value="{{ (old('job') == null ? $data->job : old('job')) }}" placeholder="Staf ITIC"  />
                             @error('job')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -103,9 +103,9 @@
                         </div>
                        
                         <div class="mb-3 col-md-6">
-                            <label for="gender" class="form-label">Gender</label>
+                            <label for="gender" class="form-label">Jenis Kelamin</label>
                             <input type="gender" class="form-control @error('gender') is-invalid @enderror" id="gender"
-                                name="gender" value="{{ (old('gender') == null ? $data->gender : old('gender')) }}" placeholder="Enter Gender M/F"  />
+                                name="gender" value="{{ (old('gender') == null ? $data->gender : old('gender')) }}" placeholder="M/F"  />
                             @error('gender')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -114,7 +114,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Role Access</label>
+                            <label class="form-label">Hak Akses</label>
                             <select class="select2 form-select" multiple="multiple" name="roles[]" id="select2Dark"
                                 >
                                 @foreach($roles as $role)
@@ -125,8 +125,8 @@
                         </div>
                     </div>
                     <div class="mt-2">
-                        <button type="submit" class="btn btn-primary me-2">Save</button>
-                        <a class="btn btn-outline-secondary" href="{{ route('setting_account') }}">Cancel</a>
+                        <button type="submit" class="btn btn-primary me-2">Simpan</button>
+                        <a class="btn btn-outline-secondary" href="{{ route('setting_account') }}">Batal</a>
                     </div>
                 </form>
             </div>

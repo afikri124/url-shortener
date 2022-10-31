@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr"
-    data-theme="theme-default" data-assets-path="{{asset('assets/')}}" data-template="vertical-menu-template">
+    data-theme="theme-default" data-assets-path="{{asset('assets/')}}/" data-template="vertical-menu-template">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport"
@@ -10,7 +10,6 @@
     <meta name="description" content="" />
     <meta name="keywords" content="">
     <!-- Canonical SEO -->
-    <!-- <link rel="canonical" href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"> -->
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon.ico')}}" />
     <link rel="shortcut icon" href="{{asset('assets/img/favicon.ico')}}" type="image/x-icon">

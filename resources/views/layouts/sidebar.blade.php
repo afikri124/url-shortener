@@ -3,10 +3,12 @@
     <div class="app-brand demo ">
         <a href="{{ route('index') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <img src="{{asset('assets/img/logo-sjgu.png')}}" height="50">
+                <img src="{{asset('assets/img/logo-sjgu.png')}}" height="44">
             </span>
+            <!-- <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span> -->
         </a>
-        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-md-none">
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>

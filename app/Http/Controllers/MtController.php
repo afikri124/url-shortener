@@ -167,8 +167,7 @@ class MtController extends Controller
             $data = AttendanceActivity::with('user')->findOrFail($id);
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-            $tanggal = Carbon::parse($data->date)->translatedFormat('l, d F Y');
-            $pdf = PDF::loadview('attendance.qr', compact('qr','data','link','tok', 'tanggal'));
+            $pdf = PDF::loadview('attendance.qr', compact('qr','data','link','tok'));
             return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
             // return view('attendance.qr', compact('qr','data','link'));
     }
@@ -188,8 +187,7 @@ class MtController extends Controller
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
             $al = Attendance::where('activity_id', $id)->with('user')->select('*')->orderBy("id")->get();
-            $tanggal = Carbon::parse($data->date)->translatedFormat('l, d F Y');
-            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al', 'tanggal'));
+            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al'));
             return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
             // return view('attendance.print', compact('qr','data','link', 'tok', 'al'));
         }else{

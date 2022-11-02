@@ -26,14 +26,18 @@
                     </a>
                 </div>
                 <!-- /Logo -->
-                <i class="mb-2">Make your long links shorter by using<br>the official domain <strong>s.jgu.ac.id</strong>,<br> easily generate an JGU Official <strong>QRCode</strong>,<br>and you can also make<br>event/meeting <strong>attendance</strong>.</i><br><br>
+                <i class="mb-2">Buat tautan panjang Anda lebih pendek dengan menggunakan
+                    domain resmi <strong>s.jgu.ac.id</strong>,<br>
+                    buat <strong>QR-Code</strong> resmi dari JGU,<br>
+                    dan Anda juga bisa membuat
+                    <strong>absensi</strong> acara/rapat.</i><br><br>
                 @if (Route::has('login'))
                 @auth
                 <a href="{{ route('home') }}" class="btn btn-danger text-white text-center w-50"><i
-                        class="bx bx-home me-2"></i>Dashboard</a>
+                        class="bx bx-home me-2"></i>Halaman Utama</a>
                 @else
                 <a href="{{ route('login') }}" class="btn btn-dark text-white text-center w-50"><i
-                        class="bx bx-log-in-circle me-2"></i>Log in</a>
+                        class="bx bx-log-in-circle me-2"></i>Masuk</a>
                 @endauth
                 @endif
                 <br><br>
@@ -41,7 +45,7 @@
                     <div class="divider-text">© 2022</div>
                 </div>
                 <div class="">
-                    <span class="mr-2">Made by </span>
+                    <span class="mr-2">Dibuat oleh </span>
                     <a href="https://itic.jgu.ac.id/" target="_blank" class="footer-link fw-bolder ml-2">ITIC JGU</a>
                 </div>
                 <small class="ml-4 text-center text-sm text-light sm:text-right sm:ml-0">

@@ -1,5 +1,5 @@
 @extends('layouts.authentication.master')
-@section('title', 'Attendance')
+@section('title', 'Absensi')
 @section('content')
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
@@ -23,23 +23,23 @@
                     @else
                     @if($check !=null)
                     <div class="alert alert-success alert-dismissible" role="alert">
-                        You have been attend on<br>{{ date('l, d F Y H:i', strtotime($check->created_at)) }}
+                        Anda sudah melakukan absen pada <br>{{ \Carbon\Carbon::parse($check->created_at)->translatedFormat("l, d F Y H:i");}}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     @else
-                    <p class="mb-4 text-center">Please Fill Your Attendance</p>
+                    <p class="mb-4 text-center">Silahkan Isi Absensi Anda</p>
                     @endif
                     @endif
                     <form id="formAuthentication" class="mb-3" action="" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label class="form-label">Full Name</label>
+                            <label class="form-label">Nama Legkap</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                name="name" value="{{ Auth::user()->name_with_title }}" disabled />
+                                name="nama" value="{{ Auth::user()->name_with_title }}" disabled />
                             @if(Auth::user()->hasRole('GS'))
                             <small class="text-mute">
-                                <strong class="text-danger">*</strong> if you want to update your name
-                                <a href="{{ route('user.edit') }}" target="_blank"><strong>click here</strong></a>
+                                <strong class="text-danger">*</strong> jika Anda ingin memperbarui nama Anda
+                                <a href="{{ route('user.edit') }}" target="_blank"><strong>klik disini</strong></a>
                             </small>
                             @endif
                         </div>
@@ -69,48 +69,45 @@
                             @enderror
                         </div>
 
-                        @if(Auth::user()->hasRole('GS') || Auth::user()->job == null)
                         <div class="mb-3">
-                            <label for="job" class="form-label">Job</label>
-                            <input type="text" class="form-control @error('job') is-invalid @enderror" id="job"
-                                name="job" value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}"
-                                @if($check !=null) readonly @endif />
-                            @error('job')
+                            <label for="jabatan" class="form-label">Jabatan</label>
+                            <input type="text" class="form-control @error('jabatan') is-invalid @enderror" id="jabatan"
+                                name="jabatan" value="{{ (old('jabatan') == null ? Auth::user()->job : old('jabatan')) }}" @if($check !=null)
+                                readonly @endif />
+                            @error('jabatan')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
                         </div>
-                        @endif
 
                         <div class="mb-3">
-                            <label class="form-label">@if($data->type == "M") Meeting @else Event @endif Title</label>
-                            <input type="text" class="form-control" name="activity" value="{{ $data->title }}"
+                            <label class="form-label">Judul @if($data->type == "M") Rapat @else Acara @endif </label>
+                            <input type="text" class="form-control" name="judul" value="{{ $data->title }} {{ $data->sub_title }}"
                                 readonly />
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Date</label>
-                            <input type="text" class="form-control" name="date"
-                                value="{{ date('l, d F Y', strtotime($data->date)) }}" readonly />
+                            <label class="form-label">Hari/Tanggal</label>
+                            <input type="text" class="form-control" name="tanggal"
+                                value='{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}' readonly />
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Location</label>
-                            <input type="text" class="form-control @error('location') is-invalid @enderror"
-                                name="location"
-                                value="{{ (old('location') == null ? $data->location : old('location')) }}"
-                                @if($data->location != null) readonly @endif/>
+                            <label class="form-label">Lokasi/Tempat</label>
+                            <input type="text" class="form-control"
+                                name="lokasi"
+                                value="{{ $data->location }}" readonly/>
                         </div>
                         <hr>
                         <div class="mb-3 text-center">
                             <button class="btn btn-success w-100" type="submit" name="attendance" @if($check !=null)
-                                disabled @endif><i class="bx bx-log-in-circle me-2"></i>Attend Now</button>
+                                disabled @endif><i class="bx bx-log-in-circle me-2"></i>Absen Sekarang</button>
                         </div>
                         <div class="mb-3 text-center">
                             <button class="btn btn-dark w-100" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
-                                <i class="bx bx-log-out-circle me-2"></i>Logout
+                                <i class="bx bx-log-out-circle me-2"></i>Keluar
                             </button>
                         </div>
                     </form>

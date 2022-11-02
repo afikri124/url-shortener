@@ -78,7 +78,7 @@
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Nama</th>
                     <th>Jabatan</th>
-                    <th data-priority="4" width="120px">Waktu Absensi</th>
+                    <th data-priority="4" width="150px">Waktu Kehadiran</th>
                     <th data-priority="3" width="50px">Aksi</th>
                 </tr>
             </thead>

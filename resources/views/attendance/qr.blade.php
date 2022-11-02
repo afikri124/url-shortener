@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>QR Absensi {{ $data->id."-".$tok }} | {{ Date::parse($data->date)->format('j F Y') }}
+    <title>QR Absensi {{ $data->id."-".$tok }} | {{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -53,7 +53,7 @@
         <br>
         <b style="font-size:20px ">{{$data->location}}</b>
         <br>
-        <i style="font-size:15px ">{{ $tanggal }}</i>
+        <i style="font-size:15px ">{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}</i>
       <hr>
         <br>
         <b style="font-size:15px ">LANGKAH MELAKUKAN ABSENSI</b>
@@ -64,7 +64,7 @@
         <tr>
             <td width="30%" style="text-align: center;">
             <h1>1.</h1>
-            <p>Menggunakan pemindai kode QR</p>
+            <p>Menggunakan pemindai QR-Code</p>
             </td>
             <td width="40%" style="text-align: center;">
             <h1>2.</h1>

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Absensi {{ $data->id."-".$tok }} | {{ Date::now()->format('j F Y') }}
+    <title>Absensi {{ $data->id."-".$tok }} | {{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -56,7 +56,7 @@
                 <p>Hari/Tgl.</p>
             </td>
             <td valign="top" width="35%">
-                <p>{{ $tanggal }}</p>
+                <p>{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}</p>
             </td>
         </tr>
         <tr>
@@ -69,7 +69,7 @@
         </tr>
         <tr>
             <td valign="top">
-                <p>Pimpinan Rapat</p>
+                <p>Pimpinan @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif</p>
             </td>
             <td valign="top">
                 <p> {{$data->host}}</p>
@@ -77,7 +77,7 @@
         </tr>
         <tr>
             <td valign="top">
-                <p>Peserta Rapat</p>
+                <p>Peserta @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif</p>
             </td>
             <td valign="top">
                 <p> {{$data->participant}}</p>

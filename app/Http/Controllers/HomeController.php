@@ -53,9 +53,9 @@ class HomeController extends Controller
                 ]);
             }
             
-            if(Auth::user()->job == null){
+            if(Auth::user()->job != $request->jabatan){
                 User::where('id', Auth::user()->id)->update([
-                    'job'=> $request->job,
+                    'job'=> $request->jabatan,
                     'updated_at' => Carbon::now()
                 ]);
             }
@@ -64,13 +64,13 @@ class HomeController extends Controller
                 'username' => (Auth::user()->username == null ? $request->username : Auth::user()->username),
                 'activity_id' => $idd
             ]);
-            return redirect()->route('attendance', ['id' => $idd, 'token' => $token])->with('msg','Attendance is successful !');
+            return redirect()->route('attendance', ['id' => $idd, 'token' => $token])->with('msg','Absensi berhasil!');
         }
         $data = AttendanceActivity::findOrFail($idd);
         $tok = $data->type."".$data->user_id."".($data->id+3);
         $check = Attendance::where('username',Auth::user()->username)->where('activity_id', $idd)->first();
         if($tok != $token){
-            abort(403, "Invalid token !");
+            abort(403, "Invalid token!");
         } else {
             return view('attendance.index', compact('data','check'));
         }

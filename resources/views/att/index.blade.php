@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Kegiatan')
+@section('title', 'Acara atau Kegiatan')
 
 @section('breadcrumb-items')
 <span class="text-muted fw-light">Absensi /</span>
@@ -96,7 +96,7 @@
                             <label class="form-label" for="basicDate">Judul</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('judul') is-invalid @enderror" name="judul"
-                                    placeholder="Judul Kegiatan" value="{{ old('title') }}">
+                                    placeholder="Judul Kegiatan" value="{{ old('judul') }}">
                                 @error('judul')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -108,7 +108,7 @@
                             <label class="form-label" for="basicDate">Judul Tambahan</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('judul_tambahan') is-invalid @enderror" name="judul_tambahan"
-                                    placeholder="Judul Kegiatan Tambahan" value="{{ old('sub_title') }}">
+                                    placeholder="Judul Kegiatan Tambahan" value="{{ old('judul_tambahan') }}">
                                 @error('judul_tambahan')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -120,7 +120,7 @@
                             <label class="form-label" for="basicDate">Tanggal</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal"
-                                    placeholder="" value="{{ old('date') }}">
+                                    placeholder="" value="{{ old('tanggal') }}">
                                 @error('tanggal')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -132,7 +132,7 @@
                             <label class="form-label" for="basicDate">Lokasi</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('lokasi') is-invalid @enderror" name="lokasi"
-                                    placeholder="Lokasi" value="{{ old('location') }}">
+                                    placeholder="Lokasi" value="{{ old('lokasi') }}">
                                 @error('lokasi')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -144,7 +144,7 @@
                             <label class="form-label" for="basicDate">Pemimpin Rapat </label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('pemimpin_rapat') is-invalid @enderror" name="pemimpin_rapat"
-                                    placeholder="Pemimpin Rapat" value="{{ old('host') }}">
+                                    placeholder="Pemimpin Rapat dengan Gelar" value="{{ old('pemimpin_rapat') }}">
                                 @error('pemimpin_rapat')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -156,7 +156,7 @@
                             <label class="form-label" for="basicDate">Peserta</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('peserta') is-invalid @enderror" name="peserta"
-                                    placeholder="Nama Department Peserta Rapat" value="{{ old('participant') }}">
+                                    placeholder="Nama Departemen Peserta Rapat" value="{{ old('peserta') }}">
                                 @error('peserta')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -235,7 +235,8 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Search..',
+                searchPlaceholder: 'Cari..',
+                url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
                 url: "{{ route('att.data') }}",
@@ -289,11 +290,10 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-primary" title="List" href="{{ url('ATT/list/` +
-                                row.idd + `') }}"><i class="bx bx-spreadsheet"></i></a> <a class="text-info" target="_blank" title="Print QR" href="{{ url('ATT/print/` +
+                            return `<a class="text-info" target="_blank" title="Print QR" href="{{ url('ATT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('ATT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
-                                <a class="text-danger" title="Delete" onclick="DeleteId(` + row.id +
+                                <a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a> `;
                     },
                     className: "text-center"
@@ -305,8 +305,8 @@
 
     function DeleteId(id) {
         swal({
-                title: "Are you sure?",
-                text: "Once deleted, the data cannot be recovered!",
+                title: "Apa kamu yakin?",
+                text: "Setelah dihapus, data tidak dapat dipulihkan!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,

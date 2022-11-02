@@ -14,9 +14,7 @@
                             </span>
                         </a>
                     </div>
-                    <br>
-                    <center><p><b>JGU Academician</b> login<br> using Single Sign-On (SSO) JGU,<br><b>Guest</b> login using Google Account.</p></center>
-                    
+                    <br>                  
                     <!-- /Logo -->
                     <!-- <h4 class="mb-2 text-center">Login</h4> -->
                     <!-- <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
@@ -72,7 +70,7 @@
                     </form> -->
                     <div class="row">
                         <div class="divider my-2">
-                            <div class="divider-text mb-2">Login Method</div>
+                            <div class="divider-text mb-2">Pilih Metode Masuk*</div>
                             @error('msg')
                             <br><span class="text-danger text-center">{!! $message !!}</span>
                             @enderror
@@ -95,6 +93,8 @@
                             </div>
                         </div>
                     </div>
+                    <br><small>
+                    <center><p><b>*Catatan:<br>Internal JGU</b> dapat masuk<br> menggunakan Single Sign-On (SSO) JGU,<br>sedangkan untuk <b>eksternal (tamu)</b> dapat masuk menggunakan akun Google.</p></center></small>
                 </div>
             </div>
         </div>

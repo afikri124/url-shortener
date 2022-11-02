@@ -167,7 +167,7 @@
                         <div class="col-sm-12 mt-4">
                             <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
                             <button type="reset" class="btn btn-outline-secondary"
-                                data-bs-dismiss="offcanvas">Cancel</button>
+                                data-bs-dismiss="offcanvas">Batal</button>
                         </div>
                         <div></div><input type="hidden">
                     </form>
@@ -180,13 +180,13 @@
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Title</th>
-                    <th>Sub Title</th>
-                    <th>Date</th>
-                    <th>Location</th>
-                    <th>Host</th>
-                    <th>Participant</th>
-                    <th width="85px" data-priority="3">Action</th>
+                    <th data-priority="2">Judul</th>
+                    <th>Judul Tambahan</th>
+                    <th>Tanggal</th>
+                    <th>Lokasi</th>
+                    <th>Pemimpin Rapat</th>
+                    <th>Peserta Rapat</th>
+                    <th width="85px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
         </table>

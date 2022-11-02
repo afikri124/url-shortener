@@ -2,7 +2,7 @@
 @section('title', $data->title )
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Attendance / Event /</span>
+<span class="text-muted fw-light">Absensi / Kegiatan /</span>
 @endsection
 
 @section('css')
@@ -54,10 +54,10 @@
                             <div class="col-md-12 text-md-end text-center pt-3 pt-md-0">
                                 <a href="{{ route('att.print', ['id' => Crypt::encrypt($data->id) ]) }}" target="_blank"
                                     class="btn btn-primary"><i class="bx bx-qr-scan me-sm-2"></i>
-                                    <span>QR-Code</span>
+                                    <span>Barcode</span>
                                 </a>
                                 <button class="btn btn-primary" type="submit"><i class="bx bx-printer me-sm-2"></i>
-                                    <span>Print Report</span>
+                                    <span>Cetak Laporan</span>
                                 </button>
                             </div>
                         </form>
@@ -70,10 +70,10 @@
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Name</th>
-                    <th>Job</th>
-                    <th data-priority="4" width="100px">Attend Date</th>
-                    <th data-priority="3" width="50px">Action</th>
+                    <th data-priority="2">Nama</th>
+                    <th>Jabatan</th>
+                    <th data-priority="4" width="100px">Tanggal Kehadiran</th>
+                    <th data-priority="3" width="50px">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -181,8 +181,8 @@
 
     function DeleteId(id) {
         swal({
-                title: "Are you sure?",
-                text: "Once deleted, the data cannot be recovered!",
+                title: "Apakah Anda yakin?",
+                text: "Ketika dihapus, data tidak dapat dikembalikan!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,

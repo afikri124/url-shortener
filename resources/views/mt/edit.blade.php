@@ -24,9 +24,9 @@
                 <div class="row">
                     <div class="mb-3 col-md-12">
                         <label class="form-label" for="basicDate">Judul</label>
-                        <input type="text" class="form-control @error('title') is-invalid @enderror" name="title"
+                        <input type="text" class="form-control @error('judul') is-invalid @enderror" name="judul"
                             placeholder="" value="{{ $data->title }}">
-                        @error('title')
+                        @error('judul')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -34,9 +34,9 @@
                     </div>
                     <div class="mb-3 col-md-12">
                     <label class="form-label" for="basicDate">Judul Tambahan</label>
-                        <input type="text" class="form-control @error('sub_title') is-invalid @enderror" name="sub_title"
+                        <input type="text" class="form-control @error('judul_tambahan') is-invalid @enderror" name="judul_tambahan"
                             placeholder="" value="{{ $data->sub_title }}">
-                        @error('title')
+                        @error('judul_tambahan')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -44,9 +44,9 @@
                     </div>
                     <div class="mb-3 col-md-12">
                     <label class="form-label" for="basicDate">Tanggal</label>
-                        <input type="date" class="form-control @error('date') is-invalid @enderror" name="date"
+                        <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal"
                             placeholder="" value="{{ $data->date }}">
-                        @error('date')
+                        @error('tanggal')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -54,9 +54,9 @@
                     </div>
                     <div class="mb-3 col-md-12">
                     <label class="form-label" for="basicDate">Lokasi</label>
-                        <input type="text" class="form-control @error('location') is-invalid @enderror" name="location"
+                        <input type="text" class="form-control @error('lokasi') is-invalid @enderror" name="lokasi"
                             placeholder="" value="{{ $data->location }}">
-                        @error('location')
+                        @error('lokasi')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -64,9 +64,9 @@
                     </div>
                     <div class="mb-3 col-md-12">
                     <label class="form-label" for="basicDate">Pimpinan Rapat</label>
-                        <input type="text" class="form-control @error('host') is-invalid @enderror" name="host"
+                        <input type="text" class="form-control @error('pimpinan_rapat') is-invalid @enderror" name="pimpinan_rapat"
                             placeholder="" value="{{ $data->host }}">
-                        @error('host')
+                        @error('pimpinan_rapat')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -74,9 +74,9 @@
                     </div>
                     <div class="mb-3 col-md-12">
                     <label class="form-label" for="basicDate">Peserta</label>
-                        <input type="text" class="form-control @error('participant') is-invalid @enderror" name="participant"
+                        <input type="text" class="form-control @error('peserta') is-invalid @enderror" name="peserta"
                             placeholder="" value="{{ $data->participant }}">
-                        @error('participant')
+                        @error('peserta')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

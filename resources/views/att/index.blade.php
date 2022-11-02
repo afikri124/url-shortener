@@ -1,8 +1,8 @@
 @extends('layouts.master')
-@section('title', 'Event')
+@section('title', 'Kegiatan')
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Attendance /</span>
+<span class="text-muted fw-light">Absensi /</span>
 @endsection
 
 @section('css')
@@ -74,7 +74,7 @@
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
                                             class="bx bx-plus me-sm-2"></i>
-                                        <span>Add New</span></span>
+                                        <span>Tambah Data</span></span>
                                 </button>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
             <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
                 aria-labelledby="offcanvasEndLabel">
                 <div class="offcanvas-header">
-                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Add New</h5>
+                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Data</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
@@ -93,11 +93,11 @@
                         enctype="multipart/form-data" id="form-add-new-record" method="POST" action="">
                         @csrf
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Title</label>
+                            <label class="form-label" for="basicDate">Judul</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('title') is-invalid @enderror" name="title"
-                                    placeholder="Event Title" value="{{ old('title') }}">
-                                @error('title')
+                                <input type="text" class="form-control @error('judul') is-invalid @enderror" name="judul"
+                                    placeholder="Judul Kegiatan" value="{{ old('title') }}">
+                                @error('judul')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -105,11 +105,11 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Sub-Title</label>
+                            <label class="form-label" for="basicDate">Judul Tambahan</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('sub_title') is-invalid @enderror" name="sub_title"
-                                    placeholder="Event Sub-Title" value="{{ old('sub_title') }}">
-                                @error('sub_title')
+                                <input type="text" class="form-control @error('judul_tambahan') is-invalid @enderror" name="judul_tambahan"
+                                    placeholder="Judul Kegiatan Tambahan" value="{{ old('sub_title') }}">
+                                @error('judul_tambahan')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -117,11 +117,11 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Date</label>
+                            <label class="form-label" for="basicDate">Tanggal</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="date" class="form-control @error('date') is-invalid @enderror" name="date"
+                                <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal"
                                     placeholder="" value="{{ old('date') }}">
-                                @error('date')
+                                @error('tanggal')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -129,11 +129,11 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Location</label>
+                            <label class="form-label" for="basicDate">Lokasi</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('location') is-invalid @enderror" name="location"
-                                    placeholder="Room Name" value="{{ old('location') }}">
-                                @error('location')
+                                <input type="text" class="form-control @error('lokasi') is-invalid @enderror" name="lokasi"
+                                    placeholder="Lokasi" value="{{ old('location') }}">
+                                @error('lokasi')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -141,11 +141,11 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Host</label>
+                            <label class="form-label" for="basicDate">Pemimpin Rapat </label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('host') is-invalid @enderror" name="host"
-                                    placeholder="Your Event Manager Name" value="{{ old('host') }}">
-                                @error('host')
+                                <input type="text" class="form-control @error('pemimpin_rapat') is-invalid @enderror" name="pemimpin_rapat"
+                                    placeholder="Pemimpin Rapat" value="{{ old('host') }}">
+                                @error('pemimpin_rapat')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -153,11 +153,11 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Participant</label>
+                            <label class="form-label" for="basicDate">Peserta</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('participant') is-invalid @enderror" name="participant"
-                                    placeholder="The Department As A Participant Name" value="{{ old('participant') }}">
-                                @error('participant')
+                                <input type="text" class="form-control @error('peserta') is-invalid @enderror" name="peserta"
+                                    placeholder="Nama Department Peserta Rapat" value="{{ old('participant') }}">
+                                @error('peserta')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>QR Absensi {{ $data->id."-".$tok }} | {{ Date::now()->format('j F Y') }}
+    <title>QR Absensi {{ $data->id."-".$tok }} | {{ Date::parse($data->date)->format('j F Y') }}
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -43,7 +43,7 @@
     <center>
         <b style="font-size:30px">{{$data->title}}</b>
         <br>
-        <b style="font-size:70px">SCAN DISINI</b>
+        <b style="font-size:50px">SCAN DISINI</b>
         <br>
         <b style="font-size:20px;">UNTUK MELAKUKAN ABSENSI @if($data->type =='E') ACARA @elseif($data->type =='M') RAPAT @endif</b>
         <br>
@@ -53,7 +53,7 @@
         <br>
         <b style="font-size:20px ">{{$data->location}}</b>
         <br>
-        <i style="font-size:15px ">{{date('l, d F Y', strtotime($data->date))}}</i>
+        <i style="font-size:15px ">{{ $tanggal }}</i>
       <hr>
         <br>
         <b style="font-size:15px ">LANGKAH MELAKUKAN ABSENSI</b>
@@ -72,7 +72,7 @@
             </td>
             <td width="30%" style="text-align:center;">
             <h1>3.</h1>
-            <p>Lengkapi detail datanya</p>
+            <p>Isikan detail data yang sesuai</p>
             </td>
         </tr>
     </table>

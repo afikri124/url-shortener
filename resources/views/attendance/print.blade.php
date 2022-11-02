@@ -56,7 +56,7 @@
                 <p>Hari/Tgl.</p>
             </td>
             <td valign="top" width="35%">
-                <p>{{ date('l, d F Y', strtotime($data->date))}}</p>
+                <p>{{ $tanggal }}</p>
             </td>
         </tr>
         <tr>

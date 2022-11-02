@@ -96,23 +96,22 @@ class MtController extends Controller
         }
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
-                'title'         => ['required'],
-                'sub_title'     => ['required'],
-                'date'          => ['required', 'date'],
-                'location'      => ['required'],
-                'sub_title'     => ['required'],
-                'host'          => ['required'],
-                'participant'   => ['required'],
+                'judul'             => ['required'],
+                'judul_tambahan'    => ['required'],
+                'tanggal'           => ['required', 'date'],
+                'lokasi'            => ['required'],
+                'pimpinan_rapat'    => ['required'],
+                'peserta'           => ['required'],
             ]);
             $data = AttendanceActivity::findOrFail($id);
             $d = $data->update([ 
                 'type'               => 'M',
-                'title'              => $request->title,
-                'sub_title'          => $request->sub_title,
-                'date'               => date('Y-m-d', strtotime($request->date)),
-                'location'           => $request->location,
-                'host'               => $request->host,
-                'participant'        => $request->participant,
+                'title'              => $request->judul,
+                'sub_title'          => $request->judul_tambahan,
+                'date'               => date('Y-m-d', strtotime($request->tanggal)),
+                'location'           => $request->lokasi,
+                'host'               => $request->pimpinan_rapat,
+                'participant'        => $request->peserta,
                 'notulen_username'   => $request->notulen,
                 'user_id'            => Auth::user()->id
             ]);
@@ -168,8 +167,9 @@ class MtController extends Controller
             $data = AttendanceActivity::with('user')->findOrFail($id);
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-            $pdf = PDF::loadview('attendance.qr', compact('qr','data','link','tok'));
-            return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
+            $tanggal = Carbon::parse($data->date)->translatedFormat('l, d F Y');
+            $pdf = PDF::loadview('attendance.qr', compact('qr','data','link','tok', 'tanggal'));
+            return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
             // return view('attendance.qr', compact('qr','data','link'));
     }
 
@@ -188,8 +188,9 @@ class MtController extends Controller
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
             $al = Attendance::where('activity_id', $id)->with('user')->select('*')->orderBy("id")->get();
-            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al'));
-            return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
+            $tanggal = Carbon::parse($data->date)->translatedFormat('l, d F Y');
+            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al', 'tanggal'));
+            return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
             // return view('attendance.print', compact('qr','data','link', 'tok', 'al'));
         }else{
             try {

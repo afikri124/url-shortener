@@ -45,7 +45,7 @@
                     <div class="divider-text">© 2022</div>
                 </div>
                 <div class="">
-                    <span class="mr-2">Dibuat oleh </span>
+                    <span class="mr-2">Dikembangkan oleh </span>
                     <a href="https://itic.jgu.ac.id/" target="_blank" class="footer-link fw-bolder ml-2">ITIC JGU</a>
                 </div>
                 <small class="ml-4 text-center text-sm text-light sm:text-right sm:ml-0">

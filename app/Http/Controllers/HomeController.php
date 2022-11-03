@@ -83,7 +83,7 @@ class HomeController extends Controller
                 return redirect()->route('login')->withErrors(['msg' => 'Token API kedaluwarsa, silakan ulangi lagi!']);
             }
             Session::put('klas2_api_key', null);
-            if($request->token == md5($request->api_key.$request->id) && "S.JGU".gmdate('Y/m/d') == Crypt::decrypt($request->api_key)){
+            if($request->token == md5($request->api_key.$request->id) && env('APP_KEY').gmdate('Y/m/d') == Crypt::decrypt($request->api_key)){
                 $user = User::where('username', $request->id)->first();
                 if ($user != null) { //login
                     if(($request->dept_id  != "STUDENT" && $user->back_title == null) || $user->job == null){

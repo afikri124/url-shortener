@@ -70,7 +70,7 @@
                     </form> -->
                     <div class="row">
                         <div class="divider my-2">
-                            <div class="divider-text mb-2">Pilih Metode Masuk*</div>
+                            <div class="divider-text mb-2">Pilih Metode Masuk</div>
                             @error('msg')
                             <br><span class="text-danger text-center">{!! $message !!}</span>
                             @enderror
@@ -85,7 +85,7 @@
                         </div>
                         <div class="col-6 mb-1">
                             <div class="btn-showcase">
-                                <a class="btn btn-dark btn-block w-100" href="{{ url('login/google') }}" title="Email JGU">
+                                <a class="btn btn-dark btn-block w-100" href="{{ url('login/google') }}" title="Log in with Email">
                                     <img style="max-height: 20px;"
                                         src="https://avatars.githubusercontent.com/u/19180220?s=200&v=4">
                                     <span>Google</span>
@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <br><small>
-                    <center><p><b>*Catatan:<br>Internal JGU</b> dapat masuk<br> menggunakan Single Sign-On (SSO) JGU,<br>sedangkan untuk <b>eksternal (tamu)</b> dapat masuk menggunakan akun Google.</p></center></small>
+                    <center><p><b><u>Pengumuman!</u></b><br>Internal JGU (Mahasiswa/Staff/Dosen) dapat masuk<br> menggunakan Single Sign-On (SSO),<br>sedangkan untuk eksternal (tamu) dapat masuk menggunakan akun Google.</p></center></small>
                 </div>
             </div>
         </div>
@@ -111,8 +111,8 @@ if(!session()->has('url.intended'))
     }
 }
 
-$login_name = "S.JGU";
-$api_key = Crypt::encrypt("S.JGU".gmdate('Y/m/d'));
+$login_name = env('APP_NAME');
+$api_key = Crypt::encrypt(env('APP_KEY').gmdate('Y/m/d'));
 Session::put('klas2_api_key', $api_key);
 $callback_url = route('sso_klas2');
 $token = md5($api_key.$callback_url);
@@ -123,11 +123,7 @@ $url."?login_to=".route('login')."&login_name=$login_name&api_key=$api_key&callb
 @section('script')
 <script>
     function Klas2Login() {
-        // alert("SSO");
-        // window.open("{!!$link!!}", "LOGIN SSO JGU",
-        //     "location=no, titlebar=no, toolbar=no, fullscreen='yes', resizable=no, scrollbars=yes");
         window.location.href = "{!!$link!!}";
     }
-
 </script>
 @endsection

@@ -221,7 +221,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{{asset('assets/js/jquery.signature.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets/js/geo.js')}}"></script>
-<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script type="text/javascript" src="https://www.openlayers.org/api/OpenLayers.js"></script>
 <script type="text/javascript">
     var sig = $('#sig').signature({
         syncField: '#signature64',

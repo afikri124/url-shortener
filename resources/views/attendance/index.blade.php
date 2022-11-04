@@ -221,7 +221,7 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{{asset('assets/js/jquery.signature.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets/js/geo.js')}}"></script>
-<script type="text/javascript" src="https://www.openlayers.org/api/OpenLayers.js"></script>
+<script type="text/javascript" src="{{asset('assets/js/OpenLayers.js')}}"></script>
 <script type="text/javascript">
     var sig = $('#sig').signature({
         syncField: '#signature64',
@@ -254,7 +254,7 @@
             .longitude;
         $("#latitude").val(p.coords.latitude);
         $("#longitude").val(p.coords.longitude);
-        document.getElementById("googleMap").href = "https://www.google.com/maps?q=loc:" + p.coords.latitude + "," + p
+        document.getElementById("googleMap").href = "https://www.google.com/maps?q=" + p.coords.latitude + "," + p
             .coords.longitude;
         console.log(p.coords.latitude + " " + p.coords.longitude);
 

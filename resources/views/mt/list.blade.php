@@ -174,7 +174,7 @@
                 {
                     render: function (data, type, row, meta) {
                         if (row.longitude != null) {
-                            return "<a target='_blank' href='https://www.google.com/maps?q=loc:"+ row.latitude + "," + row.longitude +"' title='Klik untuk melihat lokasi absensi'>" + row.latitude + " , " + row.longitude +
+                            return "<a target='_blank' href='https://www.google.com/maps?q="+ row.latitude + "," + row.longitude +"' title='Klik untuk melihat lokasi absensi'>" + row.latitude + " , " + row.longitude +
                                 "</a>";
                         }
                     },

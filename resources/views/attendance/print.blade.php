@@ -111,7 +111,7 @@
                 <p>{{($d->user != null ? $d->user->job : "-")}}</p>
             </td>
             <td style="text-align:center;">
-                <p>{{$d->created_at}}</p>
+                <p><img src="{!! $d->signature_img !!}" style="height:40px;"/></p>
             </td>
         </tr>
         @endforeach

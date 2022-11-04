@@ -78,6 +78,7 @@
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Nama</th>
                     <th>Jabatan</th>
+                    <th>Lokasi Absensi</th>
                     <th data-priority="4" width="150px">Waktu Kehadiran</th>
                     <th data-priority="3" width="50px">Aksi</th>
                 </tr>
@@ -167,6 +168,14 @@
                         if (row.user != null) {
                             return "<span title='" + row.user.job + "'>" + row.user.job +
                                 "</span>";
+                        }
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        if (row.longitude != null) {
+                            return "<a target='_blank' href='https://www.google.com/maps?q=loc:"+ row.latitude + "," + row.longitude +"' title='Klik untuk melihat lokasi absensi'>" + row.latitude + " , " + row.longitude +
+                                "</a>";
                         }
                     },
                 },

@@ -133,6 +133,18 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Tenggat Absensi</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="datetime-local" class="form-control @error('tenggat_absensi') is-invalid @enderror" name="tenggat_absensi"
+                                    placeholder="" value="{{ old('tenggat_absensi') }}">
+                                @error('tenggat_absensi')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
                             <label class="form-label" for="basicDate">Lokasi</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('lokasi') is-invalid @enderror" name="lokasi"

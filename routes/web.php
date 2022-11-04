@@ -54,7 +54,7 @@ Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:ST']], function (
   Route::get('/print/{id}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
 });
 
-//User absen pakai QR
+//User absen menggunakan QR
 Route::any('/A/{id}/{token}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
 
 //MT ATT

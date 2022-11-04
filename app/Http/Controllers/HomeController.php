@@ -37,6 +37,8 @@ class HomeController extends Controller
             $this->validate($request, [ 
                 'email'=> ['required'],
                 'username' => ['required'],
+                'jabatan' => ['required'],
+                'paraf' => ['required'],
             ]);
 
             if(Auth::user()->username == null){
@@ -62,7 +64,10 @@ class HomeController extends Controller
 
             $data = Attendance::create([
                 'username' => (Auth::user()->username == null ? $request->username : Auth::user()->username),
-                'activity_id' => $idd
+                'activity_id' => $idd,
+                'signature_img' => $request->paraf,
+                'longitude' => $request->longitude,
+                'latitude' => $request->latitude
             ]);
             return redirect()->route('attendance', ['id' => $idd, 'token' => $token])->with('msg','Absensi berhasil!');
         }

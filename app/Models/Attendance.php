@@ -12,6 +12,9 @@ class Attendance extends Model
         'id',
         'username',
         'activity_id',
+        'signature_img',
+        'longitude',
+        'latitude',
     ];
 
     public function activity()

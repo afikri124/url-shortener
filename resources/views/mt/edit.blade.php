@@ -53,6 +53,16 @@
                         @enderror
                     </div>
                     <div class="mb-3 col-md-12">
+                        <label class="form-label" for="basicDate">Tenggat Absensi</label>
+                        <input type="datetime-local" class="form-control @error('tenggat_absensi') is-invalid @enderror"
+                            name="tenggat_absensi" placeholder="" value="{{ $data->expired }}">
+                        @error('tenggat_absensi')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 col-md-12">
                     <label class="form-label" for="basicDate">Lokasi</label>
                         <input type="text" class="form-control @error('lokasi') is-invalid @enderror" name="lokasi"
                             placeholder="" value="{{ $data->location }}">

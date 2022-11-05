@@ -16,6 +16,28 @@
 
 @section('style')
 <style>
+    table.dataTable tbody td {
+        vertical-align: middle;
+    }
+
+    table.dataTable td:nth-child(2) {
+        max-width: 100px;
+    }
+
+    table.dataTable td:nth-child(3) {
+        max-width: 80px;
+    }
+
+    table.dataTable td:nth-child(4) {
+        max-width: 80px;
+    }
+
+    table.dataTable td {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-wrap: break-word;
+    }
 
 </style>
 @endsection
@@ -35,7 +57,7 @@
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
                         <div class="row">
-                        <div class=" col-md-3">
+                            <div class=" col-md-3">
                                 <select id="select_role" class="select2 form-select" data-placeholder="Hak Akses">
                                     <option value="">Hak Akses</option>
                                     @foreach($roles as $d)
@@ -94,6 +116,7 @@
             });
         })(jQuery);
     }, 350);
+
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -109,7 +132,7 @@
             ajax: {
                 url: "{{ route('setting_account_data') }}",
                 data: function (d) {
-                        d.select_role = $('#select_role').val(),
+                    d.select_role = $('#select_role').val(),
                         d.select_job = $('#select_job').val(),
                         d.search = $('input[type="search"]').val()
                 },
@@ -118,8 +141,7 @@
                 "defaultContent": "-",
                 "targets": "_all"
             }],
-            columns: [
-                {
+            columns: [{
                     render: function (data, type, row, meta) {
                         var no = (meta.row + meta.settings._iDisplayStart + 1);
                         return no;
@@ -128,7 +150,8 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = `<a class="text-primary" title="` + row.name + `" href="{{ url('profile/` +
+                        var html = `<a class="text-primary" title="` + row.name +
+                            `" href="{{ url('profile/` +
                             row.idd + `') }}">` + row.name + `</a>`;
                         return html;
                     },
@@ -150,28 +173,32 @@
 
                 {
                     render: function (data, type, row, meta) {
-                        if(row.job != null){
+                        if (row.job != null) {
                             return "<span title='" + row.job + "'>" + row.job + "</span>";
                         }
-                        
+
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var x = '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">';
-                        if(row.roles != null){
+                        var x =
+                            '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">';
+                        if (row.roles != null) {
                             row.roles.forEach((e) => {
-                                x += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="' 
-                                + e.title + '"><i class="badge rounded-pill bg-'+e.color+'"  style="font-size:8pt;">' + e.title + '</i></li>';
+                                x += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="' +
+                                    e.title + '"><i class="badge rounded-pill bg-' + e
+                                    .color + '"  style="font-size:8pt;">' + e.title +
+                                    '</i></li>';
                             });
                         }
                         var y = "</ul>";
-                        return x+y;
+                        return x + y;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = `<a class=" text-success" title="Edit" href="{{ url('setting/account/edit/` +
+                        var html =
+                            `<a class=" text-success" title="Edit" href="{{ url('setting/account/edit/` +
                             row.idd + `') }}"><i class="bx bxs-edit"></i></a> 
                             <a class=" text-danger" title="Delete" onclick="DeleteId(` + row
                             .id + `)" ><i class="bx bx-trash"></i></a>`;
@@ -226,5 +253,6 @@
                 }
             })
     }
+
 </script>
 @endsection

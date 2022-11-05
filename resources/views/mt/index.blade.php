@@ -88,7 +88,7 @@
             <div class="offcanvas offcanvas-end @if($errors->all()) show @endif"  id="newrecord"
                 aria-labelledby="offcanvasEndLabel">
                 <div class="offcanvas-header">
-                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Buat Baru</h5>
+                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Buat Absensi</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
@@ -160,7 +160,7 @@
                             <label class="form-label" for="basicDate">Pimpinan Rapat</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('pimpinan_rapat') is-invalid @enderror" name="pimpinan_rapat"
-                                    placeholder="Nama lengkap Pimpinan Rapat dengan gelar" value="{{ old('pimpinan_rapat') }}">
+                                    placeholder="Nama Pimpinan Rapat dengan gelar" value="{{ old('pimpinan_rapat') }}">
                                 @error('pimpinan_rapat')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -183,8 +183,8 @@
                         <div class="col-sm-12 fv-plugins-icon-container">
                             <label class="form-label" for="basicDate">Notulen</label>
                             <div class="input-group input-group-merge has-validation">
-                                <select class="form-select select2-modal" data-placeholder="Notulen" name="notulen">
-                                    <option value="">--Select Notulen--</option>
+                                <select class="form-select select2-modal" name="notulen">
+                                    <option value="">-- Pilih Notulen Rapat --</option>
                                     @foreach($user as $d)
                                     <option value="{{ $d->username }}">{{ $d->name }} - {{ $d->username }}</option>
                                     @endforeach
@@ -329,7 +329,7 @@
                                 <a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a> `;
                     },
-                    className: "text-center"
+                    className: "text-md-center"
                 }
 
             ]

@@ -59,7 +59,7 @@ class GoogleController extends Controller
                     }
                 } else {
                     $email = explode("@",$user->email);
-                    if($email[1] == "jgu.ac.id" || $email[1] == "student.jgu.ac.id" ){
+                    if($email[1] == "jgu.ac.id" || $email[1] == "student.jgu.ac.id" || $email[1] == "itkj.ac.id"){
                         $data=User::create([
                             'name' => strtoupper($user->name),
                             'email' => $user->email,

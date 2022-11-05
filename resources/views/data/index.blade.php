@@ -19,7 +19,9 @@
     table.dataTable tbody td {
         vertical-align: middle;
     }
-
+    table.dataTable td:nth-child(2) {
+        max-width: 200px;
+    }
     table.dataTable td:nth-child(3) {
         max-width: 200px;
     }
@@ -186,7 +188,7 @@
                             l = row.shortlink;
                         }
                         return `<a class="text-dark" target="_blank" href="{{ url('qrcode?data=` +
-                            x + `&label=` + l + `') }}" title="View QRCode"><i class="bx bx-qr-scan"></i></a>`;
+                            x + `&label=` + l + `') }}" title="Lihat QR-Code"><i class="bx bx-qr-scan"></i></a>`;
                     },
                     className: "text-md-center"
                 },
@@ -194,7 +196,7 @@
                 {
                     render: function (data, type, row, meta) {
                         if(row.user != null){
-                            return html = row.user.name;
+                            return "<span title='" + row.user.name + "'>" + row.user.name + "</span>";
                         }
                     },
                 },
@@ -210,7 +212,7 @@
                                 <a class="text-muted"><i class="bx bx-trash"></i></a>`;
                         }
                     },
-                    className: "text-center"
+                    className: "text-md-center"
                 }
 
             ]

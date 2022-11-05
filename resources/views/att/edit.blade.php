@@ -11,7 +11,7 @@
 @endsection
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Absensi / </span>
+<span class="text-muted fw-light">Absensi / Acara / </span>
 @endsection
 
 

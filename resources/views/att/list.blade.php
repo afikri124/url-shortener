@@ -2,7 +2,7 @@
 @section('title', $data->title )
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Absensi / Acara atau Kegiatan /</span>
+<span class="text-muted fw-light">Absensi / Acara /</span>
 @endsection
 
 @section('css')
@@ -64,7 +64,7 @@
                             <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
                                 <a href="{{ route('att.print', ['id' => Crypt::encrypt($data->id) ]) }}" target="_blank"
                                     class="btn btn-primary"><i class="bx bx-qr-scan me-sm-2"></i>
-                                    <span>Barcode</span>
+                                    <span>Qr-Code</span>
                                 </a>
                                 <button class="btn btn-primary" type="submit"><i class="bx bx-printer me-sm-2"></i>
                                     <span>Cetak Laporan</span>

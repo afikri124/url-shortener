@@ -52,7 +52,7 @@
     <script src="{{asset('assets/js/config.js')}}"></script>
   </head>
 
-  <body>
+  <body onload="initialize()">
     <!-- Content -->
     @yield('content')
     <!-- / Content -->

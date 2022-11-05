@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Acara atau Kegiatan')
+@section('title', 'Acara')
 
 @section('breadcrumb-items')
 <span class="text-muted fw-light">Absensi /</span>
@@ -74,7 +74,7 @@
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
                                             class="bx bx-plus me-sm-2"></i>
-                                        <span>Tambah Data</span></span>
+                                        <span>Buat Baru</span></span>
                                 </button>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
             <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
                 aria-labelledby="offcanvasEndLabel">
                 <div class="offcanvas-header">
-                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Data</h5>
+                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Buat Absensi</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
@@ -108,7 +108,7 @@
                             <label class="form-label" for="basicDate">Judul Tambahan</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('judul_tambahan') is-invalid @enderror" name="judul_tambahan"
-                                    placeholder="Judul Kegiatan Tambahan" value="{{ old('judul_tambahan') }}">
+                                    placeholder="Judul Tambahan" value="{{ old('judul_tambahan') }}">
                                 @error('judul_tambahan')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -146,7 +146,7 @@
                             <label class="form-label" for="basicDate">Lokasi</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('lokasi') is-invalid @enderror" name="lokasi"
-                                    placeholder="Lokasi" value="{{ old('lokasi') }}">
+                                    placeholder="Tempat/Ruangan" value="{{ old('lokasi') }}">
                                 @error('lokasi')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -310,7 +310,7 @@
                                 <a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a> `;
                     },
-                    className: "text-center"
+                    className: "text-md-center"
                 }
 
             ]

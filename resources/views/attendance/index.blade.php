@@ -1,4 +1,4 @@
-@extends('layouts.authentication.master')
+@extends('layouts.authentication.master_att')
 @section('title', 'Absensi')
 
 @section('css')
@@ -55,7 +55,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @else
-                <p class="my-4 text-center">Silahkan Isi Absensi Anda</p>
+                <p class="my-4 text-center">Silahkan Isi Absensi Kehadiran Anda</p>
                 @endif
                 @endif
 
@@ -146,18 +146,16 @@
                                 <input type="text" class="form-control" name="judul"
                                     value="{{ $data->title }} {{ $data->sub_title }}" readonly />
                             </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Hari/Tanggal</label>
-                                <input type="text" class="form-control" name="tanggal"
-                                    value='{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}'
-                                    readonly />
-                            </div>
-
                             <div class="mb-3">
                                 <label class="form-label">Lokasi/Tempat @if($data->type == "M") Rapat @else Acara
                                     @endif</label>
                                 <input type="text" class="form-control" name="lokasi" value="{{ $data->location }}"
+                                    readonly />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Hari/Tanggal</label>
+                                <input type="text" class="form-control" name="tanggal"
+                                    value='{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}'
                                     readonly />
                             </div>
                             @if($data->expired != null)
@@ -200,12 +198,12 @@
                         <hr>
                         <div class="mb-3 text-center">
                             <button class="btn btn-success w-100" type="submit" name="attendance" @if($check !=null)
-                                disabled @endif><i class="bx bx-log-in-circle me-2"></i>Absen Sekarang</button>
+                                disabled @endif><i class="bx bx-check-circle me-2"></i>Absen Sekarang</button>
                         </div>
                         <div class="mb-3 text-center">
                             <button class="btn btn-dark w-100" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
-                                <i class="bx bx-log-out-circle me-2"></i>Keluar
+                                <i class="bx bx-log-out me-2"></i>Keluar
                             </button>
                         </div>
                     </form>

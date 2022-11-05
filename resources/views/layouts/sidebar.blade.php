@@ -5,7 +5,6 @@
             <span class="app-brand-logo demo">
                 <img src="{{asset('assets/img/logo-sjgu.png')}}" height="44">
             </span>
-            <!-- <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span> -->
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -25,7 +24,7 @@
             </a>
         </li>
         @if(Auth::user()->hasRole('ST') || Auth::user()->hasRole('SD'))
-        <li class="menu-item {{ Route::currentRouteName()=='url.index' ? 'active' : '' }}">
+        <li class="menu-item {{ Route::currentRouteName()=='url.index' ? 'active' : (request()->route()->getPrefix() == '/URL' ? 'active' : '') }}">
             <a href="{{ route('url.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-link"></i>
                 <div>Penyingkat URL</div>
@@ -46,12 +45,12 @@
                 <div>Absensi</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item {{ Route::currentRouteName()=='att.index' ? 'active' : '' }}">
+                <li class="menu-item {{ Route::currentRouteName()=='att.index' ? 'active' : (request()->route()->getPrefix() == '/ATT' ? 'active' : '') }}">
                     <a href="{{ route('att.index') }}" class="menu-link">
                         <div>Acara/Kegiatan</div>
                     </a>
                 </li>
-                <li class="menu-item {{ Route::currentRouteName()=='mt.index' ? 'active' : '' }}">
+                <li class="menu-item {{ Route::currentRouteName()=='mt.index' ? 'active' : (request()->route()->getPrefix() == '/MT' ? 'active' : '') }}">
                     <a href="{{ route('mt.index') }}" class="menu-link">
                         <div>Rapat</div>
                     </a>
@@ -64,7 +63,7 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pengaturan</span>
         </li>
-        <li class="menu-item {{ Route::currentRouteName()=='setting_account' ? 'active' : '' }}">
+        <li class="menu-item {{ Route::currentRouteName()=='setting_account' ? 'active' : (request()->route()->getPrefix() == '/setting' ? 'active' : '') }}">
             <a href="{{ route('setting_account') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Account">Akun</div>

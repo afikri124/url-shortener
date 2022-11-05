@@ -24,6 +24,10 @@
         max-width: 100px;
     }
 
+    table.dataTable td:nth-child(4) {
+        max-width: 100px;
+    }
+
     table.dataTable td {
         white-space: nowrap;
         text-overflow: ellipsis;

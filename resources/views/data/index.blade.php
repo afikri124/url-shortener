@@ -182,6 +182,9 @@
                     render: function (data, type, row, meta) {
                         var x = `{{ url('` + row.shortlink + `') }}`;
                         var l = 's.jgu.ac.id/' + row.shortlink;
+                        if(l.length > 30) {
+                            l = row.shortlink;
+                        }
                         return `<a class="text-dark" target="_blank" href="{{ url('qrcode?data=` +
                             x + `&label=` + l + `') }}" title="View QRCode"><i class="bx bx-qr-scan"></i></a>`;
                     },

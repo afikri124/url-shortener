@@ -21,6 +21,10 @@
         height: auto;
     }
 
+    #OpenLayers_Control_Attribution_7{
+        display: none;
+    }
+
 </style>
 @endsection
 

@@ -155,10 +155,10 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Pemimpin Rapat </label>
+                            <label class="form-label" for="basicDate">Pemimpin </label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('pemimpin_rapat') is-invalid @enderror" name="pemimpin_rapat"
-                                    placeholder="Pemimpin Rapat dengan Gelar" value="{{ old('pemimpin_rapat') }}">
+                                    placeholder="Nama Pemimpin dengan Gelar" value="{{ old('pemimpin_rapat') }}">
                                 @error('pemimpin_rapat')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -170,7 +170,7 @@
                             <label class="form-label" for="basicDate">Peserta</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('peserta') is-invalid @enderror" name="peserta"
-                                    placeholder="Nama Departemen Peserta Rapat" value="{{ old('peserta') }}">
+                                    placeholder="Departemen Peserta" value="{{ old('peserta') }}">
                                 @error('peserta')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -198,8 +198,8 @@
                     <th>Judul Tambahan</th>
                     <th>Tanggal</th>
                     <th>Lokasi</th>
-                    <th>Pemimpin Rapat</th>
-                    <th>Peserta Rapat</th>
+                    <th>Pemimpin</th>
+                    <th>Peserta</th>
                     <th width="85px" data-priority="3">Aksi</th>
                 </tr>
             </thead>

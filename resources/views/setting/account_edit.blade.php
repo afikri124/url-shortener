@@ -126,7 +126,7 @@
                     </div>
                     <div class="mt-2">
                         <button type="submit" class="btn btn-primary me-2">Simpan</button>
-                        <a class="btn btn-outline-secondary" href="{{ route('setting_account') }}">Batal</a>
+                        <a class="btn btn-outline-secondary" href="{{ route('setting_account') }}">Kembali</a>
                     </div>
                 </form>
             </div>

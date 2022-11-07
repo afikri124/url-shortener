@@ -67,7 +67,7 @@
                                     <span>QR-Code</span>
                                 </a>
                                 <button class="btn btn-primary" type="submit"><i class="bx bx-printer me-sm-2"></i>
-                                    <span>Cetak Lapoan</span>
+                                    <span>Cetak Laporan</span>
                                 </button>
                             </div>
                         </form>

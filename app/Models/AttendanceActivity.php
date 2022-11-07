@@ -12,7 +12,6 @@ class AttendanceActivity extends Model
         'id',
         'type',
         'title',
-        'sub_title',
         'date',
         'location',
         'host',

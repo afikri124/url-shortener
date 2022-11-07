@@ -27,7 +27,6 @@ class MtController extends Controller
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
                 'judul'             => ['required'],
-                'judul_tambahan'    => ['required'],
                 'tanggal'           => ['required', 'date'],
                 'tenggat_absensi'       => ['required', 'date'],
                 'lokasi'            => ['required'],
@@ -37,7 +36,6 @@ class MtController extends Controller
             $data = AttendanceActivity::create([
                 'type'               => 'M',
                 'title'              => $request->judul,
-                'sub_title'          => $request->judul_tambahan,
                 'date'               => date('Y-m-d', strtotime($request->tanggal)),
                 'expired'       => date('Y-m-d H:i:s', strtotime($request->tenggat_absensi)),
                 'location'           => $request->lokasi,
@@ -99,7 +97,6 @@ class MtController extends Controller
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
                 'judul'             => ['required'],
-                'judul_tambahan'    => ['required'],
                 'tanggal'           => ['required', 'date'],
                 'tenggat_absensi'       => ['required', 'date'],
                 'lokasi'            => ['required'],
@@ -110,7 +107,6 @@ class MtController extends Controller
             $d = $data->update([ 
                 'type'               => 'M',
                 'title'              => $request->judul,
-                'sub_title'          => $request->judul_tambahan,
                 'date'               => date('Y-m-d', strtotime($request->tanggal)),
                 'expired'       => date('Y-m-d H:i:s', strtotime($request->tenggat_absensi)),
                 'location'           => $request->lokasi,
@@ -190,7 +186,7 @@ class MtController extends Controller
             $data = AttendanceActivity::with('user')->findOrFail($id);
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-            $al = Attendance::where('activity_id', $id)->with('user')->select('*')->orderBy("id")->get();
+            $al = Attendance::where('activity_id', $id)->with('user')->select('*')->get();
             $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al'));
             return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
             // return view('attendance.print', compact('qr','data','link', 'tok', 'al'));

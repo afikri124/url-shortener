@@ -32,17 +32,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="mb-3 col-md-12">
-                    <label class="form-label" for="basicDate">Judul Tambahan</label>
-                        <input type="text" class="form-control @error('judul_tambahan') is-invalid @enderror" name="judul_tambahan"
-                            placeholder="" value="{{ $data->sub_title }}">
-                        @error('judul_tambahan')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-                    <div class="mb-3 col-md-12">
+                    <div class="mb-3 col-md-6">
                     <label class="form-label" for="basicDate">Tanggal</label>
                         <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal"
                             placeholder="" value="{{ $data->date }}">
@@ -52,7 +42,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="mb-3 col-md-12">
+                    <div class="mb-3 col-md-6">
                         <label class="form-label" for="basicDate">Tenggat Absensi</label>
                         <input type="datetime-local" class="form-control @error('tenggat_absensi') is-invalid @enderror"
                             name="tenggat_absensi" placeholder="" value="{{ $data->expired }}">
@@ -62,7 +52,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="mb-3 col-md-12">
+                    <div class="mb-3 col-md-6">
                     <label class="form-label" for="basicDate">Lokasi</label>
                         <input type="text" class="form-control @error('lokasi') is-invalid @enderror" name="lokasi"
                             placeholder="" value="{{ $data->location }}">
@@ -72,7 +62,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="mb-3 col-md-12">
+                    <div class="mb-3 col-md-6">
                     <label class="form-label" for="basicDate">Pimpinan Rapat</label>
                         <input type="text" class="form-control @error('pimpinan_rapat') is-invalid @enderror" name="pimpinan_rapat"
                             placeholder="" value="{{ $data->host }}">
@@ -82,7 +72,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="mb-3 col-md-12">
+                    <div class="mb-3 col-md-6">
                     <label class="form-label" for="basicDate">Peserta</label>
                         <input type="text" class="form-control @error('peserta') is-invalid @enderror" name="peserta"
                             placeholder="" value="{{ $data->participant }}">
@@ -92,7 +82,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="mb-3 col-md-12">
+                    <div class="mb-3 col-md-6">
                     <label class="form-label" for="basicDate">Notulen</label>
                         <select class="form-select select2 col-sm-12 @error('notulen') is-invalid @enderror" name="notulen">
                             <option value="" selected disabled>--Select Notulen--</option>

@@ -24,7 +24,7 @@
     }
 
     table.dataTable td:nth-child(3) {
-        max-width: 150px;
+        max-width: 80px;
     }
 
     table.dataTable td:nth-child(4) {
@@ -96,20 +96,8 @@
                             <label class="form-label" for="basicDate">Judul</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('judul') is-invalid @enderror" name="judul"
-                                    placeholder="Judul Kegiatan" value="{{ old('judul') }}">
+                                    placeholder="Judul Acara/Kegiatan" value="{{ old('judul') }}">
                                 @error('judul')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Judul Tambahan</label>
-                            <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('judul_tambahan') is-invalid @enderror" name="judul_tambahan"
-                                    placeholder="Judul Tambahan" value="{{ old('judul_tambahan') }}">
-                                @error('judul_tambahan')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -195,7 +183,6 @@
                 <tr>
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Judul</th>
-                    <th>Judul Tambahan</th>
                     <th>Tanggal</th>
                     <th>Lokasi</th>
                     <th>Pemimpin</th>
@@ -275,11 +262,6 @@
                     render: function (data, type, row, meta) {
                         return `<a href="{{ url('ATT/list/` +
                                 row.idd + `') }}"><span title='` + row.title + `'>` + row.title + `</span>`;
-                    },
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return "<span title='" + row.sub_title + "'>" + row.sub_title + "</span>";
                     },
                 },
                 {

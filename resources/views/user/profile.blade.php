@@ -154,7 +154,7 @@
                 {
                     render: function (data, type, row, meta) {
                         if (row.activity != null) {
-                            return "<span title='" + row.activity.title + " " + row.activity.sub_title + "'>" + row.activity.title + " " + row.activity.sub_title + "</span>";
+                            return "<span title='" + row.activity.title + "'>" + row.activity.title + "</span>";
                         }
                     },
                 },

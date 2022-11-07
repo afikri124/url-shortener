@@ -21,8 +21,50 @@
         height: auto;
     }
 
-    #OpenLayers_Control_Attribution_7{
+    #OpenLayers_Control_Attribution_7 {
         display: none;
+    }
+
+    :root {
+        --smaller: .75;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        color: #333;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    li {
+        display: inline-block;
+        list-style-type: none;
+        padding: 1em;
+    }
+
+    li span {
+        display: block;
+        font-size: 15pt;
+    }
+
+
+    @media all and (max-width: 768px) {
+        h1 {
+            font-size: calc(1.5rem * var(--smaller));
+        }
+
+        li {
+            font-size: calc(1.125rem * var(--smaller));
+        }
+
+        li span {
+            font-size: calc(2rem * var(--smaller));
+        }
     }
 
 </style>
@@ -55,7 +97,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @else
-                <p class="my-4 text-center">Silahkan Isi Absensi Kehadiran Anda</p>
+                <div class="text-center pt-4">
+                    <h5 class="mb-1" id="silahkan">Silahkan Isi Absensi Kehadiran Anda</h5>
+                    <div id="countdown">
+                        <ul style="padding: 0;">
+                            <li id="hari"><span id="days"></span>Hari</li>
+                            <li id="jam"><span id="hours"></span>Jam</li>
+                            <li id="menit"><span id="minutes"></span>Menit</li>
+                            <li id="detik"><span id="seconds"></span>Detik</li>
+                        </ul>
+                    </div>
+                </div>
                 @endif
                 @endif
 
@@ -70,7 +122,7 @@
                         @csrf
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Nama Lengkap @if(Auth::user()->hasRole('GS'))
+                                <label class="form-label">Nama @if(Auth::user()->hasRole('GS'))
                                     <small class="text-mute">
                                         <strong class="text-danger">*</strong> <a href="{{ route('user.edit') }}"
                                             target="_blank"><i>klik disini memperbarui nama Anda</i></a>
@@ -144,26 +196,26 @@
                                 <label class="form-label">Judul @if($data->type == "M") Rapat @else Acara @endif
                                 </label>
                                 <input type="text" class="form-control" name="judul"
-                                    value="{{ $data->title }} {{ $data->sub_title }}" readonly />
+                                    value="{{ $data->title }} {{ $data->sub_title }}" disabled />
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Lokasi/Tempat @if($data->type == "M") Rapat @else Acara
                                     @endif</label>
                                 <input type="text" class="form-control" name="lokasi" value="{{ $data->location }}"
-                                    readonly />
+                                    disabled />
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Hari/Tanggal</label>
                                 <input type="text" class="form-control" name="tanggal"
                                     value='{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}'
-                                    readonly />
+                                    disabled />
                             </div>
                             @if($data->expired != null)
                             <div class="mb-3">
                                 <label class="form-label">Tenggat waktu Absensi</label>
                                 <input type="text" class="form-control" name="tenggat"
                                     value='{{ \Carbon\Carbon::parse($data->expired)->translatedFormat("l, d F Y H:i"); }}'
-                                    readonly />
+                                    disabled />
                             </div>
                             @endif
 
@@ -290,6 +342,57 @@
 
         map.setCenter(lonLat, zoom);
     }
+
+</script>
+<script>
+    (function () {
+        const second = 1000,
+            minute = second * 60,
+            hour = minute * 60,
+            day = hour * 24;
+        let today = new Date(),
+            dd = String(today.getDate()).padStart(2, "0"),
+            mm = String(today.getMonth() + 1).padStart(2, "0"),
+            yyyy = today.getFullYear(),
+            nextYear = yyyy + 1,
+            dayMonth = "09/30/",
+            birthday = dayMonth + yyyy;
+
+        today = mm + "/" + dd + "/" + yyyy;
+        if (today > birthday) {
+            birthday = dayMonth + nextYear;
+        }
+
+        const countDown = new Date("{{$data->expired}}").getTime(),
+            x = setInterval(function () {
+
+                const now = new Date().getTime(),
+                    distance = countDown - now;
+
+                document.getElementById("days").innerText = Math.floor(distance / (day)),
+                    document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour)),
+                    document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute)),
+                    document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
+                if(Math.floor(distance / (day)) <= 0){
+                    document.getElementById("hari").style.display = "none";
+                }
+
+                if(Math.floor((distance % (day)) / (hour)) <= 0){
+                    document.getElementById("jam").style.display = "none";
+                }
+
+                if(Math.floor((distance % (hour)) / (minute)) <= 0){
+                    document.getElementById("menit").style.display = "none";
+                }
+
+                if (distance < 0) {
+                    document.getElementById("countdown").style.display = "none";
+                    document.getElementById("silahkan").style.display = "none";
+                    clearInterval(x);
+                }
+
+            }, 0)
+    }());
 
 </script>
 @endsection

@@ -39,7 +39,7 @@
                 <img src="{{ public_path('assets/img/jgu.png') }}" style="height: 60px;" alt="">
             </td>
             <td valign="top" colspan="2" style="text-align:center;" width="55%">
-                <p><b>{{$data->title}}<b></p>
+                <p><b>Presensi Kehadiran @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif<b></p>
             </td>
             <td style="text-align:center; vertical-align:middle;" rowspan='6' width="20%">
                 <p style="margin-bottom: 5px;">FM/JGU/L.007</p>
@@ -48,7 +48,7 @@
         </tr>
         <tr>
             <td valign="top" colspan="2" style="text-align:center;">
-                <p><b>{{$data->sub_title}}</b></p>
+                <p><b>{{$data->title}}</b></p>
             </td>
         </tr>
         <tr>
@@ -99,10 +99,11 @@
                 <p>Paraf</p>
             </td>
         </tr>
-        @foreach($al as $key => $d)
+        @php $i = 1; @endphp
+        @foreach($al->sortBy('user.name_with_title') as $d)
         <tr style="vertical-align:middle">
             <td style="text-align:center;">
-                <p>{{$key+1}}</p>
+                <p>{{$i++}}</p>
             </td>
             <td>
                 <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}</p>
@@ -111,7 +112,7 @@
                 <p>{{($d->user != null ? $d->user->job : "-")}}</p>
             </td>
             <td style="text-align:center;">
-                <p><img src="{!! $d->signature_img !!}" style="height:40px;"/></p>
+                <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;"/></p>
             </td>
         </tr>
         @endforeach

@@ -74,8 +74,8 @@ class HomeController extends Controller
         $data = AttendanceActivity::findOrFail($idd);
         $tok = $data->type."".$data->user_id."".($data->id+3);
         $check = Attendance::where('username',Auth::user()->username)->where('activity_id', $idd)->first();
-        if($tok != $token){
-            abort(403, "Invalid token!");
+        if(strtolower($tok) != strtolower($token)){
+            abort(403, "Token tidak valid!");
         } else {
             return view('attendance.index', compact('data','check'));
         }

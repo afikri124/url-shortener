@@ -43,7 +43,7 @@ Route::group(['prefix' => 'URL','middleware' => ['auth', 'role:ST,SD']], functio
 });
 
 //ACT ATT
-Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:ST']], function () {
+Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:ST,AD']], function () {
   Route::any('/', [App\Http\Controllers\AttController::class, 'index'])->name('att.index');
   Route::get('/data', [App\Http\Controllers\AttController::class, 'data'])->name('att.data');
   Route::any('/edit/{id}', [App\Http\Controllers\AttController::class, 'edit'])->name('att.edit');
@@ -54,11 +54,12 @@ Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:ST']], function (
   Route::get('/print/{id}', [App\Http\Controllers\AttController::class, 'print'])->name('att.print');
 });
 
-//User absen menggunakan QR
+//User absen menggunakan QR/LInk
 Route::any('/A/{id}/{token}', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance')->middleware(['auth']);
+Route::any('/a/{id}/{token}', [App\Http\Controllers\HomeController::class, 'attendance'])->middleware(['auth']);
 
 //MT ATT
-Route::group(['prefix' => 'MT','middleware' => ['auth','role:ST']], function () {
+Route::group(['prefix' => 'MT','middleware' => ['auth','role:ST,AD']], function () {
   Route::any('/', [App\Http\Controllers\MtController::class, 'index'])->name('mt.index');
   Route::get('/data', [App\Http\Controllers\MtController::class, 'data'])->name('mt.data');
   Route::any('/edit/{id}', [App\Http\Controllers\MtController::class, 'edit'])->name('mt.edit');
@@ -67,6 +68,13 @@ Route::group(['prefix' => 'MT','middleware' => ['auth','role:ST']], function () 
   Route::delete('/list/delete', [App\Http\Controllers\MtController::class, 'list_delete'])->name('mt.list_delete');
   Route::any('/list/{id}', [App\Http\Controllers\MtController::class, 'list'])->name('mt.list');
   Route::get('/print/{id}', [App\Http\Controllers\MtController::class, 'print'])->name('mt.print');
+});
+
+//Rekap Absensi
+Route::group(['prefix' => 'attendance','middleware' => ['auth','role:AD']], function () {
+  Route::any('/', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.index');
+  Route::get('/data', [App\Http\Controllers\AttendanceController::class, 'data'])->name('attendance.data');
+  Route::get('/print/{id}', [App\Http\Controllers\AttendanceController::class, 'print'])->name('attendance.print');
 });
 
 //QR-JGU

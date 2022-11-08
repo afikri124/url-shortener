@@ -261,7 +261,7 @@
                 {
                     render: function (data, type, row, meta) {
                         return `<a href="{{ url('ATT/list/` +
-                                row.idd + `') }}"><span title='` + row.title + `'>` + row.title + `</span>`;
+                                row.idd + `') }}"><span title='` + row.title + `'>` + row.title + `</span></a>`;
                     },
                 },
                 {

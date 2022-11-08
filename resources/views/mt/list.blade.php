@@ -56,7 +56,7 @@
                         <form method="POST" class="row" target="_blank" action="">
                             @csrf
                             <div class="col-md-6 text-md-start text-center pt-3 pt-md-0">
-                                <a href="{{ route('mt.index') }}" 
+                                <a href="{{ url()->previous() }}" 
                                     class="btn btn-outline-secondary"><i class="bx bx-chevron-left me-sm-2"></i>
                                     <span>Kembali</span>
                                 </a>
@@ -84,7 +84,9 @@
                     <th>Jabatan</th>
                     <th>Lokasi Absensi</th>
                     <th data-priority="4" width="150px">Waktu Kehadiran</th>
+                    @if($data->user_id == Auth::user()->id)
                     <th data-priority="3" width="50px">Aksi</th>
+                    @endif
                 </tr>
             </thead>
         </table>
@@ -189,13 +191,16 @@
                             "</span>";
                     },
                 },
+                @if($data->user_id == Auth::user()->id)
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
-                                `)" ><i class="bx bx-trash"></i></a> `;
+                        return `<a class="text-danger" title="Delete" onclick="DeleteId(` + row
+                            .id +
+                            `)" ><i class="bx bx-trash"></i></a> `;
                     },
                     className: "text-center"
                 }
+                @endif
             ]
         });
     });

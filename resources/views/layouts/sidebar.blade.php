@@ -39,7 +39,7 @@
         @endif
         @if(Auth::user()->hasRole('ST'))
         <li
-            class="menu-item {{ request()->route()->getPrefix() == '/MT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/ATT' ? 'open' : '' }}">
+            class="menu-item {{ request()->route()->getPrefix() == '/MT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/ATT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/attendance' ? 'open' : '' }}">
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-calendar-event"></i>
                 <div>Absensi</div>
@@ -55,6 +55,13 @@
                         <div>Rapat</div>
                     </a>
                 </li>
+                @if(Auth::user()->hasRole('AD'))
+                <li class="menu-item {{ Route::currentRouteName()=='attendance.index' ? 'active' : (request()->route()->getPrefix() == '/attendance' ? 'active' : '') }}">
+                    <a href="{{ route('attendance.index') }}" class="menu-link">
+                        <div>Rekap Absensi</div>
+                    </a>
+                </li>
+                @endif
             </ul>
         </li>
         @endif

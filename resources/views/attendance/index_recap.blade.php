@@ -1,8 +1,8 @@
 @extends('layouts.master')
-@section('title', $data->title )
+@section('title', 'Rekap Absensi')
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Absensi / Acara /</span>
+<span class="text-muted fw-light">Absensi /</span>
 @endsection
 
 @section('css')
@@ -19,13 +19,24 @@
     table.dataTable tbody td {
         vertical-align: middle;
     }
-
     table.dataTable td:nth-child(2) {
-        max-width: 100px;
+        max-width: 200px;
     }
 
-    table.dataTable td:nth-child(4) {
-        max-width: 100px;
+    table.dataTable td:nth-child(5) {
+        max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(6) {
+        max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(7) {
+        max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(8) {
+        max-width: 50px;
     }
 
     table.dataTable td {
@@ -55,21 +66,26 @@
                     <div class="col-12">
                         <form method="POST" class="row" target="_blank" action="">
                             @csrf
-                            <div class="col-md-6 text-md-start text-center pt-3 pt-md-0">
-                                <a href="{{ url()->previous() }}" class="btn btn-outline-secondary"><i
-                                        class="bx bx-chevron-left me-sm-2"></i>
-                                    <span>Kembali</span>
-                                </a>
+                            <div class=" col-md-3">
+                                <select id="select_pembuat" class="select2 form-select" name="pembuat" data-placeholder="Pembuat">
+                                    <option value="">Pembuat</option>
+                                    @foreach($user as $d)
+                                    <option value="{{ $d->user_id }}">{{ $d->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
-                                <a href="{{ route('att.print', ['id' => Crypt::encrypt($data->id) ]) }}" target="_blank"
-                                    class="btn btn-primary"><i class="bx bx-qr-scan me-sm-2"></i>
-                                    <span>Qr-Code</span>
-                                </a>
-                                <button class="btn btn-primary" type="submit"><i class="bx bx-printer me-sm-2"></i>
-                                    <span>Cetak Laporan</span>
+                            <div class=" col-md-3">
+                                <select id="select_tipe" class="select2 form-select" name="tipe" data-placeholder="Tipe">
+                                    <option value="">Tipe</option>
+                                    <option value="E">Acara (E)</option>
+                                    <option value="M">Rapat (M)</option>
+                                </select>
+                            </div>
+                            <!-- <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
+                                <button class="btn btn-primary" type="submit"><i class="bx bx-export me-sm-2"></i>
+                                    <span>Unduh Rekap</span>
                                 </button>
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                 </div>
@@ -80,13 +96,14 @@
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Nama</th>
-                    <th>Jabatan</th>
-                    <th>Lokasi Absensi</th>
-                    <th data-priority="4" width="150px">Waktu Kehadiran</th>
-                    @if($data->user_id == Auth::user()->id)
-                    <th data-priority="3" width="50px">Aksi</th>
-                    @endif
+                    <th data-priority="2">Judul</th>
+                    <th width="50px">Tanggal</th>
+                    <th width="20px">Tipe</th>
+                    <th>Lokasi</th>
+                    <th>Pimpinan</th>
+                    <th>Peserta</th>
+                    <th>Pembuat</th>
+                    <th width="50px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -115,17 +132,6 @@
             });
         })(jQuery);
     }, 350);
-    setTimeout(function () {
-        (function ($) {
-            "use strict";
-            $(".select2-modal").select2({
-                dropdownParent: $('#newrecord'),
-                allowClear: true,
-                minimumResultsForSearch: 5
-            });
-        })(jQuery);
-    }, 350);
-
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -139,10 +145,10 @@
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
-                url: "{{ route('att.list_data', ['id' => $id]) }}",
+                url: "{{ route('attendance.data') }}",
                 data: function (d) {
-                    d.select_dosen = $('#select_dosen').val(),
-                        d.select_kategori = $('#select_kategori').val(),
+                    d.select_pembuat = $('#select_pembuat').val(),
+                    d.select_tipe = $('#select_tipe').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -159,89 +165,72 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if (row.user != null) {
-                            return "<span title='" + row.user.name + "'>" + row.user
-                                .name_with_title +
-                                "</span>";
+                        if(row.type == "E"){
+                            return `<a href="{{ url('ATT/list/` +
+                                row.idd + `') }}"><span title='` + row.title + `'>` + row.title + `</span></a>`;
+                        } else if (row.type == "M"){
+                            return `<a href="{{ url('MT/list/` +
+                                row.idd + `') }}"><span title='` + row.title + `'>` + row.title + `</span></a>`;
                         } else {
-                            return "<span class='text-danger' title='unregistered user'>" + row
-                                .username +
-                                "</span>";
+                            return `<span title='` + row.title + `'>` + row.title + `</span>`;
                         }
                     },
                 },
+                {
+                    render: function (data, type, row, meta) {
+                        return row.date;
+                    },
+                    className: "text-md-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return row.type;
+                    },
+                    className: "text-md-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
+                      return "<span title='" + row.location + "'>" + row.location + "</span>";
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return "<span title='" + row.host + "'>" + row.host + "</span>";
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return "<span title='" + row.participant + "'>" + row.participant + "</span>";
+                    },
+                },
+                
                 {
                     render: function (data, type, row, meta) {
                         if (row.user != null) {
-                            return "<span title='" + row.user.job + "'>" + row.user.job +
+                            return "<span title='" + row.user.name + "'>" + row.user.name +
                                 "</span>";
                         }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if (row.longitude != null) {
-                            return "<a target='_blank' href='https://www.google.com/maps?q=" +
-                                row.latitude + "," + row.longitude +
-                                "' title='Klik untuk melihat lokasi absensi'>" + row.latitude +
-                                " , " + row.longitude +
-                                "</a>";
-                        }
+                        return `<a class="text-primary" title="Lihat"  target="_blank"  href="{{ url('A/` + row.id + `/` +
+                                row.token + `') }}"><i class="bx bxs-show"></i></a> <a class="text-info" target="_blank" title="Cetak QR" href="{{ url('attendance/print/` +
+                                row.idd + `') }}"><i class="bx bxs-printer"></i></a>`;
                     },
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return "<span title='" + row.created_at + "'>" + row.date +
-                            "</span>";
-                    },
-                },
-                @if($data->user_id == Auth::user()->id)
-                {
-                    render: function (data, type, row, meta) {
-                        return `<a class="text-danger" title="Delete" onclick="DeleteId(` + row
-                            .id +
-                            `)" ><i class="bx bx-trash"></i></a> `;
-                    },
-                    className: "text-center"
+                    className: "text-md-center"
                 }
-                @endif
+
             ]
         });
+        
+        $('#select_pembuat').change(function () {
+            table.draw();
+        });
+        $('#select_tipe').change(function () {
+            table.draw();
+        });
     });
-
-    function DeleteId(id) {
-        swal({
-                title: "Apakah Anda yakin?",
-                text: "Ketika dihapus, data tidak dapat dikembalikan!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    $.ajax({
-                        url: "{{ route('att.list_delete') }}",
-                        type: "DELETE",
-                        data: {
-                            "id": id,
-                            "_token": $("meta[name='csrf-token']").attr("content"),
-                        },
-                        success: function (data) {
-                            if (data['success']) {
-                                swal(data['message'], {
-                                    icon: "success",
-                                });
-                                $('#datatable').DataTable().ajax.reload();
-                            } else {
-                                swal(data['message'], {
-                                    icon: "error",
-                                });
-                            }
-                        }
-                    })
-                }
-            })
-    }
 
 </script>
 @endsection

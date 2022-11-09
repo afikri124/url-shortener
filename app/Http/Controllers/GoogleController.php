@@ -105,7 +105,7 @@ class GoogleController extends Controller
                 return redirect()->route('home');
             }
         } catch (Exception $e) {
-            return redirect()->route('login')->withErrors(['msg' => 'Session Expired, please try again!']);
+            return redirect()->route('login')->withErrors(['msg' => 'Sesi Kedaluwarsa, silakan ulangi lagi!']);
         }
     }
 }

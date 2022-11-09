@@ -64,6 +64,25 @@
                 @endif
             </ul>
         </li>
+        <li
+            class="menu-item {{ request()->route()->getPrefix() == '/MoM' ? 'open' : '' }}">
+            <a href="#" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-notepad"></i>
+                <div>Notulensi</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ Route::currentRouteName()=='mom.user' ? 'active' : (request()->route()->getPrefix() == '/MoM/user' ? 'active' : '') }}">
+                    <a href="{{ route('mom.user') }}" class="menu-link">
+                        <div>Risalah Rapat</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Route::currentRouteName()=='mom.admin' ? 'active' : (request()->route()->getPrefix() == '/MoM/admin' ? 'active' : '') }}">
+                    <a href="{{ route('mom.admin') }}" class="menu-link">
+                        <div>Notulen</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
         @endif
 
         @if(Auth::user()->hasRole('AD'))

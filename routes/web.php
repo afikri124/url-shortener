@@ -82,6 +82,17 @@ Route::group(['prefix' => 'QR','middleware' => ['auth','role:ST,SD']], function 
   Route::get('/', [App\Http\Controllers\QrController::class, 'index'])->name('qr.index');
 });
 
+//Notulensi
+Route::group(['prefix' => 'MoM','middleware' => ['auth','role:ST']], function () {
+  Route::any('/admin', [App\Http\Controllers\MoMController::class, 'admin'])->name('mom.admin');
+  Route::get('/admin/data', [App\Http\Controllers\MoMController::class, 'admin_data'])->name('mom.admin_data');
+  Route::get('/admin/print/{id}', [App\Http\Controllers\MoMController::class, 'admin_print'])->name('mom.admin_print');
+  Route::any('/user', [App\Http\Controllers\MoMController::class, 'user'])->name('mom.user');
+  Route::get('/user/data', [App\Http\Controllers\MoMController::class, 'user_data'])->name('mom.user_data');
+  Route::any('/user/{id}', [App\Http\Controllers\MoMController::class, 'user_list_id'])->name('mom.user_list_id');
+});
+
+//Pengaturan
 Route::group(['prefix' => 'setting','middleware' => ['auth','role:AD']], function () {
   Route::get('account', [App\Http\Controllers\SettingController::class, 'account'])->name('setting_account');
   Route::get('account/data', [App\Http\Controllers\SettingController::class, 'account_data'])->name('setting_account_data');

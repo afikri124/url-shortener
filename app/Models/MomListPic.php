@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class MomListPic extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     protected $fillable = [
         'id',
         'mom_list_id',
-        'username',
+        'user_id',
     ];
 }

@@ -14,4 +14,26 @@ class MomList extends Model
         'detail',
         'target',
     ];
+
+    public function docs()
+    {
+        return $this->hasMany(MomDoc::class, 'activity_id', 'activity_id');
+    } 
+
+    public function pics()
+    {
+        return $this->belongsToMany(User::class, 'mom_list_pics');
+    } 
+
+
+    public function hasPIC($username) 
+    {
+      return $this->pics()->where('username', $username)->count() == 1;
+    }
+
+    public function activity()
+    {
+        return $this->belongsTo(AttendanceActivity::class, 'activity_id');
+    }
+
 }

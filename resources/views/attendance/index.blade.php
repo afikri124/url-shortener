@@ -111,7 +111,7 @@
                 @endif
                 @endif
 
-                @if($data->expired != null && $data->expired < \Carbon\Carbon::now() ) <div
+                @if($data->expired != null && $data->expired < \Carbon\Carbon::now() && $check ==null ) <div
                     class="alert alert-danger text-center" role="alert">
                     Anda sudah tidak bisa mengisi Absensi<br>karena
                     {{ $data->title }} {{ $data->sub_title }}

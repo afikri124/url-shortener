@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Risalah Rapat')
+@section('title', 'Notulen')
 
 @section('breadcrumb-items')
 <span class="text-muted fw-light">Notulensi /</span>
@@ -20,7 +20,23 @@
         vertical-align: middle;
     }
     table.dataTable td:nth-child(2) {
-        max-width: 150px;
+        max-width: 200px;
+    }
+    
+    table.dataTable td:nth-child(4) {
+        max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(5) {
+        max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(6) {
+        max-width: 50px;
+    }
+
+    table.dataTable td:nth-child(7) {
+        max-width: 50px;
     }
 
     table.dataTable td {
@@ -44,7 +60,7 @@
 
 <div class="card">
     <div class="card-datatable table-responsive">
-        <!-- <div class="card-header flex-column flex-md-row pb-0">
+        <div class="card-header flex-column flex-md-row pb-0">
             <div class="row">
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
@@ -58,25 +74,28 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
+                            <!-- <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-primary" type="submit"><i class="bx bx-export me-sm-2"></i>
                                     <span>Unduh Rekap</span>
                                 </button>
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <table class="table table-hover table-sm" id="datatable" width="100%">
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Uraian Rapat</th>
-                    <th width="150px">PIC</th>
-                    <th width="80px">Target</th>
-                    <th data-priority="3" width="50px">Aksi</th>
+                    <th data-priority="2">Judul Rapat</th>
+                    <th width="50px">Tanggal</th>
+                    <th>Lokasi</th>
+                    <th>Pimpinan</th>
+                    <th>Peserta</th>
+                    <th width="50px">Pembuat</th>
+                    <th width="50px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -114,12 +133,13 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Cari uraian rapat..',
+                searchPlaceholder: 'Cari..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
-                url: "{{ route('mom.user_data') }}",
+                url: "{{ route('mom.note-taker_data') }}",
                 data: function (d) {
+                    d.select_pembuat = $('#select_pembuat').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -136,38 +156,53 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        activity = "";
-                        if (row.activity != null) {
-                            activity = "<strong title='" + row.activity.title + "'>" + row.activity.title +
-                                "</strong> (" + row.activity.date + ")<br>";
-                        }
-
-                        dataX = row.detail;
-                        
-                        return activity + "<i>" + dataX + "</i>";
+                        return `<span title='` + row.title + `'>` + row.title + `</span>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var x =
-                            '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">';
-                        if (row.pics != null) {
-                            row.pics.forEach((e) => {
-                                x += e.name + '</br>';
-                            });
-                        }
-                        var y = "</ul>";
-                        return x + y;
+                        return row.date;
                     },
+                    className: "text-md-center"
                 },
-                {data: 'target', name: 'target'},
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-primary btn btn-light btn-sm" title="Lihat" target="_blank" href="{{ url('MoM/user/` + row.idd +  `') }}"><i class="bx bx-show"></i></a>`;
+                      return "<span title='" + row.location + "'>" + row.location + "</span>";
                     },
-                    className: "text-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return "<span title='" + row.host + "'>" + row.host + "</span>";
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return "<span title='" + row.participant + "'>" + row.participant + "</span>";
+                    },
+                },
+                
+                {
+                    render: function (data, type, row, meta) {
+                        if (row.user != null) {
+                            return "<span title='" + row.user.name + "'>" + row.user.name +
+                                "</span>";
+                        }
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        // return `<a class="text-primary" title="Lihat"  target="_blank"  href="{{ url('A/` + row.id + `/` +
+                        //         row.token + `') }}"><i class="bx bxs-show"></i></a> <a class="text-info" target="_blank" title="Cetak QR" href="{{ url('attendance/print/` +
+                        //         row.idd + `') }}"><i class="bx bxs-printer"></i></a>`;
+                    },
+                    className: "text-md-center"
                 }
+
             ]
+        });
+        
+        $('#select_pembuat').change(function () {
+            table.draw();
         });
     });
 

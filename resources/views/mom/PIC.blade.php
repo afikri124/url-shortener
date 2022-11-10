@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Notulen')
+@section('title', 'PIC Uraian Rapat')
 
 @section('breadcrumb-items')
 <span class="text-muted fw-light">Notulensi /</span>
@@ -17,33 +17,25 @@
 @section('style')
 <style>
     table.dataTable tbody td {
-        vertical-align: middle;
+        vertical-align: top;
     }
     table.dataTable td:nth-child(2) {
-        max-width: 200px;
-    }
-    
-    table.dataTable td:nth-child(4) {
-        max-width: 50px;
+        max-width: 250px;
+        min-width: 200px;
     }
 
-    table.dataTable td:nth-child(5) {
-        max-width: 50px;
-    }
-
-    table.dataTable td:nth-child(6) {
-        max-width: 50px;
-    }
-
-    table.dataTable td:nth-child(7) {
-        max-width: 50px;
-    }
-
-    table.dataTable td {
+    table.dataTable td:nth-child(3) {
+        max-width: 90px;
+        width: 90px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+    }
+
+
+    table.dataTable td {
         word-wrap: break-word;
+        word-break: break-word;
     }
 
 </style>
@@ -60,42 +52,14 @@
 
 <div class="card">
     <div class="card-datatable table-responsive">
-        <div class="card-header flex-column flex-md-row pb-0">
-            <div class="row">
-                <div class="col-12 pt-3 pt-md-0">
-                    <div class="col-12">
-                        <form method="POST" class="row" target="_blank" action="">
-                            @csrf
-                            <div class=" col-md-3">
-                                <select id="select_pembuat" class="select2 form-select" name="pembuat" data-placeholder="Pembuat Absensi">
-                                    <option value="">Pembuat Absensi</option>
-                                    @foreach($user as $d)
-                                    <option value="{{ $d->user_id }}">{{ $d->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <!-- <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-primary" type="submit"><i class="bx bx-export me-sm-2"></i>
-                                    <span>Unduh Rekap</span>
-                                </button>
-                            </div> -->
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <table class="table table-hover table-sm" id="datatable" width="100%">
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Judul Rapat</th>
-                    <th width="50px">Tanggal</th>
-                    <th>Lokasi</th>
-                    <th>Pimpinan</th>
-                    <th>Peserta</th>
-                    <th width="50px">Pembuat</th>
-                    <th width="50px" data-priority="3">Aksi</th>
+                    <th data-priority="2">Uraian Rapat</th>
+                    <th >PIC</th>
+                    <th width="80px">Target</th>
+                    <th data-priority="3" width="50px">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -132,14 +96,17 @@
             processing: true,
             serverSide: true,
             ordering: false,
+            lengthMenu: [
+                [5, 10, 100],
+                [5, 10, 100],
+            ],
             language: {
-                searchPlaceholder: 'Cari..',
+                searchPlaceholder: 'Cari uraian rapat..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
-                url: "{{ route('mom.admin_data') }}",
+                url: "{{ route('mom.PIC_data') }}",
                 data: function (d) {
-                    d.select_pembuat = $('#select_pembuat').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -156,53 +123,33 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<span title='` + row.title + `'>` + row.title + `</span>`;
+                        activity = "";
+                        if (row.activity != null) {
+                            activity = "<strong title='" + row.activity.title + "'>" + row.activity.title +
+                                "</strong> <span class='badge rounded-pill bg-label-secondary'>" + row.activity.date + "</span><br>";
+                        }                       
+                        return activity + $("<textarea/>").html(row.detail).text();
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.date;
-                    },
-                    className: "text-md-center"
-                },
-                {
-                    render: function (data, type, row, meta) {
-                      return "<span title='" + row.location + "'>" + row.location + "</span>";
-                    },
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return "<span title='" + row.host + "'>" + row.host + "</span>";
-                    },
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return "<span title='" + row.participant + "'>" + row.participant + "</span>";
-                    },
-                },
-                
-                {
-                    render: function (data, type, row, meta) {
-                        if (row.user != null) {
-                            return "<span title='" + row.user.name + "'>" + row.user.name +
-                                "</span>";
+                        var x = '';
+                        if (row.pics != null) {
+                            row.pics.forEach((e) => {
+                                x += '<i class="badge rounded-pill bg-label-secondary" title="' + e.name +'">' + e.name + '</i><br> ';
+                            });
                         }
+                        return x;
                     },
                 },
+                {data: 'target', name: 'target'},
                 {
                     render: function (data, type, row, meta) {
-                        // return `<a class="text-primary" title="Lihat"  target="_blank"  href="{{ url('A/` + row.id + `/` +
-                        //         row.token + `') }}"><i class="bx bxs-show"></i></a> <a class="text-info" target="_blank" title="Cetak QR" href="{{ url('attendance/print/` +
-                        //         row.idd + `') }}"><i class="bx bxs-printer"></i></a>`;
+                        return `<a class="text-primary btn btn-light btn-sm" title="Lihat" href="{{ url('MoM/PIC/` + row.idd +  `') }}"><i class="bx bx-show"></i></a>`;
                     },
-                    className: "text-md-center"
+                    className: "text-center"
                 }
-
             ]
-        });
-        
-        $('#select_pembuat').change(function () {
-            table.draw();
         });
     });
 

@@ -18,16 +18,16 @@ use App\Models\User;
 class MoMController extends Controller
 {
     //
-    public function admin(Request $request)
+    public function notetaker(Request $request)
     {
         $user = AttendanceActivity::select('attendance_activities.user_id', 'users.name')
                 ->join('users','attendance_activities.user_id','=','users.id')
                 ->groupBy('user_id', 'name')
                 ->get();
-        return view('mom.admin', compact('user'));
+        return view('mom.notetaker', compact('user'));
     }
 
-    public function admin_data(Request $request)
+    public function notetaker_data(Request $request)
     {
         $data = AttendanceActivity::where('notulen_username', Auth::user()->username)->with('user')->select('*')->orderByDesc("date");
             return Datatables::of($data)
@@ -48,16 +48,16 @@ class MoMController extends Controller
                     ->make(true);
     }
 
-    public function user(Request $request)
+    public function PIC(Request $request)
     {
         $user = AttendanceActivity::select('attendance_activities.user_id', 'users.name')
                 ->join('users','attendance_activities.user_id','=','users.id')
                 ->groupBy('user_id', 'name')
                 ->get();
-        return view('mom.user', compact('user'));
+        return view('mom.PIC', compact('user'));
     }
 
-    public function user_data(Request $request)
+    public function PIC_data(Request $request)
     {
         $data = MomList::
         whereHas('pics', function($q) use($request){
@@ -81,7 +81,7 @@ class MoMController extends Controller
                     ->make(true);
     }
 
-    public function user_list_id($idd, Request $request) {
+    public function PIC_list_id($idd, Request $request) {
         try {
             $id = Crypt::decrypt($idd);
         } catch (DecryptException $e) {
@@ -95,6 +95,6 @@ class MoMController extends Controller
                 ->with('pics')
                 ->with('docs')
                 ->findOrFail($id);
-        return view('mom.user_list_id', compact('data'));
+        return view('mom.PIC_list_id', compact('data'));
     }
 }

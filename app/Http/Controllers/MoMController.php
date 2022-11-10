@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Auth;
 use PDF;
 use Carbon\Carbon;
+use App\Models\Attendance;
 use App\Models\AttendanceActivity;
+use App\Models\MomDoc;
 use App\Models\MomList;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
@@ -81,7 +83,7 @@ class MoMController extends Controller
                     ->make(true);
     }
 
-    public function PIC_list_id($idd, Request $request) {
+    public function PIC_id($idd, Request $request) {
         try {
             $id = Crypt::decrypt($idd);
         } catch (DecryptException $e) {
@@ -95,6 +97,48 @@ class MoMController extends Controller
                 ->with('pics')
                 ->with('docs')
                 ->findOrFail($id);
-        return view('mom.PIC_list_id', compact('data'));
+        return view('mom.PIC_id', compact('data'));
     }
+
+    public function meeting(Request $request)
+    {
+        return view('mom.meeting');
+    }
+
+    public function meeting_data(Request $request)
+    {
+        $data = AttendanceActivity::
+        join('attendances', 'attendances.activity_id', '=', 'attendance_activities.id')
+        ->join('mom_lists', 'mom_lists.activity_id', '=', 'attendance_activities.id')
+        ->where('attendances.username', Auth::user()->username)
+        ->selectRaw('attendance_activities.id, attendance_activities.title, attendance_activities.date, attendance_activities.location, attendance_activities.host, attendance_activities.participant, count(mom_lists.id) as MoM')
+        ->groupBy('attendance_activities.id', 'attendance_activities.title', 'attendance_activities.date', 'attendance_activities.location', 'attendance_activities.host', 'attendance_activities.participant')
+        ->orderByDesc("attendance_activities.date");
+
+            return Datatables::of($data)
+                    ->filter(function ($instance) use ($request) {
+                        if (!empty($request->get('search'))) {
+                            $search = $request->get('search');
+                            $instance->where('title', 'LIKE', "%$search%");
+                        }
+                    })
+                    ->addColumn('idd', function($x){
+                        return Crypt::encrypt($x['id']);
+                      })
+                    ->rawColumns(['idd'])
+                    ->make(true);
+    }
+
+    public function meeting_id($idd, Request $request) {
+        try {
+            $id = Crypt::decrypt($idd);
+        } catch (DecryptException $e) {
+            abort(403, "Data tidak ditemukan!");
+        }
+        $activity =  AttendanceActivity::findOrFail($id);
+        $lists =  MomList::where('activity_id',$id)->with('pics')->get();
+        $docs =  MomDoc::where('activity_id',$id)->get();
+        return view('mom.meeting_id', compact('activity','lists','docs'));
+    }
+
 }

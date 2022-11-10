@@ -84,14 +84,15 @@ Route::group(['prefix' => 'QR','middleware' => ['auth','role:ST,SD']], function 
 
 //Notulensi
 Route::group(['prefix' => 'MoM','middleware' => ['auth','role:ST']], function () {
-  Route::any('/note-taker', [App\Http\Controllers\MoMController::class, 'notetaker'])->name('mom.note-taker');
+  Route::get('/note-taker', [App\Http\Controllers\MoMController::class, 'notetaker'])->name('mom.note-taker');
   Route::get('/note-taker/data', [App\Http\Controllers\MoMController::class, 'notetaker_data'])->name('mom.note-taker_data');
   Route::get('/note-taker/print/{id}', [App\Http\Controllers\MoMController::class, 'notetaker_print'])->name('mom.note-taker_print');
-  Route::any('/PIC', [App\Http\Controllers\MoMController::class, 'PIC'])->name('mom.PIC');
+  Route::get('/PIC', [App\Http\Controllers\MoMController::class, 'PIC'])->name('mom.PIC');
   Route::get('/PIC/data', [App\Http\Controllers\MoMController::class, 'PIC_data'])->name('mom.PIC_data');
-  Route::any('/PIC/{id}', [App\Http\Controllers\MoMController::class, 'PIC_list_id'])->name('mom.PIC_list_id');
-  Route::any('/meeting', [App\Http\Controllers\MoMController::class, 'meeting'])->name('mom.meeting');
+  Route::get('/PIC/{id}', [App\Http\Controllers\MoMController::class, 'PIC_id'])->name('mom.PIC_id');
+  Route::get('/meeting', [App\Http\Controllers\MoMController::class, 'meeting'])->name('mom.meeting');
   Route::get('/meeting/data', [App\Http\Controllers\MoMController::class, 'meeting_data'])->name('mom.meeting_data');
+  Route::get('/meeting/{id}', [App\Http\Controllers\MoMController::class, 'meeting_id'])->name('mom.meeting_id');
 });
 
 //Pengaturan

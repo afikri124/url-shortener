@@ -50,6 +50,41 @@ class MoMController extends Controller
                     ->make(true);
     }
 
+    public function notetaker_id($idd, Request $request) {
+        try {
+            $id = Crypt::decrypt($idd);
+        } catch (DecryptException $e) {
+            abort(403, "Data tidak ditemukan!");
+        }
+        $activity =  AttendanceActivity::findOrFail($id);
+        return view('mom.notetaker_id', compact('activity'));
+    }
+
+    public function notetaker_id_data($id, Request $request)
+    {
+        $data = MomList::join('attendance_activities','attendance_activities.id','=','mom_lists.activity_id')
+        ->where('attendance_activities.id', $id)
+        ->where('attendance_activities.notulen_username', Auth::user()->username)
+        ->select('mom_lists.*', 'attendance_activities.notulen_username')
+        ->with(['pics' => function ($query) {
+            $query->select('name');
+        }])
+        ->orderBy("mom_lists.id");
+            return Datatables::of($data)
+                    ->filter(function ($instance) use ($request) {
+                        if (!empty($request->get('search'))) {
+                            $search = $request->get('search');
+                            $instance->where('detail', 'LIKE', "%$search%");
+                        }
+                    })
+                    ->addColumn('idd', function($x){
+                        return Crypt::encrypt($x['id']);
+                    })
+                    ->rawColumns(['idd'])
+                    ->make(true);
+    }
+
+
     public function PIC(Request $request)
     {
         $user = AttendanceActivity::select('attendance_activities.user_id', 'users.name')
@@ -66,7 +101,9 @@ class MoMController extends Controller
             $q->where('username', Auth::user()->username);
         })
         ->with('activity')
-        ->with('pics')
+        ->with(['pics' => function ($query) {
+            $query->select('name');
+        }])
         ->select('*')
         ->orderByDesc("id");
             return Datatables::of($data)
@@ -94,7 +131,9 @@ class MoMController extends Controller
                     $q->where('username', Auth::user()->username);
                 })
                 ->with('activity')
-                ->with('pics')
+                ->with(['pics' => function ($query) {
+                    $query->select('name');
+                }])
                 ->with('docs')
                 ->findOrFail($id);
         return view('mom.PIC_id', compact('data'));
@@ -136,7 +175,10 @@ class MoMController extends Controller
             abort(403, "Data tidak ditemukan!");
         }
         $activity =  AttendanceActivity::findOrFail($id);
-        $lists =  MomList::where('activity_id',$id)->with('pics')->get();
+        $lists =  MomList::where('activity_id',$id)
+            ->with(['pics' => function ($query) {
+                $query->select('name');
+            }])->get();
         $docs =  MomDoc::where('activity_id',$id)->get();
         return view('mom.meeting_id', compact('activity','lists','docs'));
     }

@@ -76,9 +76,12 @@
                             <tr>
                                 <td><strong>PIC</strong></td>
                                 <td>
-                                    @foreach($data->pics as $x)
-                                    {{ ucwords(strtolower($x->name)) }},
-                                    @endforeach
+                                    @php $pic = [];
+                                    foreach($data->pics as $key => $p){
+                                    array_push($pic, ucwords(strtolower($p->name)));
+                                    }
+                                    @endphp
+                                    {{ implode(", ",$pic); }}
                                 </td>
                             </tr>
                             <tr>

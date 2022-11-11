@@ -305,7 +305,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                            return `<a class="text-info" target="_blank" title="Print QR" href="{{ url('MT/print/` +
+                            return `<a class="text-info" target="_blank" title="Print QR" style="cursor:pointer" href="{{ url('MT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('MT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +

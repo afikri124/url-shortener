@@ -191,13 +191,10 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        // return `<a class="text-primary" title="Lihat"  target="_blank"  href="{{ url('A/` + row.id + `/` +
-                        //         row.token + `') }}"><i class="bx bxs-show"></i></a> <a class="text-info" target="_blank" title="Cetak QR" href="{{ url('attendance/print/` +
-                        //         row.idd + `') }}"><i class="bx bxs-printer"></i></a>`;
+                        return `<a class="text-success btn btn-light btn-sm" title="Edit Notulensi" href="{{ url('MoM/note-taker/` + row.idd +  `') }}"><i class="bx bxs-edit"></i></a>`;
                     },
-                    className: "text-md-center"
+                    className: "text-center"
                 }
-
             ]
         });
         

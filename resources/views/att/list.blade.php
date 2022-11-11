@@ -198,7 +198,7 @@
                 @if($data->user_id == Auth::user()->id)
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-danger" title="Delete" onclick="DeleteId(` + row
+                        return `<a class="text-danger" title="Delete" style="cursor:pointer" onclick="DeleteId(` + row
                             .id +
                             `)" ><i class="bx bx-trash"></i></a> `;
                     },

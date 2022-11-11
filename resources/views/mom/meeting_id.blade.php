@@ -102,9 +102,12 @@
                             <td class="text-center">{{ $key+1 }}</td>
                             <td>{!! $d->detail !!}</td>
                             <td>
-                                @foreach($d->pics as $key => $p)
-                                {{ ucwords(strtolower($p->name)) }},
-                                @endforeach
+                                @php $pic = [];
+                                foreach($d->pics as $key => $p){
+                                array_push($pic, ucwords(strtolower($p->name)));
+                                }
+                                @endphp
+                                {{ implode(", ",$pic); }}
                             </td>
                             <td>{{ $d->target }}</td>
                         </tr>

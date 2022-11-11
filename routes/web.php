@@ -87,6 +87,8 @@ Route::group(['prefix' => 'MoM','middleware' => ['auth','role:ST']], function ()
   Route::get('/note-taker', [App\Http\Controllers\MoMController::class, 'notetaker'])->name('mom.note-taker');
   Route::get('/note-taker/data', [App\Http\Controllers\MoMController::class, 'notetaker_data'])->name('mom.note-taker_data');
   Route::get('/note-taker/print/{id}', [App\Http\Controllers\MoMController::class, 'notetaker_print'])->name('mom.note-taker_print');
+  Route::get('/note-taker/{id}', [App\Http\Controllers\MoMController::class, 'notetaker_id'])->name('mom.notetaker_id');
+  Route::get('/note-taker/{id}/data', [App\Http\Controllers\MoMController::class, 'notetaker_id_data'])->name('mom.notetaker_id_data');
   Route::get('/PIC', [App\Http\Controllers\MoMController::class, 'PIC'])->name('mom.PIC');
   Route::get('/PIC/data', [App\Http\Controllers\MoMController::class, 'PIC_data'])->name('mom.PIC_data');
   Route::get('/PIC/{id}', [App\Http\Controllers\MoMController::class, 'PIC_id'])->name('mom.PIC_id');

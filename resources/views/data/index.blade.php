@@ -205,7 +205,7 @@
                         if(row.user_id == "{{Auth::user()->id}}"){
                             return `<a class="text-success" title="Edit" href="{{ url('URL/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
-                                <a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
+                                <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a>`;
                         } else {
                             return `<a class="text-muted"><i class="bx bxs-edit"></i></a>

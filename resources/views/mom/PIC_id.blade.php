@@ -12,6 +12,10 @@
         word-wrap: break-word;
     }
 
+    p {
+        margin-bottom: 0;
+    }
+
 </style>
 @endsection
 
@@ -25,8 +29,13 @@
     <div class="col-12">
         <div class="card mb-4">
             <div class="user-profile-header-banner">
+                @if($images != null)
+                <img src="{{asset($images->doc_path)}}" class="rounded-top" width="100%" height="250px"
+                    style="object-fit: cover;">
+                @else
                 <img src="{{asset('assets/img/jgu.jpg')}}" class="rounded-top" width="100%" height="250px"
                     style="object-fit: cover;">
+                @endif
             </div>
             <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
                 <div class="flex-grow-1 mt-4">
@@ -93,14 +102,28 @@
                                 <td><strong>Risalah Rapat</strong></td>
                                 <td>{!! $data->detail !!}</td>
                             </tr>
+                            @if($data->docs != null)
+                            <tr>
+                                <td><strong>Dokumen / Gambar</strong></td>
+                                <td>
+                                    <ul>
+                                        @foreach($data->docs as $key => $p)
+                                        <li><a href="{{ asset($p->doc_path) }}" target="_blank">{{$p->doc_path}}</a>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                            </tr>
+                            @endif
+
                         </table>
                     </div>
                 </div>
             </div>
             <div class="card-footer d-none d-md-block">
                 <!-- <div class="mt-3"> -->
-                    <a class="btn btn-outline-secondary" href="{{ url()->previous() }}"><i
-                            class="bx bx-chevron-left me-sm-2"></i> Kembali</a>
+                <a class="btn btn-outline-secondary" href="{{ url()->previous() }}"><i
+                        class="bx bx-chevron-left me-sm-2"></i> Kembali</a>
                 <!-- </div> -->
             </div>
         </div>

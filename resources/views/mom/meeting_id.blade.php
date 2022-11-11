@@ -14,6 +14,10 @@
         padding: 2px;
     }
 
+    p {
+        margin-bottom: 0;
+    }
+
 </style>
 @endsection
 
@@ -29,15 +33,12 @@
             <div class="user-profile-header-banner">
                 <div class="swiper gallery-top">
                     <div class="swiper-wrapper">
+                        @foreach($images as $key => $d)
+                        <div class="swiper-slide" style='background-image:url("{{ asset($d->doc_path) }}")'></div>
+                        @endforeach
                         <div class="swiper-slide"
-                            style="background-image:url(https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/img/backgrounds/6.jpg)">
-                            Dokumentasi 1</div>
-                        <div class="swiper-slide"
-                            style="background-image:url(https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/img/backgrounds/5.jpg)">
-                            Dokumentasi 2</div>
-                        <div class="swiper-slide"
-                            style="background-image:url(https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/img/backgrounds/7.jpg)">
-                            Dokumentasi 3</div>
+                            style="background-image:url(https://lpm.jgu.ac.id/public/assets/images/landing/screen2.jpg)">
+                        </div>
                     </div>
                     <!-- Add Arrows -->
                     <div class="swiper-button-next swiper-button-white"></div>
@@ -70,7 +71,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <a onclick="window.print()" class="btn btn-light m-0 mt-2 p-0 text-info d-none d-md-block"
+                        <a href="{{ route('mom.note-taker_print', ['id' => Crypt::encrypt($activity->id)] ) }}" target="_blank" class="btn btn-light m-0 mt-2 p-0 text-info"
                             title="Cetak halaman ini">
                             <i class="bx bx-printer"></i>
                         </a>
@@ -113,6 +114,17 @@
                         </tr>
                         @endforeach
                     </table>
+                    @if($docs != null)
+                    <div class="mt-5">
+                        <strong>Dokumen/Gambar</strong><br>
+                        <ul>
+                        @foreach($docs as $key => $p)
+                            <li><a href="{{ asset($p->doc_path) }}" target="_blank">{{$p->doc_path}}</a></li>
+                        @endforeach
+                        </ul>
+                        
+                    </div>
+                    @endif
                 </div>
             </div>
             <div class="card-footer d-none d-md-block">

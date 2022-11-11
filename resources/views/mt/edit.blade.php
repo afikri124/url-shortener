@@ -88,7 +88,7 @@
                             <option value="" selected disabled>--Select Notulen--</option>
                             @foreach($user as $d)
                             <option value="{{ $d->username }}" {{ ($d->username==$data->notulen_username ? "selected": "") }}>
-                            {{ $d->name }} - {{ $d->username }}</option>
+                            {{ $d->name }} ({{ $d->job }})</option>
                             @endforeach
                         </select>
                         @error('notulen')

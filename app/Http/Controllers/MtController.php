@@ -50,7 +50,7 @@ class MtController extends Controller
                 return redirect()->route('mt.index')->with('msg','Absensi gagal dibuat!');
             }
         }else{
-            $user            = User::select('username','name')
+            $user            = User::select('username','name', 'job')
                                 ->whereHas('roles', function($q){
                                     $q->where('role_id', "ST");
                                 })
@@ -121,7 +121,7 @@ class MtController extends Controller
                 return redirect()->route('mt.index')->with('msg','Data gagal diubah!');
             }
         }
-        $user            = User::select('username','name')->get();
+        $user            = User::select('username','name','job')->get();
         $data            = AttendanceActivity::findOrFail($id);
         if($data->user_id != Auth::user()->id){
             abort(403);

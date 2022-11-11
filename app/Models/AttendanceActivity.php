@@ -25,4 +25,9 @@ class AttendanceActivity extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function notulen()
+    {
+        return $this->belongsTo(User::class, 'notulen_username', 'username');
+    }
 }

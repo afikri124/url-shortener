@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use Illuminate\Support\Facades\File;
 
 
 class MoMController extends Controller
@@ -56,11 +57,52 @@ class MoMController extends Controller
         } catch (DecryptException $e) {
             abort(403, "Data tidak ditemukan!");
         }
+        if ($request->isMethod('post')) {
+            $this->validate($request, [ 
+                'dokumen' => ['required', 'mimes:xlsx,xls,doc,docx,ppt,pptx,pdf,jpg,jpeg,png','max:10000'],
+            ]);
+
+            $type = "File";
+            $dokName = "";
+            if(isset($request->dokumen)){
+                $ext = $request->dokumen->extension();
+                if($ext == "jpg" || $ext == "jpeg" || $ext == "png"){
+                    $type = "Image";
+                }    
+                $dokName = Auth::user()->id.'_'.$request->dokumen->getClientOriginalName(); 
+                $folderName =  "MoM/".Carbon::now()->format('Y/m');
+                $path = public_path()."/".$folderName;
+                if (!File::exists($path)) {
+                    File::makeDirectory($path, 0755, true); //create folder
+                }
+                $request->dokumen->move($path, $dokName); //upload image to folder
+                $dokName=$folderName."/".$dokName;
+            }
+            
+            $data = MomDoc::create([
+                'activity_id' => $id,
+                'type' => $type,
+                'doc_path' => $dokName
+            ]);
+            if($data){
+                return redirect()->route('mom.notetaker_id', ['id'=>$idd])->with('msg','Dokumen telah disimpan!');
+            } else {
+                return redirect()->route('mom.notetaker_id', ['id'=>$idd])->with('msg','Gagal menambahkan dokumen!');
+            }
+        }
         $activity   = AttendanceActivity::findOrFail($id);
-        $users      = User::whereHas('roles', function($q){
+        
+        if(Auth::user()->username == 'admin'){
+            $users      = User::whereHas('roles', function($q){
+                                $q->where('role_id','ST');
+                            })
+                            ->get();
+        } else {
+            $users      = User::whereHas('roles', function($q){
                                 $q->where('role_id','ST');
                             })->where('username','!=', 'admin')
                             ->get();
+        }
         return view('mom.notetaker_id', compact('activity','users'));
     }
 
@@ -73,7 +115,7 @@ class MoMController extends Controller
         ->with(['pics' => function ($query) {
             $query->select('name');
         }])
-        ->orderBy("mom_lists.id");
+        ->orderByDesc("mom_lists.id");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
@@ -90,32 +132,85 @@ class MoMController extends Controller
 
     public function notetaker_add(Request $request) 
     {
+        if($request->_token==csrf_token() && $request->detail != null){
+            $data = MomList::create([
+                'activity_id' => $request->activity_id,
+                'detail' => $request->detail,
+                'target' => $request->target
+            ]);
+            if($data){
+                MomList::find($data->id)->pics()->attach($request->users);
+                return response()->json([
+                    'success' => true,
+                   'message' => 'Berhasil ditambahkan!'
+                ]);  
+            }
+        }
         return response()->json([
-            'success' => true,
-            'message' => 'Tidak diizinkan untuk menghapus data ini!'
-        ]);
-        // $data = AttendanceActivity::find($request->id);
-        // $att = Attendance::where("activity_id", $request->id)->count();
-        // if($att != 0){
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Absensi ini sudah terpakai, mohon hapus dulu daftar pesertanya!'
-        //     ]);
-        // } else {
-        //     if($data && $data->user_id == Auth::user()->id){
-        //         Log::warning(Auth::user()->name." delete AttendanceActivity #".$data->id.", ".$data->title);
-        //         $data->delete();
-        //         return response()->json([
-        //             'success' => true,
-        //             'message' => 'Data berhasil dihapus!'
-        //         ]);
-        //     } else {
-        //         return response()->json([
-        //             'success' => false,
-        //             'message' => 'Tidak diizinkan untuk menghapus data ini!'
-        //         ]);
-        //     }
-        // }
+                'success' => false,
+                'message' => 'Terjadi kesalahan!'
+            ]);
+    }
+
+    public function notetaker_edit(Request $request) 
+    {
+        if($request->_token==csrf_token() && $request->detail != null){
+            $data = MomList::findOrFail($request->id);
+            $d = $data->update([ 
+                'detail' => $request->detail,
+                'target' => $request->target
+            ]);
+
+            if($d){
+                if($request->users != null){
+                    $detach = MomList::find($request->id)->pics()->detach();
+                    $attach =  MomList::find($request->id)->pics()->attach($request->users);
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Berhasil diubah!'
+                ]);  
+            }
+        }
+        return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan!'
+            ]);
+    }
+
+    public function notetaker_delete(Request $request) 
+    {
+        $data = MomList::find($request->id);
+        if($data){
+            Log::warning(Auth::user()->name." delete MomList #".$data->id.", activity: ".$data->actyvity_id);
+            $data->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil dihapus!'
+            ]);
+        }
+        return response()->json([
+                'success' => false,
+                'message' => 'Gagal dihapus!'
+            ]);
+    }
+
+    public function list_id(Request $request) {
+        $data   = MomList::join('attendance_activities','attendance_activities.id','=','mom_lists.activity_id')
+        ->where('attendance_activities.notulen_username', Auth::user()->username)
+        ->select('mom_lists.*', 'attendance_activities.notulen_username')
+        ->find($request->id);
+        if($data){
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak Diizinkan!'
+            ]);
+        }
     }
 
 
@@ -170,7 +265,8 @@ class MoMController extends Controller
                 }])
                 ->with('docs')
                 ->findOrFail($id);
-        return view('mom.PIC_id', compact('data'));
+        $images =  MomDoc::where('activity_id',$data->activity_id)->where('type', "Image")->inRandomOrder()->first();
+        return view('mom.PIC_id', compact('data','images'));
     }
 
     public function meeting(Request $request)
@@ -213,8 +309,62 @@ class MoMController extends Controller
             ->with(['pics' => function ($query) {
                 $query->select('name');
             }])->get();
-        $docs =  MomDoc::where('activity_id',$id)->get();
-        return view('mom.meeting_id', compact('activity','lists','docs'));
+        $docs =  MomDoc::where('activity_id',$id)
+        // ->where('type',"!=", "Image")
+        ->get();
+        $images =  MomDoc::where('activity_id',$id)->where('type', "Image")->inRandomOrder()->get();
+        return view('mom.meeting_id', compact('activity','lists','docs', 'images'));
     }
 
+    public function mom_docs(Request $request)
+    {
+        $data = MomDoc::where('activity_id', $request->activity_id)
+                ->select('*')
+                ->orderByDesc("type");
+        return Datatables::of($data)->make(true);
+    }
+
+    public function mom_docs_delete(Request $request) {
+        $data = MomDoc::find($request->id);
+        if($data){
+                if($data->doc_path != null){
+                    File::delete(public_path()."/".$data->doc_path);
+                }
+                Log::warning(Auth::user()->name." menghapus dokumen #".$data->id.", Dok: ".$data->doc_path);
+                $data->delete();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Dokumen berhasil dihapus!'
+                ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak diizinkan menghapus data ini!'
+            ]);
+        }
+    }
+
+    
+    public function notetaker_print($idd, Request $request) {
+        try {
+            $id = Crypt::decrypt($idd);
+        } catch (DecryptException $e) {
+            abort(403, "Data tidak ditemukan!");
+        }
+        $data =  AttendanceActivity::with('notulen')->findOrFail($id);
+        $lists =  MomList::where('activity_id',$id)
+            ->with(['pics' => function ($query) {
+                $query->select('name','front_title','back_title');
+            }])->get();
+        $docs =  MomDoc::where('activity_id',$id)
+                ->where('type',"!=", "Image")
+                ->get();
+        $images =  MomDoc::where('activity_id',$id)->where('type', "Image")->inRandomOrder()->get();
+
+        $link = route('mom.note-taker_print', ['id' => $idd] );
+        $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
+        $pdf = PDF::loadview('mom.print', compact('qr','link', 'data', 'lists', 'docs', 'images'))->setPaper('a4', 'landscape');
+        return $pdf->stream("MoM #".$data->id." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
+        // return view('mom.print', compact('qr','link', 'data', 'lists', 'docs', 'images'));
+    }
 }

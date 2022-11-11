@@ -171,10 +171,10 @@
                         <div class="col-sm-12 fv-plugins-icon-container">
                             <label class="form-label" for="basicDate">Notulen</label>
                             <div class="input-group input-group-merge has-validation">
-                                <select class="form-select select2-modal" name="notulen">
+                                <select class="form-select select2-modal" name="notulen" data-placeholder="-- Pilih Notulen Rapat --">
                                     <option value="">-- Pilih Notulen Rapat --</option>
                                     @foreach($user as $d)
-                                    <option value="{{ $d->username }}">{{ $d->name }} - {{ $d->username }}</option>
+                                    <option value="{{ $d->username }}">{{ $d->name }} ({{ $d->job }})</option>
                                     @endforeach
                                 </select>
                             </div>

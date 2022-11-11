@@ -38,6 +38,10 @@
         word-break: break-word;
     }
 
+    p {
+        margin-bottom: 0;
+    }
+
 </style>
 @endsection
 

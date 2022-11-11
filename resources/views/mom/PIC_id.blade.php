@@ -16,7 +16,7 @@
 @endsection
 
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Notulensi / Uraian Rapat / </span>
+<span class="text-muted fw-light">Notulensi / PIC Uraian Rapat / </span>
 @endsection
 
 @section('content')

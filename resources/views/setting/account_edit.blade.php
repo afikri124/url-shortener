@@ -115,8 +115,7 @@
 
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Hak Akses</label>
-                            <select class="select2 form-select" multiple="multiple" name="roles[]" id="select2Dark"
-                                >
+                            <select class="select2 form-select" multiple="multiple" name="roles[]" id="select2Dark">
                                 @foreach($roles as $role)
                                 <option value="{{$role->id}}" {{ $data->hasRole($role->id) ? 'selected' : '' }}>
                                     {{$role->title}}</option>

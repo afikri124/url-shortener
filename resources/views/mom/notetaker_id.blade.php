@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/sweetalert2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/quill/typography.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/quill/editor.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
 @endsection
 
@@ -32,6 +34,10 @@
     table.dataTable td {
         word-wrap: break-word;
         word-break: break-word;
+    }
+
+    #myeditor p {
+        margin-bottom: 0;
     }
 
 </style>
@@ -72,17 +78,59 @@
                                 </li>
                             </ul>
                         </div>
-                        <a onclick="window.print()" class="btn btn-light m-0 mt-2 p-0 text-info d-none d-md-block"
-                            title="Cetak halaman ini">
-                            <i class="bx bx-printer"></i>
-                        </a>
+                        <div class="text-md-end text-center">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                                <span><i class="bx bx-plus me-sm-2"></i> Tambah</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-12">
+    <div class="modal fade" id="modalTambah">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCenterTitle">Tambah Uraian Rapat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="form-tambah">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row g-2">
+                            <div class="col-md-6 mb-0">
+                                <label for="add_target" class="form-label">Target</label>
+                                <input type="date" class="form-control" id="add_target" name="add_target">
+                            </div>
+                            <div class="col-md-6 mb-0">
+                                <label for="add_users" class="form-label">Penanggung Jawab (PIC)</label>
+                                <div class="select2-primary">
+                                    <select class="form-select select2-modal" multiple name="add_users[]" id="add_users"
+                                        data-placeholder="Pilih Penanggung Jawab (PIC)">
+                                        @foreach($users as $u)
+                                        <option value="{{$u->id}}">{{$u->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col mb-3">
+                                <label for="myeditor" class="form-label">Uraian Rapat</label>
+                                <div id="myeditor">
 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <!--/ Header -->
@@ -98,16 +146,14 @@
                             <th data-priority="2">Uraian Rapat</th>
                             <th>PIC</th>
                             <th width="80px">Target</th>
-                            <th data-priority="3" width="40px">Aksi</th>
+                            <th data-priority="3" width="50px">Aksi</th>
                         </tr>
                     </thead>
                 </table>
             </div>
             <div class="card-footer d-none d-md-block">
-                <!-- <div class="mt-3"> -->
                 <a class="btn btn-outline-secondary" href="{{ url()->previous() }}"><i
                         class="bx bx-chevron-left me-sm-2"></i> Kembali</a>
-                <!-- </div> -->
             </div>
         </div>
     </div>
@@ -123,15 +169,64 @@
 <script src="{{asset('assets/vendor/libs/datatables/datatables-buttons.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/buttons.bootstrap5.js')}}"></script>
 <script src="{{asset('assets/js/sweetalert.min.js')}}"></script>
+<script src="{{asset('assets/js/ui-modals.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/quill/katex.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/quill/quill.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
 <script>
     "use strict";
+    var quill = new Quill("#myeditor", {
+        bounds: "#myeditor",
+        placeholder: "Ketik Sesuatu...",
+        modules: {
+            formula: !0,
+            toolbar: [
+                [{
+                    font: []
+                }, {
+                    size: []
+                }],
+                ["bold", "italic", "underline", "strike"],
+                [{
+                    color: []
+                }, {
+                    background: []
+                }],
+                [{
+                    script: "super"
+                }, {
+                    script: "sub"
+                }],
+                [{
+                    header: "1"
+                }, {
+                    header: "2"
+                }, "blockquote", "code-block"],
+                [{
+                    list: "ordered"
+                }, {
+                    list: "bullet"
+                }, {
+                    indent: "-1"
+                }, {
+                    indent: "+1"
+                }],
+                ["direction", {
+                    align: []
+                }],
+                ["link", "image", "video", "formula"],
+                ["clean"]
+            ]
+        },
+        theme: "snow"
+    });
+
     setTimeout(function () {
         (function ($) {
             "use strict";
-            $(".select2").select2({
-                allowClear: true,
-                minimumResultsForSearch: 7
+            $(".select2-modal").select2({
+                dropdownParent: $('#modalTambah'),
+                allowClear: true
             });
         })(jQuery);
     }, 350);
@@ -192,14 +287,67 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-success" title="Edit" style="cursor:pointer" onclick="EditId(` + row.id +
+                        return `<a class="text-success" title="Edit" style="cursor:pointer" onclick="EditId(` +
+                            row.id +
                             `)"><i class="bx bxs-edit"></i></a>
-                                <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row.id +
+                                <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
+                            .id +
                             `)" ><i class="bx bx-trash"></i></a>`;
                     },
                     className: "text-center"
                 }
             ]
+        });
+
+        $("#form-tambah").submit(function (event) {
+            var detailX = $('.ql-editor').html();
+            if (detailX == '<p><br></p>') {
+                // alert('Uraian Rapat tidak boleh kosong..');
+                swal("Uraian Rapat tidak boleh kosong..", {
+                    icon: "error",
+                });
+            } else {
+                $.ajax({
+                    url: "{{ route('mom.notetaker_add') }}",
+                    type: "POST",
+                    data: {
+                            "activity_id": "{{ $activity->id }}",
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                            "target": $("#add_target").val(),
+                            "detail": detailX,
+                            "users": $("#add_users").val(),
+                        },
+                    success: function (data) {
+                        if (data['success']) {
+                            swal(data['message'], {
+                                icon: "success",
+                            });
+                            $('#datatable').DataTable().ajax.reload();
+                            $('#modalTambah').modal('hide');
+                            document.getElementById("form-tambah").reset();
+                            quill.setContents([{
+                                insert: '\n'
+                            }]);
+                            $("#add_users").trigger('change');
+                        } else {
+                            swal(data['message'], {
+                                icon: "error",
+                            });
+                        }
+                    }
+                })
+                // $.ajax({
+                //     type: "POST",
+                //     url: "process.php",
+                //     data: formData,
+                //     dataType: "json",
+                //     encode: true,
+                // }).done(function (data) {
+                //     console.log(data);
+                // });
+
+            }
+            event.preventDefault();
         });
     });
 

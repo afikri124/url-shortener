@@ -56,8 +56,12 @@ class MoMController extends Controller
         } catch (DecryptException $e) {
             abort(403, "Data tidak ditemukan!");
         }
-        $activity =  AttendanceActivity::findOrFail($id);
-        return view('mom.notetaker_id', compact('activity'));
+        $activity   = AttendanceActivity::findOrFail($id);
+        $users      = User::whereHas('roles', function($q){
+                                $q->where('role_id','ST');
+                            })->where('username','!=', 'admin')
+                            ->get();
+        return view('mom.notetaker_id', compact('activity','users'));
     }
 
     public function notetaker_id_data($id, Request $request)
@@ -82,6 +86,36 @@ class MoMController extends Controller
                     })
                     ->rawColumns(['idd'])
                     ->make(true);
+    }
+
+    public function notetaker_add(Request $request) 
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Tidak diizinkan untuk menghapus data ini!'
+        ]);
+        // $data = AttendanceActivity::find($request->id);
+        // $att = Attendance::where("activity_id", $request->id)->count();
+        // if($att != 0){
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Absensi ini sudah terpakai, mohon hapus dulu daftar pesertanya!'
+        //     ]);
+        // } else {
+        //     if($data && $data->user_id == Auth::user()->id){
+        //         Log::warning(Auth::user()->name." delete AttendanceActivity #".$data->id.", ".$data->title);
+        //         $data->delete();
+        //         return response()->json([
+        //             'success' => true,
+        //             'message' => 'Data berhasil dihapus!'
+        //         ]);
+        //     } else {
+        //         return response()->json([
+        //             'success' => false,
+        //             'message' => 'Tidak diizinkan untuk menghapus data ini!'
+        //         ]);
+        //     }
+        // }
     }
 
 

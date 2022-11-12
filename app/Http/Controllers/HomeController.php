@@ -42,10 +42,17 @@ class HomeController extends Controller
             ]);
 
             if(Auth::user()->username == null){
-                User::where('id', Auth::user()->id)->update([
-                    'username'=> $request->username,
-                    'updated_at' => Carbon::now()
-                ]);
+                $user = User::where('username', $request->username)->first();
+                if($user){
+                    User::where('username', Auth::user()->username)->update([
+                        'updated_at' => Carbon::now()
+                    ]);
+                } else {
+                    User::where('id', Auth::user()->id)->update([
+                        'username'=> $request->username,
+                        'updated_at' => Carbon::now()
+                    ]);
+                }
             }
             
             if(Auth::user()->email == null){

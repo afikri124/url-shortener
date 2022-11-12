@@ -107,14 +107,47 @@
             </td>
             <td>
                 @if($d->longitude == null)
-                <p style="color:red;">
+                <p style="color:red;">{{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                </p>
                 @else
                 <p>
                 <a style="color:black;" target='_blank' href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
-                @endif
                 {{($d->user != null ? $d->user->name_with_title : $d->username)}}
                 </a>
                 </p>
+                @endif
+                
+            </td>
+            <td>
+                <p>{{($d->user != null ? $d->user->job : "-")}}</p>
+            </td>
+            <td style="text-align:center;">
+                <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;"/></p>
+            </td>
+        </tr>
+        @endforeach
+        @if(count($al2) != 0)
+            <tr>
+                <td colspan="4" style="text-align: center;"><small>Bukan Karyawan JGU</small></td>
+            </tr>
+        @endif
+        @foreach($al2->sortBy('user.name_with_title') as $d)
+        <tr style="vertical-align:middle">
+            <td style="text-align:center;">
+                <p>{{$i++}}</p>
+            </td>
+            <td>
+                @if($d->longitude == null)
+                <p style="color:red;">{{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                </p>
+                @else
+                <p>
+                <a style="color:black;" target='_blank' href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
+                {{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                </a>
+                </p>
+                @endif
+                
             </td>
             <td>
                 <p>{{($d->user != null ? $d->user->job : "-")}}</p>

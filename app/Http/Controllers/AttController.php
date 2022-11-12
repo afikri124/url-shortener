@@ -176,10 +176,20 @@ class AttController extends Controller
             $data = AttendanceActivity::with('user')->findOrFail($id);
             $link = route('attendance', ['id' => $id, 'token' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-            $al = Attendance::where('activity_id', $id)->with('user')->select('*')->get();
-            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al'));
+            $al = Attendance::where('activity_id', $id)->with('user')->with('user.roles')
+            ->whereHas('user.roles', function($q){
+                $q->where('role_id','ST');
+            })
+            ->select('*')->get();
+            $al2 = Attendance::where('activity_id', $id)->with('user')->with('user.roles')
+            ->whereDoesntHave('user.roles', function($q){
+                $q->where('role_id','ST');
+            })
+            ->select('*')->get();
+            // dd($al);
+            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al', 'al2'));
             return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::now()->format('j F Y').".pdf");
-            // return view('attendance.print', compact('qr','data','link', 'tok', 'al'));
+            // return view('attendance.print', compact('qr','data','link','tok', 'al', 'al2'));
         }else{
             try {
                 $id = Crypt::decrypt($idd);

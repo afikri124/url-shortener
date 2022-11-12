@@ -106,7 +106,7 @@
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
-                url: "{{ route('user.data_by_id', ['id' => $data->username]) }}",
+                url: "{{ route('user.data_by_id', ['id' => ($data->username==null?$data->id:$data->username)]) }}",
                 data: function (d) {
                         d.search = $('input[type="search"]').val()
                 },

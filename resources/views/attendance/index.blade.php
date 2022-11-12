@@ -89,6 +89,11 @@
                     {{session('msg')}}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                <div class="alert alert-info alert-dismissible" role="alert">
+                    Jika ingin memperbarui akun Anda 
+                    <a href="{{ route('user.edit') }}" target="_blank"><i>klik disini</i></a>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 @else
                 @if($check !=null)
                 <div class="alert alert-success alert-dismissible" role="alert">
@@ -99,6 +104,7 @@
                 @else
                 <div class="text-center pt-4">
                     <h5 class="mb-1" id="silahkan">Silahkan Isi Absensi Kehadiran Anda</h5>
+                    @if($data->expired != null)
                     <div id="countdown">
                         <ul style="padding: 0;">
                             <li id="hari"><span id="days"></span>Hari</li>
@@ -107,11 +113,14 @@
                             <li id="detik"><span id="seconds"></span>Detik</li>
                         </ul>
                     </div>
+                    @else
+                    <br><br>
+                    @endif
                 </div>
                 @endif
                 @endif
 
-                @if($data->expired != null && $data->expired < \Carbon\Carbon::now() && $check ==null ) <div
+                @if($data->expired != null && $data->expired < \Carbon\Carbon::now() && $check==null ) <div
                     class="alert alert-danger text-center" role="alert">
                     Anda sudah tidak bisa mengisi Absensi<br>karena
                     {{ $data->title }} {{ $data->sub_title }}
@@ -122,10 +131,11 @@
                         @csrf
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Nama @if(Auth::user()->hasRole('GS'))
+                                <label class="form-label">Nama @if(Auth::user()->hasRole('GS') || Auth::user()->username
+                                    == null)
                                     <small class="text-mute">
                                         <strong class="text-danger">*</strong> <a href="{{ route('user.edit') }}"
-                                            target="_blank"><i>klik disini memperbarui nama Anda</i></a>
+                                            target="_blank"><i>klik disini memperbarui akun Anda</i></a>
                                     </small>
                                     @endif</label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror" name="nama"
@@ -196,7 +206,7 @@
                                 <label class="form-label">Judul @if($data->type == "M") Rapat @else Acara @endif
                                 </label>
                                 <input type="text" class="form-control" name="judul"
-                                    value="{{ $data->title }} {{ $data->sub_title }}" disabled />
+                                    value="{{ $data->title }}" disabled />
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Lokasi/Tempat @if($data->type == "M") Rapat @else Acara
@@ -295,7 +305,8 @@
             document.getElementById('current').innerHTML = "Receiving...";
             geo_position_js.getCurrentPosition(show_position, function () {
                 document.getElementById('map_canvas').innerHTML =
-                    "Sistem tidak bisa mendeteksi lokasi anda,<br>harap untuk menyalakan GPS<br>dan mengizinkan sistem ini."
+                    "<i>Sistem tidak bisa mendeteksi lokasi anda,<br>harap untuk menyalakan GPS<br>dan mengizinkan sistem ini.</i></br></br><b>Admin berhak membatalkan absensi Anda<br>jika titik lokasi tidak sesuai / tidak diaktifkan.</b>";
+                document.getElementById("googleMap").style.display = 'none';
             }, {
                 enableHighAccuracy: true
             });
@@ -369,26 +380,34 @@
                 const now = new Date().getTime(),
                     distance = countDown - now;
 
-                document.getElementById("days").innerText = Math.floor(distance / (day)),
-                    document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour)),
-                    document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute)),
-                    document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
-                if(Math.floor(distance / (day)) <= 0){
+                if (Math.floor(distance / (day)) <= 0) {
                     document.getElementById("hari").style.display = "none";
+                } else {
+                    document.getElementById("hari").style.display = "inline-block";
+                    document.getElementById("days").innerText = Math.floor(distance / (day));
                 }
 
-                if(Math.floor((distance % (day)) / (hour)) <= 0){
+                if (Math.floor((distance % (day)) / (hour)) <= 0) {
                     document.getElementById("jam").style.display = "none";
+                } else {
+                    document.getElementById("jam").style.display = "inline-block";
+                    document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour));
                 }
 
-                if(Math.floor((distance % (hour)) / (minute)) <= 0){
+                if (Math.floor((distance % (hour)) / (minute)) <= 0) {
                     document.getElementById("menit").style.display = "none";
+                } else {
+                    document.getElementById("menit").style.display = "inline-block";
+                    document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute));
                 }
 
                 if (distance < 0) {
                     document.getElementById("countdown").style.display = "none";
                     document.getElementById("silahkan").style.display = "none";
                     clearInterval(x);
+                } else {
+                    document.getElementById("countdown").style.display = "inline-block";
+                    document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
                 }
 
             }, 0)

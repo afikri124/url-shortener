@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <br><small>
-                    <center><p><b><u>Pengumuman!</u></b><br>Internal JGU (Mahasiswa/Staff/Dosen) dapat masuk<br> menggunakan Single Sign-On (SSO),<br>sedangkan untuk eksternal (tamu) dapat masuk menggunakan akun Google.</p></center></small>
+                    <center><p><b><u class="text-danger">Pengumuman!</u></b><br>Internal JGU (Mahasiswa/Staf/Dosen) dapat masuk<br> menggunakan Single Sign-On (SSO) atau Email JGU,<br>sedangkan untuk eksternal (tamu) dapat masuk menggunakan akun Google.</p></center></small>
                 </div>
             </div>
         </div>

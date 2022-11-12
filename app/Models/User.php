@@ -97,8 +97,10 @@ class User extends Authenticatable
     { 
       if($this->gender == 'F'){
         return "Wanita";
-      } else {
+      } else if($this->gender == 'M'){
         return "Pria";
+      } else {
+        return "Belum ditentukan";
       }
     }
 

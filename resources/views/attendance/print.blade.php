@@ -32,7 +32,7 @@
     </style>
 </head>
 
-<body style="font-size: 11pt;">
+<body style="font-size: 10pt;">
     <table width="100%" border="1px solid">
         <tr>
             <td style="text-align:center; vertical-align:middle;" rowspan='6' width="25%">
@@ -106,7 +106,15 @@
                 <p>{{$i++}}</p>
             </td>
             <td>
-                <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}</p>
+                @if($d->longitude == null)
+                <p style="color:red;">
+                @else
+                <p>
+                <a style="color:black;" target='_blank' href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
+                @endif
+                {{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                </a>
+                </p>
             </td>
             <td>
                 <p>{{($d->user != null ? $d->user->job : "-")}}</p>

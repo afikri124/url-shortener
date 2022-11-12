@@ -18,6 +18,11 @@
             margin: 0 5px;
         }
 
+        a {
+            margin: 0;
+            padding: 0;
+        }
+
     </style>
     <style>
         tbody td {
@@ -99,7 +104,7 @@
                 <p>Paraf</p>
             </td>
         </tr>
-        @php $i = 1; @endphp
+        @php $i = 1; $datamerah = false; @endphp
         @foreach($al->sortBy('user.name_with_title') as $d)
         <tr style="vertical-align:middle">
             <td style="text-align:center;">
@@ -107,27 +112,29 @@
             </td>
             <td>
                 @if($d->longitude == null)
-                <p style="color:red;">{{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                @php $datamerah = true; @endphp
+                <p style="color:red;" title="Lokasi">{{($d->user != null ? $d->user->name_with_title : $d->username)}}
                 </p>
                 @else
                 <p>
-                <a style="color:black;" target='_blank' href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
-                {{($d->user != null ? $d->user->name_with_title : $d->username)}}
-                </a>
+                    <a style="color:black;" target='_blank'
+                        href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
+                        {{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                    </a>
                 </p>
                 @endif
-                
+
             </td>
             <td>
                 <p>{{($d->user != null ? $d->user->job : "-")}}</p>
             </td>
             <td style="text-align:center;">
-                <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;"/></p>
+                <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;" /></p>
             </td>
         </tr>
         @endforeach
         @if(count($al2) != 0)
-            <tr>
+            <tr style="background-color: #999; color:#fff">
                 <td colspan="4" style="text-align: center;"><small>Bukan Karyawan JGU</small></td>
             </tr>
         @endif
@@ -138,32 +145,38 @@
             </td>
             <td>
                 @if($d->longitude == null)
+                @php $datamerah = true; @endphp
                 <p style="color:red;">{{($d->user != null ? $d->user->name_with_title : $d->username)}}
                 </p>
                 @else
                 <p>
-                <a style="color:black;" target='_blank' href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
-                {{($d->user != null ? $d->user->name_with_title : $d->username)}}
-                </a>
+                    <a style="color:black;" target='_blank'
+                        href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
+                        {{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                    </a>
                 </p>
                 @endif
-                
+
             </td>
             <td>
-                <p>{{($d->user != null ? $d->user->job : "-")}}</p>
+                <p><i>{{($d->user != null ? $d->user->job : "-")}}</i></p>
             </td>
             <td style="text-align:center;">
-                <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;"/></p>
+                <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;" /></p>
             </td>
         </tr>
         @endforeach
     </table>
+    @if($datamerah)
+        <small><p style="color:red;font-size:6pt">* Warna Merah : Titik lokasi Absensi tidak ditemukan.</p></small>
+    @endif
     <br>
     <table width="100%">
         <tr>
             <td width="60%">
             </td>
-            <td width="40%">Pimpinan @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif <br><br><br><br><b>{{$data->host}}</b></td>
+            <td width="40%">Pimpinan @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif
+                <br><br><br><br><b>{{$data->host}}</b></td>
         </tr>
     </table>
 </body>

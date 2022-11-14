@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "rap2hpoutre/laravel-log-viewer": "^2.2",
+        "rats/zkteco": "^002.0",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {

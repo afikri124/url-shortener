@@ -111,6 +111,9 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:AD']], functio
   Route::delete('account/delete', [App\Http\Controllers\SettingController::class, 'account_delete'])->name('setting_account_delete');
 });
 
+//JAM-KERJA
+Route::get('zk', [\App\Http\Controllers\WorkHoursController::class, 'index'])->middleware(['auth', 'role:AD']);
+
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware(['auth', 'role:AD']);
 
 //Rest API QR-JGU

@@ -37,13 +37,13 @@ class WorkHoursController extends Controller
                 // $zk->removeUser(219); 
                 // return "Add user success";
 
-                $this->setUser($zk, 217, 'S092021100001', 'ALI FIKRI BARU', '', 14);
+                // $this->setUser($zk, 217, 'S092021100001', 'ALI FIKRI BARU', '', 14);
 
-                // $data = $this->getUser($zk);
-                // return response()->json([
-                //     'success' => true,
-                //     'data' => $data
-                // ]);
+                $data = $this->getAttendance($zk);
+                return response()->json([
+                    'success' => true,
+                    'data' => $data
+                ]);
                 
             }
     }
@@ -111,17 +111,6 @@ class WorkHoursController extends Controller
     {
         $self->_section = __METHOD__;
 
-        // if (
-        //     (int)$uid === 0 ||
-        //     (int)$uid > Util::USHRT_MAX ||
-        //     strlen($userid) > 9 ||
-        //     strlen($name) > 24 ||
-        //     strlen($password) > 8 ||
-        //     strlen($cardno) > 10
-        // ) {
-        //     return false;
-        // }
-
         $command = Util::CMD_SET_USER;
         $byte1 = chr((int)($uid % 256));
         $byte2 = chr((int)($uid >> 8));
@@ -138,9 +127,9 @@ class WorkHoursController extends Controller
             str_pad($userid, 24, chr(0)),
             // str_repeat(chr(0), 15)
         ]);
-//        die($command_string);
-        // return $self->_command($command, $command_string);
-        dd($command_string);
+        // die($command_string);
+        return $self->_command($command, $command_string);
+        // dd($command_string);
     }
 
     static public function getAttendance(ZKTeco $self)
@@ -176,7 +165,7 @@ class WorkHoursController extends Controller
 				
                 $attendance[] = [
                     'uid' => $uid,
-                    'id' => $id,
+                    // 'id' => $id,
                     'userid' => $userid,
                     'state' => $state,
                     'timestamp' => $timestamp,

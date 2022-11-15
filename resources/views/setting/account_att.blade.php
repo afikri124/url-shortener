@@ -241,13 +241,20 @@
                         },
                         success: function (data) {
                             // console.log(data);
-                            $('#datatable').DataTable().ajax.reload();
+                            if(data['success']){
+                                $('#datatable').DataTable().ajax.reload();
                             swal(data['total'] + " data already synced " +
                                 "(New:" + data['new'].length +
                                 ", Updated:" + data['updated'].length +
                                 ", Failed:" + data['failed'].length + ")", {
                                     icon: "success",
                                 });
+                            } else {
+                                swal("Terjadi Kesalahan! Hubungi Programmer..", {
+                                    icon: "error",
+                                });
+                            }
+                            
                         }
                     })
                 } else {

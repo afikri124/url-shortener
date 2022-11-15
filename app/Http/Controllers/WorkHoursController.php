@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 use Rats\Zkteco\Lib\ZKTeco;
-use App\Http\Controllers\ZkTecoController;
 
 use Illuminate\Http\Request;
 
 class WorkHoursController extends Controller
 {
     //
-    protected $ZkTecoController;
-    public function __construct(ZkTecoController $ZkTecoController)
-    {
-        $this->ZkTecoController = $ZkTecoController;
-    }
     public function zk(){
             $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             if ($zk->connect()){
@@ -47,13 +41,13 @@ class WorkHoursController extends Controller
 
                 // app('App\Http\Controllers\ZkTecoController')->setUser($zk, 217, 'S092021100001', 'ALI FIKRI (baru)', '', 14);
 
-                // $data = app('App\Http\Controllers\ZkTecoController')->getUser($zk);
+                // $data = app('App\Http\Controllers\ZKTecoController')->getUser($zk);
                 // return response()->json([
                 //     'success' => true,
                 //     'data' => $data
                 // ]);
 
-                $data = json_decode(json_encode($this->ZkTecoController->getUser($zk)));
+                $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));
 
                 dd($data);
                 $zk->disconnect();   

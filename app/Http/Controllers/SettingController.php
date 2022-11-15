@@ -13,7 +13,6 @@ use App\Models\Role;
 use Yajra\DataTables\DataTables;
 use Auth;
 use Rats\Zkteco\Lib\ZKTeco;
-use App\Http\Controllers\ZkTecoController;
 
 use Carbon\Carbon;
 
@@ -21,11 +20,9 @@ use Carbon\Carbon;
 class SettingController extends Controller
 {
     //
-    protected $ZkTecoController;
-    public function __construct(ZkTecoController $ZkTecoController)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->ZkTecoController = $ZkTecoController;
     }
 
     public function account(Request $request)
@@ -163,16 +160,16 @@ class SettingController extends Controller
 
     public function account_att_sync(Request $request)
     {
-        // $data = null;
-        // $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
-        // if ($zk->connect()){
-        //     $data = json_decode(json_encode($this->ZkTecoController->getUser($zk)));
-        //     $zk->disconnect();   
-        // } else {
+        $data = null;
+        $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
+        if ($zk->connect()){
+            $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));
+            $zk->disconnect();   
+        } else {
             return response()->json([
                 'success' => false
             ]);
-        // }       
+        }       
         $i = 0;
         $NewUser = array();
         $UpdatedUser = array();

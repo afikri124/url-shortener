@@ -243,7 +243,7 @@
                             // console.log(data);
                             if(data['success']){
                                 $('#datatable').DataTable().ajax.reload();
-                            swal(data['total'] + " data already synced " +
+                            swal(data['total'] + " data tersinkron " +
                                 "(New:" + data['new'].length +
                                 ", Updated:" + data['updated'].length +
                                 ", Failed:" + data['failed'].length + ")", {

@@ -175,7 +175,6 @@ class SettingController extends Controller
         $UpdatedUser = array();
         $FailedUser = array();
         foreach ($data as $u) {
-            $prodi = null;
             $user = WhUser::where('uid',$u->uid)->first();
             if($user == null){
                 $new_user = false;
@@ -214,6 +213,7 @@ class SettingController extends Controller
                 }  
             }
         }
+        Log::info(Auth::user()->username." sync user att from machine");
         return response()->json([
             'success' => true,
             'total' => $i,

@@ -79,15 +79,16 @@ Route::group(['prefix' => 'attendance','middleware' => ['auth','role:AD']], func
 
 //JAM KERJA
 Route::group(['prefix' => 'WH','middleware' => ['auth','role:ST']], function () {
-  Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'index'])->name('WH.index');
+  Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'wh'])->name('WH.index');
   Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'data'])->name('WH.data');
   Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'print'])->name('WH.print');
 });
 //REKAP JAM KERJA
 Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR']], function () {
-  Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'index'])->name('WHR.index');
-  Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'data'])->name('WHR.data');
-  Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'print'])->name('WHR.print');
+  Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'whr'])->name('WHR.index');
+  Route::get('/sync', [App\Http\Controllers\WorkHoursController::class, 'whr_sync'])->name('WHR.sync');
+  Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'whr_data'])->name('WHR.data');
+  Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'whr_print'])->name('WHR.print');
 });
 //JAM-KERJA tes
 Route::get('zk', [\App\Http\Controllers\WorkHoursController::class, 'zk'])->middleware(['auth', 'role:AD']);

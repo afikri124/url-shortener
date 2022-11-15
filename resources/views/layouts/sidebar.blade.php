@@ -40,7 +40,7 @@
         @endif
         @if(Auth::user()->hasRole('ST'))
         <li
-            class="menu-item {{ request()->route()->getPrefix() == '/MT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/ATT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/attendance' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/WH' ? 'open' : '' }}">
+            class="menu-item {{ request()->route()->getPrefix() == '/MT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/ATT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/attendance' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/WH' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/WHR' ? 'open' : '' }}">
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-calendar-event"></i>
                 <div>Absensi</div>

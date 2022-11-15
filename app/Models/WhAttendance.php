@@ -17,4 +17,14 @@ class WhAttendance extends Model
         'type',
         'timestamp',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'username', 'username');
+    }
+
+    // public function user_old()
+    // {
+    //     return $this->belongsTo(WhUser::class, 'username', 'username_old');
+    // }
 }

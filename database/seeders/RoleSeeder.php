@@ -20,6 +20,7 @@ class RoleSeeder extends Seeder
             ["id" => "ST", "title" => "Staff"],
             ["id" => "SD", "title" => "Student"],
             ["id" => "GS", "title" => "Guest"],
+            ["id" => "HR", "title" => "HR & Finance"],
         ];
 
         foreach ($data as $x) {

@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Models\WhUser;
 use App\Models\Role;
 use Yajra\DataTables\DataTables;
 use Auth;
+use Rats\Zkteco\Lib\ZKTeco;
 
 
 use Carbon\Carbon;
@@ -118,4 +120,105 @@ class SettingController extends Controller
             ]);
         }
     }
+
+    public function account_att(Request $request)
+    {
+            $status          = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
+            return view('setting.account_att', compact('status'));      
+    }
+
+    public function account_att_data(Request $request)
+    {
+        $data = WhUser::with('user')->select('*')->orderBy('name');
+        return Datatables::of($data)
+                ->filter(function ($instance) use ($request) {
+                    if (!is_null($request->get('select_status'))) {
+                        $instance->where('status', $request->get('select_status'));
+                    }
+                    if (!empty($request->get('search'))) {
+                         $instance->where(function($w) use($request){
+                            $search = $request->get('search');
+                                $w->orWhere('username', 'LIKE', "%$search%")
+                                ->orWhere('name', 'LIKE', "%$search%")
+                                ->orWhere('username_old', 'LIKE', "%$search%")
+                                ->orWhere('cardno', 'LIKE', "%$search%");
+                        });
+                    }
+                })
+                ->addColumn('idd', function($x){
+                    return Crypt::encrypt($x['id']);
+                  })
+                ->addColumn('userid', function($x){
+                    if($x->user != null){
+                        return Crypt::encrypt($x->user->id);
+                    } else {
+                        return null;
+                    }
+                  })
+                ->rawColumns(['idd','userid'])
+                ->make(true);
+    }
+
+    public function account_att_sync(Request $request)
+    {
+        $data = null;
+        $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
+        if ($zk->connect()){
+            $data = json_decode(json_encode(app('App\Http\Controllers\ZkTecoController')->getUser($zk)));
+            $zk->disconnect();   
+        } else {
+
+        }       
+        $i = 0;
+        $NewUser = array();
+        $UpdatedUser = array();
+        $FailedUser = array();
+        foreach ($data as $u) {
+            $prodi = null;
+            $user = WhUser::where('uid',$u->uid)->first();
+            if($user == null){
+                $new_user = false;
+                $new_user=WhUser::insert([
+                        'uid' => $u->uid,
+                        'username' => (strlen($u->userid) <  13 ? null : $u->userid),
+                        'username_old' => (strlen($u->userid) <  13 ? $u->userid : null),
+                        'name' => $u->name,
+                        'role' => $u->role,
+                        'password'=> $u->password,
+                        'cardno' => $u->cardno,
+                        'status' => 1,
+                        'created_at' => Carbon::now()
+                ]);
+                if($new_user){
+                    array_push($NewUser,$u->name);
+                    $i++;
+                } else {
+                    array_push($FailedUser,$u->name);
+                }  
+            } else {
+                $old_user = WhUser::where('uid',$u->uid)->update([
+                    'username' => (strlen($u->userid) <  13 ? null : $u->userid),
+                    'name' => $u->name,
+                    'role' => $u->role,
+                    'password'=> $u->password,
+                    'cardno' => $u->cardno,
+                    'updated_at' => Carbon::now()
+                ]);
+                
+                if($old_user){
+                    array_push($UpdatedUser,$u->name);
+                    $i++;
+                } else {
+                    array_push($FailedUser,$u->name);
+                }  
+            }
+        }
+        return response()->json([
+            'total' => $i,
+            'new' => $NewUser,
+            'updated' => $UpdatedUser,
+            'failed' => $FailedUser
+        ]);
+    }
+
 }

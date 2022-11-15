@@ -40,7 +40,7 @@
         @endif
         @if(Auth::user()->hasRole('ST'))
         <li
-            class="menu-item {{ request()->route()->getPrefix() == '/MT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/ATT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/attendance' ? 'open' : '' }}">
+            class="menu-item {{ request()->route()->getPrefix() == '/MT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/ATT' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/attendance' ? 'open' : '' }} {{ request()->route()->getPrefix() == '/WH' ? 'open' : '' }}">
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-calendar-event"></i>
                 <div>Absensi</div>
@@ -58,11 +58,23 @@
                         <div>Rapat</div>
                     </a>
                 </li>
-                @if(Auth::user()->hasRole('AD'))
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='WH.index' ? 'active' : (request()->route()->getPrefix() == '/WH' ? 'active' : '') }}">
+                    <a href="{{ route('WH.index') }}" class="menu-link">
+                        <div>Jam Kerja</div>
+                    </a>
+                </li>
+                @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR'))
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='WHR.index' ? 'active' : (request()->route()->getPrefix() == '/WHR' ? 'active' : '') }}">
+                    <a href="{{ route('WHR.index') }}" class="menu-link">
+                        <div>Rekap Jam Kerja</div>
+                    </a>
+                </li>
                 <li
                     class="menu-item {{ Route::currentRouteName()=='attendance.index' ? 'active' : (request()->route()->getPrefix() == '/attendance' ? 'active' : '') }}">
                     <a href="{{ route('attendance.index') }}" class="menu-link">
-                        <div>Rekap Absensi</div>
+                        <div>Rekap Acara/Rapat</div>
                     </a>
                 </li>
                 @endif
@@ -96,16 +108,34 @@
         </li>
         @endif
 
-        @if(Auth::user()->hasRole('AD'))
+        @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR'))
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pengaturan</span>
         </li>
-        <li
-            class="menu-item {{ Route::currentRouteName()=='setting_account' ? 'active' : (request()->route()->getPrefix() == '/setting' ? 'active' : '') }}">
-            <a href="{{ route('setting_account') }}" class="menu-link">
+
+        <li class="menu-item {{ request()->route()->getPrefix() == '/setting' ? 'open' : '' }}">
+            <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Account">Akun</div>
             </a>
+            <ul class="menu-sub">
+                @if(Auth::user()->hasRole('AD'))
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='setting_account' ? 'active' : '' }}">
+                    <a href="{{ route('setting_account') }}" class="menu-link">
+                        <div>Sistem</div>
+                    </a>
+                </li>
+                @endif
+                @if(Auth::user()->hasRole('HR'))
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='setting_account_att' ? 'active' : '' }}">
+                    <a href="{{ route('setting_account_att') }}" class="menu-link">
+                        <div>Mesin Absen</div>
+                    </a>
+                </li>
+                @endif
+            </ul>
         </li>
         @endif
 

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title', $data->name )
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Pengaturan / Akun / </span>
+<span class="text-muted fw-light">Pengaturan / Akun Sistem / </span>
 @endsection
 
 @section('css')

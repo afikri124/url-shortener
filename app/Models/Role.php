@@ -22,18 +22,20 @@ class Role extends Model
   protected $appends = ['color'];
 
   public function getColorAttribute(){
-      $x = "";
-      if($this->id == "AD"){
-          $x = "secondary";
-      } else if($this->id == "SD"){
-          $x = "warning";
-      } else if($this->id == "ST"){
-          $x = "danger";
-      } else if($this->id == "GS"){
-          $x = "info";
-      } else {
-          $x = "muted";
-      }
-      return $x;
+        $x = "";
+        if($this->id == "AD"){
+            $x = "secondary";
+        } else if($this->id == "SD"){
+            $x = "warning";
+        } else if($this->id == "ST"){
+            $x = "danger";
+        } else if($this->id == "GS"){
+            $x = "info";
+        } else if($this->id == "HR"){
+            $x = "success";
+        } else {
+            $x = "dark";
+        }
+        return $x;
   }
 }

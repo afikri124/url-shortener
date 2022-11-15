@@ -77,6 +77,21 @@ Route::group(['prefix' => 'attendance','middleware' => ['auth','role:AD']], func
   Route::get('/print/{id}', [App\Http\Controllers\AttendanceController::class, 'print'])->name('attendance.print');
 });
 
+//JAM KERJA
+Route::group(['prefix' => 'WH','middleware' => ['auth','role:ST']], function () {
+  Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'index'])->name('WH.index');
+  Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'data'])->name('WH.data');
+  Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'print'])->name('WH.print');
+});
+//REKAP JAM KERJA
+Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR']], function () {
+  Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'index'])->name('WHR.index');
+  Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'data'])->name('WHR.data');
+  Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'print'])->name('WHR.print');
+});
+//JAM-KERJA tes
+Route::get('zk', [\App\Http\Controllers\WorkHoursController::class, 'zk'])->middleware(['auth', 'role:AD']);
+
 //QR-JGU
 Route::group(['prefix' => 'QR','middleware' => ['auth','role:ST,SD']], function () {
   Route::get('/', [App\Http\Controllers\QrController::class, 'index'])->name('qr.index');
@@ -110,9 +125,13 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:AD']], functio
   Route::any('account/edit/{id}', [App\Http\Controllers\SettingController::class, 'account_edit'])->name('setting_account_edit');
   Route::delete('account/delete', [App\Http\Controllers\SettingController::class, 'account_delete'])->name('setting_account_delete');
 });
+Route::group(['prefix' => 'setting','middleware' => ['auth','role:HR']], function () {
+  Route::get('account_att', [App\Http\Controllers\SettingController::class, 'account_att'])->name('setting_account_att');
+  Route::get('account_att/sync', [App\Http\Controllers\SettingController::class, 'account_att_sync'])->name('setting_account_att_sync');
+  Route::get('account_att/data', [App\Http\Controllers\SettingController::class, 'account_att_data'])->name('setting_account_att_data');
+  Route::any('account_att/edit/{id}', [App\Http\Controllers\SettingController::class, 'account_att_edit'])->name('setting_account_att_edit');
+});
 
-//JAM-KERJA
-Route::get('zk', [\App\Http\Controllers\WorkHoursController::class, 'index'])->middleware(['auth', 'role:AD']);
 
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware(['auth', 'role:AD']);
 

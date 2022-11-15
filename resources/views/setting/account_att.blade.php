@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Akun Sistem')
+@section('title', 'Akun Mesin Absen')
 
 @section('breadcrumb-items')
 <span class="text-muted fw-light">Pengaturan /</span>
@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/sweetalert2.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/spinkit/spinkit.css')}}" />
 @endsection
 
 @section('style')
@@ -20,16 +21,12 @@
         vertical-align: middle;
     }
 
-    table.dataTable td:nth-child(2) {
-        max-width: 100px;
-    }
-
     table.dataTable td:nth-child(3) {
-        max-width: 80px;
+        max-width: 150px;
     }
 
     table.dataTable td:nth-child(4) {
-        max-width: 80px;
+        max-width: 90px;
     }
 
     table.dataTable td {
@@ -50,6 +47,15 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
+<div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSync" style="display: none;">
+    <div class="spinner-border text-danger" role="status">
+        <span class="visually-hidden">Tunggu...</span>
+    </div>
+    <br>
+    Tunggu sebentar...<br>
+    <span id="loadingSyncText"></span>
+</div>
+
 <div class="card">
     <div class="card-datatable table-responsive">
         <div class="card-header flex-column flex-md-row pb-0">
@@ -58,20 +64,18 @@
                     <div class="col-12">
                         <div class="row">
                             <div class=" col-md-3">
-                                <select id="select_role" class="select2 form-select" data-placeholder="Hak Akses">
-                                    <option value="">Hak Akses</option>
-                                    @foreach($roles as $d)
+                                <select id="select_status" class="select2 form-select" data-placeholder="Status">
+                                    <option value="">Status</option>
+                                    @foreach($status as $d)
                                     <option value="{{ $d->id }}">{{ $d->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class=" col-md-3">
-                                <select id="select_job" class="select2 form-select" data-placeholder="Jabatan">
-                                    <option value="">Jabatan</option>
-                                    @foreach($job as $d)
-                                    <option value="{{ $d->job }}">{{ $d->job }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="offset-md-6 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                                <button class="btn btn-outline-dark" type="button" onclick="SyncUser()">
+                                    <span><i class="bx bx-sync me-sm-2"></i>
+                                        Sinkron</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -81,12 +85,14 @@
         <table class="table table-hover table-sm" id="datatable" width="100%">
             <thead>
                 <tr>
-                    <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Nama</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Jabatan</th>
-                    <th>Hak Akses</th>
+                    <th width="10px" data-priority="1">No</th>
+                    <th width="10px">UID</th>
+                    <th data-priority="2">Nama [Nama di Mesin]</th>
+                    <th>Username / [old]</th>
+                    <th width="60px">Role</th>
+                    <th width="60px">Password</th>
+                    <th width="80px">No Kartu</th>
+                    <th data-priority="4" width="50px">Status</th>
                     <th width="40px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
@@ -130,10 +136,9 @@
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
-                url: "{{ route('setting_account_data') }}",
+                url: "{{ route('setting_account_att_data') }}",
                 data: function (d) {
-                    d.select_role = $('#select_role').val(),
-                        d.select_job = $('#select_job').val(),
+                    d.select_status = $('#select_status').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -141,7 +146,8 @@
                 "defaultContent": "-",
                 "targets": "_all"
             }],
-            columns: [{
+            columns: [
+                {
                     render: function (data, type, row, meta) {
                         var no = (meta.row + meta.settings._iDisplayStart + 1);
                         return no;
@@ -150,106 +156,104 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = `<a class="text-primary" title="` + row.name +
-                            `" href="{{ url('profile/` +
-                            row.idd + `') }}">` + row.name + `</a>`;
+                        var html = `<code>` + row.uid + `</code>`;
+                        return html;
+                    },
+                    className: "text-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        var html = "<small title='Nama di Mesin'>[" + row.name + "]</small>";
+                        if (row.user != null) {
+                            html = `<a class="text-primary" title="` + row.user.name +
+                                `" href="{{ url('profile/` + row.userid + `') }}">` + row.user
+                                .name + `</a><br>` + html;
+                        }
                         return html;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = "<span title='" + row.username + "'>" + row.username +
-                            "</span>";
+                        var html = "<code title='NIK'>" + row.username + "</code>";
+                        if (row.username_old != null) {
+                            html += "<br><code title='Userid Mesin'>[" + row.username_old +
+                                "]</code>";
+                        }
                         return html;
                     },
                 },
                 {
-                    render: function (data, type, row, meta) {
-                        var html = "<span title='" + row.email + "'>" + row.email +
-                            "</span>";
-                        return html;
-                    },
+                    data: 'role_name',
+                    name: 'role_name'
                 },
-
                 {
-                    render: function (data, type, row, meta) {
-                        if (row.job != null) {
-                            return "<span title='" + row.job + "'>" + row.job + "</span>";
-                        }
-
-                    },
+                    data: 'password',
+                    name: 'password'
+                },
+                {
+                    data: 'cardno',
+                    name: 'cardno'
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var x =
-                            '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">';
-                        if (row.roles != null) {
-                            row.roles.forEach((e) => {
-                                x += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="' +
-                                    e.title + '"><i class="badge rounded-pill bg-' + e
-                                    .color + '"  style="font-size:8pt;">' + e.title +
-                                    '</i></li>';
-                            });
-                        }
-                        var y = "</ul>";
-                        return x + y;
+                        return row.status_name;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html =
-                            `<a class=" text-success" title="Edit" href="{{ url('setting/account/edit/` +
-                            row.idd + `') }}"><i class="bx bxs-edit"></i></a> 
-                            <a class=" text-danger" title="Delete" onclick="DeleteId(` + row
-                            .id + `)" ><i class="bx bx-trash"></i></a>`;
-                        if (row.id != 1) {
-                            return html;
-                        } else {
-                            return "";
-                        }
+                        // var html =
+                        //     `<a class=" text-success" title="Edit" href="{{ url('setting/account_att/edit/` +
+                        //     row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
+                        // return html;
                     },
                     className: "text-center"
                 }
             ]
         });
-        $('#select_role').change(function () {
-            table.draw();
-        });
-        $('#select_job').change(function () {
+        $('#select_status').change(function () {
             table.draw();
         });
     });
 
-    function DeleteId(id) {
+    function SyncUser() {
         swal({
-                title: "Apa kamu yakin?",
-                text: "Setelah dihapus, data tidak dapat dipulihkan!",
+                title: "Konfirmasi Sinkronisasi Data",
+                text: "Sistem akan mengambil data user dari mesin absen",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             })
-            .then((willDelete) => {
-                if (willDelete) {
+            .then((x) => {
+                if (x) {
                     $.ajax({
-                        url: "{{ route('setting_account_delete') }}",
-                        type: "DELETE",
+                        url: "{{ route('setting_account_att_sync') }}",
+                        type: "GET",
                         data: {
-                            "id": id,
                             "_token": $("meta[name='csrf-token']").attr("content"),
                         },
+                        beforeSend: function (xhr) {
+                            document.getElementById('loadingSync').style.display = 'block';
+                            document.getElementById('loadingSyncText').innerHTML = 'Menyinkronkan user dari mesin Absensi..'
+                        },
+                        complete: function () {
+                            document.getElementById('loadingSync').style.display = 'none';
+                            document.getElementById('loadingSyncText').innerHTML = ''
+                        },
                         success: function (data) {
-                            if (data['success']) {
-                                swal(data['message'], {
+                            // console.log(data);
+                            $('#datatable').DataTable().ajax.reload();
+                            swal(data['total'] + " data already synced " +
+                                "(New:" + data['new'].length +
+                                ", Updated:" + data['updated'].length +
+                                ", Failed:" + data['failed'].length + ")", {
                                     icon: "success",
                                 });
-                                $('#datatable').DataTable().ajax.reload();
-                            } else {
-                                swal(data['message'], {
-                                    icon: "error",
-                                });
-                            }
                         }
                     })
+                } else {
+                    swal("Dibatalkan!", {
+                        icon: "error",
+                    });
                 }
             })
     }

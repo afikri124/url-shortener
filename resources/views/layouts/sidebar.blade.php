@@ -123,7 +123,7 @@
                 <li
                     class="menu-item {{ Route::currentRouteName()=='setting_account' ? 'active' : '' }}">
                     <a href="{{ route('setting_account') }}" class="menu-link">
-                        <div>S.jgu</div>
+                        <div>Sistem</div>
                     </a>
                 </li>
                 @endif

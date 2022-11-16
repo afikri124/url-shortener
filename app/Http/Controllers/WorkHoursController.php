@@ -110,10 +110,9 @@ class WorkHoursController extends Controller
             foreach ($data as $att) {
                 if($att['uid'] == $breakId){
                     break;
-                }
-    
-                $check = WhAttendance::where('uid',$att['uid'])->first();
-                if(!$check){
+                } else {
+                // $check = WhAttendance::where('uid',$att['uid'])->first();
+                // if(!$check){
                     $new_att = false;
                     $new_att=WhAttendance::insert([
                             'uid' => $att['uid'],
@@ -125,6 +124,7 @@ class WorkHoursController extends Controller
                     if($new_att){
                         $i++;
                     }  
+                // }
                 }
             }
             Log::info(Auth::user()->username." sync data att from machine, total : ".$i);
@@ -133,9 +133,9 @@ class WorkHoursController extends Controller
                 'total' => $i,
             ]);
         } else {
-            Log::info(Auth::user()->username." failed sync data att from machine, total : ".$i);
+            Log::info(Auth::user()->username." failed sync data att from machine, breakid".$breakId.", total : ".$i);
             return response()->json([
-                'success' => false,
+                'success' => true,
                 'total' => $i,
             ]);
         }

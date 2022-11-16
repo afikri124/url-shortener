@@ -248,11 +248,10 @@
                                     icon: "success",
                                 });
                             } else {
-                                swal("Terjadi Kesalahan! Hubungi Programmer..", {
+                                swal(" Terjadi Kesalahan! Hubungi Programmer.. id = " + data['total'], {
                                     icon: "error",
                                 });
                             }
-                            
                         }
                     })
                 } else {

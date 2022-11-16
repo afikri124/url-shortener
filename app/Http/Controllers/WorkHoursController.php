@@ -104,7 +104,7 @@ class WorkHoursController extends Controller
         $breakId = null;
         $user = WhAttendance::orderByDesc('uid')->first();
         if($user){
-            $breakId = $user->id;
+            $breakId = $user->uid;
         }
         if($data != null){
             foreach ($data as $att) {

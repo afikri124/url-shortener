@@ -46,7 +46,7 @@ class WorkHoursController extends Controller
         )
         // ->where('wh_attendances.username','s092021100001')
         ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
-        ->orderBy('tanggal','desc');
+        ->orderByDesc('masuk');
         return Datatables::of($data)
                 ->filter(function ($instance) use ($request) {
                     if (!empty($request->get('select_user'))) {

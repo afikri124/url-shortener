@@ -18,7 +18,10 @@ class WorkHoursController extends Controller
 {
     //
     public function wh(){
-        echo "Sabar, masih di coding.. hehe";
+        $user = WhUser::with('user')->select('*')->orderBy('name')
+                ->whereNotNull('username')
+                ->get();
+        return view('wh.index', compact('user')); 
     }
 
     public function whr(){
@@ -26,6 +29,120 @@ class WorkHoursController extends Controller
                 ->whereNotNull('username')
                 ->get();
         return view('whr.index', compact('user')); 
+    }
+
+    public function wh_data(Request $request)
+    {
+        if(Auth::user()->hasRole('HR')){
+            if (!empty($request->get('select_range'))) {
+                $data = WhAttendance::
+                leftjoin('wh_users', function($join){
+                    $join->on('wh_users.username','=','wh_attendances.username'); // i want to join the users table with either of these columns
+                    $join->orOn('wh_users.username_old','=','wh_attendances.username');
+                })
+                ->with(['user' => function ($query) {
+                    $query->select('id','username','name');
+                }])
+                ->select('wh_attendances.username','name',
+                    DB::raw('DATE(`timestamp`) as tanggal'),
+                    DB::raw('MIN(`timestamp`) as masuk'),
+                    DB::raw('MAX(`timestamp`) as keluar'),
+                    DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
+                )
+                ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
+                ->orderByDesc('masuk');
+            } else {
+                $data = WhAttendance::
+                leftjoin('wh_users', function($join){
+                    $join->on('wh_users.username','=','wh_attendances.username'); // i want to join the users table with either of these columns
+                    $join->orOn('wh_users.username_old','=','wh_attendances.username');
+                })
+                ->with(['user' => function ($query) {
+                    $query->select('id','username','name');
+                }])
+                ->select('wh_attendances.username','name',
+                    DB::raw('DATE(`timestamp`) as tanggal'),
+                    DB::raw('MIN(`timestamp`) as masuk'),
+                    DB::raw('MAX(`timestamp`) as keluar'),
+                    DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
+                )
+                ->whereDate('timestamp', '<=', Carbon::now()->startOfDay())
+                 ->whereDate('timestamp', '>=', Carbon::now()->endOfDay())
+                ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
+                ->orderByDesc('masuk');
+            }
+        } else {
+            $data = WhAttendance::
+            leftjoin('wh_users', function($join){
+                $join->on('wh_users.username','=','wh_attendances.username'); // i want to join the users table with either of these columns
+                $join->orOn('wh_users.username_old','=','wh_attendances.username');
+            })
+            ->with(['user' => function ($query) {
+                $query->select('id','username','name');
+            }])
+            ->select('wh_attendances.username','name',
+                DB::raw('DATE(`timestamp`) as tanggal'),
+                DB::raw('MIN(`timestamp`) as masuk'),
+                DB::raw('MAX(`timestamp`) as keluar'),
+                DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
+            )
+            ->where('wh_attendances.username',Auth::user()->username)
+            ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
+            ->orderByDesc('masuk');
+        }
+        return Datatables::of($data)
+                ->filter(function ($instance) use ($request) {
+                    if (!empty($request->get('select_user'))) {
+                        $instance->where('wh_attendances.username', $request->get('select_user'));
+                    }
+                    if (!empty($request->get('select_range'))) {
+                        if($request->get('select_range') != "" && $request->get('select_range') != null && $request->get('select_range') != "Invalid date - Invalid date"){
+                            $x = explode(" - ",$request->get('select_range'));
+                            $instance->whereDate('timestamp', '<=', date('Y-m-d 23:59',strtotime($x[1])));
+                            $instance->whereDate('timestamp', '>=', date('Y-m-d 00:00',strtotime($x[0])));
+                        }
+                    } else {
+                        $instance->whereDate('timestamp', '<=', Carbon::now()->startOfDay());
+                        $instance->whereDate('timestamp', '>=', Carbon::now()->endOfDay());
+                    }
+                    if (!empty($request->get('search'))) {
+                         $instance->where(function($w) use($request){
+                            $search = $request->get('search');
+                                $w->orWhere('wh_attendances.username', 'LIKE', "%$search%")
+                                ->orWhere('name', 'LIKE', "%$search%");
+                        });
+                    }
+                })
+                ->addColumn('telat', function($x){
+                    if(new Carbon($x->masuk) > new Carbon($x->tanggal." 08:00:00")){
+                        return (new Carbon($x->masuk))->diff(new Carbon($x->tanggal." 08:00:00"))->format('%h:%I');
+                    } else {
+                        return null;
+                    }
+                  })
+                ->addColumn('cepat', function($x){
+                    if((new Carbon($x->keluar) < new Carbon($x->tanggal." 16:00:00")) && $x->total_jam != '00:00:00'){
+                        return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." 16:00:00"))->format('-%h:%I');
+                    } else {
+                        return null;
+                    }
+                  })
+                ->addColumn('lembur', function($x){
+                    if(new Carbon($x->total_jam) > new Carbon("10:00:00")){
+                        return (new Carbon($x->total_jam))->diff(new Carbon("10:00:00"))->format('%h:%I');
+                    } else {
+                        return null;
+                    }
+                  })
+                ->addColumn('userid', function($x){
+                    if($x->user != null){
+                        return Crypt::encrypt($x->user->id);
+                    } else {
+                        return null;
+                    }
+                  })
+                ->rawColumns(['telat','cepat','lembur','userid'])
+                ->make(true);
     }
 
     public function whr_data(Request $request)
@@ -61,14 +178,14 @@ class WorkHoursController extends Controller
                     }
                 })
                 ->addColumn('telat', function($x){
-                    if($x->total_jam != "00:00:00"){
+                    if(new Carbon($x->masuk) > new Carbon($x->tanggal." 08:00:00")){
                         return (new Carbon($x->masuk))->diff(new Carbon($x->tanggal." 08:00:00"))->format('%h:%I');
                     } else {
                         return null;
                     }
                   })
                 ->addColumn('cepat', function($x){
-                    if(new Carbon($x->keluar) < new Carbon($x->tanggal." 16:00:00")){
+                    if((new Carbon($x->keluar) < new Carbon($x->tanggal." 16:00:00")) && $x->total_jam != '00:00:00'){
                         return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." 16:00:00"))->format('-%h:%I');
                     } else {
                         return null;
@@ -94,6 +211,7 @@ class WorkHoursController extends Controller
 
     public function whr_sync(Request $request)
     {
+        ini_set('MAX_EXECUTION_TIME', 1200);
         $data = null;
         $i = 0;
         $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
@@ -107,35 +225,43 @@ class WorkHoursController extends Controller
             $breakId = $user->uid;
         }
         if($data != null){
-            foreach ($data as $att) {
-                if($att['uid'] == $breakId){
-                    break;
-                } else {
-                    $check = WhAttendance::where('uid',$att['uid'])->first();
-                    if(!$check){
-                        $new_att = false;
-                        $new_att=WhAttendance::insert([
-                                'uid' => $att['uid'],
-                                'username' => $att['userid'],
-                                'state' => $att['state'],
-                                'timestamp' => $att['timestamp'],
-                                'type' => $att['type'],
-                        ]);
-                        if($new_att){
-                            $i++;
-                        }  
+            try {
+                foreach ($data as $att) {
+                    if($att['uid'] == $breakId){
+                        break;
+                    } else {
+                        $check = WhAttendance::where('uid',$att['uid'])->first();
+                        if(!$check){
+                            $new_att = false;
+                            $new_att=WhAttendance::insert([
+                                    'uid' => $att['uid'],
+                                    'username' => $att['userid'],
+                                    'state' => $att['state'],
+                                    'timestamp' => $att['timestamp'],
+                                    'type' => $att['type'],
+                            ]);
+                            if($new_att){
+                                $i++;
+                            }  
+                        }
                     }
                 }
+                Log::info(Auth::user()->username." sync data att from machine, total : ".$i);
+                return response()->json([
+                    'success' => true,
+                    'total' => $i,
+                ]);
+            } catch (DecryptException $e) {
+                Log::info(Auth::user()->username." failed sync data att to database, breakid".$breakId.", total : ".$i);
+                return response()->json([
+                    'success' => false,
+                    'total' => $i,
+                ]);
             }
-            Log::info(Auth::user()->username." sync data att from machine, total : ".$i);
-            return response()->json([
-                'success' => true,
-                'total' => $i,
-            ]);
         } else {
             Log::info(Auth::user()->username." failed sync data att from machine, breakid".$breakId.", total : ".$i);
             return response()->json([
-                'success' => true,
+                'success' => false,
                 'total' => $i,
             ]);
         }

@@ -80,8 +80,8 @@ Route::group(['prefix' => 'attendance','middleware' => ['auth','role:AD,HR']], f
 //JAM KERJA
 Route::group(['prefix' => 'WH','middleware' => ['auth','role:ST']], function () {
   Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'wh'])->name('WH.index');
-  Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'data'])->name('WH.data');
-  Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'print'])->name('WH.print');
+  Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'wh_data'])->name('WH.data');
+  Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'wh_print'])->name('WH.print');
 });
 //REKAP JAM KERJA
 Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR']], function () {

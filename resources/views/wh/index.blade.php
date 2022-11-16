@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Rekap Jam Kerja')
+@section('title', 'Jam Kerja')
 
 @section('breadcrumb-items')
 <span class="text-muted fw-light">Absensi /</span>
@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/sweetalert2.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/spinkit/spinkit.css')}}" />
+<link rel="stylesheet" type="text/css"
+    href="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css')}}">
 @endsection
 
 @section('style')
@@ -63,20 +65,27 @@
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
                         <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" id="select_range" name="range" class="form-control"
+                                    placeholder="Pilih Tanggal" autocomplete="off" />
+                            </div>
+                            @if(Auth::user()->hasRole('HR'))
                             <div class=" col-md-3">
                                 <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
                                     <option value="">Pilih Akun</option>
                                     @foreach($user as $d)
-                                    <option value="{{ $d->username }}">{{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
+                                    <option value="{{ $d->username }}">
+                                        {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="offset-md-6 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                            <div class="offset-md-3 col-md-3 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-outline-dark" type="button" onclick="SyncAtt()">
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>
                                 </button>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -111,6 +120,7 @@
 <script src="{{asset('assets/vendor/libs/datatables/datatables-buttons.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/buttons.bootstrap5.js')}}"></script>
 <script src="{{asset('assets/js/sweetalert.min.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
 <script>
     "use strict";
@@ -137,9 +147,10 @@
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
-                url: "{{ route('WHR.data') }}",
+                url: "{{ route('WH.data') }}",
                 data: function (d) {
                     d.select_user = $('#select_user').val(),
+                    d.select_range = $('#select_range').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -147,8 +158,7 @@
                 "defaultContent": "-",
                 "targets": "_all"
             }],
-            columns: [
-                {
+            columns: [{
                     render: function (data, type, row, meta) {
                         var no = (meta.row + meta.settings._iDisplayStart + 1);
                         return no;
@@ -158,15 +168,17 @@
                 {
                     render: function (data, type, row, meta) {
                         var html = `<code>` + row.username + `</code>`;
-                        if(row.user != null){
+                        if (row.user != null) {
                             html = `<a class="text-primary" title="` + row.user.name +
                                 `" href="{{ url('profile/` + row.userid + `') }}">` + row.user
                                 .name + `</a><br>` + html;
                         } else {
-                            html = `<small title='Nama di Mesin'>[` + row.name + `]</small><br>` + html;
+                            html = `<small title='Nama di Mesin'>[` + row.name +
+                                `]</small><br>` + html;
                         }
                         return html;
-                    }, className: "text-start"
+                    },
+                    className: "text-start"
                 },
                 {
                     data: 'tanggal',
@@ -174,14 +186,14 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if(row.masuk != null){
+                        if (row.masuk != null) {
                             return moment(row.masuk).format('H:mm');
                         }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if(row.keluar != null){
+                        if (row.keluar != null) {
                             return moment(row.keluar).format('H:mm');
                         }
                     },
@@ -197,26 +209,23 @@
                 {
                     data: 'lembur',
                     name: 'lembur'
-                },{
+                }, {
                     data: 'total_jam',
                     name: 'total_jam'
-                },
-                // {
-                //     render: function (data, type, row, meta) {
-                //         // var html =
-                //         //     `<a class=" text-success" title="Edit" href="{{ url('setting/account_att/edit/` +
-                //         //     row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
-                //         // return html;
-                //     },
-                //     className: "text-center"
-                // }
+                }
             ]
         });
         $('#select_user').change(function () {
             table.draw();
         });
+        $('#select_range').change(function () {
+            table.draw();
+        });
     });
 
+</script>
+@if(Auth::user()->hasRole('HR'))
+<script type="text/javascript">
     function SyncAtt() {
         swal({
                 title: "Konfirmasi Sinkronisasi Data",
@@ -235,14 +244,15 @@
                         },
                         beforeSend: function (xhr) {
                             document.getElementById('loadingSync').style.display = 'block';
-                            document.getElementById('loadingSyncText').innerHTML = 'Menyinkronkan data dari mesin Absensi.'
+                            document.getElementById('loadingSyncText').innerHTML =
+                                'Menyinkronkan data dari mesin Absensi.'
                         },
                         complete: function () {
                             document.getElementById('loadingSync').style.display = 'none';
                             document.getElementById('loadingSyncText').innerHTML = ''
                         },
                         success: function (data) {
-                            if(data['success']){
+                            if (data['success']) {
                                 $('#datatable').DataTable().ajax.reload();
                                 swal(data['total'] + " data tersinkron..", {
                                     icon: "success",
@@ -261,6 +271,42 @@
                 }
             })
     }
+
+</script>
+@endif
+
+<script>
+    //DateRange Picker
+    (function ($) {
+        $(function () {
+            var start = moment();
+            var end = moment();
+
+            function cb() {
+                document.getElementById("select_range").value = null;
+            }
+            $('#select_range').daterangepicker({
+                startDate: start,
+                endDate: end,
+                showDropdowns: true,
+                minYear: 2020,
+                maxYear: parseInt(moment().format('YYYY'), 10),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                ranges: {
+                    'Hari ini': [moment(), moment()],
+                    'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
+                    'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment()
+                        .subtract(1, 'month').endOf('month')
+                    ],
+                    'Tahun ini': [moment().startOf('year'), moment().endOf('year')],
+                }
+            }, cb);
+            cb();
+            document.getElementById("select_range").value = null;
+        });
+    })(jQuery);
 
 </script>
 @endsection

@@ -21,11 +21,11 @@
         vertical-align: middle;
     }
 
-    table.dataTable td:nth-child(3) {
+    table.dataTable td:nth-child(2) {
         max-width: 150px;
     }
 
-    table.dataTable td:nth-child(2) {
+    table.dataTable td:nth-child(3) {
         max-width: 90px;
     }
 
@@ -64,10 +64,10 @@
                     <div class="col-12">
                         <div class="row">
                             <div class=" col-md-3">
-                                <select id="select_user" class="select2 form-select" data-placeholder="Pilih User">
-                                    <option value="">Pilih User</option>
+                                <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
+                                    <option value="">Pilih Akun</option>
                                     @foreach($user as $d)
-                                    <option value="{{ $d->username }}">{{ ($d->user==null ? "[ ".$d->name." ]" : $d->user->name )}}</option>
+                                    <option value="{{ $d->username }}">{{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -82,19 +82,18 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover table-sm" id="datatable" width="100%">
+        <table class="table table-hover table-sm text-md-center" id="datatable" width="100%">
             <thead>
                 <tr>
-                    <th width="10px" data-priority="1">No</th>
+                    <th width="30px" data-priority="1">No</th>
+                    <th data-priority="2">Nama<br><code>userid mesin</code></th>
                     <th width="60px">Tanggal</th>
-                    <th data-priority="2">Nama [di Mesin]</th>
-                    <th width="80px">Username</th>
                     <th width="60px">Masuk</th>
                     <th width="60px">Keluar</th>
                     <th width="60px">Telat</th>
-                    <th width="60px">Plg Cepat</th>
+                    <th width="80px">Plg Cepat</th>
                     <th width="60px">Lembur</th>
-                    <th width="60px">Jam Hadir</th>
+                    <th width="80px" data-priority="3">Jam Hadir</th>
                 </tr>
             </thead>
         </table>
@@ -103,6 +102,7 @@
 @endsection
 
 @section('script')
+<script src="{{asset('assets/vendor/libs/moment/moment.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/datatables-bootstrap5.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/datatables.responsive.js')}}"></script>
@@ -157,53 +157,59 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = `<code>` + row.uid + `</code>`;
+                        var html = `<code>` + row.username + `</code>`;
+                        if(row.user != null){
+                            html = `<a class="text-primary" title="` + row.user.name +
+                                `" href="{{ url('profile/` + row.userid + `') }}">` + row.user
+                                .name + `</a><br>` + html;
+                        } else {
+                            html = `<small title='Nama di Mesin'>[` + row.name + `]</small><br>` + html;
+                        }
                         return html;
-                    },
-                    className: "text-center"
+                    }, className: "text-start"
                 },
                 {
-                    data: 'username',
-                    name: 'username'
-                },
-                {
-                    data: 'timestamp',
-                    name: 'timestamp'
-                },
-                {
-                    data: 'state',
-                    name: 'state'
+                    data: 'tanggal',
+                    name: 'tanggal'
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.type;
-                    },
-                },
-                
-                {
-                    render: function (data, type, row, meta) {
-                        // return row.type;
+                        if(row.masuk != null){
+                            return moment(row.masuk).format('H:mm');
+                        }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        // return row.type;
+                        if(row.keluar != null){
+                            return moment(row.keluar).format('H:mm');
+                        }
                     },
                 },
                 {
-                    render: function (data, type, row, meta) {
-                        // return row.type;
-                    },
+                    data: 'telat',
+                    name: 'telat'
                 },
                 {
-                    render: function (data, type, row, meta) {
-                        // var html =
-                        //     `<a class=" text-success" title="Edit" href="{{ url('setting/account_att/edit/` +
-                        //     row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
-                        // return html;
-                    },
-                    className: "text-center"
-                }
+                    data: 'cepat',
+                    name: 'cepat'
+                },
+                {
+                    data: 'lembur',
+                    name: 'lembur'
+                },{
+                    data: 'total_jam',
+                    name: 'total_jam'
+                },
+                // {
+                //     render: function (data, type, row, meta) {
+                //         // var html =
+                //         //     `<a class=" text-success" title="Edit" href="{{ url('setting/account_att/edit/` +
+                //         //     row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
+                //         // return html;
+                //     },
+                //     className: "text-center"
+                // }
             ]
         });
         $('#select_user').change(function () {

@@ -22,9 +22,4 @@ class WhAttendance extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-
-    // public function user_old()
-    // {
-    //     return $this->belongsTo(WhUser::class, 'username', 'username_old');
-    // }
 }

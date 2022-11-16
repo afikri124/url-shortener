@@ -9,6 +9,8 @@ use Auth;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use DB;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
@@ -28,21 +30,56 @@ class WorkHoursController extends Controller
 
     public function whr_data(Request $request)
     {
-        $data = WhAttendance::with('user')->select('*');
+        $data = WhAttendance::
+        leftjoin('wh_users', function($join){
+            $join->on('wh_users.username','=','wh_attendances.username'); // i want to join the users table with either of these columns
+            $join->orOn('wh_users.username_old','=','wh_attendances.username');
+        })
+        ->with(['user' => function ($query) {
+            $query->select('id','username','name');
+        }])
+        ->select('wh_attendances.username','name',
+            DB::raw('DATE(`timestamp`) as tanggal'),
+            DB::raw('MIN(`timestamp`) as masuk'),
+            DB::raw('MAX(`timestamp`) as keluar'),
+            DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
+        )
+        // ->where('wh_attendances.username','s092021100001')
+        ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
+        ->orderBy('tanggal','desc');
         return Datatables::of($data)
                 ->filter(function ($instance) use ($request) {
                     if (!empty($request->get('select_user'))) {
-                        $instance->where('username', $request->get('select_user'));
+                        $instance->where('wh_attendances.username', $request->get('select_user'));
                     }
                     if (!empty($request->get('search'))) {
                          $instance->where(function($w) use($request){
                             $search = $request->get('search');
-                                $w->orWhere('username', 'LIKE', "%$search%");
+                                $w->orWhere('wh_attendances.username', 'LIKE', "%$search%")
+                                ->orWhere('name', 'LIKE', "%$search%");
                         });
                     }
                 })
-                ->addColumn('idd', function($x){
-                    return Crypt::encrypt($x['id']);
+                ->addColumn('telat', function($x){
+                    if($x->total_jam != "00:00:00"){
+                        return (new Carbon($x->masuk))->diff(new Carbon($x->tanggal." 08:00:00"))->format('%h:%I');
+                    } else {
+                        return null;
+                    }
+                  })
+                ->addColumn('cepat', function($x){
+                    if(new Carbon($x->keluar) < new Carbon($x->tanggal." 16:00:00")){
+                        return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." 16:00:00"))->format('-%h:%I');
+                    } else {
+                        return null;
+                    }
+                  })
+                ->addColumn('lembur', function($x){
+                    if(new Carbon($x->total_jam) > new Carbon("10:00:00")){
+                        return (new Carbon($x->total_jam))->diff(new Carbon("10:00:00"))->format('%h:%I');
+                    } else {
+                        return null;
+                    }
                   })
                 ->addColumn('userid', function($x){
                     if($x->user != null){
@@ -51,7 +88,7 @@ class WorkHoursController extends Controller
                         return null;
                     }
                   })
-                ->rawColumns(['idd','userid'])
+                ->rawColumns(['telat','cepat','lembur','userid'])
                 ->make(true);
     }
 

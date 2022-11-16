@@ -95,46 +95,51 @@ class WorkHoursController extends Controller
     public function whr_sync(Request $request)
     {
         $data = null;
+        $i = 0;
         $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
         if ($zk->connect()){
             $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
             $zk->disconnect();   
-        } else {
-            return response()->json([
-                'success' => false
-            ]);
-        }       
-        $i = 0;
+        }      
         $breakId = null;
         $user = WhAttendance::orderByDesc('uid')->first();
         if($user){
             $breakId = $user->id;
         }
-        foreach ($data as $att) {
-            if($att['uid'] == $breakId){
-                break;
+        if($data != null){
+            foreach ($data as $att) {
+                if($att['uid'] == $breakId){
+                    break;
+                }
+    
+                $check = WhAttendance::where('uid',$att['uid'])->first();
+                if(!$check){
+                    $new_att = false;
+                    $new_att=WhAttendance::insert([
+                            'uid' => $att['uid'],
+                            'username' => $att['userid'],
+                            'state' => $att['state'],
+                            'timestamp' => $att['timestamp'],
+                            'type' => $att['type'],
+                    ]);
+                    if($new_att){
+                        $i++;
+                    }  
+                }
             }
-
-            $check = WhAttendance::where('uid',$att['uid'])->first();
-            if(!$check){
-                $new_att = false;
-                $new_att=WhAttendance::insert([
-                        'uid' => $att['uid'],
-                        'username' => $att['userid'],
-                        'state' => $att['state'],
-                        'timestamp' => $att['timestamp'],
-                        'type' => $att['type'],
-                ]);
-                if($new_att){
-                    $i++;
-                }  
-            }
+            Log::info(Auth::user()->username." sync data att from machine, total : ".$i);
+            return response()->json([
+                'success' => true,
+                'total' => $i,
+            ]);
+        } else {
+            Log::info(Auth::user()->username." failed sync data att from machine, total : ".$i);
+            return response()->json([
+                'success' => false,
+                'total' => $i,
+            ]);
         }
-        Log::info(Auth::user()->username." sync data att from machine, total : ".$i);
-        return response()->json([
-            'success' => true,
-            'total' => $i,
-        ]);
+
     }
 
     public function zk(){

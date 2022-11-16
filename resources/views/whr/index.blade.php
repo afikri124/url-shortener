@@ -244,7 +244,7 @@
                         success: function (data) {
                             if(data['success']){
                                 $('#datatable').DataTable().ajax.reload();
-                                    swal(data['total'] + " data tersinkron..", {
+                                swal(data['total'] + " data tersinkron..", {
                                     icon: "success",
                                 });
                             } else {

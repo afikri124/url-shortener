@@ -70,8 +70,8 @@ Route::group(['prefix' => 'MT','middleware' => ['auth','role:ST,AD']], function 
   Route::get('/print/{id}', [App\Http\Controllers\MtController::class, 'print'])->name('mt.print');
 });
 
-//Rekap Absensi
-Route::group(['prefix' => 'attendance','middleware' => ['auth','role:AD']], function () {
+//Rekap Absensi acara/rapat
+Route::group(['prefix' => 'attendance','middleware' => ['auth','role:AD,HR']], function () {
   Route::any('/', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.index');
   Route::get('/data', [App\Http\Controllers\AttendanceController::class, 'data'])->name('attendance.data');
   Route::get('/print/{id}', [App\Http\Controllers\AttendanceController::class, 'print'])->name('attendance.print');

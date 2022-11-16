@@ -211,7 +211,7 @@ class WorkHoursController extends Controller
 
     public function whr_sync(Request $request)
     {
-        ini_set('MAX_EXECUTION_TIME', 1200);
+        //ini_set('MAX_EXECUTION_TIME', 1200);
         $data = null;
         $i = 0;
         $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));

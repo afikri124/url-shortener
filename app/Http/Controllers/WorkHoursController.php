@@ -111,20 +111,20 @@ class WorkHoursController extends Controller
                 if($att['uid'] == $breakId){
                     break;
                 } else {
-                // $check = WhAttendance::where('uid',$att['uid'])->first();
-                // if(!$check){
-                    $new_att = false;
-                    $new_att=WhAttendance::insert([
-                            'uid' => $att['uid'],
-                            'username' => $att['userid'],
-                            'state' => $att['state'],
-                            'timestamp' => $att['timestamp'],
-                            'type' => $att['type'],
-                    ]);
-                    if($new_att){
-                        $i++;
-                    }  
-                // }
+                    $check = WhAttendance::where('uid',$att['uid'])->first();
+                    if(!$check){
+                        $new_att = false;
+                        $new_att=WhAttendance::insert([
+                                'uid' => $att['uid'],
+                                'username' => $att['userid'],
+                                'state' => $att['state'],
+                                'timestamp' => $att['timestamp'],
+                                'type' => $att['type'],
+                        ]);
+                        if($new_att){
+                            $i++;
+                        }  
+                    }
                 }
             }
             Log::info(Auth::user()->username." sync data att from machine, total : ".$i);

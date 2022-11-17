@@ -21,7 +21,7 @@ class WorkHoursController extends Controller
         $user = WhUser::with('user')->select('*')->orderBy('name')
                 ->whereNotNull('username')
                 ->get();
-        $lastData = WhAttendance::orderByDesc('uid')->first();
+        $lastData = WhAttendance::orderByDesc('timestamp')->first();
         return view('wh.index', compact('user', 'lastData')); 
     }
 
@@ -211,7 +211,7 @@ class WorkHoursController extends Controller
                 $zk->disconnect();   
             }      
             $breakId = null;
-            $user = WhAttendance::orderByDesc('uid')->first();
+            $user = WhAttendance::orderByDesc('timestamp')->first();
             if($user){
                 $breakId = $user->uid;
             }

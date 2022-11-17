@@ -43,12 +43,10 @@
 
 
 @section('content')
-@if(session('msg'))
-<div class="alert alert-primary alert-dismissible" role="alert">
-    {{session('msg')}}
+<div class="alert alert-secondary alert-dismissible" role="alert">
+    Data terakhir disinkronkan pada {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-@endif
 <div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSync" style="display: none;">
     <div class="spinner-border text-danger" role="status">
         <span class="visually-hidden">Tunggu...</span>
@@ -96,7 +94,7 @@
                 <tr>
                     <th width="30px" data-priority="1">No</th>
                     <th data-priority="2">Nama<br><code>userid mesin</code></th>
-                    <th width="60px">Tanggal</th>
+                    <th width="60px">Hari/TGL</th>
                     <th width="60px">Masuk</th>
                     <th width="60px">Keluar</th>
                     <th width="60px">Telat</th>
@@ -182,8 +180,9 @@
                     className: "text-start"
                 },
                 {
-                    data: 'tanggal',
-                    name: 'tanggal'
+                    render: function (data, type, row, meta) {
+                        return moment(row.tanggal).format('dddd<br>L');
+                    },
                 },
                 {
                     render: function (data, type, row, meta) {

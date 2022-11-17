@@ -21,7 +21,8 @@ class WorkHoursController extends Controller
         $user = WhUser::with('user')->select('*')->orderBy('name')
                 ->whereNotNull('username')
                 ->get();
-        return view('wh.index', compact('user')); 
+        $lastData = WhAttendance::orderByDesc('uid')->first();
+        return view('wh.index', compact('user', 'lastData')); 
     }
 
     public function whr(){
@@ -102,10 +103,18 @@ class WorkHoursController extends Controller
                     }
                   })
                 ->addColumn('cepat', function($x){
-                    if((new Carbon($x->keluar) < new Carbon($x->tanggal." 16:00:00")) && $x->total_jam != '00:00:00'){
-                        return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." 16:00:00"))->format('-%h:%I');
+                    if((new Carbon($x->tanggal))->dayOfWeek == Carbon::SATURDAY){
+                        if((new Carbon($x->keluar) < new Carbon($x->tanggal." 14:00:00")) && $x->total_jam != '00:00:00'){
+                            return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." 14:00:00"))->format('-%h:%I');
+                        } else {
+                            return null;
+                        }
                     } else {
-                        return null;
+                        if((new Carbon($x->keluar) < new Carbon($x->tanggal." 16:00:00")) && $x->total_jam != '00:00:00'){
+                            return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." 16:00:00"))->format('-%h:%I');
+                        } else {
+                            return null;
+                        }
                     }
                   })
                 ->addColumn('lembur', function($x){
@@ -251,9 +260,9 @@ class WorkHoursController extends Controller
     }
 
     public function zk(){
-        $user = Carbon::now()->subMonth(1)->startOfDay()->day(20);
-        // dd($user);
-        echo $user;
+        $dt = Carbon::now();
+// echo $dt->previous(Carbon::SATURDAY);             // 2012-01-25 00:00:00
+var_dump($dt->dayOfWeek == Carbon::SATURDAY); 
             // $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             // if ($zk->connect()){
 

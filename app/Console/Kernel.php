@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         // $schedule->job(new SyncAttendanceJob)->dailyAt('21:44'); 
-        $schedule->job(new SyncAttendanceJob)->twiceDaily(0, 12); //jam 00:00 dan 12:00
+        $schedule->job(new SyncAttendanceJob)->twiceDaily(3, 12); //jam 03:00 dan 12:00
     }
 
     /**

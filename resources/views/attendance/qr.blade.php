@@ -41,11 +41,11 @@
     </table>
     <br>
     <center>
-        <b style="font-size:30px">{{$data->title}}</b>
-        <br>
         <b style="font-size:50px">SCAN DISINI</b>
         <br>
         <b style="font-size:20px;">UNTUK MELAKUKAN ABSENSI @if($data->type =='E') ACARA @elseif($data->type =='M') RAPAT @endif</b>
+        <br>
+        <b style="font-size:30px">{{$data->title}}</b>
         <br>
         <a href="{{$link}}" target="_blank" ><img src="{!! $qr !!}" style="height: 300px;margin:40px 0 20px 0;"></a>
         <br>

@@ -31,7 +31,7 @@ class SyncAttendanceJob implements ShouldQueue
     public function handle()
     {
         //jalankan fungsi dari controller ini
-        app('App\Http\Controllers\SettingController')->account_att_sync(); //akun pada mesin
         app('App\Http\Controllers\WorkHoursController')->whr_sync(); //absen pada mesin
+        app('App\Http\Controllers\SettingController')->account_att_sync(); //akun pada mesin
     }
 }

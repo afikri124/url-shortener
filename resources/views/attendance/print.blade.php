@@ -135,7 +135,7 @@
         @endforeach
         @if(count($al2) != 0)
             <tr style="background-color: #999; color:#fff">
-                <td colspan="4" style="text-align: center;"><small>Bukan Karyawan JGU</small></td>
+                <td colspan="4" style="text-align: center;"><small>Tidak masuk menggunakan Akun karyawan JGU</small></td>
             </tr>
         @endif
         @foreach($al2->sortBy('user.name_with_title') as $d)

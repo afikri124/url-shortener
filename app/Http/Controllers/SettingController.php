@@ -214,7 +214,7 @@ class SettingController extends Controller
                 }  
             }
         }
-        Log::info($info." sync user att from machine");
+        Log::info($info." sync user att from machine, total : ".$i);
         return response()->json([
             'success' => true,
             'total' => $i,

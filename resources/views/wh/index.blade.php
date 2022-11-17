@@ -193,7 +193,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if (row.keluar != null) {
+                        if (row.keluar != row.masuk) {
                             return moment(row.keluar).format('H:mm');
                         }
                     },

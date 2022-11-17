@@ -158,10 +158,12 @@ class SettingController extends Controller
                 ->make(true);
     }
 
-    public function account_att_sync(Request $request)
+     //sync data from machine
+    public function account_att_sync()
     {
         $data = null;
-        $info = (Auth::check() ? Auth::user()->username : "CronJob");
+        $i = 0;
+        $info = (Auth::check() ? Auth::user()->username." ".Auth::user()->name : "CronJob");
         $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
         if ($zk->connect()){
             $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));
@@ -171,7 +173,6 @@ class SettingController extends Controller
                 'success' => false
             ]);
         }       
-        $i = 0;
         $NewUser = array();
         $UpdatedUser = array();
         $FailedUser = array();

@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/sweetalert2.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/spinkit/spinkit.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css')}}">
 @endsection
 
 @section('style')
@@ -25,9 +26,7 @@
         max-width: 150px;
     }
 
-    table.dataTable td:nth-child(3) {
-        max-width: 90px;
-    }
+  
 
     table.dataTable td {
         white-space: nowrap;
@@ -47,6 +46,10 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
+<div class="alert alert-secondary alert-dismissible" role="alert" id="lastupdate">
+    Data terakhir disinkronkan pada {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 <div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSync" style="display: none;">
     <div class="spinner-border text-danger" role="status">
         <span class="visually-hidden">Tunggu...</span>
@@ -63,15 +66,19 @@
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
                         <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" id="select_range" name="range" class="form-control"
+                                    placeholder="Pilih Tanggal" autocomplete="off" />
+                            </div>
                             <div class=" col-md-3">
                                 <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
                                     <option value="">Pilih Akun</option>
                                     @foreach($user as $d)
-                                    <option value="{{ $d->username }}">{{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
+                                    <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">{{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="offset-md-6 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                            <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-outline-dark" type="button" onclick="SyncAtt()">
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>
@@ -86,14 +93,9 @@
             <thead>
                 <tr>
                     <th width="30px" data-priority="1">No</th>
-                    <th data-priority="2">Nama<br><code>userid mesin</code></th>
-                    <th width="60px">Tanggal</th>
-                    <th width="60px">Masuk</th>
-                    <th width="60px">Keluar</th>
-                    <th width="60px">Telat</th>
-                    <th width="80px">Plg Cepat</th>
-                    <th width="60px">Lembur</th>
-                    <th width="80px" data-priority="3">Total Jam</th>
+                    <th data-priority="2">Nama<br><small>[Nama @ Mesin]</small></th>
+                    <th>UserId @ Mesin</th>
+                    <th width="100px" data-priority="3">Total Jam</th>
                 </tr>
             </thead>
         </table>
@@ -103,6 +105,7 @@
 
 @section('script')
 <script src="{{asset('assets/vendor/libs/moment/moment.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/moment/id.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/datatables-bootstrap5.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/datatables.responsive.js')}}"></script>
@@ -111,6 +114,7 @@
 <script src="{{asset('assets/vendor/libs/datatables/datatables-buttons.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/buttons.bootstrap5.js')}}"></script>
 <script src="{{asset('assets/js/sweetalert.min.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
 <script>
     "use strict";
@@ -132,15 +136,17 @@
             processing: true,
             serverSide: true,
             ordering: false,
+            bFilter: false,
             language: {
-                searchPlaceholder: 'Cari username..',
+                searchPlaceholder: 'Cari..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
                 url: "{{ route('WHR.data') }}",
                 data: function (d) {
                     d.select_user = $('#select_user').val(),
-                        d.search = $('input[type="search"]').val()
+                    d.select_range = $('#select_range').val()
+                        // d.search = $('input[type="search"]').val()
                 },
             },
             columnDefs: [{
@@ -157,62 +163,32 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = `<code>` + row.username + `</code>`;
-                        if(row.user != null){
-                            html = `<a class="text-primary" title="` + row.user.name +
-                                `" href="{{ url('profile/` + row.userid + `') }}">` + row.user
-                                .name + `</a><br>` + html;
-                        } else {
-                            html = `<small title='Nama di Mesin'>[` + row.name + `]</small><br>` + html;
+                        var html = `<small>[` + row.name + `]</small>`;
+                        if(row.name2 != null){
+                            html = `<a class="text-primary" title="` + row.name2 +
+                                `" href="{{ url('tes/` + row.username + `') }}">` + row.name2 + `</a><br>` + html;
                         }
                         return html;
                     }, className: "text-start"
                 },
                 {
-                    data: 'tanggal',
-                    name: 'tanggal'
-                },
-                {
                     render: function (data, type, row, meta) {
-                        if(row.masuk != null){
-                            return moment(row.masuk).format('H:mm');
-                        }
+                        return `<code title="UserId di Mesin">[` + row.username + `]</code>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if(row.keluar != null){
-                            return moment(row.keluar).format('H:mm');
+                        if(row.total != null){
+                            return row.total;
                         }
                     },
-                },
-                {
-                    data: 'telat',
-                    name: 'telat'
-                },
-                {
-                    data: 'cepat',
-                    name: 'cepat'
-                },
-                {
-                    data: 'lembur',
-                    name: 'lembur'
-                },{
-                    data: 'total_jam',
-                    name: 'total_jam'
-                },
-                // {
-                //     render: function (data, type, row, meta) {
-                //         // var html =
-                //         //     `<a class=" text-success" title="Edit" href="{{ url('setting/account_att/edit/` +
-                //         //     row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
-                //         // return html;
-                //     },
-                //     className: "text-center"
-                // }
+                }
             ]
         });
         $('#select_user').change(function () {
+            table.draw();
+        });
+        $('#select_range').change(function () {
             table.draw();
         });
     });
@@ -235,15 +211,18 @@
                         },
                         beforeSend: function (xhr) {
                             document.getElementById('loadingSync').style.display = 'block';
-                            document.getElementById('loadingSyncText').innerHTML = 'Menyinkronkan data dari mesin Absensi.'
+                            document.getElementById('loadingSyncText').innerHTML =
+                                'Menyinkronkan data dari mesin Absensi.';
                         },
                         complete: function () {
                             document.getElementById('loadingSync').style.display = 'none';
-                            document.getElementById('loadingSyncText').innerHTML = ''
+                            document.getElementById('loadingSyncText').innerHTML = '';
+                            $('#datatable').DataTable().ajax.reload();
+                            document.getElementById('lastupdate').style.display = 'none';
+                            
                         },
                         success: function (data) {
-                            if(data['success']){
-                                $('#datatable').DataTable().ajax.reload();
+                            if (data['success']) {
                                 swal(data['total'] + " data tersinkron..", {
                                     icon: "success",
                                 });
@@ -261,6 +240,39 @@
                 }
             })
     }
+</script>
+<script>
+    //DateRange Picker
+    (function ($) {
+        $(function () {
+            var start = moment().subtract(1, 'month').set("date",20);
+            var end = moment();
+
+            function cb() {
+                document.getElementById("select_range").value = null;
+            }
+            $('#select_range').daterangepicker({
+                startDate: start,
+                endDate: end,
+                locale: 'id',
+                showDropdowns: true,
+                minYear: 2020,
+                maxYear: parseInt(moment().format('YYYY'), 10),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                ranges: {
+                    'Hari ini': [moment(), moment()],
+                    'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
+                    'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
+                    'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    '20 ke 19': [moment().subtract(1, 'month').set("date",20), moment().set("date",19)],
+                }
+            }, cb);
+            cb();
+            document.getElementById("select_range").value = null;
+        });
+    })(jQuery);
 
 </script>
 @endsection

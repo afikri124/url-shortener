@@ -13,8 +13,7 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/sweetalert2.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/spinkit/spinkit.css')}}" />
-<link rel="stylesheet" type="text/css"
-    href="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css')}}">
 @endsection
 
 @section('style')
@@ -72,8 +71,7 @@
                                 <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
                                     <option value="">Pilih Akun</option>
                                     @foreach($user as $d)
-                                    <option value="{{ $d->username }}">
-                                        {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
+                                    <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">{{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -93,8 +91,8 @@
             <thead>
                 <tr>
                     <th width="30px" data-priority="1">No</th>
-                    <th data-priority="2">Nama<br><code>userid mesin</code></th>
-                    <th width="60px">Hari/TGL</th>
+                    <th data-priority="2">Nama<br><code>Userid @ Mesin</code></th>
+                    <th width="60px">Hari/Tgl</th>
                     <th width="60px">Masuk</th>
                     <th width="60px">Keluar</th>
                     <th width="60px">Telat</th>
@@ -186,14 +184,18 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if (row.masuk != null) {
+                        if (row.masuk != row.keluar) {
+                            return moment(row.masuk).format('H:mm');
+                        } else if(moment(row.masuk) <= moment(row.tanggal + " 16:00")){
                             return moment(row.masuk).format('H:mm');
                         }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if (row.keluar != row.masuk) {
+                        if (row.masuk != row.keluar) {
+                            return moment(row.keluar).format('H:mm');
+                        } else if(moment(row.keluar) > moment(row.tanggal + " 16:00")){
                             return moment(row.keluar).format('H:mm');
                         }
                     },
@@ -273,7 +275,6 @@
                 }
             })
     }
-
 </script>
 @endif
 

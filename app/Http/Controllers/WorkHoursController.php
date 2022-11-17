@@ -18,19 +18,16 @@ class WorkHoursController extends Controller
 {
     //
     public function wh(){
-        $user = WhUser::with('user')->select('*')->orderBy('name')
-                ->whereNotNull('username')
-                ->get();
+        $user = WhUser::with('user')->select('*')->orderBy('name')->get();
         $lastData = WhAttendance::orderByDesc('timestamp')->first();
         return view('wh.index', compact('user', 'lastData')); 
     }
 
     public function whr(){
-        $user = WhUser::with('user')->select('*')->orderBy('name')
-                ->whereNotNull('username')
-                ->get();
-        // return view('whr.index', compact('user')); 
-        echo "sabar, masih di koding";
+        $user = WhUser::with('user')->select('*')->orderBy('name')->get();
+        $lastData = WhAttendance::orderByDesc('timestamp')->first();
+        return view('whr.index', compact('user', 'lastData')); 
+        // echo "sabar, masih di koding";
     }
 
     public function wh_data(Request $request)
@@ -137,73 +134,56 @@ class WorkHoursController extends Controller
 
     public function whr_data(Request $request)
     {
-        $data = WhAttendance::
-        leftjoin('wh_users', function($join){
-            $join->on('wh_users.username','=','wh_attendances.username'); // i want to join the users table with either of these columns
-            $join->orOn('wh_users.username_old','=','wh_attendances.username');
-        })
-        ->with(['user' => function ($query) {
-            $query->select('id','username','name');
-        }])
-        ->select('wh_attendances.username','name',
-            DB::raw('DATE(`timestamp`) as tanggal'),
-            DB::raw('MIN(`timestamp`) as masuk'),
-            DB::raw('MAX(`timestamp`) as keluar'),
-            DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
-        )
-        // ->where('wh_attendances.username','s092021100001')
-        ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
-        ->orderByDesc('masuk');
-        return Datatables::of($data)
-                ->filter(function ($instance) use ($request) {
-                    if (!empty($request->get('select_user'))) {
-                        $instance->where('wh_attendances.username', $request->get('select_user'));
-                    }
-                    if (!empty($request->get('search'))) {
-                         $instance->where(function($w) use($request){
-                            $search = $request->get('search');
-                                $w->orWhere('wh_attendances.username', 'LIKE', "%$search%")
-                                ->orWhere('name', 'LIKE', "%$search%");
-                        });
-                    }
-                })
-                ->addColumn('telat', function($x){
-                    if(new Carbon($x->masuk) > new Carbon($x->tanggal." 08:00:00")){
-                        return (new Carbon($x->masuk))->diff(new Carbon($x->tanggal." 08:00:00"))->format('%h:%I');
-                    } else {
-                        return null;
-                    }
-                  })
-                ->addColumn('cepat', function($x){
-                    if((new Carbon($x->keluar) < new Carbon($x->tanggal." 16:00:00")) && $x->total_jam != '00:00:00'){
-                        return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." 16:00:00"))->format('-%h:%I');
-                    } else {
-                        return null;
-                    }
-                  })
-                ->addColumn('lembur', function($x){
-                    if(new Carbon($x->total_jam) > new Carbon("10:00:00")){
-                        return (new Carbon($x->total_jam))->diff(new Carbon("10:00:00"))->format('%h:%I');
-                    } else {
-                        return null;
-                    }
-                  })
-                ->addColumn('userid', function($x){
-                    if($x->user != null){
-                        return Crypt::encrypt($x->user->id);
-                    } else {
-                        return null;
-                    }
-                  })
-                ->rawColumns(['telat','cepat','lembur','userid'])
-                ->make(true);
+        $start = Carbon::now()->subMonth(1)->startOfDay()->day(20);
+        $end = Carbon::now();
+        if (!empty($request->get('select_range'))) {
+            if($request->get('select_range') != "" && $request->get('select_range') != null 
+                && $request->get('select_range') != "Invalid date - Invalid date"){
+                $x = explode(" - ",$request->get('select_range'));
+                $start = date('Y-m-d 00:00',strtotime($x[0]));
+                $end = date('Y-m-d 23:59',strtotime($x[1]));
+            }
+        }
+
+        if (!empty($request->get('select_user'))) {
+            $user_id = $request->get('select_user');
+            $data = DB::select( DB::raw("SELECT a.username, w.name, u.name AS name2, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
+                FROM (
+                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
+                    FROM wh_attendances
+                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end' && `username` = '$user_id'
+                    GROUP BY DATE(`timestamp`),username
+                    ORDER BY pulang DESC
+                ) a 
+                LEFT JOIN wh_users w ON w.username = a.username OR w.username_old = a.username
+                LEFT JOIN users u ON u.username = a.username
+                GROUP BY a.username, w.name, u.name
+                ORDER BY w.name
+                ") );
+        } else {
+            $data = DB::select( DB::raw("SELECT a.username, w.name, u.name AS name2, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
+                FROM (
+                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
+                    FROM wh_attendances
+                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end'
+                    GROUP BY DATE(`timestamp`),username
+                    ORDER BY pulang DESC
+                ) a 
+                LEFT JOIN wh_users w ON w.username = a.username OR w.username_old = a.username
+                LEFT JOIN users u ON u.username = a.username
+                GROUP BY a.username, w.name, u.name
+                ORDER BY w.name
+                ") );
+        }
+        return Datatables::of($data)->make(true);
     }
 
-    public function whr_sync(Request $request)
+     //sync data from machine
+    public function whr_sync()
     {
         $data = null;
         $i = 0;
-        $info = (Auth::check() ? Auth::user()->username : "CronJob");
+        $info = (Auth::check() ? Auth::user()->username." ".Auth::user()->name : "CronJob");
         try {
             $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             if ($zk->connect()){
@@ -256,7 +236,6 @@ class WorkHoursController extends Controller
                 'total' => $i,
             ]);
         }
-
     }
 
     public function zk(){

@@ -90,15 +90,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <div class="alert alert-info alert-dismissible" role="alert">
-                    Jika ingin memperbarui akun Anda 
+                    Jika ingin memperbarui akun Anda
                     <a href="{{ route('user.edit') }}" target="_blank"><i>klik disini</i></a>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @else
                 @if($check !=null)
                 <div class="alert alert-success alert-dismissible" role="alert">
-                    Anda sudah melakukan absen pada
-                    <br>{{ \Carbon\Carbon::parse($check->created_at)->translatedFormat("l, d F Y H:i");}}
+                    Anda sudah melakukan absensi pada
+                    {{ \Carbon\Carbon::parse($check->created_at)->translatedFormat("l, d F Y H:i");}}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @else
@@ -122,9 +122,10 @@
 
                 @if($data->expired != null && $data->expired < \Carbon\Carbon::now() && $check==null ) <div
                     class="alert alert-danger text-center" role="alert">
-                    Anda sudah tidak bisa mengisi Absensi<br>karena
+                    Anda sudah tidak bisa melakukan Absensi<br>karena absensi
                     {{ $data->title }} {{ $data->sub_title }}
-                    telah berakhir pada<br>{{ \Carbon\Carbon::parse($data->expired)->translatedFormat("l, d F Y H:i");}}
+                    <br>telah berakhir pada
+                    {{ \Carbon\Carbon::parse($data->expired)->translatedFormat("l, d F Y H:i");}}
                     @else
                     <form id="formAuthentication" class="mb-3 row" action="" method="POST"
                         enctype="multipart/form-data">
@@ -205,8 +206,8 @@
                             <div class="mb-3">
                                 <label class="form-label">Judul @if($data->type == "M") Rapat @else Acara @endif
                                 </label>
-                                <input type="text" class="form-control" name="judul"
-                                    value="{{ $data->title }}" disabled />
+                                <input type="text" class="form-control" name="judul" value="{{ $data->title }}"
+                                    disabled />
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Lokasi/Tempat @if($data->type == "M") Rapat @else Acara
@@ -323,34 +324,26 @@
         document.getElementById("googleMap").href = "https://www.google.com/maps?q=" + p.coords.latitude + "," + p
             .coords.longitude;
         console.log(p.coords.latitude + " " + p.coords.longitude);
-
         map = new OpenLayers.Map("map_canvas");
         map.addLayer(new OpenLayers.Layer.OSM());
-
-        @if($check == null)
-        var lonLat = new OpenLayers.LonLat(p.coords.longitude, p.coords.latitude)
-            .transform(
-                new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-                map.getProjectionObject() // to Spherical Mercator Projection
-            );
-        @else
-        var lonLat = new OpenLayers.LonLat("{{ $check->longitude }}", "{{ $check->latitude }}")
-            .transform(
-                new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-                map.getProjectionObject() // to Spherical Mercator Projection
-            );
-        document.getElementById("googleMap").style.display = 'none';
-        @endif
-
-
-
+        if ("{{ $check }}" == "null") {
+            var lonLat = new OpenLayers.LonLat(p.coords.longitude, p.coords.latitude)
+                .transform(
+                    new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                    map.getProjectionObject() // to Spherical Mercator Projection
+                );
+        } else {
+            var lonLat = new OpenLayers.LonLat("{{ $check->longitude }}", "{{ $check->latitude }}")
+                .transform(
+                    new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                    map.getProjectionObject() // to Spherical Mercator Projection
+                );
+            document.getElementById("googleMap").style.display = 'none';
+        }
         var zoom = 16;
-
         var markers = new OpenLayers.Layer.Markers("Markers");
         map.addLayer(markers);
-
         markers.addMarker(new OpenLayers.Marker(lonLat));
-
         map.setCenter(lonLat, zoom);
     }
 
@@ -376,40 +369,41 @@
 
         const countDown = new Date("{{$data->expired}}").getTime(),
             x = setInterval(function () {
-
                 const now = new Date().getTime(),
                     distance = countDown - now;
+                if ("{{ $check }}" == "null") {
+                    if (Math.floor(distance / (day)) <= 0) {
+                        document.getElementById("hari").style.display = "none";
+                    } else {
+                        document.getElementById("hari").style.display = "inline-block";
+                        document.getElementById("days").innerText = Math.floor(distance / (day));
+                    }
 
-                if (Math.floor(distance / (day)) <= 0) {
-                    document.getElementById("hari").style.display = "none";
-                } else {
-                    document.getElementById("hari").style.display = "inline-block";
-                    document.getElementById("days").innerText = Math.floor(distance / (day));
+                    if (Math.floor((distance % (day)) / (hour)) <= 0) {
+                        document.getElementById("jam").style.display = "none";
+                    } else {
+                        document.getElementById("jam").style.display = "inline-block";
+                        document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour));
+                    }
+
+                    if (Math.floor((distance % (hour)) / (minute)) <= 0) {
+                        document.getElementById("menit").style.display = "none";
+                    } else {
+                        document.getElementById("menit").style.display = "inline-block";
+                        document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (
+                            minute));
+                    }
+
+                    if (distance < 0) {
+                        document.getElementById("countdown").style.display = "none";
+                        document.getElementById("silahkan").style.display = "none";
+                        clearInterval(x);
+                    } else {
+                        document.getElementById("countdown").style.display = "inline-block";
+                        document.getElementById("seconds").innerText = Math.floor((distance % (minute)) /
+                            second);
+                    }
                 }
-
-                if (Math.floor((distance % (day)) / (hour)) <= 0) {
-                    document.getElementById("jam").style.display = "none";
-                } else {
-                    document.getElementById("jam").style.display = "inline-block";
-                    document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour));
-                }
-
-                if (Math.floor((distance % (hour)) / (minute)) <= 0) {
-                    document.getElementById("menit").style.display = "none";
-                } else {
-                    document.getElementById("menit").style.display = "inline-block";
-                    document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute));
-                }
-
-                if (distance < 0) {
-                    document.getElementById("countdown").style.display = "none";
-                    document.getElementById("silahkan").style.display = "none";
-                    clearInterval(x);
-                } else {
-                    document.getElementById("countdown").style.display = "inline-block";
-                    document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
-                }
-
             }, 0)
     }());
 

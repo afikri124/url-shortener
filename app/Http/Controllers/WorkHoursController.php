@@ -201,9 +201,9 @@ class WorkHoursController extends Controller
 
     public function whr_sync(Request $request)
     {
-        //ini_set('MAX_EXECUTION_TIME', 1200);
         $data = null;
         $i = 0;
+        $info = (Auth::check() ? Auth::user()->username : "CronJob");
         try {
             $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             if ($zk->connect()){
@@ -236,21 +236,21 @@ class WorkHoursController extends Controller
                             }
                         }
                     }
-                    Log::info(Auth::user()->username." sync data att from machine, total : ".$i);
+                    Log::info($info." sync data att from machine, total : ".$i);
                     return response()->json([
                         'success' => true,
                         'total' => $i,
                     ]);
 
             } else {
-                Log::info(Auth::user()->username." failed sync data att from machine, breakid".$breakId.", total : ".$i);
+                Log::info($info." failed sync data att from machine, breakid".$breakId.", total : ".$i);
                 return response()->json([
                     'success' => false,
                     'total' => $i,
                 ]);
             }
         } catch (DecryptException $e) {
-            Log::info(Auth::user()->username." failed sync data att to database, breakid".$breakId.", total : ".$i);
+            Log::info($info." failed sync data att to database, breakid".$breakId.", total : ".$i);
             return response()->json([
                 'success' => false,
                 'total' => $i,

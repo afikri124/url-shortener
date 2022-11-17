@@ -43,7 +43,7 @@
 
 
 @section('content')
-<div class="alert alert-secondary alert-dismissible" role="alert">
+<div class="alert alert-secondary alert-dismissible" role="alert" id="lastupdate">
     Data terakhir disinkronkan pada {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
@@ -251,6 +251,8 @@
                             document.getElementById('loadingSync').style.display = 'none';
                             document.getElementById('loadingSyncText').innerHTML = '';
                             $('#datatable').DataTable().ajax.reload();
+                            document.getElementById('lastupdate').style.display = 'none';
+                            
                         },
                         success: function (data) {
                             if (data['success']) {

@@ -161,6 +161,7 @@ class SettingController extends Controller
     public function account_att_sync(Request $request)
     {
         $data = null;
+        $info = (Auth::check() ? Auth::user()->username : "CronJob");
         $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
         if ($zk->connect()){
             $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));
@@ -213,7 +214,7 @@ class SettingController extends Controller
                 }  
             }
         }
-        Log::info(Auth::user()->username." sync user att from machine");
+        Log::info($info." sync user att from machine");
         return response()->json([
             'success' => true,
             'total' => $i,

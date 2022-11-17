@@ -176,7 +176,7 @@
                     render: function (data, type, row, meta) {
                         var html = "<code title='NIK'>" + row.username + "</code>";
                         if (row.username_old != null) {
-                            html += "<br><code title='Userid Mesin'>[" + row.username_old +
+                            html += " <code title='Userid Mesin'>[" + row.username_old +
                                 "]</code>";
                         }
                         return html;

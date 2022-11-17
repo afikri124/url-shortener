@@ -233,16 +233,16 @@
                         },
                         beforeSend: function (xhr) {
                             document.getElementById('loadingSync').style.display = 'block';
-                            document.getElementById('loadingSyncText').innerHTML = 'Menyinkronkan user dari mesin Absensi..'
+                            document.getElementById('loadingSyncText').innerHTML = 'Menyinkronkan user dari mesin Absensi..';
                         },
                         complete: function () {
                             document.getElementById('loadingSync').style.display = 'none';
-                            document.getElementById('loadingSyncText').innerHTML = ''
+                            document.getElementById('loadingSyncText').innerHTML = '';
+                            $('#datatable').DataTable().ajax.reload();
                         },
                         success: function (data) {
                             // console.log(data);
                             if(data['success']){
-                                $('#datatable').DataTable().ajax.reload();
                             swal(data['total'] + " data tersinkron " +
                                 "(New:" + data['new'].length +
                                 ", Updated:" + data['updated'].length +

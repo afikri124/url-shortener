@@ -112,6 +112,7 @@
 
 @section('script')
 <script src="{{asset('assets/vendor/libs/moment/moment.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/moment/id.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/datatables-bootstrap5.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/datatables.responsive.js')}}"></script>
@@ -245,15 +246,15 @@
                         beforeSend: function (xhr) {
                             document.getElementById('loadingSync').style.display = 'block';
                             document.getElementById('loadingSyncText').innerHTML =
-                                'Menyinkronkan data dari mesin Absensi.'
+                                'Menyinkronkan data dari mesin Absensi.';
                         },
                         complete: function () {
                             document.getElementById('loadingSync').style.display = 'none';
-                            document.getElementById('loadingSyncText').innerHTML = ''
+                            document.getElementById('loadingSyncText').innerHTML = '';
+                            $('#datatable').DataTable().ajax.reload();
                         },
                         success: function (data) {
                             if (data['success']) {
-                                $('#datatable').DataTable().ajax.reload();
                                 swal(data['total'] + " data tersinkron..", {
                                     icon: "success",
                                 });
@@ -279,7 +280,7 @@
     //DateRange Picker
     (function ($) {
         $(function () {
-            var start = moment();
+            var start = moment().subtract(1, 'month').set("date",20);
             var end = moment();
 
             function cb() {
@@ -288,6 +289,7 @@
             $('#select_range').daterangepicker({
                 startDate: start,
                 endDate: end,
+                locale: 'id',
                 showDropdowns: true,
                 minYear: 2020,
                 maxYear: parseInt(moment().format('YYYY'), 10),
@@ -296,11 +298,10 @@
                 },
                 ranges: {
                     'Hari ini': [moment(), moment()],
+                    'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
                     'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
-                    'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment()
-                        .subtract(1, 'month').endOf('month')
-                    ],
-                    'Tahun ini': [moment().startOf('year'), moment().endOf('year')],
+                    'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    '20 ke 19': [moment().subtract(1, 'month').set("date",20), moment().set("date",19)],
                 }
             }, cb);
             cb();

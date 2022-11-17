@@ -43,10 +43,6 @@
         max-width: 50px;
     }
 
-    table.dataTable td:nth-child(8) {
-        max-width: 50px;
-    }
-
     table.dataTable td {
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -201,7 +197,7 @@
                     <th>Pimpinan</th>
                     <th>Peserta</th>
                     <th>Notulen</th>
-                    <th width="85px" data-priority="3">Aksi</th>
+                    <th data-priority="3">Aksi</th>
                 </tr>
             </thead>
         </table>

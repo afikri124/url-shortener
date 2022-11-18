@@ -147,7 +147,7 @@ class WorkHoursController extends Controller
 
         if (!empty($request->get('select_user'))) {
             $user_id = $request->get('select_user');
-            $data = DB::select( DB::raw("SELECT a.username, w.name, u.name AS name2, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
+            $data = DB::select( DB::raw("SELECT a.username, w.name, u.name AS name2, u.id AS NIK, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
@@ -157,11 +157,11 @@ class WorkHoursController extends Controller
                 ) a 
                 LEFT JOIN wh_users w ON w.username = a.username OR w.username_old = a.username
                 LEFT JOIN users u ON u.username = a.username
-                GROUP BY a.username, w.name, u.name
+                GROUP BY a.username, w.name, u.name, u.id
                 ORDER BY w.name
                 ") );
         } else {
-            $data = DB::select( DB::raw("SELECT a.username, w.name, u.name AS name2, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
+            $data = DB::select( DB::raw("SELECT a.username, w.name, u.name AS name2, u.id AS NIK, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
@@ -171,11 +171,20 @@ class WorkHoursController extends Controller
                 ) a 
                 LEFT JOIN wh_users w ON w.username = a.username OR w.username_old = a.username
                 LEFT JOIN users u ON u.username = a.username
-                GROUP BY a.username, w.name, u.name
+                GROUP BY a.username, w.name, u.name, u.id
                 ORDER BY w.name
                 ") );
         }
-        return Datatables::of($data)->make(true);
+        return Datatables::of($data)
+        ->addColumn('userid', function($x){
+            if($x->NIK != null){
+                return Crypt::encrypt($x->NIK);
+            } else {
+                return null;
+            }
+          })
+        ->rawColumns(['userid'])
+        ->make(true);
     }
 
      //sync data from machine
@@ -183,7 +192,7 @@ class WorkHoursController extends Controller
     {
         $data = null;
         $i = 0;
-        $info = (Auth::check() ? Auth::user()->username." ".Auth::user()->name : "CronJob");
+        $info = (Auth::check() ? Auth::user()->username." : ".Auth::user()->name : "CronJob");
         try {
             $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             if ($zk->connect()){
@@ -223,14 +232,14 @@ class WorkHoursController extends Controller
                     ]);
 
             } else {
-                Log::info($info." failed sync data att from machine, breakid : ".$breakId.", total total new: ".$i);
+                Log::info($info." failed sync data att from machine, breakid : ".$breakId.", total new: ".$i);
                 return response()->json([
                     'success' => false,
                     'total' => $i,
                 ]);
             }
         } catch (DecryptException $e) {
-            Log::info($info." failed sync data att to database, breakid : ".$breakId.", total  total new: ".$i);
+            Log::info($info." failed sync data att to database, breakid : ".$breakId.",  total new: ".$i);
             return response()->json([
                 'success' => false,
                 'total' => $i,

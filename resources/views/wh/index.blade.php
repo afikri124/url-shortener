@@ -43,7 +43,7 @@
 
 @section('content')
 <div class="alert alert-secondary alert-dismissible" role="alert" id="lastupdate">
-    Data terakhir disinkronkan pada {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
+    Data disinkronkan terakhir sebelum {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSync" style="display: none;">
@@ -76,7 +76,7 @@
                                 </select>
                             </div>
                             <div class="offset-md-3 col-md-3 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-outline-dark" type="button" onclick="SyncAtt()">
+                                <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>
                                 </button>
@@ -87,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover table-sm text-md-center" id="datatable" width="100%">
+        <table class="table table-hover table-sm text-md-center stripe" id="datatable" width="100%">
             <thead>
                 <tr>
                     <th width="30px" data-priority="1">No</th>
@@ -140,7 +140,7 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Cari username..',
+                searchPlaceholder: 'Cari..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
@@ -303,6 +303,7 @@
                 },
                 ranges: {
                     'Hari ini': [moment(), moment()],
+                    'Kemarin': [moment().subtract(1, 'day').startOf('day'), moment().subtract(1, 'day').endOf('day')],
                     'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
                     'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
                     'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],

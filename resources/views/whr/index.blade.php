@@ -26,8 +26,6 @@
         max-width: 150px;
     }
 
-  
-
     table.dataTable td {
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -47,7 +45,7 @@
 </div>
 @endif
 <div class="alert alert-secondary alert-dismissible" role="alert" id="lastupdate">
-    Data terakhir disinkronkan pada {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
+    Data disinkronkan terakhir sebelum {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSync" style="display: none;">
@@ -79,7 +77,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-outline-dark" type="button" onclick="SyncAtt()">
+                                <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>
                                 </button>
@@ -166,7 +164,7 @@
                         var html = `<small>[` + row.name + `]</small>`;
                         if(row.name2 != null){
                             html = `<a class="text-primary" title="` + row.name2 +
-                                `" href="{{ url('tes/` + row.username + `') }}">` + row.name2 + `</a><br>` + html;
+                                `" href="{{ url('profile/` + row.userid + `') }}">` + row.name2 + `</a><br>` + html;
                         }
                         return html;
                     }, className: "text-start"
@@ -263,6 +261,7 @@
                 },
                 ranges: {
                     'Hari ini': [moment(), moment()],
+                    'Kemarin': [moment().subtract(1, 'day').startOf('day'), moment().subtract(1, 'day').endOf('day')],
                     'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
                     'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
                     'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],

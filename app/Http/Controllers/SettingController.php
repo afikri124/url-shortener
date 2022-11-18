@@ -163,7 +163,7 @@ class SettingController extends Controller
     {
         $data = null;
         $i = 0;
-        $info = (Auth::check() ? Auth::user()->username." ".Auth::user()->name : "CronJob");
+        $info = (Auth::check() ? Auth::user()->username." : ".Auth::user()->name : "CronJob");
         $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
         if ($zk->connect()){
             $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));

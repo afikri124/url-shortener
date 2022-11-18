@@ -35,7 +35,7 @@
                     <div class="mb-3 col-md-6">
                     <label class="form-label" for="basicDate">Tanggal</label>
                         <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal"
-                            placeholder="" value="{{ $data->date }}">
+                            placeholder="yyyy-mm-dd" value="{{ $data->date }}">
                         @error('tanggal')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -45,7 +45,7 @@
                     <div class="mb-3 col-md-6">
                         <label class="form-label" for="basicDate">Tenggat Absensi</label>
                         <input type="datetime-local" class="form-control @error('tenggat_absensi') is-invalid @enderror"
-                            name="tenggat_absensi" placeholder="" value="{{ $data->expired }}">
+                            name="tenggat_absensi" placeholder="yyyy-mm-dd hh:mm" value="{{ $data->expired }}">
                         @error('tenggat_absensi')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

@@ -106,7 +106,7 @@
                         <div class="row g-2">
                             <div class="col-md-6 mb-0">
                                 <label for="add_target" class="form-label">Target</label>
-                                <input type="date" class="form-control" id="add_target" name="add_target">
+                                <input type="date" class="form-control" id="add_target" name="add_target" placeholder="yyyy-mm-dd">
                             </div>
                             <div class="col-md-6 mb-0">
                                 <label for="add_users" class="form-label">Penanggung Jawab (PIC)</label>

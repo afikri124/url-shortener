@@ -108,7 +108,7 @@
                             <label class="form-label" for="basicDate">Tanggal</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="date" class="form-control @error('tanggal') is-invalid @enderror" name="tanggal"
-                                    placeholder="" value="{{ old('tanggal') }}">
+                                    placeholder="yyyy-mm-dd" value="{{ old('tanggal') }}">
                                 @error('tanggal')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -120,7 +120,7 @@
                             <label class="form-label" for="basicDate">Tenggat Absensi</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="datetime-local" class="form-control @error('tenggat_absensi') is-invalid @enderror" name="tenggat_absensi"
-                                    placeholder="" value="{{ old('tenggat_absensi') }}">
+                                    placeholder="yyyy-mm-dd hh:mm" value="{{ old('tenggat_absensi') }}">
                                 @error('tenggat_absensi')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

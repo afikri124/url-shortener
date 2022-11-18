@@ -146,20 +146,20 @@
                 "defaultContent": "-",
                 "targets": "_all"
             }],
-            columns: [
-                {
+            columns: [{
                     render: function (data, type, row, meta) {
                         var no = (meta.row + meta.settings._iDisplayStart + 1);
                         return no;
                     },
-                    className: "text-center"
+                    className: "text-center",
+                    "orderable": false
                 },
                 {
                     render: function (data, type, row, meta) {
                         var html = `<code>` + row.uid + `</code>`;
                         return html;
                     },
-                    className: "text-center"
+                    className: "text-center", name: "uid"
                 },
                 {
                     render: function (data, type, row, meta) {
@@ -170,7 +170,7 @@
                                 .name + `</a><br>` + html;
                         }
                         return html;
-                    },
+                    }, name: "name"
                 },
                 {
                     render: function (data, type, row, meta) {
@@ -180,11 +180,11 @@
                                 "]</code>";
                         }
                         return html;
-                    },
+                    }, name: "username"
                 },
                 {
                     data: 'role_name',
-                    name: 'role_name'
+                    name: 'role'
                 },
                 {
                     data: 'password',
@@ -197,7 +197,7 @@
                 {
                     render: function (data, type, row, meta) {
                         return row.status_name;
-                    },
+                    }, name: "status"
                 },
                 {
                     render: function (data, type, row, meta) {
@@ -206,7 +206,8 @@
                         //     row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
                         // return html;
                     },
-                    className: "text-center"
+                    className: "text-center",
+                    "orderable": false
                 }
             ]
         });
@@ -233,7 +234,8 @@
                         },
                         beforeSend: function (xhr) {
                             document.getElementById('loadingSync').style.display = 'block';
-                            document.getElementById('loadingSyncText').innerHTML = 'Menyinkronkan user dari mesin Absensi..';
+                            document.getElementById('loadingSyncText').innerHTML =
+                                'Menyinkronkan user dari mesin Absensi..';
                         },
                         complete: function () {
                             document.getElementById('loadingSync').style.display = 'none';
@@ -242,19 +244,19 @@
                         },
                         success: function (data) {
                             // console.log(data);
-                            if(data['success']){
-                            swal(data['total'] + " data tersinkron " +
-                                "(New:" + data['new'].length +
-                                ", Updated:" + data['updated'].length +
-                                ", Failed:" + data['failed'].length + ")", {
-                                    icon: "success",
-                                });
+                            if (data['success']) {
+                                swal(data['total'] + " data tersinkron " +
+                                    "(New:" + data['new'].length +
+                                    ", Updated:" + data['updated'].length +
+                                    ", Failed:" + data['failed'].length + ")", {
+                                        icon: "success",
+                                    });
                             } else {
                                 swal("Terjadi Kesalahan! Hubungi Programmer..", {
                                     icon: "error",
                                 });
                             }
-                            
+
                         }
                     })
                 } else {

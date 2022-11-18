@@ -172,7 +172,7 @@
                 {
                     render: function (data, type, row, meta) {
                         return `<code title="UserId di Mesin">[` + row.username + `]</code>`;
-                    },"orderable": false
+                    },
                 },
                 {
                     render: function (data, type, row, meta) {

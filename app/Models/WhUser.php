@@ -39,9 +39,9 @@ class WhUser extends Model
 
     public function getRoleNameAttribute(){
         $x = "";
-        if($this->id == 0){
+        if($this->role == 0){
             $x = "User";
-        } else if($this->id == 14){
+        } else if($this->role == 14){
             $x = "Admin";
         }
         return $x;

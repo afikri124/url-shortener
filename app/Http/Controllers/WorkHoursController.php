@@ -18,16 +18,15 @@ class WorkHoursController extends Controller
 {
     //
     public function wh(){
-        $user = WhUser::with('user')->select('*')->orderBy('name')->get();
+        $user = WhUser::where('status',1)->with('user')->select('*')->orderBy('name')->get();
         $lastData = WhAttendance::orderByDesc('timestamp')->first();
         return view('wh.index', compact('user', 'lastData')); 
     }
 
     public function whr(){
-        $user = WhUser::with('user')->select('*')->orderBy('name')->get();
+        $user = WhUser::where('status',1)->with('user')->select('*')->orderBy('name')->get();
         $lastData = WhAttendance::orderByDesc('timestamp')->first();
         return view('whr.index', compact('user', 'lastData')); 
-        // echo "sabar, masih di koding";
     }
 
     public function wh_data(Request $request)
@@ -147,7 +146,7 @@ class WorkHoursController extends Controller
 
         if (!empty($request->get('select_user'))) {
             $user_id = $request->get('select_user');
-            $data = DB::select( DB::raw("SELECT a.username, w.name, u.name AS name2, u.id AS NIK, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
@@ -155,13 +154,13 @@ class WorkHoursController extends Controller
                     GROUP BY DATE(`timestamp`),username
                     ORDER BY pulang DESC
                 ) a 
-                LEFT JOIN wh_users w ON w.username = a.username OR w.username_old = a.username
+                LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
                 LEFT JOIN users u ON u.username = a.username
                 GROUP BY a.username, w.name, u.name, u.id
                 ORDER BY w.name
                 ") );
         } else {
-            $data = DB::select( DB::raw("SELECT a.username, w.name, u.name AS name2, u.id AS NIK, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
@@ -169,7 +168,7 @@ class WorkHoursController extends Controller
                     GROUP BY DATE(`timestamp`),username
                     ORDER BY pulang DESC
                 ) a 
-                LEFT JOIN wh_users w ON w.username = a.username OR w.username_old = a.username
+                LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
                 LEFT JOIN users u ON u.username = a.username
                 GROUP BY a.username, w.name, u.name, u.id
                 ORDER BY w.name
@@ -177,8 +176,8 @@ class WorkHoursController extends Controller
         }
         return Datatables::of($data)
         ->addColumn('userid', function($x){
-            if($x->NIK != null){
-                return Crypt::encrypt($x->NIK);
+            if($x->usrid != null){
+                return Crypt::encrypt($x->usrid);
             } else {
                 return null;
             }

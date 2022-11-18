@@ -16,10 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('queue:work --stop-when-empty --timeout=60 --tries=1 --once')
-        ->everyMinute()
-        ->withoutOverlapping();
-        $schedule->command('queue:retry all')
+        $schedule->command('queue:retry all --stop-when-empty --timeout=60 --tries=1')
         ->twiceDaily(11, 23)
         ->withoutOverlapping();
         $schedule->job(new SyncAttendanceJob)->twiceDaily(3, 12)->withoutOverlapping(); //jam 03:00 dan 12:00

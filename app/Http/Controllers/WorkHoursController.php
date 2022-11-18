@@ -216,21 +216,21 @@ class WorkHoursController extends Controller
                             }
                         }
                     }
-                    Log::info($info." sync data att from machine, total : ".$i);
+                    Log::info($info." sync data att from machine, breakid : ".$breakId.", total new : ".$i);
                     return response()->json([
                         'success' => true,
                         'total' => $i,
                     ]);
 
             } else {
-                Log::info($info." failed sync data att from machine, breakid".$breakId.", total : ".$i);
+                Log::info($info." failed sync data att from machine, breakid : ".$breakId.", total total new: ".$i);
                 return response()->json([
                     'success' => false,
                     'total' => $i,
                 ]);
             }
         } catch (DecryptException $e) {
-            Log::info($info." failed sync data att to database, breakid".$breakId.", total : ".$i);
+            Log::info($info." failed sync data att to database, breakid : ".$breakId.", total  total new: ".$i);
             return response()->json([
                 'success' => false,
                 'total' => $i,
@@ -240,8 +240,8 @@ class WorkHoursController extends Controller
 
     public function zk(){
         $dt = Carbon::now();
-// echo $dt->previous(Carbon::SATURDAY);             // 2012-01-25 00:00:00
-var_dump($dt->dayOfWeek == Carbon::SATURDAY); 
+        // echo $dt->previous(Carbon::SATURDAY);             // 2012-01-25 00:00:00
+        var_dump($dt->dayOfWeek == Carbon::SATURDAY); 
             // $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             // if ($zk->connect()){
 

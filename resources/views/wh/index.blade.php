@@ -151,6 +151,9 @@
                         d.search = $('input[type="search"]').val()
                 },
             },
+            scroller: {
+                loadingIndicator: true
+            },
             columnDefs: [{
                 "defaultContent": "-",
                 "targets": "_all"

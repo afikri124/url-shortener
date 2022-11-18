@@ -135,7 +135,6 @@
             responsive: true,
             processing: true,
             serverSide: true,
-            ordering: false,
             bFilter: false,
             language: {
                 searchPlaceholder: 'Cari..',
@@ -159,7 +158,8 @@
                         var no = (meta.row + meta.settings._iDisplayStart + 1);
                         return no;
                     },
-                    className: "text-center"
+                    className: "text-center",
+                    "orderable": false
                 },
                 {
                     render: function (data, type, row, meta) {
@@ -174,7 +174,7 @@
                 {
                     render: function (data, type, row, meta) {
                         return `<code title="UserId di Mesin">[` + row.username + `]</code>`;
-                    },
+                    },"orderable": false
                 },
                 {
                     render: function (data, type, row, meta) {

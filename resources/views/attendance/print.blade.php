@@ -90,6 +90,7 @@
         </tr>
     </table>
     <table width="100%" border="1px solid">
+    <thead>
         <tr style="vertical-align:middle">
             <td style="text-align:center;vertical-align:middle" width="5%">
                 <p>No</p>
@@ -104,10 +105,14 @@
                 <p>Paraf</p>
             </td>
         </tr>
+    </thead>
+    <tbody>
         @php $i = 1; $datamerah = false; @endphp
-        @foreach($al->sortBy('user.name_with_title') as $d)
+        @foreach($al->sortBy('user.name') as $d)
         <tr style="vertical-align:middle">
-            <td style="text-align:center;">
+            <td style="text-align:center;padding:0; margin:0; white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;">
                 <p>{{$i++}}</p>
             </td>
             <td>
@@ -117,7 +122,7 @@
                 </p>
                 @else
                 <p>
-                    <a style="color:black;" target='_blank'
+                    <a style="color:black;" target='_BLANK'
                         href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
                         {{($d->user != null ? $d->user->name_with_title : $d->username)}}
                     </a>
@@ -134,13 +139,15 @@
         </tr>
         @endforeach
         @if(count($al2) != 0)
-            <tr style="background-color: #999; color:#fff">
-                <td colspan="4" style="text-align: center;"><small>Tidak masuk menggunakan Akun karyawan JGU</small></td>
+            <tr style="background-color: #000; color:#fff">
+                <td colspan="4" style="text-align: center;"><small>Non Karyawan JGU</small></td>
             </tr>
         @endif
         @foreach($al2->sortBy('user.name_with_title') as $d)
         <tr style="vertical-align:middle">
-            <td style="text-align:center;">
+            <td style="text-align:center;padding:0; margin:0; white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;">
                 <p>{{$i++}}</p>
             </td>
             <td>
@@ -166,6 +173,7 @@
             </td>
         </tr>
         @endforeach
+    </tbody>
     </table>
     @if($datamerah)
         <small><p style="color:red;font-size:6pt">* Warna Merah : Titik lokasi Absensi tidak ditemukan.</p></small>

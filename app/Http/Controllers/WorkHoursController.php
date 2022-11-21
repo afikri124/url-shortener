@@ -146,7 +146,7 @@ class WorkHoursController extends Controller
 
         if (!empty($request->get('select_user'))) {
             $user_id = $request->get('select_user');
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, count(jam) as hari,  SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
@@ -160,7 +160,7 @@ class WorkHoursController extends Controller
                 ORDER BY w.name
                 ") );
         } else {
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, count(jam) as hari, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances

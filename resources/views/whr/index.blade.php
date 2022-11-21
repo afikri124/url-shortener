@@ -93,6 +93,7 @@
                     <th width="30px" data-priority="1">No</th>
                     <th data-priority="2">Nama<br><small>[Nama @ Mesin]</small></th>
                     <th>UserId @ Mesin</th>
+                    <th width="80px" data-priority="4">Total Hari</th>
                     <th width="100px" data-priority="3">Total Jam</th>
                 </tr>
             </thead>
@@ -172,6 +173,13 @@
                 {
                     render: function (data, type, row, meta) {
                         return `<code title="UserId di Mesin">[` + row.username + `]</code>`;
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        if(row.hari != null){
+                            return row.hari;
+                        }
                     },
                 },
                 {

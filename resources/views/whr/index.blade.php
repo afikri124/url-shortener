@@ -93,7 +93,7 @@
                     <th width="30px" data-priority="1">No</th>
                     <th data-priority="2">Nama<br><small>[Nama @ Mesin]</small></th>
                     <th>UserId @ Mesin</th>
-                    <th width="80px" data-priority="4">Total Hari</th>
+                    <th width="90px" data-priority="4">Total Hari</th>
                     <th width="100px" data-priority="3">Total Jam</th>
                 </tr>
             </thead>
@@ -271,8 +271,8 @@
                     'Hari ini': [moment(), moment()],
                     'Kemarin': [moment().subtract(1, 'day').startOf('day'), moment().subtract(1, 'day').endOf('day')],
                     'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
+                    'Minggu lalu': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
                     'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
-                    'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                     '20 ke 19': [moment().subtract(1, 'month').set("date",20), moment().set("date",19)],
                 }
             }, cb);

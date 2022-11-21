@@ -133,6 +133,10 @@ class MoMController extends Controller
     public function notetaker_add(Request $request) 
     {
         if($request->_token==csrf_token() && $request->detail != null){
+            $this->validate($request, [ 
+                'activity_id'=> ['required'],
+                'detail'=> ['required', 'max:65500'],
+            ]);
             $data = MomList::create([
                 'activity_id' => $request->activity_id,
                 'detail' => $request->detail,
@@ -155,6 +159,9 @@ class MoMController extends Controller
     public function notetaker_edit(Request $request) 
     {
         if($request->_token==csrf_token() && $request->detail != null){
+            $this->validate($request, [ 
+                'detail'=> ['required', 'max:65500'],
+            ]);
             $data = MomList::findOrFail($request->id);
             $d = $data->update([ 
                 'detail' => $request->detail,

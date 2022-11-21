@@ -139,6 +139,10 @@
                 searchPlaceholder: 'Cari..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
+            lengthMenu: [
+                [10,50,100,250],
+                [10,50,100,250],
+            ],
             ajax: {
                 url: "{{ route('WHR.data') }}",
                 data: function (d) {

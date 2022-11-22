@@ -69,14 +69,19 @@ class MoMController extends Controller
                 if($ext == "jpg" || $ext == "jpeg" || $ext == "png"){
                     $type = "Image";
                 }    
-                $dokName = Auth::user()->id.'_'.$request->dokumen->getClientOriginalName(); 
+                $name = str_replace(' ', '_', $request->dokumen->getClientOriginalName());
+                $dokName = Auth::user()->id.'_'.$name; 
                 $folderName =  "MoM/".Carbon::now()->format('Y/m');
                 $path = public_path()."/".$folderName;
                 if (!File::exists($path)) {
                     File::makeDirectory($path, 0755, true); //create folder
                 }
-                $request->dokumen->move($path, $dokName); //upload image to folder
-                $dokName=$folderName."/".$dokName;
+                $upload = $request->dokumen->move($path, $dokName); //upload image to folder
+                if($upload){
+                    $dokName=$folderName."/".$dokName;
+                } else {
+                    $dokName = "";
+                }
             }
             
             $data = MomDoc::create([
@@ -311,7 +316,7 @@ class MoMController extends Controller
         } catch (DecryptException $e) {
             abort(403, "Data tidak ditemukan!");
         }
-        $activity =  AttendanceActivity::findOrFail($id);
+        $activity =  AttendanceActivity::with('notulen')->findOrFail($id);
         $lists =  MomList::where('activity_id',$id)
             ->with(['pics' => function ($query) {
                 $query->select('name');

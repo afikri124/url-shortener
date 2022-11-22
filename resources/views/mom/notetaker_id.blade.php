@@ -223,7 +223,7 @@
                     <div class="offcanvas offcanvas-bottom @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
                         aria-labelledby="offcanvasEndLabel">
                         <div class="offcanvas-header">
-                            <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Dokumen</h5>
+                            <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Dokumen/Gambar</h5>
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                                 aria-label="Close"></button>
                         </div>
@@ -257,7 +257,7 @@
                         <thead>
                             <tr>
                                 <th width="20px" data-priority="1">No</th>
-                                <th data-priority="2">Nama File</th>
+                                <th data-priority="2">Nama File (Dokumen/Gambar)</th>
                                 <th>Tipe</th>
                                 <th width="85px" data-priority="3">Aksi</th>
                             </tr>
@@ -290,7 +290,7 @@
     "use strict";
     var quill = new Quill("#myeditor", {
         bounds: "#myeditor",
-        placeholder: "Ketik Sesuatu...",
+        placeholder: "Ketik Sesuatu... (text only)",
         modules: {
             formula: !0,
             toolbar: [
@@ -336,7 +336,7 @@
 
     var quill2 = new Quill("#myeditor2", {
         bounds: "#myeditor2",
-        placeholder: "Ketik Sesuatu...",
+        placeholder: "Ketik Sesuatu... (text only)",
         modules: {
             formula: !0,
             toolbar: [
@@ -631,7 +631,7 @@
             },
             dom: '<"datatable-header"fBl<"toolbar mb-3">><t><"datatable-footer"ip>',
             buttons: [{
-                text: '<span data-bs-toggle="offcanvas" data-bs-target="#newrecord" aria-controls="offcanvasEnd"><i class="bx bx-plus me-sm-2"></i> Dokumen</span>',
+                text: '<span data-bs-toggle="offcanvas" data-bs-target="#newrecord" aria-controls="offcanvasEnd"><i class="bx bx-plus me-sm-2"></i> Lampiran</span>',
                 className: 'btn btn-primary mb-2',
                 // action: function (e, dt, node, config) {
                 //     alert('Button activated');

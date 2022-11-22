@@ -61,7 +61,7 @@
                 <tr>
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Uraian Rapat</th>
-                    <th >PIC</th>
+                    <!-- <th >PIC</th> -->
                     <th width="80px">Target</th>
                     <th data-priority="3" width="50px">Aksi</th>
                 </tr>
@@ -129,23 +129,23 @@
                     render: function (data, type, row, meta) {
                         activity = "";
                         if (row.activity != null) {
-                            activity = "<strong title='" + row.activity.title + "'>" + row.activity.title +
-                                "</strong> <span class='badge rounded-pill bg-label-secondary'>" + row.activity.date + "</span><br>";
+                            activity = "<span class='badge bg-label-danger'>" + row.activity.date + "</span> <strong title='" + row.activity.title + "'>" + row.activity.title +
+                                "</strong><br>";
                         }                       
                         return activity + $("<textarea/>").html(row.detail).text();
                     },
                 },
-                {
-                    render: function (data, type, row, meta) {
-                        var x = '';
-                        if (row.pics != null) {
-                            row.pics.forEach((e) => {
-                                x += '<i class="badge rounded-pill bg-label-secondary" title="' + e.name +'">' + e.name + '</i><br> ';
-                            });
-                        }
-                        return x;
-                    },
-                },
+                // {
+                //     render: function (data, type, row, meta) {
+                //         var x = '';
+                //         if (row.pics != null) {
+                //             row.pics.forEach((e) => {
+                //                 x += '<i class="badge rounded-pill bg-label-secondary" title="' + e.name +'">' + e.name + '</i><br> ';
+                //             });
+                //         }
+                //         return x;
+                //     },
+                // },
                 {data: 'target', name: 'target'},
                 {
                     render: function (data, type, row, meta) {

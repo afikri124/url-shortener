@@ -148,7 +148,7 @@
     <br>
     @foreach($images as $key => $s)
     <center>
-        <img src="{{ public_path($s->doc_path) }}" style="width: 15.2cm;"><br>
+        <img src="{{ public_path($s->doc_path) }}" style="max-width: 15.2cm; max-height:15cm"><br>
         <small style="font-size: 8pt">Dokumentasi {{$key+1}}</small>
     </center><br>
     @endforeach

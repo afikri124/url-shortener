@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('queue:retry all')
-        ->twiceDaily(11, 20)
+        ->twiceDaily(10, 15)
         ->withoutOverlapping();
         $schedule->job(new SyncAttendanceJob)->twiceDaily(3, 12)->withoutOverlapping(); //jam 03:00 dan 12:00
     }

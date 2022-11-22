@@ -69,6 +69,10 @@
                                     <span class="me-1"><i class='bx bx-group'></i>
                                         {{ $activity->participant }}
                                 </li>
+                                <li class="list-inline-item fw-semibold">
+                                    <span class="me-1"><i class='bx bx-notepad'></i>
+                                        {{ ($activity->notulen == null ? "" : $activity->notulen->name_with_title) }}
+                                </li>
                             </ul>
                         </div>
                         <a href="{{ route('mom.note-taker_print', ['id' => Crypt::encrypt($activity->id)] ) }}" target="_blank" class="btn btn-light m-0 mt-2 p-0 text-info"

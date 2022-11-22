@@ -196,7 +196,7 @@ class MtController extends Controller
                 $q->where('role_id','ST');
             })
             ->select('*')->get();
-            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al', 'al2'));
+            $pdf = PDF::loadview('attendance.print', compact('qr','data','link','tok', 'al', 'al2'))->set_option("enable_php", true);
             return $pdf->stream("Attendance #".$data->id."-".$tok." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
             // return view('attendance.print', compact('qr','data','link', 'tok', 'al', 'al2'));
         }else{

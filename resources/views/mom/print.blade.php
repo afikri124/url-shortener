@@ -85,44 +85,52 @@
         </tr>
     </table>
     <table width="100%" border="1px solid">
-        <tr style="vertical-align:middle">
-            <th style="text-align:center;vertical-align:middle" width="5%">
-                <p>NO</p>
-            </th>
-            <th style="text-align:center;" width="70%">
-                <p>URAIAN RAPAT</p>
-            </th>
-            <th style="text-align:center;" width="15%">
-                <p>PIC</p>
-            </th>
-            <th style="text-align:center;" width="10%">
-                <p>TARGET</p>
-            </th>
-        </tr>
-        @php $i = 1; @endphp
-        @foreach($lists->sortBy('id') as $d)
-        <tr style="vertical-align:middle">
-            <td style="text-align:center;">
-                <p>{{$i++}}</p>
-            </td>
-            <td>
-                <p>{!! $d->detail !!}</p>
-            </td>
-            <td>
-                <p>
-                    @php $pic = [];
-                    foreach($d->pics as $key => $p){
-                    array_push($pic, $p->name_with_title);
-                    }
-                    @endphp
-                    {!! implode(",<br>",$pic); !!}
-                </p>
-            </td>
-            <td style="text-align:center;">
-                <p>{!! $d->target !!}</p>
-            </td>
-        </tr>
-        @endforeach
+        <thead>
+            <tr style="vertical-align:middle">
+                <th style="text-align:center;vertical-align:middle" width="5%">
+                    <p>NO</p>
+                </th>
+                <th style="text-align:center;" width="70%">
+                    <p>URAIAN RAPAT</p>
+                </th>
+                <th style="text-align:center;" width="15%">
+                    <p>PIC</p>
+                </th>
+                <th style="text-align:center;" width="10%">
+                    <p>TARGET</p>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @php $i = 1; @endphp
+            @foreach($lists->sortBy('id') as $d)
+            <tr style="vertical-align:middle">
+                <td style="text-align:center;">
+                    <p>{{$i++}}</p>
+                </td>
+                <td>
+                    <p>{!! $d->detail !!}</p>
+                </td>
+                <td>
+                    <p>
+                        @php $pic = []; $pics = "";
+                        foreach($d->pics as $key => $p){
+                        array_push($pic, $p->name_with_title);
+                        }
+                        $pics = implode(",<br>",$pic);
+                        if(strlen($pics) > 150){
+                        $pics = substr($pics,0,150).".. dll.";
+                        }
+                        @endphp
+                        {!! $pics; !!}
+                    </p>
+                </td>
+                <td style="text-align:center;">
+                    <p>{!! $d->target !!}</p>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
     </table>
     <br>
     <table width="100%" style="text-align: center;">
@@ -167,7 +175,20 @@
         @endforeach
     </ul>
     @endif
-
+    <script type="text/php">
+        if (isset($pdf)) {
+            $x = 40;
+            $y = 550;
+            $text = "Halaman {PAGE_NUM} dari {PAGE_COUNT}";
+            $font = null;
+            $size = 8;
+            $color = array(0,0,0);
+            $word_space = 0.0;  //  default
+            $char_space = 0.0;  //  default
+            $angle = 0.0;   //  default
+            $pdf->page_text($x, $y, $text, $font, $size, $color, $word_space, $char_space, $angle);
+        }
+    </script>
 </body>
 
 </html>

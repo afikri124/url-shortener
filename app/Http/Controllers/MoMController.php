@@ -375,8 +375,9 @@ class MoMController extends Controller
 
         $link = route('mom.note-taker_print', ['id' => $idd] );
         $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-        $pdf = PDF::loadview('mom.print', compact('qr','link', 'data', 'lists', 'docs', 'images'))->setPaper('a4', 'landscape');
-        return $pdf->stream("MoM #".$data->id." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
+
         // return view('mom.print', compact('qr','link', 'data', 'lists', 'docs', 'images'));
+        $pdf = PDF::loadView('mom.print', compact('qr','link', 'data', 'lists', 'docs', 'images'))->setPaper('a4', 'landscape')->set_option("enable_php", true);
+        return $pdf->stream("MoM #".$data->id." - ".Carbon::parse($data->date)->translatedFormat('j F Y').".pdf");
     }
 }

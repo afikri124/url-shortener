@@ -187,6 +187,20 @@
                 <br><br><br><br><b>{{$data->host}}</b></td>
         </tr>
     </table>
+    <script type="text/php">
+        if (isset($pdf)) {
+            $x = 40;
+            $y = 800;
+            $text = "Halaman {PAGE_NUM} dari {PAGE_COUNT}";
+            $font = null;
+            $size = 8;
+            $color = array(255,0,0);
+            $word_space = 0.0;  //  default
+            $char_space = 0.0;  //  default
+            $angle = 0.0;   //  default
+            $pdf->page_text($x, $y, $text, $font, $size, $color, $word_space, $char_space, $angle);
+        }
+    </script>
 </body>
 
 </html>

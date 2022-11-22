@@ -246,7 +246,7 @@ class MoMController extends Controller
             $query->select('name');
         }])
         ->select('*')
-        ->orderByDesc("id");
+        ->orderByDesc("activity_id");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {

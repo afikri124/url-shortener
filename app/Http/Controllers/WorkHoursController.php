@@ -247,11 +247,8 @@ class WorkHoursController extends Controller
     }
 
     public function zk(){
-        $dt = Carbon::now();
-        // echo $dt->previous(Carbon::SATURDAY);             // 2012-01-25 00:00:00
-        var_dump($dt->dayOfWeek == Carbon::SATURDAY); 
-            // $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
-            // if ($zk->connect()){
+            $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
+            if ($zk->connect()){
 
                 // $role = 0; //14= super admin, 0=User :: according to ZKtecho Machine
                 // $users = $zk->getUser();
@@ -263,7 +260,7 @@ class WorkHoursController extends Controller
                 // 3 = nama (max 24 char)
                 // 4 = password
                 // 5 = role (14 : admin, 0 : user)
-                // $x = $zk->setUser(217, 'S092021100001', 'ALI FIKRI', '', 14);
+                // $x = $zk->setUser(216, '2', 'ALI FIKRI AKUN LAMA', '', 0);
                     // $uid = 96;
                     // $cardno = 0;
                     // $role = 14;
@@ -282,17 +279,17 @@ class WorkHoursController extends Controller
 
                 // app('App\Http\Controllers\ZkTecoController')->setUser($zk, 217, 'S092021100001', 'ALI FIKRI (baru)', '', 14);
 
-                // $data = app('App\Http\Controllers\ZKTecoController')->getUser($zk);
-                // return response()->json([
-                //     'success' => true,
-                //     'data' => $data
-                // ]);
+                $data = app('App\Http\Controllers\ZKTecoController')->getUser($zk);
+                return response()->json([
+                    'success' => true,
+                    'data' => $data
+                ]);
 
     //             $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));
 
     //             dd($data);
-    //             $zk->disconnect();   
-    //         }
+                $zk->disconnect();   
+            }
     }
 
 }

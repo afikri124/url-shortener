@@ -37,7 +37,7 @@ class DataController extends Controller
             );
 
             $data = Data::create([
-                'shortlink' => $request->shortlink,
+                'shortlink' => str_replace(" ","_",$request->shortlink),
                 'url' => $request->url,
                 'user_id' => Auth::user()->id
             ]);
@@ -112,7 +112,7 @@ class DataController extends Controller
             );
             $data = Data::findOrFail($id);
             $d = $data->update([ 
-                'shortlink' => $request->shortlink,
+                'shortlink' => str_replace(" ","_",$request->shortlink),
                 'url' => $request->url,
             ]);
             if($d){

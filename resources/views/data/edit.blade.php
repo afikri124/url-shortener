@@ -19,18 +19,23 @@
 <div class="card">
     <div class="card-datatable table-responsive">
         <div class="card-body">
-            <form  action="" method="POST">
+            <form action="" method="POST">
                 @csrf
                 <div class="row">
                     <div class="mb-3 col-md-12">
                         <label for="penulis" class="form-label">Shortlink <i class="text-danger">*</i></label>
-                        <input type="text" name="shortlink" value="{{ (old('shortlink') != null ? old('shortlink') : $data->shortlink) }}"
-                            class="form-control @error('shortlink') is-invalid @enderror">
-                        @error('shortlink')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
+                        <div class="input-group">
+                            <span class="input-group-text @error('shortlink') btn-danger @enderror">
+                                s.jgu.ac.id/
+                            </span>
+                            <input type="text" name="shortlink" class="form-control @error('shortlink') is-invalid @enderror"
+                                value="{{ (old('shortlink') != null ? old('shortlink') : $data->shortlink) }}" placeholder="something">
+                            @error('shortlink')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
                     </div>
                     <div class="mb-3 col-md-12">
                         <label for="link" class="form-label">URL Panjang <i class="text-danger">*</i></label>

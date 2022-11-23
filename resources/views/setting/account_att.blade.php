@@ -201,10 +201,10 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        // var html =
-                        //     `<a class=" text-success" title="Edit" href="{{ url('setting/account_att/edit/` +
-                        //     row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
-                        // return html;
+                        var html =
+                            `<a class=" text-success" title="Ubah" href="{{ url('setting/account_att/edit/` +
+                            row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
+                        return html;
                     },
                     className: "text-center",
                     "orderable": false

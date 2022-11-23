@@ -13,6 +13,7 @@ use App\Models\Role;
 use Yajra\DataTables\DataTables;
 use Auth;
 use Rats\Zkteco\Lib\ZKTeco;
+use DB;
 
 use Carbon\Carbon;
 
@@ -145,7 +146,7 @@ class SettingController extends Controller
                     }
                 })
                 ->addColumn('idd', function($x){
-                    return Crypt::encrypt($x['id']);
+                    return Crypt::encrypt($x['uid']);
                   })
                 ->addColumn('userid', function($x){
                     if($x->user != null){
@@ -223,6 +224,34 @@ class SettingController extends Controller
             'updated' => $UpdatedUser,
             'failed' => $FailedUser
         ]);
+    }
+
+    public function account_att_edit ($idd, Request $request)
+    {
+        try {
+            $id = Crypt::decrypt($idd);
+        } catch (DecryptException $e) {
+            return redirect()->route('setting_account_att');
+        }
+        if ($request->isMethod('post')) {
+            $this->validate($request, [ 
+                'name' => ['required', 'string','max:24'],
+                'status' => ['required', 'string','max:1']
+            ]);
+            WhUser::where('uid', $id)->update([
+                'name'=> $request->name,
+                'status'=> $request->status,
+                'username_old' => $request->old,
+                'updated_at' => Carbon::now()
+            ]);
+            return redirect()->route('setting_account_att', ['id'=>$idd])->with('msg','Profil '.$request->name.' diperbarui!');
+        }
+        $status   = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
+        $data = WhUser::where('uid',$id)->first();
+        if($id == 1 || $data == null){
+            abort(403, "Access not allowed!");
+        }
+        return view('setting.account_att_edit', compact('data','status'));
     }
 
 }

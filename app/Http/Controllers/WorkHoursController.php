@@ -146,16 +146,19 @@ class WorkHoursController extends Controller
 
         if (!empty($request->get('select_user'))) {
             $user_id = $request->get('select_user');
+            $old_user = WhUser::where('username',$user_id)->first();
+            $old = ($old_user == null ? $user_id: $old_user->username_old);
             $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, count(jam) as hari,  SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
-                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end' && `username` = '$user_id'
+                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end' && (`username` = '$user_id' or `username` = '$old')
+                    -- WHERE `timestamp` >= '$start' && `timestamp` <= '$end' && `username` = '$user_id'
                     GROUP BY DATE(`timestamp`),username
                     ORDER BY pulang DESC
                 ) a 
                 LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
-                LEFT JOIN users u ON u.username = a.username
+                LEFT JOIN users u ON u.username = a.username 
                 GROUP BY a.username, w.name, u.name, u.id
                 ORDER BY w.name
                 ") );
@@ -260,7 +263,7 @@ class WorkHoursController extends Controller
                 // 3 = nama (max 24 char)
                 // 4 = password
                 // 5 = role (14 : admin, 0 : user)
-                // $x = $zk->setUser(216, '2', 'ALI FIKRI AKUN LAMA', '', 0);
+                // $x = $zk->setUser(220, '048', 'YULIANTO HADIPRAWIRO', '', 0);
                     // $uid = 96;
                     // $cardno = 0;
                     // $role = 14;

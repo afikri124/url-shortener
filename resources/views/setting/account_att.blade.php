@@ -90,7 +90,7 @@
                     <th data-priority="2">Nama [Nama di Mesin]</th>
                     <th>Username / [old]</th>
                     <th width="60px">Role</th>
-                    <th width="60px">Password</th>
+                    <!-- <th width="60px">Password</th> -->
                     <th width="80px">No Kartu</th>
                     <th data-priority="4" width="50px">Status</th>
                     <th width="40px" data-priority="3">Aksi</th>
@@ -174,10 +174,18 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = "<code title='NIK'>" + row.username + "</code>";
+                        var html = "";
+                        if(row.username != null){
+                            html = "<span title='NIK'>" + row.username + "</span>";
+                        }
                         if (row.username_old != null) {
-                            html += " <code title='Userid Mesin'>[" + row.username_old +
-                                "]</code>";
+                            html += " <span title='Userid Mesin'>[" + row.username_old +
+                                "]</span>";
+                        }
+                        if(row.status == 1){
+                            html = "<code>" + html + "</code>";
+                        } else {
+                            html = "<small>" + html + "</small>";
                         }
                         return html;
                     }, name: "username"
@@ -186,10 +194,10 @@
                     data: 'role_name',
                     name: 'role'
                 },
-                {
-                    data: 'password',
-                    name: 'password'
-                },
+                // {
+                //     data: 'password',
+                //     name: 'password'
+                // },
                 {
                     data: 'cardno',
                     name: 'cardno'

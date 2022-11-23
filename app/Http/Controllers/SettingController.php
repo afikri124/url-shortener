@@ -248,7 +248,7 @@ class SettingController extends Controller
         }
         $status   = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
         $data = WhUser::where('uid',$id)->first();
-        if($id == 1 || $data == null){
+        if($data == null){
             abort(403, "Access not allowed!");
         }
         return view('setting.account_att_edit', compact('data','status'));

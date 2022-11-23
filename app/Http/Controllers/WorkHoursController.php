@@ -31,6 +31,8 @@ class WorkHoursController extends Controller
 
     public function wh_data(Request $request)
     {
+        $old_user = WhUser::where('username',Auth::user()->username)->first();
+        $old = ($old_user == null ? Auth::user()->username: $old_user->username_old);
         if(Auth::user()->hasRole('HR')){
             $data = WhAttendance::
                 leftjoin('wh_users', function($join){
@@ -63,14 +65,18 @@ class WorkHoursController extends Controller
                 DB::raw('MAX(`timestamp`) as keluar'),
                 DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
             )
-            ->where('wh_attendances.username',Auth::user()->username)
+            ->where('wh_attendances.username',Auth::user()->username)->orWhere('wh_attendances.username',$old)
+            ->where('wh_users.status', 1)
             ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
             ->orderByDesc('masuk');
         }
         return Datatables::of($data)
                 ->filter(function ($instance) use ($request) {
                     if (!empty($request->get('select_user'))) {
-                        $instance->where('wh_attendances.username', $request->get('select_user'));
+                        $old_user2 = WhUser::where('username',$request->get('select_user'))->first();
+                        $old2 = ($old_user2 == null ? $request->get('select_user'): $old_user2->username_old);
+                        $instance->where('wh_attendances.username', $request->get('select_user'))->orWhere('wh_attendances.username',$old2)
+                        ->where('wh_users.status', 1);
                     }
                     if (!empty($request->get('select_range'))) {
                         if($request->get('select_range') != "" && $request->get('select_range') != null 

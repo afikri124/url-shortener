@@ -159,6 +159,7 @@ class WorkHoursController extends Controller
                 ) a 
                 LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
                 LEFT JOIN users u ON u.username = a.username 
+                WHERE w.status = 1
                 GROUP BY a.username, w.name, u.name, u.id
                 ORDER BY w.name
                 ") );
@@ -173,6 +174,7 @@ class WorkHoursController extends Controller
                 ) a 
                 LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
                 LEFT JOIN users u ON u.username = a.username
+                WHERE w.status = 1
                 GROUP BY a.username, w.name, u.name, u.id
                 ORDER BY w.name
                 ") );

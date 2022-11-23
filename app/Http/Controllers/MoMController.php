@@ -32,7 +32,8 @@ class MoMController extends Controller
 
     public function notetaker_data(Request $request)
     {
-        $data = AttendanceActivity::where('notulen_username', Auth::user()->username)->with('user')->select('*')->orderByDesc("date");
+        $data = AttendanceActivity::where('notulen_username', Auth::user()->username)
+        ->whereNotNull('attendance_activities.notulen_username')->with('user')->select('*')->orderByDesc("date");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         
@@ -115,7 +116,6 @@ class MoMController extends Controller
     {
         $data = MomList::join('attendance_activities','attendance_activities.id','=','mom_lists.activity_id')
         ->where('attendance_activities.id', $id)
-        ->whereNotNull('attendance_activities.notulen_username')
         ->where('attendance_activities.notulen_username', Auth::user()->username)
         ->select('mom_lists.*', 'attendance_activities.notulen_username')
         ->with(['pics' => function ($query) {

@@ -65,8 +65,10 @@ class WorkHoursController extends Controller
                 DB::raw('MAX(`timestamp`) as keluar'),
                 DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
             )
-            ->where('wh_attendances.username',Auth::user()->username)->orWhere('wh_attendances.username',$old)
-            ->where('wh_users.status', 1)
+            ->where(function ($query) use ($request,$old) {
+                $query->where('wh_attendances.username', Auth::user()->username)
+                      ->orWhere('wh_attendances.username',$old);
+            })->where('wh_users.status', 1)
             ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
             ->orderByDesc('masuk');
         }
@@ -75,8 +77,10 @@ class WorkHoursController extends Controller
                     if (!empty($request->get('select_user'))) {
                         $old_user2 = WhUser::where('username',$request->get('select_user'))->first();
                         $old2 = ($old_user2 == null ? $request->get('select_user'): $old_user2->username_old);
-                        $instance->where('wh_attendances.username', $request->get('select_user'))->orWhere('wh_attendances.username',$old2)
-                        ->where('wh_users.status', 1);
+                        $instance->where(function ($query) use ($request,$old2) {
+                            $query->where('wh_attendances.username', $request->get('select_user'))
+                                  ->orWhere('wh_attendances.username',$old2);
+                        })->where('wh_users.status', 1);
                     }
                     if (!empty($request->get('select_range'))) {
                         if($request->get('select_range') != "" && $request->get('select_range') != null 

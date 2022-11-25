@@ -13,7 +13,8 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/sweetalert2.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/spinkit/spinkit.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css')}}">
 @endsection
 
 @section('style')
@@ -43,7 +44,7 @@
 
 @section('content')
 <div class="alert alert-secondary alert-dismissible" role="alert" id="lastupdate">
-    Data disinkronkan terakhir sebelum {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
+    Data terakhir disinkronkan {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSync" style="display: none;">
@@ -71,7 +72,8 @@
                                 <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
                                     <option value="">Pilih Akun</option>
                                     @foreach($user as $d)
-                                    <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">{{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
+                                    <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
+                                        {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -101,6 +103,18 @@
                     <th width="80px" data-priority="3">Total Jam</th>
                 </tr>
             </thead>
+            <tfoot>
+                <tr>
+                    <th width="30px" colspan="2">Total</th>
+                    <th width="60px"></th>
+                    <th width="60px"></th>
+                    <th width="60px"></th>
+                    <th width="60px"></th>
+                    <th width="80px"></th>
+                    <th width="60px"></th>
+                    <th width="80px" id="Total_All" class="text-center"></th>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
@@ -131,6 +145,31 @@
         })(jQuery);
     }, 350);
 
+    function total_all() {
+        // alert($('#select_user').val()+$('#select_range').val());
+        $.ajax({
+            url: "{{ route('WH.total_h') }}",
+            type: "GET",
+            data: {
+                "_token": $("meta[name='csrf-token']").attr("content"),
+                "select_user" : $('#select_user').val(),
+                "select_range" : $('#select_range').val()
+            },
+            success: function (data) {
+                if (data['success']) {
+                    var jam = data['total'].split(":");
+                    if(jam[0] < 160){
+                        document.getElementById("Total_All").innerHTML = "<b class='text-danger'>"+ jam[0] + " Jam</b>";
+                    } else {
+                        document.getElementById("Total_All").innerHTML = "<b class='text-success'>"+ jam[0] + " Jam</b>";
+                    }
+                } else {
+                    document.getElementById("Total_All").innerHTML = "Error!";
+                }
+            }
+        })
+    }
+
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -147,7 +186,7 @@
                 url: "{{ route('WH.data') }}",
                 data: function (d) {
                     d.select_user = $('#select_user').val(),
-                    d.select_range = $('#select_range').val(),
+                        d.select_range = $('#select_range').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -189,7 +228,7 @@
                     render: function (data, type, row, meta) {
                         if (row.masuk != row.keluar) {
                             return moment(row.masuk).format('H:mm');
-                        } else if(moment(row.masuk) <= moment(row.tanggal + " 16:00")){
+                        } else if (moment(row.masuk) <= moment(row.tanggal + " 16:00")) {
                             return moment(row.masuk).format('H:mm');
                         }
                     },
@@ -198,7 +237,7 @@
                     render: function (data, type, row, meta) {
                         if (row.masuk != row.keluar) {
                             return moment(row.keluar).format('H:mm');
-                        } else if(moment(row.keluar) > moment(row.tanggal + " 16:00")){
+                        } else if (moment(row.keluar) > moment(row.tanggal + " 16:00")) {
                             return moment(row.keluar).format('H:mm');
                         }
                     },
@@ -222,9 +261,11 @@
         });
         $('#select_user').change(function () {
             table.draw();
+            total_all();
         });
         $('#select_range').change(function () {
             table.draw();
+            total_all();
         });
     });
 
@@ -257,7 +298,7 @@
                             document.getElementById('loadingSyncText').innerHTML = '';
                             $('#datatable').DataTable().ajax.reload();
                             document.getElementById('lastupdate').style.display = 'none';
-                            
+
                         },
                         success: function (data) {
                             if (data['success']) {
@@ -278,6 +319,7 @@
                 }
             })
     }
+
 </script>
 @endif
 
@@ -285,7 +327,7 @@
     //DateRange Picker
     (function ($) {
         $(function () {
-            var start = moment().subtract(1, 'month').set("date",20);
+            var start = moment().subtract(1, 'month').set("date", 20);
             var end = moment();
 
             function cb() {
@@ -303,11 +345,14 @@
                 },
                 ranges: {
                     'Hari ini': [moment(), moment()],
-                    'Kemarin': [moment().subtract(1, 'day').startOf('day'), moment().subtract(1, 'day').endOf('day')],
+                    'Kemarin': [moment().subtract(1, 'day').startOf('day'), moment().subtract(1,
+                        'day').endOf('day')],
                     'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
-                    'Minggu lalu': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+                    'Minggu lalu': [moment().subtract(1, 'week').startOf('week'), moment().subtract(
+                        1, 'week').endOf('week')],
                     'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
-                    '20 ke 19': [moment().subtract(1, 'month').set("date",20), moment().set("date",19)],
+                    '20 ke 19': [moment().subtract(1, 'month').set("date", 20), moment().set("date",
+                        19)],
                 }
             }, cb);
             cb();

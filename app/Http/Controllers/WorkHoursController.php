@@ -201,6 +201,57 @@ class WorkHoursController extends Controller
         ->make(true);
     }
 
+    public function wh_total_h(Request $request)
+    {
+        $start = Carbon::now()->subMonth(1)->startOfDay()->day(20);
+        $end = Carbon::now();
+        if (!empty($request->get('select_range'))) {
+            if($request->get('select_range') != "" && $request->get('select_range') != null 
+                && $request->get('select_range') != "Invalid date - Invalid date"){
+                $x = explode(" - ",$request->get('select_range'));
+                $start = date('Y-m-d 00:00',strtotime($x[0]));
+                $end = date('Y-m-d 23:59',strtotime($x[1]));
+            }
+        }
+
+        if (!empty($request->get('select_user')) || !Auth::user()->hasRole('HR') ) {
+            $user_id = (Auth::user()->hasRole('HR') ? $request->get('select_user') : Auth::user()->username);
+            $old_user = WhUser::where('username',$user_id)->first();
+            $old = ($old_user == null ? $user_id: $old_user->username_old);
+            $data = DB::select( DB::raw("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
+                FROM (
+                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
+                    FROM wh_attendances
+                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end' && (`username` = '$user_id' or `username` = '$old')
+                    GROUP BY DATE(`timestamp`),username
+                    ORDER BY pulang DESC
+                ) a 
+                LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
+                WHERE w.status = 1
+                ") );
+        } else {
+            $data = DB::select( DB::raw("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total
+                FROM (
+                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
+                    FROM wh_attendances
+                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end'
+                    GROUP BY DATE(`timestamp`),username
+                    ORDER BY pulang DESC
+                ) a 
+                LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
+                WHERE w.status = 1
+                ") );
+        }
+        $total = 0;
+        foreach($data as $d){
+            $total = $d->total;
+        }
+        return response()->json([
+            'success' => true,
+            'total' => $total
+        ]);
+    }
+
      //sync data from machine
     public function whr_sync()
     {
@@ -239,7 +290,9 @@ class WorkHoursController extends Controller
                             }
                         }
                     }
-                    Log::info($info." sync data att from machine, breakid : ".$breakId.", total new : ".$i);
+                    if(Auth::check()){
+                        Log::info($info." sync data att from machine, breakid : ".$breakId.", total new : ".$i);
+                    }
                     return response()->json([
                         'success' => true,
                         'total' => $i,
@@ -275,7 +328,7 @@ class WorkHoursController extends Controller
                 // 3 = nama (max 24 char)
                 // 4 = password
                 // 5 = role (14 : admin, 0 : user)
-                // $x = $zk->setUser(220, '048', 'YULIANTO HADIPRAWIRO', '', 0);
+                // $x = app('App\Http\Controllers\ZKTecoController')->setUser($zk, 217, 'S092021100001', 'ALI FIKRI S.Kom', '', 14);
                     // $uid = 96;
                     // $cardno = 0;
                     // $role = 14;
@@ -291,8 +344,6 @@ class WorkHoursController extends Controller
 
                 // $zk->removeUser(219); 
                 // return "Add user success";
-
-                // app('App\Http\Controllers\ZkTecoController')->setUser($zk, 217, 'S092021100001', 'ALI FIKRI (baru)', '', 14);
 
                 $data = app('App\Http\Controllers\ZKTecoController')->getUser($zk);
                 return response()->json([

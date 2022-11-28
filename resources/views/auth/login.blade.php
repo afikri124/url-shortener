@@ -106,10 +106,23 @@
 
 if(!session()->has('url.intended'))
 {
-    if(url()->previous() != route('index')."/"){
-        session(['url.intended' => url()->previous()]);
+    if(((url()->previous() != route('index')) || (url()->previous() != route('index')."/")) && isset($_GET['redirect_to'])){
+        $linkcheck = parse_url(url()->previous());
+        if($linkcheck['host'] == "s.jgu.ac.id" || $linkcheck['host'] == "127.0.0.1"){
+            session(['url.intended' => $_GET['redirect_to']]);
+        }
     }
+} else if (session()->has('url.intended') && !isset($_GET['redirect_to'])) {
+    $url = route('login')."?redirect_to=".session('url.intended');
+    $linkcheck = parse_url(url()->previous());
+    if($linkcheck['host'] == "s.jgu.ac.id" || $linkcheck['host'] == "127.0.0.1"){
+        header("Location: $url"); 
+        exit();
+    }
+} else {
+    echo "<small style='color: #bcbcbc'>Redirect to : ".session('url.intended')."</small>";
 }
+
 
 $login_name = env('APP_NAME');
 $api_key = Crypt::encrypt(env('APP_KEY').gmdate('Y/m/d'));

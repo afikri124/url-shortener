@@ -100,6 +100,7 @@ class GoogleController extends Controller
             if( session()->has('url.intended')){
                 $link = session('url.intended');
                 session(['url.intended' => null]);
+                Session::forget('url.intended');
                 return redirect($link);
             } else {
                 return redirect()->route('home');

@@ -343,30 +343,6 @@ class WorkHoursController extends Controller
         }
     }
 
-    public function excel()
-    {
-        $start = Carbon::now()->subMonth(2)->startOfDay()->day(20);
-        $end = Carbon::now()->subMonth(1)->endOfDay()->day(19);
-  
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, count(jam) as hari, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
-                FROM (
-                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
-                    FROM wh_attendances
-                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end'
-                    GROUP BY DATE(`timestamp`),username
-                    ORDER BY pulang DESC
-                ) a 
-                LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
-                LEFT JOIN users u ON u.username = a.username
-                WHERE w.status = 1
-                GROUP BY a.username, w.name, u.name, u.id
-                ORDER BY w.name
-                ") );
-                // dd($data);
-        $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
-        return Excel::download(new RekapJamKerja($data,$periode), 'Rekap Jam Kerja_'.$periode.'.xlsx');
-    }
-
     public function zk(){
             $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             if ($zk->connect()){

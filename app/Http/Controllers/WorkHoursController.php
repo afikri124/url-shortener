@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Exports\RekapJamKerja;
 use Rats\Zkteco\Lib\ZKTeco;
 use App\Models\WhUser;
 use App\Models\WhAttendance;
@@ -11,7 +13,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use DB;
 use Carbon\Carbon;
-
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 class WorkHoursController extends Controller
@@ -23,7 +25,34 @@ class WorkHoursController extends Controller
         return view('wh.index', compact('user', 'lastData')); 
     }
 
-    public function whr(){
+    public function whr(Request $request){
+        if ($request->isMethod('post')) {
+            $start = Carbon::now()->subMonth(1)->startOfDay()->day(20);
+            $end = Carbon::now();
+                if($request->range != "" && $request->range != null && $request->range != "Invalid date - Invalid date"){
+                    $x = explode(" - ",$request->range);
+                    $start = date('Y-m-d 00:00',strtotime($x[0]));
+                    $end = date('Y-m-d 23:59',strtotime($x[1]));
+                }
+  
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, count(jam) as hari, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
+                FROM (
+                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
+                    FROM wh_attendances
+                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end'
+                    GROUP BY DATE(`timestamp`),username
+                    ORDER BY pulang DESC
+                ) a 
+                LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
+                LEFT JOIN users u ON u.username = a.username
+                WHERE w.status = 1
+                GROUP BY a.username, w.name, u.name, u.id
+                ORDER BY w.name
+                ") );
+            $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
+            return Excel::download(new RekapJamKerja($data,$periode), 'Rekap Jam Kerja_'.$periode.'.xlsx');
+        }
+
         $user = WhUser::where('status',1)->with('user')->select('*')->orderBy('name')->get();
         $lastData = WhAttendance::orderByDesc('timestamp')->first();
         return view('whr.index', compact('user', 'lastData')); 
@@ -312,6 +341,30 @@ class WorkHoursController extends Controller
                 'total' => $i,
             ]);
         }
+    }
+
+    public function excel()
+    {
+        $start = Carbon::now()->subMonth(2)->startOfDay()->day(20);
+        $end = Carbon::now()->subMonth(1)->endOfDay()->day(19);
+  
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, a.username, count(jam) as hari, SEC_TO_TIME(SUM(TIME_TO_SEC(jam))) AS total, u.id AS usrid
+                FROM (
+                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
+                    FROM wh_attendances
+                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end'
+                    GROUP BY DATE(`timestamp`),username
+                    ORDER BY pulang DESC
+                ) a 
+                LEFT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
+                LEFT JOIN users u ON u.username = a.username
+                WHERE w.status = 1
+                GROUP BY a.username, w.name, u.name, u.id
+                ORDER BY w.name
+                ") );
+                // dd($data);
+        $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
+        return Excel::download(new RekapJamKerja($data,$periode), 'Rekap Jam Kerja_'.$periode.'.xlsx');
     }
 
     public function zk(){

@@ -152,16 +152,18 @@
             type: "GET",
             data: {
                 "_token": $("meta[name='csrf-token']").attr("content"),
-                "select_user" : $('#select_user').val(),
-                "select_range" : $('#select_range').val()
+                "select_user": $('#select_user').val(),
+                "select_range": $('#select_range').val()
             },
             success: function (data) {
                 if (data['success']) {
                     var jam = data['total'].split(":");
-                    if(jam[0] < 160){
-                        document.getElementById("Total_All").innerHTML = "<b class='text-danger'>"+ jam[0] + " Jam</b>";
+                    if (jam[0] < 160) {
+                        document.getElementById("Total_All").innerHTML = "<b class='text-danger'>" + jam[
+                            0] + " Jam</b>";
                     } else {
-                        document.getElementById("Total_All").innerHTML = "<b class='text-success'>"+ jam[0] + " Jam</b>";
+                        document.getElementById("Total_All").innerHTML = "<b class='text-success'>" + jam[
+                            0] + " Jam</b>";
                     }
                 } else {
                     document.getElementById("Total_All").innerHTML = "Error!";
@@ -350,9 +352,10 @@
                     'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
                     'Minggu lalu': [moment().subtract(1, 'week').startOf('week'), moment().subtract(
                         1, 'week').endOf('week')],
-                    'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
-                    '20 ke 19': [moment().subtract(1, 'month').set("date", 20), moment().set("date",
-                        19)],
+                    '20 ke 19 bln ini': [moment().subtract(1, 'month').set("date", 20), moment().set("date", 19)],
+                    '20 ke 19 bln lalu': [moment().subtract(2, 'month').set("date", 20), moment()
+                        .subtract(1, 'month').set("date", 19)
+                    ],
                 }
             }, cb);
             cb();

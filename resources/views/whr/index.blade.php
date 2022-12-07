@@ -13,7 +13,8 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/sweetalert2.css')}}">
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/spinkit/spinkit.css')}}" />
-<link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css')}}">
+<link rel="stylesheet" type="text/css"
+    href="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css')}}">
 @endsection
 
 @section('style')
@@ -63,26 +64,34 @@
             <div class="row">
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <input type="text" id="select_range" name="range" class="form-control"
-                                    placeholder="Pilih Tanggal" autocomplete="off" />
+                        <form method="POST" action="">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" id="select_range" name="range" class="form-control"
+                                        placeholder="Pilih Tanggal" autocomplete="off" />
+                                </div>
+                                <div class=" col-md-3">
+                                    <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
+                                        <option value="">Pilih Akun</option>
+                                        @foreach($user as $d)
+                                        <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
+                                            {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
+                                        <span><i class="bx bx-sync me-sm-2"></i>
+                                            Sinkron</span>
+                                    </button>
+                                    <button class="btn btn-primary" type="submit">
+                                        <span><i class="bx bx-export me-sm-2"></i>
+                                            Export</span>
+                                    </button>
+                                </div>
                             </div>
-                            <div class=" col-md-3">
-                                <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
-                                    <option value="">Pilih Akun</option>
-                                    @foreach($user as $d)
-                                    <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">{{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
-                                    <span><i class="bx bx-sync me-sm-2"></i>
-                                        Sinkron</span>
-                                </button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -140,23 +149,22 @@
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             lengthMenu: [
-                [10,50,100,250],
-                [10,50,100,250],
+                [10, 50, 100, 250],
+                [10, 50, 100, 250],
             ],
             ajax: {
                 url: "{{ route('WHR.data') }}",
                 data: function (d) {
                     d.select_user = $('#select_user').val(),
-                    d.select_range = $('#select_range').val()
-                        // d.search = $('input[type="search"]').val()
+                        d.select_range = $('#select_range').val()
+                    // d.search = $('input[type="search"]').val()
                 },
             },
             columnDefs: [{
                 "defaultContent": "-",
                 "targets": "_all"
             }],
-            columns: [
-                {
+            columns: [{
                     render: function (data, type, row, meta) {
                         var no = (meta.row + meta.settings._iDisplayStart + 1);
                         return no;
@@ -167,12 +175,14 @@
                 {
                     render: function (data, type, row, meta) {
                         var html = `<small>[` + row.name + `]</small>`;
-                        if(row.name2 != null){
+                        if (row.name2 != null) {
                             html = `<a class="text-primary" title="` + row.name2 +
-                                `" href="{{ url('profile/` + row.userid + `') }}">` + row.name2 + `</a><br>` + html;
+                                `" href="{{ url('profile/` + row.userid + `') }}">` + row
+                                .name2 + `</a><br>` + html;
                         }
                         return html;
-                    }, className: "text-start"
+                    },
+                    className: "text-start"
                 },
                 {
                     render: function (data, type, row, meta) {
@@ -181,14 +191,14 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if(row.hari != null){
+                        if (row.hari != null) {
                             return row.hari;
                         }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if(row.total != null){
+                        if (row.total != null) {
                             return row.total;
                         }
                     },
@@ -229,7 +239,7 @@
                             document.getElementById('loadingSyncText').innerHTML = '';
                             $('#datatable').DataTable().ajax.reload();
                             document.getElementById('lastupdate').style.display = 'none';
-                            
+
                         },
                         success: function (data) {
                             if (data['success']) {
@@ -250,12 +260,13 @@
                 }
             })
     }
+
 </script>
 <script>
     //DateRange Picker
     (function ($) {
         $(function () {
-            var start = moment().subtract(1, 'month').set("date",20);
+            var start = moment().subtract(1, 'month').set("date", 20);
             var end = moment();
 
             function cb() {
@@ -273,11 +284,17 @@
                 },
                 ranges: {
                     'Hari ini': [moment(), moment()],
-                    'Kemarin': [moment().subtract(1, 'day').startOf('day'), moment().subtract(1, 'day').endOf('day')],
+                    'Kemarin': [moment().subtract(1, 'day').startOf('day'), moment().subtract(1,
+                        'day').endOf('day')],
                     'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
-                    'Minggu lalu': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-                    'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
-                    '20 ke 19': [moment().subtract(1, 'month').set("date",20), moment().set("date",19)],
+                    'Minggu lalu': [moment().subtract(1, 'week').startOf('week'), moment().subtract(
+                        1, 'week').endOf('week')],
+                    '20 ke 19 bln ini': [moment().subtract(1, 'month').set("date", 20), moment()
+                        .set("date", 19)
+                    ],
+                    '20 ke 19 bln lalu': [moment().subtract(2, 'month').set("date", 20), moment()
+                        .subtract(1, 'month').set("date", 19)
+                    ],
                 }
             }, cb);
             cb();

@@ -191,7 +191,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-success btn btn-light btn-sm" title="Edit Notulensi" href="{{ url('MoM/note-taker/` + row.idd +  `') }}"><i class="bx bxs-edit"></i></a>`;
+                        return `<a class="text-success btn btn-light btn-sm" title="Tulis Notulensi" href="{{ url('MoM/note-taker/` + row.idd +  `') }}"><i class="bx bxs-edit"></i></a>`;
                     },
                     className: "text-center"
                 }

@@ -199,9 +199,11 @@
                     render: function (data, type, row, meta) {
                         var html =
                             `<a class=" text-success" title="Edit" href="{{ url('setting/account/edit/` +
-                            row.idd + `') }}"><i class="bx bxs-edit"></i></a> 
-                            <a class=" text-danger" title="Delete" onclick="DeleteId(` + row
+                            row.idd + `') }}"><i class="bx bxs-edit"></i></a>`; 
+                        if("{{Auth::user()->id}}" == 1){
+                            html += ` <a class=" text-danger" title="Delete" onclick="DeleteId(` + row
                             .id + `)" ><i class="bx bx-trash"></i></a>`;
+                        }
                         if (row.id != 1) {
                             return html;
                         } else {

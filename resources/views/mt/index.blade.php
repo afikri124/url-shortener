@@ -173,6 +173,9 @@
                                     <option value="{{ $d->username }}">{{ $d->name }} ({{ $d->job }})</option>
                                     @endforeach
                                 </select>
+                                <small >
+                                    <i>* Kosongkan jika tidak menggunakan sistem Notulensi</i>
+                                </small>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-4">
@@ -296,7 +299,9 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return "<span title='" + row.notulen_username + "'>" + row.notulen + "</span>";
+                        if(row.notulen_username != null){
+                            return "<span title='" + row.notulen_username + "'>" + row.notulen + "</span>";
+                        }
                     },
                 },
                 {

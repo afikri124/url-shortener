@@ -118,7 +118,7 @@
                         </tr>
                         @endforeach
                     </table>
-                    @if($docs != null)
+                    @if(count($docs) != 0)
                     <div class="mt-5">
                         <strong>Dokumen/Gambar</strong><br>
                         <ul>
@@ -128,14 +128,14 @@
                         </ul>
                         
                     </div>
+                    @else
+                    <center><i>Notulen tidak melampirkan dokumen Risalah Rapat</i></center>
                     @endif
                 </div>
             </div>
             <div class="card-footer d-none d-md-block">
-                <!-- <div class="mt-3"> -->
                 <a class="btn btn-outline-secondary" href="{{ url()->previous() }}"><i
                         class="bx bx-chevron-left me-sm-2"></i> Kembali</a>
-                <!-- </div> -->
             </div>
         </div>
     </div>

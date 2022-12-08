@@ -83,9 +83,9 @@
                         @enderror
                     </div>
                     <div class="mb-3 col-md-6">
-                    <label class="form-label" for="basicDate">Notulen</label>
-                        <select class="form-select select2 col-sm-12 @error('notulen') is-invalid @enderror" name="notulen">
-                            <option value="" selected disabled>--Select Notulen--</option>
+                    <label class="form-label" for="basicDate">Notulen (boleh dikosongkan)</label>
+                        <select class="form-select select2 col-sm-12 @error('notulen') is-invalid @enderror" name="notulen" data-placeholder="-- Pilih Notulen Rapat --">
+                            <option value="" selected disabled>-- Pilih Notulen Rapat --</option>
                             @foreach($user as $d)
                             <option value="{{ $d->username }}" {{ ($d->username==$data->notulen_username ? "selected": "") }}>
                             {{ $d->name }} ({{ $d->job }})</option>
@@ -118,7 +118,8 @@
         (function ($) {
             "use strict";
             $(".select2").select2({
-                minimumResultsForSearch: 5
+                minimumResultsForSearch: 5,
+                allowClear: true,
             });
         })(jQuery);
     }, 350);

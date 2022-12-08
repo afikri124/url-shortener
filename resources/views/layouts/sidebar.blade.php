@@ -89,21 +89,21 @@
             </a>
             <ul class="menu-sub">
                 <li
-                    class="menu-item {{ Route::currentRouteName()=='mom.meeting' ? 'active' : '' }}">
-                    <a href="{{ route('mom.meeting') }}" class="menu-link">
-                        <div>Risalah Rapat</div>
+                    class="menu-item {{ Route::currentRouteName()=='mom.note-taker' ? 'active' : '' }}">
+                    <a href="{{ route('mom.note-taker') }}" class="menu-link">
+                        <div>Notulen</div>
                     </a>
                 </li>
                 <li
                     class="menu-item {{ Route::currentRouteName()=='mom.PIC' ? 'active' : '' }}">
                     <a href="{{ route('mom.PIC') }}" class="menu-link">
-                        <div>PIC Uraian Rapat</div>
+                        <div>PIC Rapat</div>
                     </a>
                 </li>
                 <li
-                    class="menu-item {{ Route::currentRouteName()=='mom.note-taker' ? 'active' : '' }}">
-                    <a href="{{ route('mom.note-taker') }}" class="menu-link">
-                        <div>Notulen</div>
+                    class="menu-item {{ Route::currentRouteName()=='mom.meeting' ? 'active' : '' }}">
+                    <a href="{{ route('mom.meeting') }}" class="menu-link">
+                        <div>Risalah Rapat</div>
                     </a>
                 </li>
             </ul>

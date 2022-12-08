@@ -246,6 +246,7 @@ class SettingController extends Controller
                 'username_old' => $request->old,
                 'updated_at' => Carbon::now()
             ]);
+            Log::info(Auth::user()->name." update user att #".$id.", ".$request->name);
             return redirect()->route('setting_account_att', ['id'=>$idd])->with('msg','Profil '.$request->name.' diperbarui!');
         }
         $status   = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));

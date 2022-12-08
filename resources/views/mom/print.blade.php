@@ -148,6 +148,7 @@
             </td>
         </tr>
     </table>
+    @if(count($images) != 0)
     <div class="page-break"></div>
     <br>
     <center>
@@ -160,6 +161,7 @@
         <small style="font-size: 8pt">Dokumentasi {{$key+1}}</small>
     </center><br>
     @endforeach
+    @endif
     @if(count($docs) != 0)
     <div class="page-break"></div>
     <br>

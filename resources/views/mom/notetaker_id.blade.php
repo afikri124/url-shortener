@@ -85,7 +85,7 @@
                         </div>
                         <div class="text-md-end text-center">
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
-                                <span><i class="bx bx-plus me-sm-2"></i> Tambah</span>
+                                <span><i class="bx bx-plus me-sm-2"></i> Uraian Rapat</span>
                             </button>
                         </div>
                     </div>
@@ -103,6 +103,14 @@
                 <form id="form-tambah">
                     @csrf
                     <div class="modal-body">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="myeditor" class="form-label">Uraian Rapat <i class="text-danger">*</i></label>
+                                <div id="myeditor">
+
+                                </div>
+                            </div>
+                        </div>
                         <div class="row g-2">
                             <div class="col-md-6 mb-0">
                                 <label for="add_target" class="form-label">Target</label>
@@ -117,14 +125,6 @@
                                         <option value="{{$u->id}}">{{ ucwords(strtolower($u->name)) }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col mb-3">
-                                <label for="myeditor" class="form-label">Uraian Rapat</label>
-                                <div id="myeditor">
-
                                 </div>
                             </div>
                         </div>
@@ -220,7 +220,7 @@
         <div class="card">
             <div class="card-datatable table-responsive">
                 <div class="flex-column flex-md-row pb-0">
-                    <div class="offcanvas offcanvas-bottom @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
+                    <div class="offcanvas offcanvas-top @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
                         aria-labelledby="offcanvasEndLabel">
                         <div class="offcanvas-header">
                             <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Dokumen/Gambar</h5>
@@ -247,6 +247,7 @@
                                         </span>
                                         @enderror
                                     </div>
+                                    <i>* Catatan: Lampiran akan ditampilkan pada menu risalah rapat di masing-masing peserta rapat yang melakukan absensi</i>
                                 </div>
                             </form>
                         </div>
@@ -257,9 +258,9 @@
                         <thead>
                             <tr>
                                 <th width="20px" data-priority="1">No</th>
-                                <th data-priority="2">Nama File (Dokumen/Gambar)</th>
+                                <th data-priority="2">Nama Lampiran (Dokumen/Gambar)</th>
                                 <th>Tipe</th>
-                                <th width="85px" data-priority="3">Aksi</th>
+                                <th width="50px" data-priority="3">Aksi</th>
                             </tr>
                         </thead>
                     </table>
@@ -670,7 +671,7 @@
                             row.id +
                             `)" ><i class="bx bx-trash"></i></a> `;
                     },
-                    className: "text-md-center"
+                    className: "text-center"
                 }
 
             ]

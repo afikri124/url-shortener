@@ -87,7 +87,7 @@
                                     </button>
                                     <button class="btn btn-primary" type="submit">
                                         <span><i class="bx bx-export me-sm-2"></i>
-                                            Export</span>
+                                            Ekspor</span>
                                     </button>
                                 </div>
                             </div>

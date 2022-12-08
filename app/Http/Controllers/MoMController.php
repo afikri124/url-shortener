@@ -291,7 +291,7 @@ class MoMController extends Controller
     {
         $data = AttendanceActivity::
         join('attendances', 'attendances.activity_id', '=', 'attendance_activities.id')
-        ->join('mom_lists', 'mom_lists.activity_id', '=', 'attendance_activities.id')
+        ->leftJoin('mom_lists', 'mom_lists.activity_id', '=', 'attendance_activities.id')
         ->where('attendances.username', Auth::user()->username)
         ->selectRaw('attendance_activities.id, attendance_activities.title, attendance_activities.date, attendance_activities.location, attendance_activities.host, attendance_activities.participant, count(mom_lists.id) as MoM')
         ->groupBy('attendance_activities.id', 'attendance_activities.title', 'attendance_activities.date', 'attendance_activities.location', 'attendance_activities.host', 'attendance_activities.participant')

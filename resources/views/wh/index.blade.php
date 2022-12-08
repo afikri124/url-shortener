@@ -157,7 +157,10 @@
             },
             success: function (data) {
                 if (data['success']) {
-                    var jam = data['total'].split(":");
+                    var jam = "0:0";
+                    if(data['total'] != null){
+                        jam = data['total'].split(":");
+                    }
                     if (jam[0] < 160) {
                         document.getElementById("Total_All").innerHTML = "<b class='text-danger'>" + jam[
                             0] + " Jam</b>";

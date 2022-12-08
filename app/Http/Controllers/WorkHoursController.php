@@ -281,6 +281,48 @@ class WorkHoursController extends Controller
         ]);
     }
 
+    public function whr_view($username, Request $request){
+        $username = str_replace("�","",$username);
+        $start = Carbon::now()->subMonth(1)->startOfDay()->day(20)->translatedFormat("Y-m-d H:i");
+        $end = Carbon::now()->translatedFormat("Y-m-d H:i");
+        if(isset($request->range)){
+            $x = explode(" - ",$request->range);
+            $end = date('Y-m-d 23:59',strtotime($x[1]));
+            $start = date('Y-m-d 00:00',strtotime($x[0]));
+        }
+
+        $user = WhUser::where('username',$username)->orWhere('username_old',$username)->with('user')->first();
+
+        if($user != null){
+            $data = WhAttendance::
+            leftjoin('wh_users', function($join){
+                $join->on('wh_users.username','=','wh_attendances.username');
+                $join->orOn('wh_users.username_old','=','wh_attendances.username');
+            })
+            ->select('wh_attendances.username',
+                DB::raw('DATE(`timestamp`) as tanggal'),
+                DB::raw('MIN(`timestamp`) as masuk'),
+                DB::raw('MAX(`timestamp`) as keluar'),
+                DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
+            )
+            ->where(function ($query) use ($user) {
+                $query->where('wh_attendances.username', $user->username)
+                      ->orWhere('wh_attendances.username',$user->username_old);
+            })
+            ->where('wh_users.status', 1)
+            ->whereDate('timestamp', '<=', $end)
+            ->whereDate('timestamp', '>=', $start)
+            ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
+            ->orderBy('tanggal')->get();
+            $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
+            $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            return view('whr.view', compact('user', 'data', 'periode','link')); 
+            // dd($user);
+        } else {
+            abort(403, "User tidak ditemukan!");
+        }
+    }
+
      //sync data from machine
     public function whr_sync()
     {

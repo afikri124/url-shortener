@@ -90,6 +90,7 @@ Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR']], function
   Route::get('/sync', [App\Http\Controllers\WorkHoursController::class, 'whr_sync'])->name('WHR.sync');
   Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'whr_data'])->name('WHR.data');
   Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'whr_print'])->name('WHR.print');
+  Route::get('/view/{id}', [App\Http\Controllers\WorkHoursController::class, 'whr_view'])->name('WHR.view');
 });
 //JAM-KERJA tes
 Route::get('zk', [\App\Http\Controllers\WorkHoursController::class, 'zk'])->middleware(['auth', 'role:AD']);

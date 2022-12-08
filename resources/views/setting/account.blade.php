@@ -201,7 +201,7 @@
                             `<a class=" text-success" title="Edit" href="{{ url('setting/account/edit/` +
                             row.idd + `') }}"><i class="bx bxs-edit"></i></a>`; 
                         if("{{Auth::user()->id}}" == 1){
-                            html += ` <a class=" text-danger" title="Delete" onclick="DeleteId(` + row
+                            html += ` <a class=" text-danger" title="Delete" style="cursor:pointer" onclick="DeleteId(` + row
                             .id + `)" ><i class="bx bx-trash"></i></a>`;
                         }
                         if (row.id != 1) {

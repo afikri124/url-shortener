@@ -85,7 +85,7 @@
                                         <span><i class="bx bx-sync me-sm-2"></i>
                                             Sinkron</span>
                                     </button>
-                                    <button class="btn btn-primary" type="submit">
+                                    <button class="btn btn-primary" type="submit" title="Ekspor ke Excel">
                                         <span><i class="bx bx-export me-sm-2"></i>
                                             Ekspor</span>
                                     </button>
@@ -101,9 +101,10 @@
                 <tr>
                     <th width="30px" data-priority="1">No</th>
                     <th data-priority="2">Nama<br><small>[Nama @ Mesin]</small></th>
-                    <th>UserId @ Mesin</th>
-                    <th width="90px" data-priority="4">Total Hari</th>
+                    <th>UserId</th>
+                    <th width="90px" data-priority="5">Total Hari</th>
                     <th width="100px" data-priority="3">Total Jam</th>
+                    <th width="60px" data-priority="4">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -202,6 +203,14 @@
                             return row.total;
                         }
                     },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return `<a class="text-primary" title="Lihat" style="cursor:pointer" onclick="View('` + row
+                            .username + `')"><i class="bx bxs-show"></i></a>`;
+                    },
+                    className: "text-md-center",
+                    "orderable": false
                 }
             ]
         });
@@ -259,6 +268,11 @@
                     });
                 }
             })
+    }
+
+    function View(username){
+        var range = $('#select_range').val();
+        window.open(`{{ url('WHR/view/` + username + `?range=` + range +`') }}`, '_blank');
     }
 
 </script>

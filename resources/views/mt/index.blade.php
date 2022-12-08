@@ -309,7 +309,7 @@
                             return `<a class="text-info" target="_blank" title="Print QR" style="cursor:pointer" href="{{ url('MT/print/` +
                                 row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('MT/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
-                                <a class="text-danger" title="Hapus" onclick="DeleteId(` + row.id +
+                                <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a> `;
                     },
                     className: "text-md-center"

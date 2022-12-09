@@ -293,28 +293,8 @@ class WorkHoursController extends Controller
         $user = WhUser::where('username',$username)->orWhere('username_old',$username)->with('user')->first();
 
         if($user != null){
-            // $data = WhAttendance::
-            // leftjoin('wh_users', function($join){
-            //     $join->on('wh_users.username','=','wh_attendances.username');
-            //     $join->orOn('wh_users.username_old','=','wh_attendances.username');
-            // })
-            // ->select('wh_attendances.username',
-            //     DB::raw('DATE(`timestamp`) as tanggal'),
-            //     DB::raw('MIN(`timestamp`) as masuk'),
-            //     DB::raw('MAX(`timestamp`) as keluar'),
-            //     DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
-            // )
-            // ->where(function ($query) use ($user) {
-            //     $query->where('wh_attendances.username', $user->username)
-            //           ->orWhere('wh_attendances.username',$user->username_old);
-            // })
-            // ->where('wh_users.status', 1)
-            // ->whereDate('timestamp', '<=', $end)
-            // ->whereDate('timestamp', '>=', $start)
-            // ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
-            // ->orderBy('tanggal')->get();
-
-            $data = DB::select("WITH recursive all_dates(dt) AS (
+            try {
+                $data = DB::select("WITH recursive all_dates(dt) AS (
                         SELECT '$start' dt
                         UNION ALL 
                         SELECT dt + INTERVAL 1 DAY FROM all_dates WHERE dt <= '$end'
@@ -332,7 +312,28 @@ class WorkHoursController extends Controller
                     GROUP BY d.dt, username, masuk, keluar, total_jam
                     ORDER BY d.dt
                 ") ;
-                
+            } catch (\Exception $e) {
+                $data = WhAttendance::
+                    leftjoin('wh_users', function($join){
+                        $join->on('wh_users.username','=','wh_attendances.username');
+                        $join->orOn('wh_users.username_old','=','wh_attendances.username');
+                    })
+                    ->select('wh_attendances.username',
+                        DB::raw('DATE(`timestamp`) as tanggal'),
+                        DB::raw('MIN(`timestamp`) as masuk'),
+                        DB::raw('MAX(`timestamp`) as keluar'),
+                        DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
+                    )
+                    ->where(function ($query) use ($user) {
+                        $query->where('wh_attendances.username', $user->username)
+                            ->orWhere('wh_attendances.username',$user->username_old);
+                    })
+                    ->where('wh_users.status', 1)
+                    ->whereDate('timestamp', '<=', $end)
+                    ->whereDate('timestamp', '>=', $start)
+                    ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
+                    ->orderBy('tanggal')->get();
+            }
             // dd($data);
             $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
             $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";

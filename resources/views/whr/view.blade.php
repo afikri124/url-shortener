@@ -54,17 +54,17 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <table class="table table-hover table-sm" width="100%">
+                        <table class="table table-hover table-striped table-sm" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70px">Hari</th>
                                     <th>Tanggal</th>
-                                    <th class="d-none d-lg-table-cell" width="100px">User Id</th>
+                                    <th class="d-none d-lg-table-cell text-center" width="100px">User Id</th>
                                     <th width="100px" class="text-center">Masuk</th>
                                     <th width="100px" class="text-center">Keluar</th>
-                                    <th width="100px" class="text-center">Telat(-)</th>
-                                    <th width="100px" class="text-center">P.Cepat(-)</th>
-                                    <th width="100px" class="text-center">Lembur(+)</th>
+                                    <th width="100px" class="text-center">Telat</th>
+                                    <th width="100px" class="text-center">P.Cepat</th>
+                                    <th width="100px" class="text-center">Lembur</th>
                                     <th width="100px" data-priority="3" class="text-end">JMLH.Jam</th>
                                 </tr>
                             </thead>
@@ -76,13 +76,24 @@
                                     $totalTelat = 0;
                                     $totalCepat = 0;
                                     $totalLembur = 0; 
+                                    $totalAbsen = 0;
                                 @endphp
                                 @foreach($data as $key => $d)
                                 <tr>
-                                    <td>{{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("l")}}</td>
-                                    <td class="d-lg-none">{{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("d/m/Y")}}</td>
+                                    <td
+                                    @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
+                                    class="text-danger"
+                                    @elseif((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SATURDAY)
+                                    class="text-warning"
+                                    @endif
+                                    >
+                                        {{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("l")}}
+                                    </td>
+                                    <td class="d-lg-none text-end">{{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("d/m/Y")}}</td>
                                     <td class="d-none d-lg-table-cell">{{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("d F Y")}}</td>
-                                    <td class="d-none d-lg-table-cell"><code>{{$d->username}}</code></td>
+                                    @if($d->username != null)
+                                    @php $totalAbsen++; @endphp
+                                    <td class="d-none d-lg-table-cell text-center"><code>{{$d->username}}</code></td>
                                     <td class="text-center">
                                         @if($d->masuk != $d->keluar)
                                             @php $totalMasuk++; @endphp
@@ -90,6 +101,8 @@
                                         @elseif($d->masuk <= \Carbon\Carbon::parse($d->tanggal." 16:00"))
                                             {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
                                             @php $totalMasuk++; @endphp
+                                        @else
+                                        <i class='bx bx-block'></i>
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -99,6 +112,8 @@
                                         @elseif($d->keluar > \Carbon\Carbon::parse($d->tanggal." 16:00"))
                                             {{ \Carbon\Carbon::parse($d->keluar)->translatedFormat("H:i")}}
                                             @php $totalKeluar++; @endphp
+                                        @else
+                                        <i class='bx bx-block'></i>
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -158,15 +173,51 @@
                                         @endphp
                                         {{$jam}}
                                     </td>
+                                    @else
+                                    <td class="d-none d-lg-table-cell text-center"></td>
+                                    <td class="text-center"><i class='bx bx-block'></i></td>
+                                    <td class="text-center"><i class='bx bx-block'></i></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>
                                 <tr>
                                     <th>Total</th>
-                                    <th class="text-center" title="Total Hari">{{count($data)}} Hari</th>
-                                    <th class="d-none d-lg-table-cell" width="100px"></th>
-                                    <th class="text-center" title="Total Abensi Masuk">{{ $totalMasuk }} x</th>
-                                    <th class="text-center" title="Total Abensi Keluar">{{ $totalKeluar }} x</th>
+                                    <th class="text-center" title="Total Hari">
+                                        @if ($totalAbsen < 20)
+                                            <b class='text-danger' title='Total < 20'>{{$totalAbsen}}<b>
+                                        @else
+                                            <b class='text-success' title='Total >= 20'>{{$totalAbsen}}<b>
+                                        @endif
+                                        / {{count($data)}} Hari
+                                    </th>
+                                    <th class="text-center d-none d-lg-table-cell" width="100px">
+                                        @if ($totalAbsen < 20)
+                                            <b class='text-danger' title='Total < 20'>{{$totalAbsen}}<b>
+                                        @else
+                                            <b title='Total >= 20'>{{$totalAbsen}}<b>
+                                        @endif
+                                    </th>
+                                    <th class="text-center" title="Total Abensi Masuk">
+                                        @if ($totalMasuk < 20)
+                                            <b class='text-danger' title='Total < 20'>{{$totalMasuk}}<b>
+                                        @else
+                                            <b title='Total >= 20'>{{$totalMasuk}}<b>
+                                        @endif
+                                        x
+                                    </th>
+                                    <th class="text-center" title="Total Abensi Keluar">
+                                        @if ($totalKeluar < 20)
+                                            <b class='text-danger' title='Total < 20'>{{$totalKeluar}}<b>
+                                        @else
+                                            <b title='Total >= 20'>{{$totalKeluar}}<b>
+                                        @endif
+                                        x
+                                    </th>
                                     <th class="text-center text-danger">
                                         @php
                                             $print = sprintf('%02d:%02d',

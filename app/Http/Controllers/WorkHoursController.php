@@ -286,7 +286,7 @@ class WorkHoursController extends Controller
         $end = Carbon::now()->subDay(1)->translatedFormat("Y-m-d H:i");
         if(isset($request->range)){
             $x = explode(" - ",$request->range);
-            $end = Carbon::parse($x[1]." 23:59")->subDay(1)->translatedFormat("Y-m-d H:i");
+            $end = Carbon::parse($x[1]." 23:59")->translatedFormat("Y-m-d H:i");
             $start = Carbon::parse($x[0]." 00:00")->translatedFormat("Y-m-d H:i");
         }
 
@@ -294,10 +294,11 @@ class WorkHoursController extends Controller
 
         if($user != null){
             try {
+                $endX = Carbon::parse($end)->subDay(1)->translatedFormat("Y-m-d H:i");
                 $data = DB::select("WITH recursive all_dates(dt) AS (
                         SELECT '$start' dt
                         UNION ALL 
-                        SELECT dt + INTERVAL 1 DAY FROM all_dates WHERE dt <= '$end'
+                        SELECT dt + INTERVAL 1 DAY FROM all_dates WHERE dt <= '$endX'
                     )
                     SELECT DATE(d.dt) AS tanggal, username, masuk, keluar, total_jam
                     FROM all_dates d

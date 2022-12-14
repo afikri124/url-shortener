@@ -14,7 +14,9 @@
                     <tr>
                         <td width="110px">
                             @if($user->user != null)
-                            <img src="{{ $user->user->image() }}" class="rounded" width="100px">
+                            <!-- <img src="{{ $user->user->image() }}" class="rounded" width="100px"> -->
+                            <img src="{{ $user->user->image() }}"  class="rounded-circle"
+                            style="object-fit: cover;" width="100px" height="100px">
                             @else
                             <img src="{{asset('assets/img/avatars/user.png')}}" class="rounded" width="100px">
                             @endif

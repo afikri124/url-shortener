@@ -283,7 +283,7 @@ class WorkHoursController extends Controller
     public function whr_view($username, Request $request){
         $username = str_replace("�","",$username);
         $start = Carbon::now()->subMonth(1)->startOfDay()->day(20)->translatedFormat("Y-m-d H:i");
-        $end = Carbon::now()->subDay(1)->translatedFormat("Y-m-d H:i");
+        $end = Carbon::now()->translatedFormat("Y-m-d H:i");
         if(isset($request->range)){
             $x = explode(" - ",$request->range);
             $end = Carbon::parse($x[1]." 23:59")->translatedFormat("Y-m-d H:i");

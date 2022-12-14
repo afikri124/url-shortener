@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\SyncAttendanceJob;
+use App\Jobs\SyncAttOnlyJob;
 
 class Kernel extends ConsoleKernel
 {
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         ->twiceDaily(10, 15)
         ->withoutOverlapping();
         $schedule->job(new SyncAttendanceJob)->twiceDaily(3, 12)->withoutOverlapping(); //jam 03:00 dan 12:00
+        $schedule->job(new SyncAttOnlyJob)->twiceDaily(9, 17)->withoutOverlapping(); //jam 09:00 dan 17:00
     }
 
     /**

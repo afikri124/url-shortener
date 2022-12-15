@@ -294,7 +294,7 @@ class WorkHoursController extends Controller
 
         if($user != null){
             try {
-                $endX = Carbon::parse($end)->subDay(1)->translatedFormat("Y-m-d H:i");
+                // $endX = Carbon::parse($end)->subDay(1)->translatedFormat("Y-m-d H:i");
                 // $data = DB::select("WITH recursive all_dates(dt) AS (
                 //         SELECT '$start' dt
                 //         UNION ALL 
@@ -314,7 +314,7 @@ class WorkHoursController extends Controller
                 //     ORDER BY d.dt
                 // ") ;
                 $data = DB::select("SELECT v.tanggal, a.username, a.masuk, a.keluar, a.total_jam FROM 
-                    (SELECT ADDDATE('2020-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) tanggal FROM
+                    (SELECT ADDDATE('$start',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) tanggal FROM
                     (SELECT 0 i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t0,
                     (SELECT 0 i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t1,
                     (SELECT 0 i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t2,

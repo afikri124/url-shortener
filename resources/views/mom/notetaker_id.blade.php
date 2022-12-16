@@ -103,9 +103,19 @@
                 <form id="form-tambah">
                     @csrf
                     <div class="modal-body">
+                        <div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSync"
+                            style="display: none;">
+                            <div class="spinner-border text-danger" role="status">
+                                <span class="visually-hidden">Tunggu...</span>
+                            </div>
+                            <br>
+                            Tunggu sebentar...
+                        </div>
+
                         <div class="row">
                             <div class="col mb-3">
-                                <label for="myeditor" class="form-label">Uraian Rapat <i class="text-danger">*</i></label>
+                                <label for="myeditor" class="form-label">Uraian Rapat <i
+                                        class="text-danger">*</i></label>
                                 <div id="myeditor">
 
                                 </div>
@@ -114,7 +124,8 @@
                         <div class="row g-2">
                             <div class="col-md-6 mb-0">
                                 <label for="add_target" class="form-label">Target</label>
-                                <input type="date" class="form-control" id="add_target" name="add_target" placeholder="yyyy-mm-dd">
+                                <input type="date" class="form-control" id="add_target" name="add_target"
+                                    placeholder="yyyy-mm-dd">
                             </div>
                             <div class="col-md-6 mb-0">
                                 <label for="add_users" class="form-label">Penanggung Jawab (PIC)</label>
@@ -147,6 +158,14 @@
                 <form id="form-edit">
                     @csrf
                     <div class="modal-body">
+                        <div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSyncEdit"
+                            style="display: none;">
+                            <div class="spinner-border text-danger" role="status">
+                                <span class="visually-hidden">Tunggu...</span>
+                            </div>
+                            <br>
+                            Tunggu sebentar...
+                        </div>
                         <div class="row g-2">
                             <div class="col-md-6 mb-0">
                                 <label for="edit_target" class="form-label">Target</label>
@@ -247,7 +266,8 @@
                                         </span>
                                         @enderror
                                     </div>
-                                    <i>* Catatan: Lampiran akan ditampilkan pada menu risalah rapat di masing-masing peserta rapat yang melakukan absensi</i>
+                                    <i>* Catatan: Lampiran akan ditampilkan pada menu risalah rapat di masing-masing
+                                        peserta rapat yang melakukan absensi</i>
                                 </div>
                             </form>
                         </div>
@@ -521,6 +541,12 @@
                     "detail": detailX,
                     "users": $("#add_users").val(),
                 },
+                beforeSend: function (xhr) {
+                    document.getElementById('loadingSync').style.display = 'block';
+                },
+                complete: function () {
+                    document.getElementById('loadingSync').style.display = 'none';
+                },
                 success: function (data) {
                     if (data['success']) {
                         swal(data['message'], {
@@ -600,6 +626,12 @@
                     "detail": detailX,
                     "users": $("#edit_users").val(),
                 },
+                beforeSend: function (xhr) {
+                    document.getElementById('loadingSyncEdit').style.display = 'block';
+                },
+                complete: function () {
+                    document.getElementById('loadingSyncEdit').style.display = 'none';
+                },
                 success: function (data) {
                     if (data['success']) {
                         swal(data['message'], {
@@ -657,7 +689,9 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<a href="{{ asset('') }}` + row.doc_path + `" target="_blank" ><span title='` + row.doc_path + `'>` + row.doc_path +
+                        return `<a href="{{ asset('') }}` + row.doc_path +
+                            `" target="_blank" ><span title='` + row.doc_path + `'>` + row
+                            .doc_path +
                             `</span></a>`;
                     },
                 },
@@ -711,5 +745,6 @@
                 }
             })
     }
+
 </script>
 @endsection

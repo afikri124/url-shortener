@@ -56,16 +56,16 @@
             <div class="nav-align-top mb-4">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                        <button type="button" class="nav-link {{(old('bio') == null? 'active' : '')}}" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-1" aria-controls="navs-1" aria-selected="true">Daftar Tautan</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-2"
+                        <button type="button" class="nav-link {{(old('bio') != null? 'active' : '')}}" role="tab" data-bs-toggle="tab" data-bs-target="#navs-2"
                             aria-controls="navs-2" aria-selected="false" tabindex="-1">Kustomisasi Situs</button>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade active show" id="navs-1" role="tabpanel">
+                    <div class="tab-pane fade {{(old('bio') == null? 'active show' : '')}}" id="navs-1" role="tabpanel">
                         <form action="" method="POST"  enctype="multipart/form-data">
                             @csrf
                             <div class="row">
@@ -111,7 +111,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade" id="navs-2" role="tabpanel">
+                    <div class="tab-pane fade {{(old('bio') != null? 'active show' : '')}}" id="navs-2" role="tabpanel">
                         <form action="" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
@@ -183,7 +183,7 @@
     </div>
     <div class="col-md-5">
         <iframe src="{{ route('MICROSITE.view', ['id' => $data->shortlink]) }}" 
-        id="iframe_view" width="100%" style="height: 80vh;">
+        id="iframe_view" width="100%" style="height: 70vh;">
         </iframe>
     </div>
 </div>

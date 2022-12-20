@@ -42,6 +42,19 @@ Route::group(['prefix' => 'URL','middleware' => ['auth', 'role:ST,SD']], functio
   Route::delete('/delete', [App\Http\Controllers\DataController::class, 'delete'])->name('url.delete');
 });
 
+//Microsite
+Route::group(['prefix' => 'MICROSITE','middleware' => ['auth', 'role:ST,SD']], function () {
+  Route::any('/', [App\Http\Controllers\MicrositeController::class, 'index'])->name('MICROSITE.index');
+  Route::get('/data', [App\Http\Controllers\MicrositeController::class, 'data'])->name('MICROSITE.data');
+  Route::get('/links/{id}', [App\Http\Controllers\MicrositeController::class, 'links'])->name('MICROSITE.links');
+  Route::any('/edit/{id}', [App\Http\Controllers\MicrositeController::class, 'edit'])->name('MICROSITE.edit');
+  Route::delete('/delete', [App\Http\Controllers\MicrositeController::class, 'delete'])->name('MICROSITE.delete');
+  Route::delete('/delete_link', [App\Http\Controllers\MicrositeController::class, 'delete_link'])->name('MICROSITE.delete_link');
+});
+//Microsite Access Link
+Route::get('/M/{id}', [App\Http\Controllers\MicrositeController::class, 'view']);
+Route::get('/m/{id}', [App\Http\Controllers\MicrositeController::class, 'view'])->name('MICROSITE.view');
+
 //ACT ATT
 Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:ST,AD']], function () {
   Route::any('/', [App\Http\Controllers\AttController::class, 'index'])->name('att.index');
@@ -138,6 +151,10 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:HR']], functio
 
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware(['auth', 'role:AD']);
 
+//LINK FILE
+Route::group(['prefix' => 'FILE'], function () {
+
+});
 //Rest API QR-JGU
 Route::get('/qrcode', [App\Http\Controllers\QrController::class, 'qrcode'])->name('qrcode');
 //letakkan di paling bawah

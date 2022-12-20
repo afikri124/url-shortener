@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Penyingkat URL')
+@section('title', 'Situs Mikro')
 
 @section('breadcrumb-items')
 <!-- <span class="text-muted fw-light">Data /</span> -->
@@ -56,16 +56,28 @@
 </div>
 @endif
 <div class="card mb-4">
-    <form class="row p-3" method="POST" action="">
+    <form class="row p-3" method="POST" action="" enctype="multipart/form-data">
         @csrf
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <label class="form-label">Judul <i class="text-danger">*</i></label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control @error('judul') is-invalid @enderror" name="judul"
+                    placeholder="Judul Situs" value="{{ old('judul') }}">
+                @error('judul')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+        </div>
+        <div class="col-md-4">
             <label class="form-label">Shortlink <i class="text-danger">*</i></label>
             <div class="input-group mb-3">
                 <span class="input-group-text @error('shortlink') btn-danger @enderror">
-                    s.jgu.ac.id/
+                    s.jgu.ac.id/m/
                 </span>
                 <input type="text" name="shortlink" class="form-control @error('shortlink') is-invalid @enderror"
-                    value="{{ old('shortlink') }}" placeholder="something">
+                    value="{{ old('shortlink') }}" placeholder="link pendek">
                 @error('shortlink')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -73,13 +85,28 @@
                 @enderror
             </div>
         </div>
-        <div class="col-md-6">
-            <label class="form-label">URL panjang <i class="text-danger">*</i></label>
+        <div class="col-md-4">
+            <label class="form-label">Avatar/Logo <i class="text-danger">*</i></label>
             <div class="input-group mb-3">
-                <input type="text" class="form-control @error('url') is-invalid @enderror" name="url"
-                    placeholder="https://..." value="{{ old('url') }}">
+                <input class="form-control @error('avatar') is-invalid @enderror"
+                                            name="avatar" type="file"
+                                            accept=".jpg, .jpeg, .png"
+                                            title="JPG/PNG">
+                @error('avatar')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+        </div>
+        
+        <div class="col-md-12">
+            <label class="form-label">Bio <i class="text-danger">*</i></label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control @error('bio') is-invalid @enderror" name="bio"
+                    placeholder="Deskripsi Halaman" value="{{ old('bio') }}">
                 <button class="btn btn-outline-primary" type="submit" id="button-addon2">Buat Sekarang!</button>
-                @error('url')
+                @error('bio')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -94,8 +121,8 @@
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Shortlink</th>
-                    <th>URL Panjang</th>
+                    <th data-priority="2">Judul</th>
+                    <th>Shortlink</th>
                     <th>QRCode</th>
                     <th>Pembuat</th>
                     <th width="85px" data-priority="3">Aksi</th>
@@ -147,14 +174,12 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Cari Shortlink..',
+                searchPlaceholder: 'Cari Judul..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
-                url: "{{ route('url.data') }}",
+                url: "{{ route('MICROSITE.data') }}",
                 data: function (d) {
-                    d.select_dosen = $('#select_dosen').val(),
-                        d.select_kategori = $('#select_kategori').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -171,19 +196,20 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return '<button class="btn m-0 p-0" title="Salin" onclick=navigator.clipboard.writeText("s.jgu.ac.id/' + row.shortlink + '")><i class="bx bx-copy"></i></button> ' + 
-                        `<span class="text-muted">s.jgu.ac.id/</span><b>` +  row.shortlink +`</b>`;
+                        return `<a target="_blank" href="{{ url('m/` +
+                            row.shortlink + `') }}" title="`+ row.title + `">`+row.title+`</a>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-primary" target="_blank" href="` + row.url + `">` + row.url + `</a>`;
+                        return '<button class="btn m-0 p-0" title="Salin" onclick=navigator.clipboard.writeText("s.jgu.ac.id/m/' + row.shortlink + '")><i class="bx bx-copy"></i></button> ' + 
+                        `<span class="text-muted">s.jgu.ac.id/</span><b>m/` +  row.shortlink +`</b>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
                         var x = `{{ url('` + row.shortlink + `') }}`;
-                        var l = 's.jgu.ac.id/' + row.shortlink;
+                        var l = 's.jgu.ac.id/m/' + row.shortlink;
                         if(l.length > 30) {
                             l = row.shortlink;
                             if(l.length > 30) {
@@ -206,7 +232,7 @@
                 {
                     render: function (data, type, row, meta) {
                         if(row.user_id == "{{Auth::user()->id}}"){
-                            return `<a class="text-success" title="Edit" href="{{ url('URL/edit/` +
+                            return `<a class="text-success" title="Edit" href="{{ url('MICROSITE/edit/` +
                                 row.idd + `') }}"><i class="bx bxs-edit"></i></a>
                                 <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a>`;
@@ -233,7 +259,7 @@
             .then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: "{{ route('url.delete') }}",
+                        url: "{{ route('MICROSITE.delete') }}",
                         type: "DELETE",
                         data: {
                             "id": id,

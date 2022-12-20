@@ -31,6 +31,13 @@
                 <div>Penyingkat URL</div>
             </a>
         </li>
+        <li
+            class="menu-item {{ Route::currentRouteName()=='MICROSITE.index' ? 'active' : (request()->route()->getPrefix() == '/MICROSITE' ? 'active' : '') }}">
+            <a href="{{ route('MICROSITE.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-sitemap"></i>
+                <div>Situs Mikro</div>
+            </a>
+        </li>
         <li class="menu-item {{ Route::currentRouteName()=='qr.index' ? 'active' : '' }}">
             <a href="{{ route('qr.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-qr"></i>

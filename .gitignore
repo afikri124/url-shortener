@@ -4,6 +4,7 @@
 /storage/*.key
 /public/dokumen/*
 /public/MoM/*
+/public/MICROSITE/*
 /vendor
 .env
 .env.backup

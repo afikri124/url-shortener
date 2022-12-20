@@ -14,6 +14,7 @@ class Microsite extends Model
         'bio',
         'avatar',
         'user_id',
+        'shortlink'
     ];
 
     public function user()

@@ -45,6 +45,9 @@
         position: relative;
     }
 
+    .ql-toolbar .ql-formats .ql-image {
+        display: none;
+    }
 </style>
 @endsection
 
@@ -83,11 +86,15 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="text-md-end text-center">
+                        <a href="{{ route('mom.note-taker_print', ['id' => Crypt::encrypt($activity->id)] ) }}" target="_blank" class="btn btn-light m-0 mt-2 p-0 text-info"
+                            title="Cetak halaman ini">
+                            <i class="bx bx-printer"></i>
+                        </a>
+                        <!-- <div class="text-md-end text-center">
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
                                 <span><i class="bx bx-plus me-sm-2"></i> Uraian Rapat</span>
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -437,6 +444,11 @@
                 searchPlaceholder: 'Cari uraian rapat..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
+            dom: '<"datatable-header mx-3 "fBl<"toolbar mb-3">><t><"datatable-footer mx-3"ip>',
+            buttons: [{
+                text: '<div data-bs-toggle="modal" data-bs-target="#modalTambah"><i class="bx bx-plus me-sm-2"></i> Uraian</div>',
+                className: 'btn btn-primary mb-2',
+            }],
             ajax: {
                 url: "{{ route('mom.notetaker_id_data', ['id' => $activity->id]) }}",
                 data: function (d) {

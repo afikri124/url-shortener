@@ -183,7 +183,7 @@
     </div>
     <div class="col-md-5">
         <iframe src="{{ route('MICROSITE.view', ['id' => $data->shortlink]) }}" 
-        id="iframe_view" width="100%" style="height: 70vh;">
+        id="iframe_view" width="100%" style="height: 75vh;">
         </iframe>
     </div>
 </div>

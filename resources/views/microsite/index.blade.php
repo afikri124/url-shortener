@@ -208,7 +208,7 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var x = `{{ url('` + row.shortlink + `') }}`;
+                        var x = `{{ url('`+ `m/` + row.shortlink + `') }}`;
                         var l = 's.jgu.ac.id/m/' + row.shortlink;
                         if(l.length > 30) {
                             l = row.shortlink;

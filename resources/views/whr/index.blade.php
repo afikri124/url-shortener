@@ -125,6 +125,7 @@
 <script src="{{asset('assets/js/sweetalert.min.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/block-ui/block-ui.js')}}"></script>
 <script>
     "use strict";
     setTimeout(function () {
@@ -206,7 +207,8 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-primary" title="Lihat" style="cursor:pointer" onclick="View('` + row
+                        return `<a class="text-primary" title="Lihat" style="cursor:pointer" onclick="View('` +
+                            row
                             .username + `')"><i class="bx bxs-show"></i></a>`;
                     },
                     className: "text-md-center",
@@ -242,6 +244,17 @@
                             document.getElementById('loadingSync').style.display = 'block';
                             document.getElementById('loadingSyncText').innerHTML =
                                 'Menyinkronkan data dari mesin Absensi.';
+                            $.blockUI({
+                                message: '<div class="spinner-border text-white" role="status"></div>',
+                                timeout: 1e3,
+                                css: {
+                                    backgroundColor: "transparent",
+                                    border: "0"
+                                },
+                                overlayCSS: {
+                                    opacity: .5
+                                }
+                            })
                         },
                         complete: function () {
                             document.getElementById('loadingSync').style.display = 'none';
@@ -270,9 +283,9 @@
             })
     }
 
-    function View(username){
+    function View(username) {
         var range = $('#select_range').val();
-        window.open(`{{ url('WHR/view/` + username + `?range=` + range +`') }}`, '_blank');
+        window.open(`{{ url('WHR/view/` + username + `?range=` + range + `') }}`, '_blank');
     }
 
 </script>

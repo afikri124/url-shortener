@@ -189,7 +189,7 @@ class SettingController extends Controller
                         'role' => $u->role,
                         'password'=> $u->password,
                         'cardno' => $u->cardno,
-                        'status' => 1,
+                        'status' => true,
                         'created_at' => Carbon::now()
                 ]);
                 if($new_user){

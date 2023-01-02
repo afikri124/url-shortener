@@ -69,7 +69,7 @@
                 @endif
                 <br><br>
                 <div class="divider mt-3">
-                    <div class="divider-text">© 2022</div>
+                    <div class="divider-text">© {{ (date('Y')=="2022"?date('Y'):"2022-".date('Y')) }}</div>
                 </div>
                 <div class="footer">
                     <span class="mr-2">Dikembangkan oleh </span>

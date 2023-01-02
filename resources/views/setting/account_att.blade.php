@@ -111,6 +111,7 @@
 <script src="{{asset('assets/vendor/libs/datatables/buttons.bootstrap5.js')}}"></script>
 <script src="{{asset('assets/js/sweetalert.min.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/block-ui/block-ui.js')}}"></script>
 <script>
     "use strict";
     setTimeout(function () {
@@ -159,7 +160,8 @@
                         var html = `<code>` + row.uid + `</code>`;
                         return html;
                     },
-                    className: "text-center", name: "uid"
+                    className: "text-center",
+                    name: "uid"
                 },
                 {
                     render: function (data, type, row, meta) {
@@ -170,25 +172,27 @@
                                 .name + `</a><br>` + html;
                         }
                         return html;
-                    }, name: "name"
+                    },
+                    name: "name"
                 },
                 {
                     render: function (data, type, row, meta) {
                         var html = "";
-                        if(row.username != null){
+                        if (row.username != null) {
                             html = "<span title='NIK'>" + row.username + "</span>";
                         }
                         if (row.username_old != null) {
                             html += " <span title='Userid Mesin'>[" + row.username_old +
                                 "]</span>";
                         }
-                        if(row.status == 1){
+                        if (row.status == 1) {
                             html = "<code>" + html + "</code>";
                         } else {
                             html = "<small>" + html + "</small>";
                         }
                         return html;
-                    }, name: "username"
+                    },
+                    name: "username"
                 },
                 {
                     data: 'role_name',
@@ -205,7 +209,8 @@
                 {
                     render: function (data, type, row, meta) {
                         return row.status_name;
-                    }, name: "status"
+                    },
+                    name: "status"
                 },
                 {
                     render: function (data, type, row, meta) {
@@ -244,6 +249,17 @@
                             document.getElementById('loadingSync').style.display = 'block';
                             document.getElementById('loadingSyncText').innerHTML =
                                 'Menyinkronkan user dari mesin Absensi..';
+                            $.blockUI({
+                                message: '<div class="spinner-border text-white" role="status"></div>',
+                                timeout: 1e3,
+                                css: {
+                                    backgroundColor: "transparent",
+                                    border: "0"
+                                },
+                                overlayCSS: {
+                                    opacity: .5
+                                }
+                            })
                         },
                         complete: function () {
                             document.getElementById('loadingSync').style.display = 'none';

@@ -56,7 +56,7 @@
     <span id="loadingSyncText"></span>
 </div>
 
-<div class="card">
+<div class="card" id="section-block">
     <div class="card-datatable table-responsive">
         <div class="card-header flex-column flex-md-row pb-0">
             <div class="row">
@@ -78,7 +78,8 @@
                                 </select>
                             </div>
                             <div class="offset-md-3 col-md-3 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
+                                <button class="btn btn-outline-secondary" type="button" id="SyncAtt"
+                                    onclick="SyncAtt()">
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>
                                 </button>
@@ -133,6 +134,7 @@
 <script src="{{asset('assets/js/sweetalert.min.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/block-ui/block-ui.js')}}"></script>
 <script>
     "use strict";
     setTimeout(function () {
@@ -158,7 +160,7 @@
             success: function (data) {
                 if (data['success']) {
                     var jam = "0:0";
-                    if(data['total'] != null){
+                    if (data['total'] != null) {
                         jam = data['total'].split(":");
                     }
                     if (jam[0] < 160) {
@@ -297,6 +299,17 @@
                             document.getElementById('loadingSync').style.display = 'block';
                             document.getElementById('loadingSyncText').innerHTML =
                                 'Menyinkronkan data dari mesin Absensi.';
+                            $.blockUI({
+                                message: '<div class="spinner-border text-white" role="status"></div>',
+                                timeout: 1e3,
+                                css: {
+                                    backgroundColor: "transparent",
+                                    border: "0"
+                                },
+                                overlayCSS: {
+                                    opacity: .5
+                                }
+                            })
                         },
                         complete: function () {
                             document.getElementById('loadingSync').style.display = 'none';
@@ -355,7 +368,9 @@
                     'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
                     'Minggu lalu': [moment().subtract(1, 'week').startOf('week'), moment().subtract(
                         1, 'week').endOf('week')],
-                    '20 ke 19 bln ini': [moment().subtract(1, 'month').set("date", 20), moment().set("date", 19)],
+                    '20 ke 19 bln ini': [moment().subtract(1, 'month').set("date", 20), moment()
+                        .set("date", 19)
+                    ],
                     '20 ke 19 bln lalu': [moment().subtract(2, 'month').set("date", 20), moment()
                         .subtract(1, 'month').set("date", 19)
                     ],

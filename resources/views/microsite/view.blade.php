@@ -12,7 +12,9 @@
 
     const setBackgroundColor = () => {
         const randomColor = getRandomColor();
-        document.body.style.background = randomColor;
+        const randomColor2 = getRandomColor();
+        // document.body.style.background = randomColor;
+        document.body.style.backgroundImage = "linear-gradient(to bottom right, "+ randomColor +", "+ randomColor2 +")";
     };
 
     setBackgroundColor()

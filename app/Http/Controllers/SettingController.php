@@ -183,8 +183,8 @@ class SettingController extends Controller
                 $new_user = false;
                 $new_user=WhUser::insert([
                         'uid' => $u->uid,
-                        'username' => (strlen($u->userid) <  13 ? null : $u->userid),
-                        'username_old' => (strlen($u->userid) <  13 ? $u->userid : null),
+                        'username' => (strpos($u->userid, "S") ? $u->userid : null),
+                        'username_old' => (strpos($u->userid, "S") ? null : $u->userid),
                         'name' => $u->name,
                         'role' => $u->role,
                         'password'=> $u->password,
@@ -200,7 +200,7 @@ class SettingController extends Controller
                 }  
             } else {
                 $old_user = WhUser::where('uid',$u->uid)->update([
-                    'username' => (strlen($u->userid) <  13 ? null : $u->userid),
+                    'username' => (strpos($u->userid, "S") ? $u->userid : null),
                     'name' => $u->name,
                     'role' => $u->role,
                     'password'=> $u->password,

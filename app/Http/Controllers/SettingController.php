@@ -201,7 +201,6 @@ class SettingController extends Controller
             } else {
                 $old_user = WhUser::where('uid',$u->uid)->update([
                     'username' => (strpos($u->userid, "S") ? $u->userid : null),
-                    'username_old' => (strpos($u->userid, "S") ? null : $u->userid),
                     'name' => $u->name,
                     'role' => $u->role,
                     'password'=> $u->password,

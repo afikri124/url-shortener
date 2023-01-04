@@ -56,7 +56,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <table class="table table-hover table-striped table-sm" width="100%">
+                        <table class="table table-hover table-sm" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70px">Hari</th>
@@ -67,7 +67,7 @@
                                     <th width="100px" class="text-center">Telat</th>
                                     <th width="100px" class="text-center">P.Cepat</th>
                                     <th width="100px" class="text-center">Lembur</th>
-                                    <th width="100px" data-priority="3" class="text-end">JMLH.Jam</th>
+                                    <th width="100px" data-priority="3" class="text-end">JAM/Hari</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,14 +81,14 @@
                                     $totalAbsen = 0;
                                 @endphp
                                 @foreach($data as $key => $d)
-                                <tr>
-                                    <td
-                                    @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
-                                    class="text-danger"
+                                <tr
+                                @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
+                                    class="text-danger" style="background-color:rgba(67,89,113,.04)"
                                     @elseif((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SATURDAY)
-                                    class="text-warning"
+                                    class="text-success"
                                     @endif
-                                    >
+                                >
+                                    <td>
                                         {{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("l")}}
                                     </td>
                                     <td class="d-lg-none text-end">{{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("d/m/Y")}}</td>
@@ -141,6 +141,8 @@
                                                 $totalCepat += (int) $temp[2];
                                                 echo \Carbon\Carbon::parse($cepat)->translatedFormat("H:i");
                                             }
+                                        } elseif ((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY){
+                                            echo "";
                                         } else {
                                             if((\Carbon\Carbon::parse($d->keluar) < \Carbon\Carbon::parse($d->tanggal." 16:00:00")) && $d->total_jam != '00:00:00'){
                                                 $cepat =  (\Carbon\Carbon::parse($d->keluar))->diff(\Carbon\Carbon::parse($d->tanggal." 16:00:00"))->format('%H:%I:%S');
@@ -277,12 +279,24 @@
                         </table>
                         <br>
                         <hr class="mt-3">
-                        <small class="text-info">Catatan : 
-                            <ul>
-                                <li>Senin - Jumat : 08:00 - 16:00 </li>
-                                <li>Sabtu : 08:00 - 14:00 </li>
-                                <li>Minggu : <i>(opsional)</i> </li>
-                            </ul>
+                        <small class="text-muted"><u>Aturan Jam Kerja</u>
+                            <table>
+                                <tr>
+                                    <td>-</td>
+                                    <td>Senin-Jumat</td>
+                                    <td>: 08:00 - 16:00 WIB</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>Sabtu</td>
+                                    <td>: 08:00 - 14:00 WIB</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>Minggu</td>
+                                    <td>: <i>opsional</i></td>
+                                </tr>
+                            </table>
                         </small>
                     </div>
                 </div>

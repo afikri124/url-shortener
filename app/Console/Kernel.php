@@ -21,7 +21,11 @@ class Kernel extends ConsoleKernel
         ->twiceDaily(10, 15)
         ->withoutOverlapping();
         $schedule->job(new SyncAttendanceJob)->twiceDaily(3, 12)->withoutOverlapping(); //jam 03:00 dan 12:00
-        $schedule->job(new SyncAttOnlyJob)->twiceDaily(9, 17)->withoutOverlapping(); //jam 09:00 dan 17:00
+        $schedule->job(new SyncAttOnlyJob)->twiceDaily(8, 9)->withoutOverlapping(); //jam 08:00 dan 09:00
+        $schedule->job(new SyncAttOnlyJob)->twiceDaily(10, 11)->withoutOverlapping();
+        $schedule->job(new SyncAttOnlyJob)->twiceDaily(13, 14)->withoutOverlapping();
+        $schedule->job(new SyncAttOnlyJob)->twiceDaily(15, 16)->withoutOverlapping();
+        $schedule->job(new SyncAttOnlyJob)->twiceDaily(17, 18)->withoutOverlapping();
     }
 
     /**

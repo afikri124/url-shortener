@@ -101,7 +101,7 @@
                     <th width="60px">Telat</th>
                     <th width="80px">Plg Cepat</th>
                     <th width="60px">Lembur</th>
-                    <th width="80px" data-priority="3">Total Jam</th>
+                    <th width="80px" data-priority="3">Jam/Hari</th>
                 </tr>
             </thead>
             <tfoot>

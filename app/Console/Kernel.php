@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         // $schedule->job(new SyncAttOnlyJob)->twiceDaily(15, 16)->withoutOverlapping();
         // $schedule->job(new SyncAttOnlyJob)->twiceDaily(17, 18)->withoutOverlapping();
 
-        $schedule->job(new SyncAttOnlyJob)->weekdays()->hourly()->runInBackground()->withoutOverlapping();
+        $schedule->job(new SyncAttOnlyJob)->hourly()->runInBackground()->withoutOverlapping();
     }
 
     /**

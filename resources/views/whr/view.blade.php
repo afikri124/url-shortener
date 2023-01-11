@@ -278,7 +278,20 @@
                                 </tr>
                         </table>
                         <br>
-                        <hr class="mt-3">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ Projects table -->
+    </div>
+</div>
+<!--/ User Profile Content -->
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="row p-2 px-4 ">
+                <div class="page-break"></div>
                         <small class="text-muted"><u>Aturan Jam Kerja</u>
                             <table>
                                 <tr>
@@ -298,12 +311,8 @@
                                 </tr>
                             </table>
                         </small>
-                    </div>
-                </div>
             </div>
         </div>
-        <!--/ Projects table -->
     </div>
 </div>
-<!--/ User Profile Content -->
 @endsection

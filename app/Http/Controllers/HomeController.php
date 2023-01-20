@@ -69,13 +69,16 @@ class HomeController extends Controller
                 ]);
             }
 
-            $data = Attendance::create([
-                'username' => (Auth::user()->username == null ? $request->username : Auth::user()->username),
-                'activity_id' => $idd,
-                'signature_img' => $request->paraf,
-                'longitude' => $request->longitude,
-                'latitude' => $request->latitude
-            ]);
+            $check = Attendance::where('activity_id', $idd)->where('username', Auth::user()->username)->first();
+            if (!$check) {
+                $data = Attendance::create([
+                    'username' => (Auth::user()->username == null ? $request->username : Auth::user()->username),
+                    'activity_id' => $idd,
+                    'signature_img' => $request->paraf,
+                    'longitude' => $request->longitude,
+                    'latitude' => $request->latitude
+                ]);
+            }
             return redirect()->route('attendance', ['id' => $idd, 'token' => $token])->with('msg','Absensi berhasil!');
         }
         $data = AttendanceActivity::findOrFail($idd);

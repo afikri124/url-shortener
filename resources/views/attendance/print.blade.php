@@ -118,7 +118,7 @@
             <td>
                 @if($d->longitude == null)
                 @php $datamerah = true; @endphp
-                <p style="color:red;" title="Lokasi">{{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                <p><i style="color:red;" title="Lokasi">*</i> {{($d->user != null ? $d->user->name_with_title : $d->username)}}
                 </p>
                 @else
                 <p>
@@ -176,7 +176,7 @@
     </tbody>
     </table>
     @if($datamerah)
-        <small><p style="color:red;font-size:6pt">* Warna Merah : Titik lokasi Absensi tidak ditemukan.</p></small>
+        <small><p style="color:red;font-size:6pt">* Titik lokasi Absensi tidak ditemukan.</p></small>
     @endif
     <br>
     <table width="100%">

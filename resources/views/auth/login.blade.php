@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <br><small>
-                    <center><p><b><u class="text-danger">Pengumuman!</u></b><br>Sivitas Akademika JGU (Mahasiswa/Staf/Dosen) <br>silakan masuk menggunakan<br>Single Sign-On (SSO) atau email JGU,<br>sedangkan untuk tamu (eksternal) dapat masuk menggunakan akun Google.</p>Jika terdapat kendala atau belum memiliki akun SSO silahkan menghubungi tim HR / ITIC</center></small>
+                    <center><p><b><u class="text-danger">Pengumuman!</u></b><br>Sivitas Akademika JGU (Mahasiswa/Staf/Dosen) <br>silakan masuk menggunakan<br>Single Sign-On (SSO) atau email JGU,<br>sedangkan untuk tamu (eksternal) dapat masuk menggunakan akun Google.</p>Jika terdapat kendala atau belum memiliki akun SSO silakan menghubungi tim HR / ITIC</center></small>
                 </div>
             </div>
         </div>

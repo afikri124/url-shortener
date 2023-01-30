@@ -4,6 +4,21 @@
 <span class="text-muted fw-light">Absensi / Rekap Jam Kerja /</span>
 @endsection
 
+@section('style')
+<style>
+    @media print
+    {    
+        .no-print, .no-print *
+        {
+            display: none !important;
+        }
+        #template-customizer {
+            display: none !important;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
 <!-- Header -->
 <div class="row">
@@ -307,7 +322,12 @@
                                 <tr>
                                     <td>-</td>
                                     <td>Minggu</td>
-                                    <td>: <i>opsional</i></td>
+                                    <td>: <i>Kondisional</i></td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>Lembur</td>
+                                    <td>: <i>Setelah 10 jam</i></td>
                                 </tr>
                             </table>
                         </small>
@@ -316,3 +336,10 @@
     </div>
 </div>
 @endsection
+@if(request()->route()->getPrefix() != "/WHR")
+@section('script')
+<script type="text/javascript">
+window.onload = function() { window.print(); }
+</script>
+@endsection
+@endif

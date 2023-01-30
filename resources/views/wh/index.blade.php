@@ -62,30 +62,54 @@
             <div class="row">
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <input type="text" id="select_range" name="range" class="form-control"
-                                    placeholder="Pilih Tanggal" autocomplete="off" />
+                        <form method="POST" action="">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" id="select_range" name="range" class="form-control @error('range') is-invalid @enderror"
+                                        placeholder="Pilih Tanggal" autocomplete="off"/>
+                                        @error('range')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                </div>
+                                @if(Auth::user()->hasRole('HR'))
+                                <div class=" col-md-3">
+                                    <select id="select_user" name="select_user" class="select2 form-select @error('select_user') is-invalid @enderror" data-placeholder="Pilih Akun">
+                                        <option value="">Pilih Akun</option>
+                                        @foreach($user as $d)
+                                        <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
+                                            {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('select_user')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                                <div class=" col-md-3">
+                                </div>
+                                @else
+                                <div class=" col-md-6">
+                                </div>
+                                @endif
+                                <div class="col-md-3 text-md-end text-center pt-3 pt-md-0">
+                                    @if(Auth::user()->hasRole('HR'))
+                                    <button class="btn btn-outline-secondary" type="button" id="SyncAtt"
+                                        onclick="SyncAtt()">
+                                        <span><i class="bx bx-sync me-sm-2"></i>
+                                            Sinkron</span>
+                                    </button>
+                                    @endif
+                                    <button class="btn btn-primary" type="submit" title="Cetak Laporan">
+                                        <span><i class="bx bx-printer me-sm-2"></i>Cetak</span>
+                                    </button>
+                                </div>
                             </div>
-                            @if(Auth::user()->hasRole('HR'))
-                            <div class=" col-md-3">
-                                <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
-                                    <option value="">Pilih Akun</option>
-                                    @foreach($user as $d)
-                                    <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
-                                        {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="offset-md-3 col-md-3 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-outline-secondary" type="button" id="SyncAtt"
-                                    onclick="SyncAtt()">
-                                    <span><i class="bx bx-sync me-sm-2"></i>
-                                        Sinkron</span>
-                                </button>
-                            </div>
-                            @endif
-                        </div>
+
+                        </form>
                     </div>
                 </div>
             </div>

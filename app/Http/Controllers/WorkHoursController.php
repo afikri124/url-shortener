@@ -19,10 +19,37 @@ use Illuminate\Http\Request;
 class WorkHoursController extends Controller
 {
     //
-    public function wh(){
-        $user = WhUser::where('status',1)->with('user')->select('*')->orderBy('name')->get();
-        $lastData = WhAttendance::orderByDesc('timestamp')->first();
-        return view('wh.index', compact('user', 'lastData')); 
+    public function wh(Request $request){
+        if ($request->isMethod('post')) {
+            if(Auth::user()->hasRole('HR')){
+                $this->validate($request, 
+                    [ 
+                        'range'=> ['required', 'string', 'max:191'],
+                        'select_user' => ['required'],
+                    ],
+                    [
+                        'range.required' => 'Periode tanggal wajib ditentukan.',
+                        'select_user.required' => 'Akun wajib dipilih.',
+                    ]
+                );
+                $username = $request->select_user;
+            } else {
+                $this->validate($request, 
+                    [ 
+                        'range'=> ['required', 'string', 'max:191']
+                    ],
+                    [
+                        'range.required' => 'Periode tanggal wajib ditentukan.'
+                    ]
+                );
+                $username = Auth::user()->username;
+            }
+            return $this->whr_view($username, $request);
+        } else {
+            $user = WhUser::where('status',1)->with('user')->select('*')->orderBy('name')->get();
+            $lastData = WhAttendance::orderByDesc('timestamp')->first();
+            return view('wh.index', compact('user', 'lastData')); 
+        }
     }
 
     public function whr(Request $request){
@@ -52,7 +79,6 @@ class WorkHoursController extends Controller
             $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
             return Excel::download(new RekapJamKerja($data,$periode), 'Rekap Jam Kerja_'.$periode.'.xlsx');
         }
-
         $user = WhUser::where('status',1)->with('user')->select('*')->orderBy('name')->get();
         $lastData = WhAttendance::orderByDesc('timestamp')->first();
         return view('whr.index', compact('user', 'lastData')); 

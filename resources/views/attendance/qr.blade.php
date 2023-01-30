@@ -77,6 +77,7 @@
         </tr>
     </table>
     <hr>
+    <small><center><i>Jika terdapat kendala login atau belum memiliki akun SSO silakan menghubungi tim HR / ITIC.</i></center></small>
 </body>
 
 </html>

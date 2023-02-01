@@ -97,14 +97,13 @@
                                 @endif
                                 <div class="col-md-3 text-md-end text-center pt-3 pt-md-0">
                                     @if(Auth::user()->hasRole('HR'))
-                                    <button class="btn btn-outline-secondary" type="button" id="SyncAtt"
-                                        onclick="SyncAtt()">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
                                         <span><i class="bx bx-sync me-sm-2"></i>
                                             Sinkron</span>
                                     </button>
                                     @endif
                                     <button class="btn btn-primary" type="submit" title="Cetak Laporan">
-                                        <span><i class="bx bx-printer me-sm-2"></i>Cetak</span>
+                                        <span><i class="bx bx-printer me-sm-2"></i> Cetak</span>
                                     </button>
                                 </div>
                             </div>

@@ -323,8 +323,7 @@
                             document.getElementById('loadingSyncText').innerHTML =
                                 'Menyinkronkan data dari mesin Absensi.';
                             $.blockUI({
-                                message: '<div class="spinner-border text-white" role="status"></div>',
-                                timeout: 1e3,
+                                message: '<div class="spinner-border text-white" role="status">s.jgu</div>',
                                 css: {
                                     backgroundColor: "transparent",
                                     border: "0"
@@ -339,7 +338,7 @@
                             document.getElementById('loadingSyncText').innerHTML = '';
                             $('#datatable').DataTable().ajax.reload();
                             document.getElementById('lastupdate').style.display = 'none';
-
+                            $.unblockUI();
                         },
                         success: function (data) {
                             if (data['success']) {

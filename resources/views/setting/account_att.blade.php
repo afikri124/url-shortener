@@ -47,15 +47,6 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
-<div class="col-sm-12 text-center justify-content-center mb-5" id="loadingSync" style="display: none;">
-    <div class="spinner-border text-danger" role="status">
-        <span class="visually-hidden">Tunggu...</span>
-    </div>
-    <br>
-    Tunggu sebentar...<br>
-    <span id="loadingSyncText"></span>
-</div>
-
 <div class="card">
     <div class="card-datatable table-responsive">
         <div class="card-header flex-column flex-md-row pb-0">
@@ -246,12 +237,8 @@
                             "_token": $("meta[name='csrf-token']").attr("content"),
                         },
                         beforeSend: function (xhr) {
-                            document.getElementById('loadingSync').style.display = 'block';
-                            document.getElementById('loadingSyncText').innerHTML =
-                                'Menyinkronkan user dari mesin Absensi..';
                             $.blockUI({
-                                message: '<div class="spinner-border text-white" role="status"></div>',
-                                timeout: 1e3,
+                                message: '<div class="spinner-border text-white" role="status">s.jgu</div><br>Menyinkronkan user dari mesin Absensi..',
                                 css: {
                                     backgroundColor: "transparent",
                                     border: "0"
@@ -262,9 +249,8 @@
                             })
                         },
                         complete: function () {
-                            document.getElementById('loadingSync').style.display = 'none';
-                            document.getElementById('loadingSyncText').innerHTML = '';
                             $('#datatable').DataTable().ajax.reload();
+                            $.unblockUI();
                         },
                         success: function (data) {
                             // console.log(data);

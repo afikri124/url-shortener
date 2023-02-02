@@ -68,6 +68,8 @@
                         </div>
                        
                     </form> -->
+                    <small>
+                    <center><p><b><u class="text-danger">Pengumuman!</u></b><br>Sivitas Akademika JGU (Mahasiswa/Staf/Dosen) <br>silakan masuk menggunakan<br>Single Sign-On (SSO) atau email @jgu.ac.id (Google),<br>sedangkan untuk tamu (eksternal) dapat masuk menggunakan akun Google.</p></center></small>
                     <div class="row">
                         <div class="divider my-2">
                             <div class="divider-text mb-2">Pilih Metode Masuk</div>
@@ -77,7 +79,7 @@
                         </div>
                         <div class="col-6 mb-1">
                             <div class="btn-showcase">
-                                <button class="btn btn-dark btn-block w-100" onclick="Klas2Login()" title="Single Sign-On JGU">
+                                <button class="btn btn-dark btn-block w-100" onclick="Klas2Login()" title="Single Sign-On JGU (User Klas)">
                                     <img style="max-height: 20px;" src="{{asset('assets/img/favicon.png')}}">
                                     <span>SSO JGU</span>
                                 </button>
@@ -85,7 +87,7 @@
                         </div>
                         <div class="col-6 mb-1">
                             <div class="btn-showcase">
-                                <a class="btn btn-dark btn-block w-100" href="{{ url('login/google') }}" title="Log in with Email">
+                                <a class="btn btn-dark btn-block w-100" href="{{ url('login/google') }}" title="Login with (Email JGU / Gmail)">
                                     <img style="max-height: 20px;"
                                         src="https://avatars.githubusercontent.com/u/19180220?s=200&v=4">
                                     <span>Google</span>
@@ -94,7 +96,7 @@
                         </div>
                     </div>
                     <br><small>
-                    <center><p><b><u class="text-danger">Pengumuman!</u></b><br>Sivitas Akademika JGU (Mahasiswa/Staf/Dosen) <br>silakan masuk menggunakan<br>Single Sign-On (SSO) atau email JGU,<br>sedangkan untuk tamu (eksternal) dapat masuk menggunakan akun Google.</p>Jika terdapat kendala atau belum memiliki akun SSO silakan menghubungi tim HR / ITIC</center></small>
+                    <center><i>Jika terdapat kendala masuk atau belum memiliki akun SSO silakan menghubungi tim <a target="_blank" href="https://wa.me/6285159211558?text=S.JGU Login SSO, Infokan NIK/NIM, Nama, Email">HR / ITIC</a></i></center></small>
                 </div>
             </div>
         </div>
@@ -120,7 +122,7 @@ if(!session()->has('url.intended'))
         exit();
     }
 } else {
-    echo "<small style='color: #bcbcbc'>Redirect to : ".session('url.intended')."</small>";
+    echo "<center><small style='color: #bcbcbc36'>Redirect to : ".session('url.intended')."</small></center>";
 }
 
 

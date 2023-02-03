@@ -158,8 +158,8 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = "<span title='" + row.username + "'>" + row.username +
-                            "</span>";
+                        var html = "<code><span title='" + row.username + "'>" + row.username +
+                            "</span></code>";
                         return html;
                     },
                 },

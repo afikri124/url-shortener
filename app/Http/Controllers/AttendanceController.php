@@ -27,7 +27,7 @@ class AttendanceController extends Controller
     {
         $user = AttendanceActivity::select('attendance_activities.user_id', 'users.name')
                 ->join('users','attendance_activities.user_id','=','users.id')
-                ->groupBy('user_id', 'name')
+                ->groupBy('user_id', 'name')->orderBy("name")
                 ->get();
         return view('attendance.index_recap', compact('user'));
     }

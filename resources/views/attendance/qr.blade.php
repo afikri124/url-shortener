@@ -32,7 +32,7 @@
     <table width="100%">
         <tr>
             <td width="50%" valign="top">
-               
+
             </td>
             <td width="50%" style="text-align: right;">
                 <img src="{{ public_path('assets/img/jgu.png') }}" style="height: 60px;" alt="">
@@ -43,41 +43,51 @@
     <center>
         <b style="font-size:50px">SCAN DISINI</b>
         <br>
-        <b style="font-size:20px;">UNTUK MELAKUKAN ABSENSI @if($data->type =='E') ACARA @elseif($data->type =='M') RAPAT @endif</b>
+        <b style="font-size:20px;">UNTUK MELAKUKAN ABSENSI @if($data->type =='E') ACARA @elseif($data->type =='M') RAPAT
+            @endif</b>
         <br>
         <b style="font-size:30px">{{$data->title}}</b>
         <br>
-        <a href="{{$link}}" target="_blank" ><img src="{!! $qr !!}" style="height: 300px;margin:40px 0 20px 0;"></a>
+        <a href="{{$link}}" target="_blank"><img src="{!! $qr !!}" style="height: 300px;margin:40px 0 20px 0;"></a>
         <br>
         <h4>[ <code style="color:red">{{$link}}</code> ]</h4>
         <br>
         <b style="font-size:20px ">{{$data->location}}</b>
         <br>
         <i style="font-size:15px ">{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}</i>
-      <hr>
+        <hr>
         <br>
         <b style="font-size:15px ">LANGKAH MELAKUKAN ABSENSI</b>
         <br>
         <br>
     </center>
-    <table width="100%"  style="font-size:13px;">
+    <table width="100%" style="font-size:13px;">
         <tr>
             <td width="30%" style="text-align: center;">
-            <h1>1.</h1>
-            <p>Menggunakan pemindai QR-Code</p>
+                <h1>1.</h1>
+                <p>Menggunakan pemindai QR-Code</p>
             </td>
             <td width="40%" style="text-align: center;">
-            <h1>2.</h1>
-            <p>Masuk dengan akun Anda</p>
+                <h1>2.</h1>
+                <p>Masuk dengan akun Anda</p>
             </td>
             <td width="30%" style="text-align:center;">
-            <h1>3.</h1>
-            <p>Isikan detail data yang sesuai</p>
+                <h1>3.</h1>
+                <p>Isikan detail data yang sesuai</p>
             </td>
         </tr>
     </table>
     <hr>
-    <small><center><i>Jika terdapat kendala login atau belum memiliki akun SSO silakan menghubungi tim HR / ITIC.</i></center></small>
+    <blockquote>
+        <small style="font-size: 8pt;color:#999">
+            <center><i>
+                    Sivitas Akademika JGU (Mahasiswa/Staf/Dosen) silakan masuk melalui Single Sign-On (SSO) dengan
+                    menggunakan akun Klas atau masuk melalui Google dengan menggunakan email @jgu.ac.id, sedangkan untuk
+                    tamu (eksternal) dapat masuk menggunakan akun Google.<br>
+                    Jika terdapat kendala login atau belum memiliki akun SSO silakan menghubungi tim HR / ITIC.</i>
+            </center>
+        </small>
+    </blockquote>
 </body>
 
 </html>

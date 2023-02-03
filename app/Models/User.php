@@ -107,7 +107,7 @@ class User extends Authenticatable
 
     public function getNameWithTitleAttribute()
     { 
-      $name_with_title = ($this->front_title==null?"":$this->front_title." ").$this->name.($this->back_title==null?"":", ".$this->back_title);
+      $name_with_title = ($this->front_title==null?"":$this->front_title." ").ucwords(strtolower($this->name)).($this->back_title==null?"":", ".$this->back_title);
       return $name_with_title;
     }
 }

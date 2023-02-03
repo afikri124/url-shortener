@@ -93,16 +93,16 @@
     <thead>
         <tr style="vertical-align:middle">
             <td style="text-align:center;vertical-align:middle" width="5%">
-                <p>No</p>
+                <b>No</b>
             </td>
             <td style="text-align:center;" width="40%">
-                <p>Nama</p>
+                <b>Nama</b>
             </td>
             <td style="text-align:center;" width="35%">
-                <p>Jabatan</p>
+                <b>Jabatan</b>
             </td>
             <td style="text-align:center;" width="20%">
-                <p>Paraf</p>
+                <b>Paraf</b>
             </td>
         </tr>
     </thead>
@@ -118,7 +118,7 @@
             <td>
                 @if($d->longitude == null)
                 @php $datamerah = true; @endphp
-                <p><i style="color:red;" title="Lokasi">*</i> {{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}<i style="color:red;" title="Lokasi">*</i> 
                 </p>
                 @else
                 <p>

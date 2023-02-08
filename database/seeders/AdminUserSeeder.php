@@ -14,11 +14,13 @@ class AdminUserSeeder extends Seeder
     public function run()
     {
         //
-        User::create([
-            'name' => 'admin',
-            'username' => 'admin',
-            'email' => 'no-reply@jgu.ac.id',
-            'password' => bcrypt('adminadmin'),
-        ]);
+        if(!User::where('username', 'admin')->first()){
+            User::create([
+                'name' => 'admin',
+                'username' => 'admin',
+                'email' => 'no-reply@jgu.ac.id',
+                'password' => bcrypt('adminadmin'),
+            ]);
+        }
     }
 }

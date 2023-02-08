@@ -13,4 +13,9 @@ class DocCategory extends Model
         'name',
         'activity_id'
     ];
+
+    public function activity()
+    {
+        return $this->belongsTo(DocActivity::class, 'activity_id');
+    }
 }

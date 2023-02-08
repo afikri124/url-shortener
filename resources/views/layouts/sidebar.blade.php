@@ -115,6 +115,50 @@
                 </li>
             </ul>
         </li>
+        @if(Auth::user()->username == 'admin')
+        <li class="menu-item {{ request()->route()->getPrefix() == '/DOC' ? 'open' : '' }}">
+            <a href="#" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-archive"></i>
+                <div>Dokumen</div>
+            </a>
+            <ul class="menu-sub">
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='DOC.index' ? 'active' : '' }}">
+                    <a href="{{ route('DOC.index') }}" class="menu-link">
+                        <div>Unggah</div>
+                    </a>
+                </li>
+                @if(Auth::user()->hasRole('DS'))
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='DOC.index' ? 'active' : '' }}">
+                    <a href="{{ route('DOC.index') }}" class="menu-link">
+                        <div>Evidence</div>
+                    </a>
+                </li>
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='DOC.category' ? 'active' : '' }}">
+                    <a href="{{ route('DOC.category') }}" class="menu-link">
+                        <div>Kategori</div>
+                    </a>
+                </li>
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='DOC.dept' ? 'active' : '' }}">
+                    <a href="{{ route('DOC.dept') }}" class="menu-link">
+                        <div>Departemen</div>
+                    </a>
+                </li>
+                @endif
+                @if(Auth::user()->hasRole('AD'))
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='DOC.activity' ? 'active' : '' }}">
+                    <a href="{{ route('DOC.activity') }}" class="menu-link">
+                        <div>Aktivitas</div>
+                    </a>
+                </li>
+                @endif
+            </ul>
+        </li>
+        @endif
         @endif
 
         @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR'))

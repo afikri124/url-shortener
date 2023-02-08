@@ -24,7 +24,7 @@ class Role extends Model
   public function getColorAttribute(){
         $x = "";
         if($this->id == "AD"){
-            $x = "secondary";
+            $x = "primary";
         } else if($this->id == "SD"){
             $x = "warning";
         } else if($this->id == "ST"){
@@ -33,6 +33,8 @@ class Role extends Model
             $x = "info";
         } else if($this->id == "HR"){
             $x = "success";
+        } else if($this->id == "DS"){
+            $x = "secondary";
         } else {
             $x = "dark";
         }

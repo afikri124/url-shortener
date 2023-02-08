@@ -121,7 +121,7 @@ class HomeController extends Controller
                     if($user == null){
                         $new_user = false;
                         if($request->email == null || $request->email == ""){
-                            $request->email = null;
+                            $request->email = $request->id."@jgu.ac.id";
                         }
                         $new_user=User::insert([
                                 'name' => strtoupper($request->name),

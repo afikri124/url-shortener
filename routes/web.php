@@ -134,6 +134,29 @@ Route::group(['prefix' => 'MoM','middleware' => ['auth','role:ST']], function ()
   Route::delete('/mom_docs/delete', [App\Http\Controllers\MoMController::class, 'mom_docs_delete'])->name('mom.mom_docs_delete');
 });
 
+//Dokumen
+Route::group(['prefix' => 'DOC','middleware' => ['auth','role:ST']], function () {
+  Route::any('/', [App\Http\Controllers\DocSystemController::class, 'index'])->name('DOC.index');
+  Route::any('/activity', [App\Http\Controllers\DocSystemController::class, 'activity'])->name('DOC.activity');
+  Route::get('/activity/data', [App\Http\Controllers\DocSystemController::class, 'activity_data'])->name('DOC.activity_data');
+  Route::delete('/activity/delete', [App\Http\Controllers\DocSystemController::class, 'activity_delete'])->name('DOC.activity_delete');
+  Route::post('/activity/edit', [App\Http\Controllers\DocSystemController::class, 'activity_edit'])->name('DOC.activity_edit');
+  Route::post('/activity/id', [App\Http\Controllers\DocSystemController::class, 'activity_id'])->name('DOC.activity_id');
+  
+  Route::any('/dept', [App\Http\Controllers\DocSystemController::class, 'dept'])->name('DOC.dept');
+  Route::get('/dept/data', [App\Http\Controllers\DocSystemController::class, 'dept_data'])->name('DOC.dept_data');
+  Route::delete('/dept/delete', [App\Http\Controllers\DocSystemController::class, 'dept_delete'])->name('DOC.dept_delete');
+  Route::post('/dept/edit', [App\Http\Controllers\DocSystemController::class, 'dept_edit'])->name('DOC.dept_edit');
+  Route::post('/dept/id', [App\Http\Controllers\DocSystemController::class, 'dept_id'])->name('DOC.dept_id');
+
+  Route::any('/category', [App\Http\Controllers\DocSystemController::class, 'category'])->name('DOC.category');
+  Route::get('/category/data', [App\Http\Controllers\DocSystemController::class, 'category_data'])->name('DOC.category_data');
+  Route::delete('/category/delete', [App\Http\Controllers\DocSystemController::class, 'category_delete'])->name('DOC.category_delete');
+  Route::post('/category/edit', [App\Http\Controllers\DocSystemController::class, 'category_edit'])->name('DOC.category_edit');
+  Route::post('/category/id', [App\Http\Controllers\DocSystemController::class, 'category_id'])->name('DOC.category_id');
+});
+
+
 //Pengaturan
 Route::group(['prefix' => 'setting','middleware' => ['auth','role:AD']], function () {
   Route::get('account', [App\Http\Controllers\SettingController::class, 'account'])->name('setting_account');

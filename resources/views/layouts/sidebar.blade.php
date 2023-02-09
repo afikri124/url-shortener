@@ -115,7 +115,6 @@
                 </li>
             </ul>
         </li>
-        <!-- @if(Auth::user()->username == 'admin') -->
         <li class="menu-item {{ request()->route()->getPrefix() == '/DOC' ? 'open' : '' }}">
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-archive"></i>
@@ -158,7 +157,6 @@
                 @endif
             </ul>
         </li>
-        <!-- @endif -->
         @endif
 
         @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR'))

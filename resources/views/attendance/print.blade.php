@@ -153,7 +153,7 @@
             <td>
                 @if($d->longitude == null)
                 @php $datamerah = true; @endphp
-                <p style="color:red;">{{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}<i style="color:red;" title="Lokasi">*</i> 
                 </p>
                 @else
                 <p>

@@ -138,8 +138,12 @@ Route::group(['prefix' => 'MoM','middleware' => ['auth','role:ST']], function ()
 Route::group(['prefix' => 'DOC','middleware' => ['auth','role:ST']], function () {
   Route::any('/', [App\Http\Controllers\DocSystemController::class, 'index'])->name('DOC.index');
   Route::get('/data', [App\Http\Controllers\DocSystemController::class, 'index_data'])->name('DOC.index_data');
-  Route::get('/view/{id}', [App\Http\Controllers\DocSystemController::class, 'view'])->name('DOC.view');
-  Route::get('/print/{id}', [App\Http\Controllers\DocSystemController::class, 'print'])->name('DOC.print');
+  Route::delete('/delete', [App\Http\Controllers\DocSystemController::class, 'index_delete'])->name('DOC.index_delete');
+  Route::any('/view/{id}', [App\Http\Controllers\DocSystemController::class, 'index_view'])->name('DOC.view');
+  Route::delete('/edit/delete', [App\Http\Controllers\DocSystemController::class, 'index_edit_delete'])->name('DOC.index_edit_delete');
+  Route::any('/edit/{id}', [App\Http\Controllers\DocSystemController::class, 'index_edit'])->name('DOC.edit');
+  Route::get('/edit/{id}/data', [App\Http\Controllers\DocSystemController::class, 'index_edit_data'])->name('DOC.index_edit_data');
+  
 
   Route::any('/activity', [App\Http\Controllers\DocSystemController::class, 'activity'])->name('DOC.activity');
   Route::get('/activity/data', [App\Http\Controllers\DocSystemController::class, 'activity_data'])->name('DOC.activity_data');

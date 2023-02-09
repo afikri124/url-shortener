@@ -20,4 +20,19 @@ class DocSystem extends Model
         'remark',
         'histories'
     ];
+
+    public function status()
+    {
+        return $this->belongsTo(DocStatus::class, 'status_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(DocCategory::class, 'category_id');
+    }
+
+    public function PIC()
+    {
+        return $this->hasMany(DocPIC::class, 'doc_id');
+    } 
 }

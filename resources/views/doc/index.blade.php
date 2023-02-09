@@ -32,7 +32,7 @@
     }
 
     table.dataTable td:nth-child(6) {
-        max-width: 50px;
+        max-width: 100px;
     }
 
   
@@ -49,6 +49,10 @@
 
 
 @section('content')
+<div class="alert alert-secondary alert-dismissible" role="alert">
+    Silahkan login menggunakan email departemen/akun PENANGGUNG JAWAB untuk mengunggah dan mengubah status dokumen yang diperlukan. 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 @if(session('msg'))
 <div class="alert alert-primary alert-dismissible" role="alert">
     {{session('msg')}}
@@ -65,7 +69,7 @@
                         <form method="POST" class="row" target="_blank" action="">
                             @csrf
                             <div class=" col-md-3">
-                                <select id="select_activitas" class="select2 form-select" name="aktivitas" data-placeholder="Aktivitas">
+                                <select id="select_aktivitas" class="select2 form-select" name="aktivitas" data-placeholder="Aktivitas">
                                     <option value="">Aktivitas</option>
                                     @foreach($activity as $d)
                                     <option value="{{ $d->id }}">{{ $d->name }}</option>
@@ -102,6 +106,93 @@
                     </div>
                 </div>
             </div>
+            @if(Auth::user()->hasRole('DS'))
+            <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
+                aria-labelledby="offcanvasEndLabel">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Dokumen</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body my-auto mx-0 flex-grow-1">
+                    <form class="add-new-record pt-0 row g-2 fv-plugins-bootstrap5 fv-plugins-framework"
+                        id="form-add-new-record" method="POST" action="">
+                        @csrf
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label">Kategori <i class="text-danger">*</i></label>
+                            <div class="input-group input-group-merge has-validation">
+                                <select class="form-select @error('kategori') is-invalid @enderror select2-modal" name="kategori" data-placeholder="-- Pilih Kategori--">
+                                    <option value="">-- Pilih Kategori --</option>
+                                    @foreach($category as $d)
+                                    <option value="{{ $d->id }}" {{ ($d->id==old('kategori') ? "selected": "") }}>{{ $d->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('kategori')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label">Nama <i class="text-danger">*</i></label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama"
+                                    placeholder="Nama Dokumen yg diperlukan" value="{{ old('nama') }}">
+                                @error('nama')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Link Unggah <i class="text-danger">*</i></label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('link') is-invalid @enderror" name="link"
+                                    placeholder="Link Gdrive" value="{{ old('link') }}">
+                                @error('link')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Batas Waktu</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="datetime-local" class="form-control @error('batas_waktu') is-invalid @enderror" name="batas_waktu"
+                                    placeholder="yyyy-mm-dd hh:mm" value="{{ old('batas_waktu') }}">
+                                @error('batas_waktu')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Catatan</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('catatan') is-invalid @enderror" name="catatan"
+                                     value="{{ old('catatan') }}">
+                                @error('catatan')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
+                            <button type="reset" class="btn btn-outline-secondary"
+                                data-bs-dismiss="offcanvas">Batal</button>
+                        </div>
+                        <div></div><input type="hidden">
+                    </form>
+
+                </div>
+            </div>
+            @endif
         </div>
 
         <table class="table table-hover table-sm" id="datatable" width="100%">
@@ -112,7 +203,9 @@
                     <th width="100px">Batas Waktu</th>
                     <th>Penanggung Jawab</th>
                     <th data-priority="4">Status</th>
+                    @if(Auth::user()->hasRole('DS'))
                     <th width="50px" data-priority="3">Aksi</th>
+                    @endif
                 </tr>
             </thead>
         </table>
@@ -121,6 +214,8 @@
 @endsection
 
 @section('script')
+<script src="{{asset('assets/vendor/libs/moment/moment.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/moment/id.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/datatables-bootstrap5.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables/datatables.responsive.js')}}"></script>
@@ -141,8 +236,52 @@
             });
         })(jQuery);
     }, 350);
+    setTimeout(function () {
+        (function ($) {
+            "use strict";
+            $(".select2-modal").select2({
+                dropdownParent: $('#newrecord'),
+                allowClear: true,
+                minimumResultsForSearch: 5
+            });
+        })(jQuery);
+    }, 350);
 </script>
 <script type="text/javascript">
+     function DeleteId(id) {
+        swal({
+                title: "Apa kamu yakin?",
+                text: "Setelah dihapus, data tidak dapat dipulihkan!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "{{ route('DOC.index_delete') }}",
+                        type: "DELETE",
+                        data: {
+                            "id": id,
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                        },
+                        success: function (data) {
+                            if (data['success']) {
+                                swal(data['message'], {
+                                    icon: "success",
+                                });
+                                $('#datatable').DataTable().ajax.reload();
+                            } else {
+                                swal(data['message'], {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    })
+                }
+            })
+    }
+
     $(document).ready(function () {
         var table = $('#datatable').DataTable({
             responsive: true,
@@ -156,7 +295,9 @@
             ajax: {
                 url: "{{ route('DOC.index_data') }}",
                 data: function (d) {
-                    // d.select_pembuat = $('#select_pembuat').val(),
+                    d.activity_id = $('#select_aktivitas').val(),
+                    d.category_id = $('#select_kategori').val(),
+                    d.status_id = $('#select_status').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -173,38 +314,71 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<span title='` + row.name + `'>` + row.name + `</span>`;
+                        var x = `<span title='` + row.name + `'>` + row.name + `</span>`;
+                        if (row.p_i_c != null) {
+                            var check = false;
+                            row.p_i_c.forEach((e) => {
+                                if(e.department.email == "{{Auth::user()->email}}" || e.user.email == "{{Auth::user()->email}}"){
+                                    check = true;
+                                }
+                            });
+                            if(check){
+                                x = `<a title="` + row.name + `" href="{{ url('DOC/view/` + row.idd +  `') }}">` + row.name + `</a>`;
+                            }
+                        }
+                        return x;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.deadline;
+                        return moment(row.deadline).format('L H:mm');
                     },
                     className: "text-md-center"
                 },  
                 {
                     render: function (data, type, row, meta) {
-                        // if (row.user != null) {
-                        //     return "<span title='" + row.user.name + "'>" + row.user.name +
-                        //         "</span>";
-                        // }
+                        if (row.p_i_c != null) {
+                            var x = "";
+                            row.p_i_c.forEach((e) => {
+                                x += '<i class="badge rounded-pill bg-primary" title="'+e.department.email+'">' 
+                                + e.department.name + '</i> <i class="badge rounded-pill bg-label-primary" title="'+e.user.email+'">' 
+                                + e.user.name + '</i><br>';
+                            });
+                            return x;
+                        }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return "<span title='" + row.status_id + "'>" + row.status_id + "</span>";
+                        if (row.status != null) {
+                            return "<span title='" + row.status.name + "'>" + row.status.name +
+                                "</span>";
+                        }
                     },
                 },
+                
+                @if(Auth::user()->hasRole('DS'))
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-success btn btn-light btn-sm" title="Tulis Notulensi" href="{{ url('MoM/note-taker/` + row.idd +  `') }}"><i class="bx bxs-edit"></i></a>`;
+                        var x = "";
+                            x += `<a class="text-success" title="Ubah" href="{{ url('DOC/edit/` + row.idd +  `') }}"><i class="bx bxs-edit"></i></a> <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
+                            .id +
+                            `)" ><i class="bx bx-trash"></i></a>`;
+                        return x;
                     },
                     className: "text-center"
                 }
+                @endif
             ]
         });
         
-        $('#select_pembuat').change(function () {
+        $('#select_aktivitas').change(function () {
+            table.draw();
+        });
+        $('#select_kategori').change(function () {
+            table.draw();
+        });
+        $('#select_status').change(function () {
             table.draw();
         });
     });

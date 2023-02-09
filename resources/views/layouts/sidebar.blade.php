@@ -115,7 +115,7 @@
                 </li>
             </ul>
         </li>
-        @if(Auth::user()->username == 'admin')
+        <!-- @if(Auth::user()->username == 'admin') -->
         <li class="menu-item {{ request()->route()->getPrefix() == '/DOC' ? 'open' : '' }}">
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-archive"></i>
@@ -125,16 +125,16 @@
                 <li
                     class="menu-item {{ Route::currentRouteName()=='DOC.index' ? 'active' : '' }}">
                     <a href="{{ route('DOC.index') }}" class="menu-link">
-                        <div>Unggah</div>
+                        <div>Unggah Bukti</div>
                     </a>
                 </li>
                 @if(Auth::user()->hasRole('DS'))
-                <li
+                <!-- <li
                     class="menu-item {{ Route::currentRouteName()=='DOC.index' ? 'active' : '' }}">
                     <a href="{{ route('DOC.index') }}" class="menu-link">
                         <div>Evidence</div>
                     </a>
-                </li>
+                </li> -->
                 <li
                     class="menu-item {{ Route::currentRouteName()=='DOC.category' ? 'active' : '' }}">
                     <a href="{{ route('DOC.category') }}" class="menu-link">
@@ -158,7 +158,7 @@
                 @endif
             </ul>
         </li>
-        @endif
+        <!-- @endif -->
         @endif
 
         @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR'))

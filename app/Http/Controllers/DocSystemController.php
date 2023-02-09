@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\DocActivity;
 use App\Models\DocCategory;
 use App\Models\DocDepartment;
+use App\Models\DocStatus;
 use App\Models\DocSystem;
 use Illuminate\Http\Request;
 
@@ -26,13 +27,27 @@ class DocSystemController extends Controller
     public function index(Request $request)
     {
         $activity = DocActivity::select('*')->get();
+        $category = DocCategory::select('*')->get();
+        $status = DocStatus::select('*')->get();
         $user = User::select('id AS user_id','name')->get();
-        return view('doc.index', compact('activity','user'));
+        return view('doc.index', compact('activity', 'category', 'status', 'user'));
     }
 
     public function index_data(Request $request)
     {
-
+        $data = DocSystem::select('*')->orderByDesc("id");
+        return Datatables::of($data)
+                ->filter(function ($instance) use ($request) {
+                    if (!empty($request->get('search'))) {
+                        $search = $request->get('search');
+                        $instance->where('name', 'LIKE', "%$search%");
+                    }
+                })
+                ->addColumn('idd', function($x){
+                    return Crypt::encrypt($x['id']);
+                })
+                ->rawColumns(['idd'])
+                ->make(true);
     }
 
     public function activity(Request $request)

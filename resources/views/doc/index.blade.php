@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Evidence')
+@section('title', 'Unggah Bukti')
 
 @section('breadcrumb-items')
 <span class="text-muted fw-light">Dokumen /</span>
@@ -24,7 +24,7 @@
     }
     
     table.dataTable td:nth-child(4) {
-        max-width: 50px;
+        max-width: 150px;
     }
 
     table.dataTable td:nth-child(5) {
@@ -35,9 +35,7 @@
         max-width: 50px;
     }
 
-    table.dataTable td:nth-child(7) {
-        max-width: 50px;
-    }
+  
 
     table.dataTable td {
         white-space: nowrap;
@@ -67,18 +65,39 @@
                         <form method="POST" class="row" target="_blank" action="">
                             @csrf
                             <div class=" col-md-3">
-                                <select id="select_pembuat" class="select2 form-select" name="pembuat" data-placeholder="Pembuat Absensi">
-                                    <option value="">Pembuat Absensi</option>
-                                    @foreach($user as $d)
-                                    <option value="{{ $d->user_id }}">{{ $d->name }}</option>
+                                <select id="select_activitas" class="select2 form-select" name="aktivitas" data-placeholder="Aktivitas">
+                                    <option value="">Aktivitas</option>
+                                    @foreach($activity as $d)
+                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <!-- <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-primary" type="submit"><i class="bx bx-export me-sm-2"></i>
-                                    <span>Unduh Rekap</span>
+                            <div class=" col-md-3">
+                                <select id="select_kategori" class="select2 form-select" name="kategori" data-placeholder="Kategori">
+                                    <option value="">Kategori</option>
+                                    @foreach($category as $d)
+                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class=" col-md-3">
+                                <select id="select_status" class="select2 form-select" name="status" data-placeholder="Status">
+                                    <option value="">Status</option>
+                                    @foreach($status as $d)
+                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3 text-md-end text-center pt-3 pt-md-0">
+                                @if(Auth::user()->hasRole('DS'))
+                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                                    data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
+                                    aria-controls="DataTables_Table_0" type="button"><span><i
+                                            class="bx bx-plus me-sm-2"></i>
+                                        <span>Tambah</span></span>
                                 </button>
-                            </div> -->
+                                @endif
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -89,12 +108,10 @@
             <thead>
                 <tr>
                     <th width="20px" data-priority="1">No</th>
-                    <th data-priority="2">Judul Rapat</th>
-                    <th width="50px">Tanggal</th>
-                    <th>Lokasi</th>
-                    <th>Pimpinan</th>
-                    <th>Peserta</th>
-                    <th width="50px">Pembuat</th>
+                    <th data-priority="2">Dokumen yg diperlukan</th>
+                    <th width="100px">Batas Waktu</th>
+                    <th>Penanggung Jawab</th>
+                    <th data-priority="4">Status</th>
                     <th width="50px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
@@ -137,9 +154,9 @@
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
-                url: "{{ route('mom.note-taker_data') }}",
+                url: "{{ route('DOC.index_data') }}",
                 data: function (d) {
-                    d.select_pembuat = $('#select_pembuat').val(),
+                    // d.select_pembuat = $('#select_pembuat').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -156,37 +173,26 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<span title='` + row.title + `'>` + row.title + `</span>`;
+                        return `<span title='` + row.name + `'>` + row.name + `</span>`;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return row.date;
+                        return row.deadline;
                     },
                     className: "text-md-center"
-                },
+                },  
                 {
                     render: function (data, type, row, meta) {
-                      return "<span title='" + row.location + "'>" + row.location + "</span>";
+                        // if (row.user != null) {
+                        //     return "<span title='" + row.user.name + "'>" + row.user.name +
+                        //         "</span>";
+                        // }
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return "<span title='" + row.host + "'>" + row.host + "</span>";
-                    },
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return "<span title='" + row.participant + "'>" + row.participant + "</span>";
-                    },
-                },
-                
-                {
-                    render: function (data, type, row, meta) {
-                        if (row.user != null) {
-                            return "<span title='" + row.user.name + "'>" + row.user.name +
-                                "</span>";
-                        }
+                        return "<span title='" + row.status_id + "'>" + row.status_id + "</span>";
                     },
                 },
                 {

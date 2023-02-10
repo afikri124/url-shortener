@@ -71,7 +71,7 @@ class DocSystemController extends Controller
                         $query->select('id', 'email', 'name');
                     }])
                     ->with('PIC.department')
-                    ->select('doc_systems.*', 'doc_categories.activity_id')->orderByDesc("id");
+                    ->select('doc_systems.*', 'doc_categories.activity_id')->orderBy("category_id");
         return Datatables::of($data)
                 ->filter(function ($instance) use ($request) {
                     if (!empty($request->get('activity_id'))) {

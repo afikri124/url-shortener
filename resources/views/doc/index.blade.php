@@ -337,21 +337,27 @@
                 },  
                 {
                     render: function (data, type, row, meta) {
+                        var x = '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">';
                         if (row.p_i_c != null) {
-                            var x = "";
                             row.p_i_c.forEach((e) => {
-                                x += '<i class="badge rounded-pill bg-primary" title="'+e.department.email+'">' 
-                                + e.department.name + '</i> <i class="badge rounded-pill bg-label-primary" title="'+e.user.email+'">' 
-                                + e.user.name + '</i><br>';
+                                x += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="' +
+                                    e.department.email + '"><i class="badge rounded-pill bg-primary"  style="font-size:8pt;">' + e.department.name +
+                                    '</i></li>';
+
+                                x += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="' +
+                                    e.user.email + '"><i class="badge rounded-pill bg-label-primary"  style="font-size:8pt;">' + e.user.name +
+                                    '</i></li>';
                             });
                             return x;
                         }
+                        var y = "</ul>";
+                        return x + y;
                     },
                 },
                 {
                     render: function (data, type, row, meta) {
                         if (row.status != null) {
-                            return "<span title='" + row.status.name + "'>" + row.status.name +
+                            return "<span class='text-"+row.status.color+"' title='" + row.status.name + "'>" + row.status.name +
                                 "</span>";
                         }
                     },
@@ -361,9 +367,12 @@
                 {
                     render: function (data, type, row, meta) {
                         var x = "";
-                            x += `<a class="text-success" title="Ubah" href="{{ url('DOC/edit/` + row.idd +  `') }}"><i class="bx bxs-edit"></i></a> <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
-                            .id +
-                            `)" ><i class="bx bx-trash"></i></a>`;
+                        x += `<a class="text-success" title="Ubah" href="{{ url('DOC/edit/` + row.idd +  `') }}"><i class="bx bxs-edit"></i></a>`;
+                        if(row.created_id == "{{Auth::user()->id}}" || row.created_id == "1"){
+                            x += ` <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
+                            .id + `)" ><i class="bx bx-trash"></i></a>`;
+                        }
+                            
                         return x;
                     },
                     className: "text-center"

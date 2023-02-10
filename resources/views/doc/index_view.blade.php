@@ -49,7 +49,7 @@
                                 </tr>
                                 <tr>
                                     <td class="pe-3 text-muted w-30">Status</td>
-                                    <td class="w-70">{{$data->status->name}}</td>
+                                    <td class="w-70 text-{{$data->status->color}}">{{$data->status->name}}</td>
                                 </tr>
                                 @if($data->remark != null)
                                 <tr>

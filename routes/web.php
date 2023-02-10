@@ -186,6 +186,28 @@ Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::cl
 Route::group(['prefix' => 'FILE'], function () {
 
 });
+
+//Email
+Route::get('/email', function () {
+  $data['email'] = "safirafaizah@jgu.ac.id";
+  $data['name'] = "Safira";
+
+  $data['subject'] = "Dokumen Bukti "."Akreditasi";
+  $data['messages'] = "Dalam rangka <b>"."Akreditasi Prodi Manjemen"."</b>, Anda ditugaskan untuk mengunggah dokumen berikut:";
+
+  $data['catatan'] = "Langkah menggunggah dokumen:<br><ol>"
+  ."<li>Akses halaman <b>https://s.jgu.ac.id</b></li>"
+  ."<li>Masuk menggunakan email penerima pemberitahuan ini / Akun SSO penanggung jawab.</li>"
+  ."<li>Tekan menu <b>Dokumen > Unggah Bukti</b></li>"
+  ."<li>Pilih dan tekan nama Dokumen yang diperlukan</li> "
+  ."<li>Lalu tekan <b>Unggah Bukti Disini</b></li>"
+  ."<li>Jika sudah, maka segera tekan <b>Sudah Unggah</b>.</li>"
+  ."</ol>";
+  $data['kegiatan'] = ["S000000","Sssss"];
+  return new App\Mail\MailNotification($data);
+})->middleware(['auth', 'role:AD']);
+
+
 //Rest API QR-JGU
 Route::get('/qrcode', [App\Http\Controllers\QrController::class, 'qrcode'])->name('qrcode');
 //letakkan di paling bawah

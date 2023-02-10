@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Mail\MailNotification;
 
 /*
 |--------------------------------------------------------------------------
@@ -205,7 +206,7 @@ Route::group(['prefix' => 'email','middleware' => ['auth','role:AD']], function 
     ."<li>Lalu tekan <b>Unggah Bukti Disini</b></li>"
     ."<li>Jika sudah, maka segera tekan <b>Sudah Unggah</b>.</li>"
     ."</ol>";
-    return new \App\Mail\MailNotification($data);
+    return new MailNotification($data);
   });
 
   Route::get('/test', [App\Http\Controllers\DocSystemController::class, 'BroadCastNotification']);

@@ -188,26 +188,28 @@ Route::group(['prefix' => 'FILE'], function () {
 });
 
 //Email
-Route::get('/email', function () {
-  $data['email'] = "safirafaizah@jgu.ac.id";
-  $data['name'] = "Safira";
+Route::group(['prefix' => 'email','middleware' => ['auth','role:AD']], function () {
+  Route::get('/', function () {
+    $data['email'] = "safirafaizah@jgu.ac.id";
+    $data['name'] = "Safira";
 
-  $data['subject'] = "Dokumen Bukti "."Akreditasi";
-  $data['messages'] = "Dalam rangka <b>"."Akreditasi Prodi Manjemen"."</b>, Anda ditugaskan untuk mengunggah dokumen berikut:";
-  $data['item'] = ["S000000","Sssss"];
+    $data['subject'] = "Dokumen Bukti "."Akreditasi";
+    $data['messages'] = "Dalam rangka <b>"."Akreditasi Prodi Manjemen"."</b>, Anda ditugaskan untuk mengunggah dokumen berikut:";
+    $data['item'] = ["S000000","Sssss"];
 
-  $data['catatan'] = "Langkah menggunggah dokumen:<br><ol>"
-  ."<li>Akses halaman <b>https://s.jgu.ac.id</b></li>"
-  ."<li>Masuk menggunakan email penerima pemberitahuan ini / Akun SSO penanggung jawab.</li>"
-  ."<li>Tekan menu <b>Dokumen > Unggah Bukti</b></li>"
-  ."<li>Pilih dan tekan nama Dokumen yang diperlukan</li> "
-  ."<li>Lalu tekan <b>Unggah Bukti Disini</b></li>"
-  ."<li>Jika sudah, maka segera tekan <b>Sudah Unggah</b>.</li>"
-  ."</ol>";
-  return new App\Mail\MailNotification($data);
-})->middleware(['auth', 'role:AD']);
+    $data['catatan'] = "Langkah menggunggah dokumen:<br><ol>"
+    ."<li>Akses halaman <b>https://s.jgu.ac.id</b></li>"
+    ."<li>Masuk menggunakan email penerima pemberitahuan ini / Akun SSO penanggung jawab.</li>"
+    ."<li>Tekan menu <b>Dokumen > Unggah Bukti</b></li>"
+    ."<li>Pilih dan tekan nama Dokumen yang diperlukan</li> "
+    ."<li>Lalu tekan <b>Unggah Bukti Disini</b></li>"
+    ."<li>Jika sudah, maka segera tekan <b>Sudah Unggah</b>.</li>"
+    ."</ol>";
+    return new App\Mail\MailNotification($data);
+  });
 
-Route::get('/email/test', [App\Http\Controllers\DocSystemController::class, 'BroadCastNotification'])->middleware(['auth', 'role:AD']);
+  Route::get('/test', [App\Http\Controllers\DocSystemController::class, 'BroadCastNotification']);
+});
 
 
 //Rest API QR-JGU

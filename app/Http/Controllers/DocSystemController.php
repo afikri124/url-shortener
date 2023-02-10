@@ -18,6 +18,7 @@ use App\Models\DocSystem;
 use Illuminate\Http\Request;
 use App\Mail\MailNotification;
 use Mail;
+use DB;
 
 class DocSystemController extends Controller
 {
@@ -224,7 +225,7 @@ class DocSystemController extends Controller
                         } 
                         $s = array();
                         $s['name'] = implode(", ",$name);
-                        $s['subject'] = "Dokumen Bukti "."Akreditasi";
+                        $s['subject'] = "Dokumen bukti yang dibutuhkan";
                         $s['messages'] = "Mohon maaf, Dokumen yang anda unggah harus direvisi";
                         $s['item'] = [$data->name];
                         $s['catatan'] = "Catatan : <br><i>".$request->catatan."</i>";
@@ -599,5 +600,63 @@ class DocSystemController extends Controller
                 'success' => false,
                 'message' => 'Terjadi kesalahan!'
             ]);
+    }
+
+    public function BroadCastNotification(){
+        $dataPIC = DocPIC::with('department')->with('user')
+        ->select('doc_p_i_c_s.department_id','doc_p_i_c_s.pic_id', DB::raw("COUNT('doc_systems.status_id') as total"))
+        ->join('doc_systems','doc_systems.id','=','doc_p_i_c_s.doc_id')
+        ->where('status_id','=','S1')
+        ->orWhere('status_id','=','S3')
+        ->groupBy('department_id','pic_id')
+        ->get();
+
+        foreach($dataPIC as $d){
+           $item = DocSystem::select('doc_systems.id','doc_systems.name', 'doc_systems.status_id', 'doc_statuses.name as status', 'doc_p_i_c_s.department_id')
+            ->join('doc_p_i_c_s','doc_systems.id','=','doc_p_i_c_s.doc_id')
+            ->join('doc_statuses','doc_systems.status_id','=','doc_statuses.id')
+            ->where(function ($query) {
+                $query->where('status_id','=','S1')
+                    ->orWhere('status_id','=','S3');
+            })
+            ->where('department_id','=', $d->department_id)
+            ->groupBy('doc_systems.id','department_id','doc_systems.name','doc_systems.status_id', 'doc_statuses.name',)
+            ->get();
+
+            if($d->total > 0){
+                $sendTo = $d->department->email;
+                $ccTo = $d->user->email;
+                $itemEmail = array();
+                $actEmail = array();
+                foreach($item as $x){
+                    array_push($itemEmail, $x->name." (".$x->status.")");
+                    $actDOC = DocSystem::select('doc_activities.name')
+                    ->join('doc_categories','doc_systems.category_id','=','doc_categories.id')
+                    ->join('doc_activities','doc_activities.id','=','doc_categories.activity_id')
+                    ->find($x->id);
+                    if(!in_array($actDOC->name, $actEmail, true)){
+                        array_push($actEmail, $actDOC->name);
+                    }
+                }
+
+                $aktivitas = implode(", ",$actEmail);
+                $s = array();
+                $s['name'] = $d->user->name;
+                $s['subject'] = "Dokumen bukti yang dibutuhkan";
+                $s['messages'] = "Dalam rangka <b>".$aktivitas."</b>, Anda ditugaskan untuk mengunggah dokumen berikut:";
+                $s['item'] = $itemEmail;
+                $s['catatan'] = "Langkah menggunggah dokumen:<br><ol>"
+                ."<li>Akses halaman <b>https://s.jgu.ac.id</b></li>"
+                ."<li>Masuk menggunakan email penerima pemberitahuan ini / Akun SSO penanggung jawab.</li>"
+                ."<li>Tekan menu <b>Dokumen > Unggah Bukti</b></li>"
+                ."<li>Pilih dan tekan nama Dokumen yang diperlukan</li> "
+                ."<li>Lalu tekan <b>Unggah Bukti Disini</b></li>"
+                ."<li>Jika sudah, maka segera tekan <b>Sudah Unggah</b>.</li>"
+                ."</ol>";
+                \Mail::to($sendTo)->cc($ccTo)->queue(new \App\Mail\MailNotification($s));
+            }
+        }
+        Log::info("DocSystem mengirim email broadcast!");
+        // return response()->json($dataPIC);
     }
 }

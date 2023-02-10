@@ -207,6 +207,8 @@ Route::get('/email', function () {
   return new App\Mail\MailNotification($data);
 })->middleware(['auth', 'role:AD']);
 
+Route::get('/email/test', [App\Http\Controllers\DocSystemController::class, 'BroadCastNotification'])->middleware(['auth', 'role:AD']);
+
 
 //Rest API QR-JGU
 Route::get('/qrcode', [App\Http\Controllers\QrController::class, 'qrcode'])->name('qrcode');

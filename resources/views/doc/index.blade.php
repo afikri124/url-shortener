@@ -24,11 +24,11 @@
     }
     
     table.dataTable td:nth-child(4) {
-        max-width: 150px;
+        max-width: 130px;
     }
 
     table.dataTable td:nth-child(5) {
-        max-width: 50px;
+        max-width: 80px;
     }
 
     table.dataTable td:nth-child(6) {

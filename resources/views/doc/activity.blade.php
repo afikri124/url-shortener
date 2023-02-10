@@ -126,7 +126,7 @@
                     <th width="20px" data-priority="1">No</th>
                     <th>Penanggung Jawab</th>
                     <th data-priority="2">Aktivitas</th>
-                    <th width="85px" data-priority="3">Aksi</th>
+                    <th width="50px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
         </table>

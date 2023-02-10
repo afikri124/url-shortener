@@ -20,15 +20,11 @@
         vertical-align: middle;
     }
 
-    table.dataTable td:nth-child(1) {
-        max-width: 100px;
-    }
-
     table.dataTable td:nth-child(2) {
         max-width: 200px;
     }
 
-    table.dataTable td:nth-child(3) {
+    table.dataTable td:nth-child(4) {
         max-width: 50px;
     }
 
@@ -126,7 +122,7 @@
                     <th width="20px" data-priority="1">No</th>
                     <th data-priority="2">Kategori</th>
                     <th >Aktivitas</th>
-                    <th width="85px" data-priority="3">Aksi</th>
+                    <th width="50px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
         </table>

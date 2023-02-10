@@ -176,7 +176,7 @@
 
 <!-- Offcanvas -->
 <!--Diterima Sidebar -->
-@if($data->status_id != "S2")
+@if($data->status_id == "S2")
 <div class="offcanvas offcanvas-end" id="modalValidasi" aria-hidden="true">
     <div class="offcanvas-header mb-3">
         <h5 class="offcanvas-title">Validast Bukti</h5>

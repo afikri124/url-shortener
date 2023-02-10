@@ -16,6 +16,7 @@ class WhAttendance extends Model
         'state',
         'type',
         'timestamp',
+        'idmesin'
     ];
 
     public function user()

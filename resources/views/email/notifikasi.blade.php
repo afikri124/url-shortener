@@ -33,11 +33,11 @@
     <tbody>
         @foreach($data['item'] as $d)
         <tr class="pad-left-right-space">
-            <td align="left" valign="top" width="35px">
+            <td align="left" valign="top" width="5px">
                 <p><strong>{{$no_urut++}}</strong></p>
             </td>
             <td align="left">
-                <p>{{ $d }}</p>
+                <p>{!! $d !!}</p>
             </td>
         </tr>
         @endforeach

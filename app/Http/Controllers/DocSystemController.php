@@ -225,7 +225,7 @@ class DocSystemController extends Controller
                         } 
                         $s = array();
                         $s['name'] = implode(", ",$name);
-                        $s['subject'] = "Dokumen bukti yang dibutuhkan";
+                        $s['subject'] = "Revisi Dokumen bukti yang dibutuhkan";
                         $s['messages'] = "Mohon maaf, Dokumen yang anda unggah harus direvisi";
                         $s['item'] = [$data->name];
                         $s['catatan'] = "Catatan : <br><i>".$request->catatan."</i>";
@@ -629,7 +629,7 @@ class DocSystemController extends Controller
                 $itemEmail = array();
                 $actEmail = array();
                 foreach($item as $x){
-                    array_push($itemEmail, $x->name." (".$x->status.")");
+                    array_push($itemEmail, $x->name." <i><b>(".$x->status.")</b></i>");
                     $actDOC = DocSystem::select('doc_activities.name')
                     ->join('doc_categories','doc_systems.category_id','=','doc_categories.id')
                     ->join('doc_activities','doc_activities.id','=','doc_categories.activity_id')

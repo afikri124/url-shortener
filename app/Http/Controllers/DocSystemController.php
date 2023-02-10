@@ -653,7 +653,7 @@ class DocSystemController extends Controller
                 ."<li>Lalu tekan <b>Unggah Bukti Disini</b></li>"
                 ."<li>Jika sudah, maka segera tekan <b>Sudah Unggah</b>.</li>"
                 ."</ol>";
-                \Mail::to($sendTo)->cc($ccTo)->queue(new \App\Mail\MailNotification($s));
+                Mail::to($sendTo)->cc($ccTo)->queue(new MailNotification($s));
             }
         }
         Log::info("DocSystem mengirim email broadcast!");

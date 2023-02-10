@@ -194,6 +194,7 @@ Route::get('/email', function () {
 
   $data['subject'] = "Dokumen Bukti "."Akreditasi";
   $data['messages'] = "Dalam rangka <b>"."Akreditasi Prodi Manjemen"."</b>, Anda ditugaskan untuk mengunggah dokumen berikut:";
+  $data['item'] = ["S000000","Sssss"];
 
   $data['catatan'] = "Langkah menggunggah dokumen:<br><ol>"
   ."<li>Akses halaman <b>https://s.jgu.ac.id</b></li>"
@@ -203,7 +204,6 @@ Route::get('/email', function () {
   ."<li>Lalu tekan <b>Unggah Bukti Disini</b></li>"
   ."<li>Jika sudah, maka segera tekan <b>Sudah Unggah</b>.</li>"
   ."</ol>";
-  $data['kegiatan'] = ["S000000","Sssss"];
   return new App\Mail\MailNotification($data);
 })->middleware(['auth', 'role:AD']);
 

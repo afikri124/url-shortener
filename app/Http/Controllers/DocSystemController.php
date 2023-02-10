@@ -16,6 +16,8 @@ use App\Models\DocPIC;
 use App\Models\DocStatus;
 use App\Models\DocSystem;
 use Illuminate\Http\Request;
+use App\Mail\MailNotification;
+use Mail;
 
 class DocSystemController extends Controller
 {
@@ -188,7 +190,8 @@ class DocSystemController extends Controller
                 $d = $data->update([ 
                     'remark' => ($request->catatan == null ? "-":$request->catatan),
                     'status_id' => "S4",
-                    'histories' => $hst
+                    'histories' => $hst,
+                    'updated_id' => Auth::user()->id
                 ]);
             } elseif($request->action == "revisi"){
                 $this->validate($request, 
@@ -207,6 +210,27 @@ class DocSystemController extends Controller
                     'status_id' => "S3",
                     'histories' => $hst
                 ]);
+                if($d){
+                    //TODO : Kirim email revisi
+                    $dataEmail = DocPIC::with('department')->with('user')->where('doc_id', $id)->get();
+                    if($dataEmail){
+                        $sendTo = array();
+                        $ccTo = array();
+                        $name = array();
+                        foreach($dataEmail as $x){
+                            array_push($sendTo, $x->department->email);
+                            array_push($ccTo, $x->user->email);
+                            array_push($name, $x->user->name);
+                        } 
+                        $s = array();
+                        $s['name'] = implode(", ",$name);
+                        $s['subject'] = "Dokumen Bukti "."Akreditasi";
+                        $s['messages'] = "Mohon maaf, Dokumen yang anda unggah harus direvisi";
+                        $s['item'] = [$data->name];
+                        $s['catatan'] = "Catatan : <br><i>".$request->catatan."</i>";
+                        \Mail::to($sendTo)->cc($ccTo)->queue(new \App\Mail\MailNotification($s));
+                    }
+                }
             } elseif($request->action == "tambah"){
                 $this->validate($request, 
                     [ 

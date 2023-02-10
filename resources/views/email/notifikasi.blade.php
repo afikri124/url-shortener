@@ -27,11 +27,11 @@
         </tr>
     </tbody>
 </table>
-@if(isset($data['kegiatan']))
+@if(isset($data['item']))
 <table class="order-detail" border="0" cellpadding="0" cellspacing="0" align="left"
     style="width: 100%; font-size:10pt;">
     <tbody>
-        @foreach($data['kegiatan'] as $d)
+        @foreach($data['item'] as $d)
         <tr class="pad-left-right-space">
             <td align="left" valign="top" width="35px">
                 <p><strong>{{$no_urut++}}</strong></p>

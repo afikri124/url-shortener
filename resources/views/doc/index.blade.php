@@ -85,6 +85,14 @@
                                 </select>
                             </div>
                             <div class=" col-md-3 mb-3">
+                                <select id="select_pj" class="select2 form-select" name="PJ" data-placeholder="Penanggung Jawab">
+                                    <option value="">Penanggung Jawab</option>
+                                    @foreach($user as $d)
+                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class=" col-md-3 mb-3">
                                 <select id="select_status" class="select2 form-select" name="status" data-placeholder="Status">
                                     <option value="">Status</option>
                                     @foreach($status as $d)
@@ -92,8 +100,9 @@
                                     @endforeach
                                 </select>
                             </div>
+                            
                             @if(Auth::user()->hasRole('DS'))
-                            <div class="col-md-3 text-md-end text-center pt-3 pt-md-0 mb-3">
+                            <div class="col-md-12 text-md-end text-center pt-3 pt-md-0 ">
                                 <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
@@ -102,14 +111,6 @@
                                 </button>
                             </div>
                             @endif
-                            <div class=" col-md-3">
-                                <select id="select_pj" class="select2 form-select" name="PJ" data-placeholder="Penanggung Jawab">
-                                    <option value="">Penanggung Jawab</option>
-                                    @foreach($user as $d)
-                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                         </form>
                     </div>
                 </div>

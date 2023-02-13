@@ -169,9 +169,7 @@ class DocSystemController extends Controller
         }
         $data = DocSystem::with('status')->with('category')
                 ->with('PIC')
-                ->with(['PIC.user' => function ($query) {
-                    $query->select('id', 'email', 'name');
-                }])
+                ->with('PIC.user')
                 ->with('PIC.department')->find($id);
         return view('doc.index_view', compact('data'));
     }

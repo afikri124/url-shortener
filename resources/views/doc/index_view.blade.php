@@ -40,26 +40,35 @@
                         <table class="" style="width: 100%;">
                             <tbody>
                                 <tr>
-                                    <td class="pe-3 text-muted w-30" style="width: 130px;">Batas Waktu</td>
+                                    <td class="pe-3 text-muted w-30" style="width: 160px;">Batas Waktu</td>
                                     <td class="w-70">{{$data->deadline}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="pe-3 text-muted w-30">Kategori</td>
-                                    <td class="w-70">{{$data->category->name}}</td>
+                                    <td class="pe-3 text-muted">Kategori</td>
+                                    <td>{{$data->category->name}}</td>
                                 </tr>
+                                @if($data->PIC != null)
                                 <tr>
-                                    <td class="pe-3 text-muted w-30">Status</td>
-                                    <td class="w-70 text-{{$data->status->color}}">{{$data->status->name}}</td>
-                                </tr>
-                                @if($data->remark != null)
-                                <tr>
-                                    <td class="pe-3 text-muted w-30">Catatan</td>
-                                    <td class="w-70">{{$data->remark}}</td>
+                                    <td class="pe-3 text-muted">Penanggung Jawab</td>
+                                    <td >
+                                        @foreach($data->PIC as $key => $p)
+                                        {{$key+1}}. {{$p->user->name_with_title}} <b>({{$p->department->name}})</b><br>
+                                        @endforeach
+                                    </td>
                                 </tr>
                                 @endif
                                 <tr>
-                                    <td class="pe-3 text-muted w-30"></td>
-                                    <td class="w-70" style="max-width: 110px;">
+                                    <td class="pe-3 text-muted">Status</td>
+                                    <td class="text-{{$data->status->color}}">{{$data->status->name}}</td>
+                                </tr>
+                                @if($data->remark != null)
+                                <tr>
+                                    <td class="pe-3 text-muted">Catatan</td>
+                                    <td >{{$data->remark}}</td>
+                                </tr>
+                                @endif
+                                <tr>
+                                    <td style="max-width: 110px;" colspan="2">
                                         <a href="{{ $data->doc_path }}" class="btn btn-info d-grid w-100 my-3" target="_blank">
                                             <span class="d-flex align-items-center justify-content-center text-nowrap">
                                                 <i class="bx bx-upload bx-xs me-3"></i>Unggah Bukti Disini

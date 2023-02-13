@@ -61,7 +61,9 @@ class DocSystemController extends Controller
         $activity = DocActivity::select('*')->get();
         $category = DocCategory::select('*')->get();
         $status = DocStatus::select('*')->get();
-        $user = User::select('id AS user_id','name')->get();
+        $user = User::whereHas('roles', function($q){
+            $q->where('role_id', "ST");
+        })->select('id','name')->get();
         return view('doc.index', compact('activity', 'category', 'status', 'user'));
     }
 
@@ -85,6 +87,11 @@ class DocSystemController extends Controller
                     }
                     if (!empty($request->get('status_id'))) {
                         $instance->where('status_id', $request->get('status_id'));
+                    }
+                    if (!empty($request->get('pic_id'))) {
+                        $instance->whereHas('PIC', function($q) use($request){
+                            $q->where('pic_id', $request->get('pic_id'));
+                        });
                     }
                     if (!empty($request->get('search'))) {
                         $search = $request->get('search');

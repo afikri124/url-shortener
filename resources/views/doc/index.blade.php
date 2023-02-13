@@ -68,7 +68,7 @@
                     <div class="col-12">
                         <form method="POST" class="row" target="_blank" action="">
                             @csrf
-                            <div class=" col-md-3">
+                            <div class=" col-md-3 mb-3">
                                 <select id="select_aktivitas" class="select2 form-select" name="aktivitas" data-placeholder="Aktivitas">
                                     <option value="">Aktivitas</option>
                                     @foreach($activity as $d)
@@ -76,7 +76,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class=" col-md-3">
+                            <div class=" col-md-3 mb-3">
                                 <select id="select_kategori" class="select2 form-select" name="kategori" data-placeholder="Kategori">
                                     <option value="">Kategori</option>
                                     @foreach($category as $d)
@@ -84,7 +84,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class=" col-md-3">
+                            <div class=" col-md-3 mb-3">
                                 <select id="select_status" class="select2 form-select" name="status" data-placeholder="Status">
                                     <option value="">Status</option>
                                     @foreach($status as $d)
@@ -92,15 +92,23 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-3 text-md-end text-center pt-3 pt-md-0">
-                                @if(Auth::user()->hasRole('DS'))
+                            @if(Auth::user()->hasRole('DS'))
+                            <div class="col-md-3 text-md-end text-center pt-3 pt-md-0 mb-3">
                                 <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
                                             class="bx bx-plus me-sm-2"></i>
                                         <span>Tambah</span></span>
                                 </button>
-                                @endif
+                            </div>
+                            @endif
+                            <div class=" col-md-3 mb-3">
+                                <select id="select_pj" class="select2 form-select" name="PJ" data-placeholder="Penanggung Jawab">
+                                    <option value="">Penanggung Jawab</option>
+                                    @foreach($user as $d)
+                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </form>
                     </div>
@@ -289,7 +297,7 @@
             serverSide: true,
             ordering: false,
             language: {
-                searchPlaceholder: 'Cari..',
+                searchPlaceholder: 'Cari nama dokumen..',
                 url: "{{asset('assets/vendor/libs/datatables/id.json')}}"
             },
             ajax: {
@@ -298,6 +306,7 @@
                     d.activity_id = $('#select_aktivitas').val(),
                     d.category_id = $('#select_kategori').val(),
                     d.status_id = $('#select_status').val(),
+                    d.pic_id = $('#select_pj').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -388,6 +397,9 @@
             table.draw();
         });
         $('#select_status').change(function () {
+            table.draw();
+        });
+        $('#select_pj').change(function () {
             table.draw();
         });
     });

@@ -63,7 +63,8 @@ class DocSystemController extends Controller
         $status = DocStatus::select('*')->get();
         $user = User::whereHas('roles', function($q){
             $q->where('role_id', "ST");
-        })->select('id','name')->get();
+        })->where('id', '!=', 1)
+        ->select('id','name')->orderBy('name')->get();
         return view('doc.index', compact('activity', 'category', 'status', 'user'));
     }
 

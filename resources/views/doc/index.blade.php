@@ -102,7 +102,7 @@
                                 </button>
                             </div>
                             @endif
-                            <div class=" col-md-3 mb-3">
+                            <div class=" col-md-3">
                                 <select id="select_pj" class="select2 form-select" name="PJ" data-placeholder="Penanggung Jawab">
                                     <option value="">Penanggung Jawab</option>
                                     @foreach($user as $d)

@@ -221,7 +221,7 @@ class DocSystemController extends Controller
                         foreach($dataEmail as $x){
                             array_push($sendTo, $x->department->email);
                             array_push($ccTo, $x->user->email);
-                            array_push($name, $x->user->name);
+                            array_push($name, $x->user->name_with_title);
                         } 
                         $s = array();
                         $s['name'] = implode(", ",$name);
@@ -612,7 +612,7 @@ class DocSystemController extends Controller
         ->get();
 
         foreach($dataPIC as $d){
-           $item = DocSystem::select('doc_systems.id','doc_systems.name', 'doc_systems.status_id', 'doc_statuses.name as status', 'doc_p_i_c_s.department_id')
+           $item = DocSystem::select('doc_systems.id','doc_systems.name', 'doc_systems.status_id', 'doc_statuses.name as status', 'doc_p_i_c_s.department_id', 'doc_p_i_c_s.pic_id')
             ->join('doc_p_i_c_s','doc_systems.id','=','doc_p_i_c_s.doc_id')
             ->join('doc_statuses','doc_systems.status_id','=','doc_statuses.id')
             ->where(function ($query) {
@@ -620,7 +620,8 @@ class DocSystemController extends Controller
                     ->orWhere('status_id','=','S3');
             })
             ->where('department_id','=', $d->department_id)
-            ->groupBy('doc_systems.id','department_id','doc_systems.name','doc_systems.status_id', 'doc_statuses.name',)
+            ->where('pic_id','=', $d->pic_id)
+            ->groupBy('doc_systems.id','department_id','pic_id','doc_systems.name','doc_systems.status_id', 'doc_statuses.name')
             ->get();
 
             if($d->total > 0){
@@ -641,12 +642,12 @@ class DocSystemController extends Controller
 
                 $aktivitas = implode(", ",$actEmail);
                 $s = array();
-                $s['name'] = $d->user->name;
-                $s['subject'] = "Dokumen bukti yang dibutuhkan";
+                $s['name'] = $d->user->name_with_title;
+                $s['subject'] = "Pengumpulan Dokumen ".$aktivitas;
                 $s['messages'] = "Dalam rangka <b>".$aktivitas."</b>, Anda ditugaskan untuk mengunggah dokumen berikut:";
                 $s['item'] = $itemEmail;
-                $s['catatan'] = "Langkah menggunggah dokumen:<br><ol>"
-                ."<li>Akses halaman <b>https://s.jgu.ac.id</b></li>"
+                $s['catatan'] = "Langkah mengunggah dokumen:<br><ol>"
+                ."<li>Akses halaman <b><a href='".url('/DOC')."'>https://s.jgu.ac.id</a></b></li>"
                 ."<li>Masuk menggunakan email penerima pemberitahuan ini / Akun SSO penanggung jawab.</li>"
                 ."<li>Tekan menu <b>Dokumen > Unggah Bukti</b></li>"
                 ."<li>Pilih dan tekan nama Dokumen yang diperlukan</li> "

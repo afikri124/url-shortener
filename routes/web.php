@@ -198,8 +198,8 @@ Route::group(['prefix' => 'email','middleware' => ['auth','role:AD']], function 
     $data['messages'] = "Dalam rangka <b>"."Akreditasi Prodi Manjemen"."</b>, Anda ditugaskan untuk mengunggah dokumen berikut:";
     $data['item'] = ["S000000","Sssss"];
 
-    $data['catatan'] = "Langkah menggunggah dokumen:<br><ol>"
-    ."<li>Akses halaman <b>https://s.jgu.ac.id</b></li>"
+    $data['catatan'] = "Langkah mengunggah dokumen:<br><ol>"
+    ."<li>Akses halaman <b><a href='".url('/DOC')."'>https://s.jgu.ac.id</a></b></li>"
     ."<li>Masuk menggunakan email penerima pemberitahuan ini / Akun SSO penanggung jawab.</li>"
     ."<li>Tekan menu <b>Dokumen > Unggah Bukti</b></li>"
     ."<li>Pilih dan tekan nama Dokumen yang diperlukan</li> "

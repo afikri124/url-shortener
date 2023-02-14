@@ -378,13 +378,14 @@ class WorkHoursController extends Controller
     public function whr_sync()
     {
         $data = null;
-        $i = 0;
+        $i_total = 0;
         $info = (Auth::check() ? Auth::user()->username." : ".Auth::user()->name : "CronJob");
 
         //mesin lantai 1
         try {
             $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             $idmesin = 1; //mesin lt 1
+            $i = 0;
             if ($zk->connect()){
                 $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
                 $zk->disconnect();   
@@ -419,7 +420,7 @@ class WorkHoursController extends Controller
                     if(Auth::check()){
                         Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                     }
-
+                    $i_total += $i;
             } else {
                 Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
                 return response()->json([
@@ -428,7 +429,7 @@ class WorkHoursController extends Controller
                 ]);
             }
         } catch (DecryptException $e) {
-            Log::info($info." failed sync data att to database, breakid : ".$breakId.",  total new: ".$i);
+            Log::info($info." failed sync from machine 1");
             return response()->json([
                 'success' => false,
                 'total' => $i,
@@ -440,6 +441,7 @@ class WorkHoursController extends Controller
             try {
                 $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE_5'));
                 $idmesin = 5; //mesin lantai 5
+                $i = 0;
                 if ($zk->connect()){
                     $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
                     $zk->disconnect();   
@@ -474,6 +476,7 @@ class WorkHoursController extends Controller
                         if(Auth::check()){
                             Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                         }
+                    $i_total += $i;
                 } else {
                     Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
                     return response()->json([
@@ -481,10 +484,8 @@ class WorkHoursController extends Controller
                         'total' => $i,
                     ]);
                 }
-                
-    
             } catch (DecryptException $e) {
-                Log::info($info." failed sync data att to database, breakid : ".$breakId.",  total new: ".$i);
+                Log::info($info." failed sync from machine 5");
                 return response()->json([
                     'success' => false,
                     'total' => $i,
@@ -497,6 +498,7 @@ class WorkHoursController extends Controller
             try {
                 $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE_2'));
                 $idmesin = 2; //mesin lantai 2
+                $i = 0;
                 if ($zk->connect()){
                     $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
                     $zk->disconnect();   
@@ -531,17 +533,16 @@ class WorkHoursController extends Controller
                         if(Auth::check()){
                             Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                         }
+                    $i_total += $i;
                 } else {
-                    Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
+                    Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId);
                     return response()->json([
                         'success' => false,
                         'total' => $i,
                     ]);
                 }
-                
-    
             } catch (DecryptException $e) {
-                Log::info($info." failed sync data att to database, breakid : ".$breakId.",  total new: ".$i);
+                Log::info($info." failed sync from machine 2");
                 return response()->json([
                     'success' => false,
                     'total' => $i,
@@ -551,7 +552,7 @@ class WorkHoursController extends Controller
         
         return response()->json([
             'success' => true,
-            'total' => $i,
+            'total' => $i_total,
         ]);
     }
 

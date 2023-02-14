@@ -388,64 +388,7 @@ class WorkHoursController extends Controller
             $i = 0;
             if ($zk->connect()){
                 $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
-                $zk->disconnect();   
-            }      
-            $breakId = null;
-            $user = WhAttendance::where('idmesin',$idmesin)->orderByDesc('timestamp')->first();
-            if($user){
-                $breakId = $user->uid;
-            }
-            if($data != null){
-                    foreach ($data as $att) {
-                        if($att['uid'] == $breakId){
-                            break;
-                        } else {
-                            $check = WhAttendance::where('uid',$att['uid'])->where('idmesin',$idmesin)->first(); //mesin 1
-                            if(!$check){
-                                $new_att = false;
-                                $new_att=WhAttendance::insert([
-                                        'uid' => $att['uid'],
-                                        'username' => $att['userid'],
-                                        'state' => $att['state'],
-                                        'timestamp' => $att['timestamp'],
-                                        'type' => $att['type'],
-                                        'idmesin' => $idmesin //lantai 1
-                                ]);
-                                if($new_att){
-                                    $i++;
-                                }  
-                            }
-                        }
-                    }
-                    if(Auth::check()){
-                        Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
-                    }
-                    $i_total += $i;
-            } else {
-                Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
-                return response()->json([
-                    'success' => false,
-                    'total' => $i,
-                ]);
-            }
-        } catch (DecryptException $e) {
-            Log::info($info." failed sync from machine 1");
-            return response()->json([
-                'success' => false,
-                'total' => $i,
-            ]);
-        }
-
-        //mesin lantai 5
-        if(env('IP_ATTENDANCE_MACHINE_5')){
-            try {
-                $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE_5'));
-                $idmesin = 5; //mesin lantai 5
-                $i = 0;
-                if ($zk->connect()){
-                    $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
-                    $zk->disconnect();   
-                }      
+                $zk->disconnect(); 
                 $breakId = null;
                 $user = WhAttendance::where('idmesin',$idmesin)->orderByDesc('timestamp')->first();
                 if($user){
@@ -456,7 +399,7 @@ class WorkHoursController extends Controller
                             if($att['uid'] == $breakId){
                                 break;
                             } else {
-                                $check = WhAttendance::where('uid',$att['uid'])->where('idmesin',$idmesin)->first(); //mesin
+                                $check = WhAttendance::where('uid',$att['uid'])->where('idmesin',$idmesin)->first(); //mesin 1
                                 if(!$check){
                                     $new_att = false;
                                     $new_att=WhAttendance::insert([
@@ -465,7 +408,7 @@ class WorkHoursController extends Controller
                                             'state' => $att['state'],
                                             'timestamp' => $att['timestamp'],
                                             'type' => $att['type'],
-                                            'idmesin' => $idmesin //lantai
+                                            'idmesin' => $idmesin //lantai 1
                                     ]);
                                     if($new_att){
                                         $i++;
@@ -476,7 +419,7 @@ class WorkHoursController extends Controller
                         if(Auth::check()){
                             Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                         }
-                    $i_total += $i;
+                        $i_total += $i;
                 } else {
                     Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
                     return response()->json([
@@ -484,13 +427,15 @@ class WorkHoursController extends Controller
                         'total' => $i,
                     ]);
                 }
-            } catch (DecryptException $e) {
-                Log::info($info." failed sync from machine 5");
-                return response()->json([
-                    'success' => false,
-                    'total' => $i,
-                ]);
-            }
+            } else {
+                Log::info($info." machine ".$idmesin." Not Connect!");
+            } 
+        } catch (DecryptException $e) {
+            Log::info($info." failed sync from machine 1");
+            return response()->json([
+                'success' => false,
+                'total' => $i,
+            ]);
         }
         
         //mesin lantai 2
@@ -501,46 +446,48 @@ class WorkHoursController extends Controller
                 $i = 0;
                 if ($zk->connect()){
                     $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
-                    $zk->disconnect();   
-                }      
-                $breakId = null;
-                $user = WhAttendance::where('idmesin',$idmesin)->orderByDesc('timestamp')->first();
-                if($user){
-                    $breakId = $user->uid;
-                }
-                if($data != null){
-                        foreach ($data as $att) {
-                            if($att['uid'] == $breakId){
-                                break;
-                            } else {
-                                $check = WhAttendance::where('uid',$att['uid'])->where('idmesin',$idmesin)->first(); //mesin
-                                if(!$check){
-                                    $new_att = false;
-                                    $new_att=WhAttendance::insert([
-                                            'uid' => $att['uid'],
-                                            'username' => $att['userid'],
-                                            'state' => $att['state'],
-                                            'timestamp' => $att['timestamp'],
-                                            'type' => $att['type'],
-                                            'idmesin' => $idmesin //lantai
-                                    ]);
-                                    if($new_att){
-                                        $i++;
-                                    }  
+                    $zk->disconnect();  
+                    $breakId = null;
+                    $user = WhAttendance::where('idmesin',$idmesin)->orderByDesc('timestamp')->first();
+                    if($user){
+                        $breakId = $user->uid;
+                    }
+                    if($data != null){
+                            foreach ($data as $att) {
+                                if($att['uid'] == $breakId){
+                                    break;
+                                } else {
+                                    $check = WhAttendance::where('uid',$att['uid'])->where('idmesin',$idmesin)->first(); //mesin
+                                    if(!$check){
+                                        $new_att = false;
+                                        $new_att=WhAttendance::insert([
+                                                'uid' => $att['uid'],
+                                                'username' => $att['userid'],
+                                                'state' => $att['state'],
+                                                'timestamp' => $att['timestamp'],
+                                                'type' => $att['type'],
+                                                'idmesin' => $idmesin //lantai
+                                        ]);
+                                        if($new_att){
+                                            $i++;
+                                        }  
+                                    }
                                 }
                             }
-                        }
-                        if(Auth::check()){
-                            Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
-                        }
-                    $i_total += $i;
+                            if(Auth::check()){
+                                Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
+                            }
+                        $i_total += $i;
+                    } else {
+                        Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId);
+                        return response()->json([
+                            'success' => false,
+                            'total' => $i,
+                        ]);
+                    }
                 } else {
-                    Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId);
-                    return response()->json([
-                        'success' => false,
-                        'total' => $i,
-                    ]);
-                }
+                    Log::info($info." machine ".$idmesin." Not Connect!");
+                } 
             } catch (DecryptException $e) {
                 Log::info($info." failed sync from machine 2");
                 return response()->json([
@@ -550,6 +497,66 @@ class WorkHoursController extends Controller
             }
         } 
         
+        
+
+        //mesin lantai 5
+        if(env('IP_ATTENDANCE_MACHINE_5')){
+            try {
+                $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE_5'));
+                $idmesin = 5; //mesin lantai 5
+                $i = 0;
+                if ($zk->connect()){
+                    $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
+                    $zk->disconnect();   
+                    $breakId = null;
+                    $user = WhAttendance::where('idmesin',$idmesin)->orderByDesc('timestamp')->first();
+                    if($user){
+                        $breakId = $user->uid;
+                    }
+                    if($data != null){
+                            foreach ($data as $att) {
+                                if($att['uid'] == $breakId){
+                                    break;
+                                } else {
+                                    $check = WhAttendance::where('uid',$att['uid'])->where('idmesin',$idmesin)->first(); //mesin
+                                    if(!$check){
+                                        $new_att = false;
+                                        $new_att=WhAttendance::insert([
+                                                'uid' => $att['uid'],
+                                                'username' => $att['userid'],
+                                                'state' => $att['state'],
+                                                'timestamp' => $att['timestamp'],
+                                                'type' => $att['type'],
+                                                'idmesin' => $idmesin //lantai
+                                        ]);
+                                        if($new_att){
+                                            $i++;
+                                        }  
+                                    }
+                                }
+                            }
+                            if(Auth::check()){
+                                Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
+                            }
+                        $i_total += $i;
+                    } else {
+                        Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
+                        return response()->json([
+                            'success' => false,
+                            'total' => $i,
+                        ]);
+                    }
+                } else {
+                    Log::info($info." machine ".$idmesin." Not Connect!");
+                }  
+            } catch (DecryptException $e) {
+                Log::info($info." failed sync from machine 5");
+                return response()->json([
+                    'success' => false,
+                    'total' => $i,
+                ]);
+            }
+        }
         return response()->json([
             'success' => true,
             'total' => $i_total,

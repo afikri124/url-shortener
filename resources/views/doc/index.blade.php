@@ -128,9 +128,25 @@
                         id="form-add-new-record" method="POST" action="">
                         @csrf
                         <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label">Aktivitas <i class="text-danger">*</i></label>
+                            <div class="input-group input-group-merge has-validation">
+                                <select class="form-select @error('aktivitas') is-invalid @enderror select2-modal" name="aktivitas" id="aktivitas" data-placeholder="-- Pilih Aktivitas--">
+                                    <option value="">-- Pilih Aktivitas --</option>
+                                    @foreach($activity as $d)
+                                    <option value="{{ $d->id }}" {{ ($d->id==old('kategori') ? "selected": "") }}>{{ $d->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('aktivitas')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
                             <label class="form-label">Kategori <i class="text-danger">*</i></label>
                             <div class="input-group input-group-merge has-validation">
-                                <select class="form-select @error('kategori') is-invalid @enderror select2-modal" name="kategori" data-placeholder="-- Pilih Kategori--">
+                                <select class="form-select @error('kategori') is-invalid @enderror select2-modal" name="kategori" id="kategori" data-placeholder="-- Pilih Kategori--">
                                     <option value="">-- Pilih Kategori --</option>
                                     @foreach($category as $d)
                                     <option value="{{ $d->id }}" {{ ($d->id==old('kategori') ? "selected": "") }}>{{ $d->name }}</option>
@@ -390,9 +406,32 @@
                 @endif
             ]
         });
-        
+        //filter data
         $('#select_aktivitas').change(function () {
+            var id = this.value;
+            $("#select_kategori").html('');
             table.draw();
+            $.ajax({
+                url: "{{ route('DOC.get_category_by_id') }}",
+                type: "GET",
+                data: {
+                    id: id,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success: function (result) {
+                    console.log(result);
+                    if (result.length != 0) {
+                        $('#select_kategori').html(
+                            '<option value="">Kategori</option>'
+                        );
+                        $.each(result, function (key, value) {
+                            $("#select_kategori").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                }
+            });
         });
         $('#select_kategori').change(function () {
             table.draw();
@@ -402,6 +441,31 @@
         });
         $('#select_pj').change(function () {
             table.draw();
+        });
+        //tambah dokumen
+        $('#aktivitas').change(function () {
+            var id = this.value;
+            $("#kategori").html('');
+            $.ajax({
+                url: "{{ route('DOC.get_category_by_id') }}",
+                type: "GET",
+                data: {
+                    id: id,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success: function (result) {
+                    if (result.length != 0) {
+                        $('#kategori').html(
+                            '<option value="">Kategori</option>'
+                        );
+                        $.each(result, function (key, value) {
+                            $("#kategori").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                }
+            });
         });
     });
 

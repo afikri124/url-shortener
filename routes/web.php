@@ -160,6 +160,7 @@ Route::group(['prefix' => 'DOC','middleware' => ['auth','role:ST']], function ()
 
   Route::any('/category', [App\Http\Controllers\DocSystemController::class, 'category'])->name('DOC.category');
   Route::get('/category/data', [App\Http\Controllers\DocSystemController::class, 'category_data'])->name('DOC.category_data');
+  Route::get('/category/by_id', [App\Http\Controllers\DocSystemController::class, 'category_by_id'])->name('DOC.get_category_by_id');
   Route::delete('/category/delete', [App\Http\Controllers\DocSystemController::class, 'category_delete'])->name('DOC.category_delete');
   Route::post('/category/edit', [App\Http\Controllers\DocSystemController::class, 'category_edit'])->name('DOC.category_edit');
   Route::post('/category/id', [App\Http\Controllers\DocSystemController::class, 'category_id'])->name('DOC.category_id');

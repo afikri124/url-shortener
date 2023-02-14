@@ -36,6 +36,7 @@ class DocSystemController extends Controller
                     'nama'=> ['required', 'string', 'max:191'],
                     'link'=> ['required', 'url', 'max:191'],
                     'kategori'=> ['required'],
+                    'aktivitas'=> ['required'],
                 ],
             );
             $hst = "- ".Carbon::now()->format('d/m/Y, H:i ')."<b>".Auth::user()->name."</b> membuat kriteria dokumen yg dibutuhkan.<br>";
@@ -58,7 +59,7 @@ class DocSystemController extends Controller
                 return redirect()->route('DOC.index')->with('msg','Gagal ditambahkan!');
             }
         }
-        $activity = DocActivity::select('*')->get();
+        $activity = DocActivity::select('*')->orderByDesc('id')->get();
         $category = DocCategory::select('*')->get();
         $status = DocStatus::select('*')->get();
         $user = User::whereHas('roles', function($q){
@@ -552,6 +553,16 @@ class DocSystemController extends Controller
                       })
                     ->rawColumns(['idd'])
                     ->make(true);
+    }
+
+    public function category_by_id(Request $request)
+    {
+        $data = DocCategory::where("activity_id",$request->id)
+            ->orderBy("id")->get(["id", "name"]);
+        if($request->id == null || $request->id == ""){
+            $data = DocCategory::orderBy("id")->get(["id", "name"]);
+        }
+        return response()->json($data);
     }
 
     public function category_delete(Request $request) {

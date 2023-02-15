@@ -20,6 +20,10 @@
 @endsection
 
 @section('content')
+<div class="alert alert-secondary alert-dismissible" role="alert">
+Pastikan nama File yg diunggah sesuai dengan nama dokumen yg dibutuhkan. 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 @foreach ($errors->all() as $error)
 <div class="alert alert-danger alert-dismissible" role="alert">
     {{ $error }}
@@ -136,7 +140,7 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label">Catatan</label>
-                <textarea class="form-control" name="catatan" cols="3" rows="8" placeholder="Boleh dikosongkan.."></textarea>
+                <textarea class="form-control" name="catatan" cols="3" rows="8" placeholder="Pastikan nama File yg diunggah sesuai dengan nama dokumen yg dibutuhkan, jika tidak sertakan linknya disini.."></textarea>
             </div>
             <div class="mb-3 d-flex flex-wrap">
                 <input type="hidden" name="action" value="unggah">

@@ -45,7 +45,7 @@ Pastikan nama File yg diunggah sesuai dengan nama dokumen yg dibutuhkan.
                             <tbody>
                                 <tr>
                                     <td class="pe-3 text-muted w-30" style="width: 160px;">Batas Waktu</td>
-                                    <td class="w-70">{{$data->deadline}}</td>
+                                    <td class="w-70">{{($data->deadline == null ? "Tidak Ditentukan": \Carbon\Carbon::parse($data->deadline)->translatedFormat("l, d F Y H:i")); }}</td>
                                 </tr>
                                 <tr>
                                     <td class="pe-3 text-muted">Kategori</td>
@@ -140,7 +140,11 @@ Pastikan nama File yg diunggah sesuai dengan nama dokumen yg dibutuhkan.
             @csrf
             <div class="mb-3">
                 <label class="form-label">Catatan</label>
-                <textarea class="form-control" name="catatan" cols="3" rows="8" placeholder="Pastikan nama File yg diunggah sesuai dengan nama dokumen yg dibutuhkan, jika tidak sertakan linknya disini.."></textarea>
+                <textarea class="form-control" name="catatan" cols="3" rows="8" placeholder="Pastikan nama File yg diunggah sesuai dengan nama dokumen yg dibutuhkan, jika tidak sertakan keterangan disini dan tautannya.."></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tautan</label>
+                <input type="url" class="form-control" name="tautan" placeholder="Boleh dikosongkan">
             </div>
             <div class="mb-3 d-flex flex-wrap">
                 <input type="hidden" name="action" value="unggah">

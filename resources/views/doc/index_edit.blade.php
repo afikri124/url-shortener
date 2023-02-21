@@ -104,7 +104,7 @@
                             <tbody>
                                 <tr>
                                     <td class="pe-3 text-muted w-30" style="width: 130px;">Batas Waktu</td>
-                                    <td class="w-70">{{$data->deadline}}</td>
+                                    <td class="w-70">{{($data->deadline == null ? "Tidak Ditentukan": \Carbon\Carbon::parse($data->deadline)->translatedFormat("l, d F Y H:i")); }}</td>
                                 </tr>
                                 <tr>
                                     <td class="pe-3 text-muted w-30">Kategori</td>
@@ -163,6 +163,11 @@
                     <span class="d-flex align-items-center justify-content-center text-nowrap"><i
                             class="bx bx-x bx-xs me-3"></i>Revisi</span>
                 </button>
+                <button class="btn btn-dark d-grid w-100 mb-3" data-bs-toggle="offcanvas"
+                    data-bs-target="#modalPerbarui" @if($data->status_id == "S4") disabled @endif>
+                    <span class="d-flex align-items-center justify-content-center text-nowrap"><i
+                            class="bx bx-edit bx-xs me-3"></i>Perbarui Data</span>
+                </button>
                 <a href="{{ route('DOC.index') }}" class="btn btn-outline-secondary"><i
                         class="bx bx-chevron-left me-sm-2"></i>
                     <span>Kembali</span>
@@ -179,7 +184,7 @@
 @if($data->status_id == "S2")
 <div class="offcanvas offcanvas-end" id="modalValidasi" aria-hidden="true">
     <div class="offcanvas-header mb-3">
-        <h5 class="offcanvas-title">Validast Bukti</h5>
+        <h5 class="offcanvas-title">Validasi Bukti</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body flex-grow-1">
@@ -213,7 +218,7 @@
             <div class="mb-3">
                 <label class="form-label">Catatan <i class="text-danger">*</i></label>
                 <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" cols="3"
-                    rows="8"></textarea>
+                    rows="8" placeholder="Wajib diisi"></textarea>
                 @error('catatan')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -222,6 +227,61 @@
             </div>
             <div class="mb-3 d-flex flex-wrap">
                 <input type="hidden" name="action" value="revisi">
+                <button type="submit" class="btn btn-danger me-3" data-bs-dismiss="offcanvas">Submit</button>
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Batal</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- /Sidebar -->
+
+<!-- Ditolak Sidebar -->
+<div class="offcanvas offcanvas-end" id="modalPerbarui" aria-hidden="true">
+    <div class="offcanvas-header mb-3">
+        <h5 class="offcanvas-title">Perbarui Data</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body flex-grow-1">
+        <form method="POST" action="">
+            @csrf
+            <div class="col-sm-12 fv-plugins-icon-container">
+                        <label class="form-label">Nama <i class="text-danger">*</i></label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama"
+                                    placeholder="Nama Dokumen yg diperlukan" value="{{ $data->name }}">
+                                @error('nama')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Link Unggah <i class="text-danger">*</i></label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('link') is-invalid @enderror" name="link"
+                                    placeholder="Link Gdrive" value="{{ $data->doc_path }}">
+                                @error('link')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container mb-3">
+                            <label class="form-label" for="basicDate">Batas Waktu</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="datetime-local" class="form-control @error('batas_waktu') is-invalid @enderror" name="batas_waktu"
+                                    placeholder="yyyy-mm-dd hh:mm" value="{{ $data->deadline }}">
+                                @error('batas_waktu')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+            <div class="mb-3 d-flex flex-wrap">
+                <input type="hidden" name="action" value="perbarui">
                 <button type="submit" class="btn btn-danger me-3" data-bs-dismiss="offcanvas">Submit</button>
                 <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Batal</button>
             </div>

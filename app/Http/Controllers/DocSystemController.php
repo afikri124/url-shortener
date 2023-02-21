@@ -143,6 +143,9 @@ class DocSystemController extends Controller
                 if($request->catatan != null){
                     $hst = $hst."--- <i>".$request->catatan."</i><br>";
                 }
+                if($request->tautan != null){
+                    $hst = $hst."--- <i><a target='_blabk' href='".$request->tautan."'>".$request->tautan."</a></i><br>";
+                }
                 $hst = $data->histories." ".$hst;
                 $d = $data->update([ 
                     'remark' => ($request->catatan == null ? "-":$request->catatan),
@@ -201,7 +204,21 @@ class DocSystemController extends Controller
                     'histories' => $hst,
                     'updated_id' => Auth::user()->id
                 ]);
-            } elseif($request->action == "revisi"){
+            } elseif($request->action == "perbarui"){
+                $this->validate($request, 
+                    [ 
+                        'action'=> ['required'],
+                        'nama'=> ['required', 'string', 'max:191'],
+                        'link'=> ['required', 'url', 'max:191']
+                    ],
+                );
+                $d = $data->update([ 
+                    'name' => $request->nama,
+                    'deadline' => ($request->batas_waktu != null ? date('Y-m-d H:i:s', strtotime($request->batas_waktu)) : null),
+                    'doc_path' => $request->link,
+                    'updated_id' => Auth::user()->id
+                ]);
+            } elseif ($request->action == "revisi"){
                 $this->validate($request, 
                     [ 
                         'action'=> ['required'],

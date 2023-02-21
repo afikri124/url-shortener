@@ -88,7 +88,7 @@
                                 <select id="select_pj" class="select2 form-select" name="PJ" data-placeholder="Penanggung Jawab">
                                     <option value="">Penanggung Jawab</option>
                                     @foreach($user as $d)
-                                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                                    <option value="{{ $d->id }}"  @if(!Auth::user()->hasRole('DS') && $d->id == Auth::user()->id) selected @endif>{{ $d->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

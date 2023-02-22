@@ -387,7 +387,6 @@ class WorkHoursController extends Controller
             $idmesin = 1; //mesin lt 1
             $i = 0;
             if ($zk->connect()){
-                $zk->setTime(date('Y-m-d H:i:s')); // Synchronize time
                 $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
                 $zk->disconnect(); 
                 $breakId = null;
@@ -446,7 +445,6 @@ class WorkHoursController extends Controller
                 $idmesin = 2; //mesin lantai 2
                 $i = 0;
                 if ($zk->connect()){
-                    $zk->setTime(date('Y-m-d H:i:s')); // Synchronize time
                     $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
                     $zk->disconnect();  
                     $breakId = null;
@@ -508,7 +506,6 @@ class WorkHoursController extends Controller
                 $idmesin = 5; //mesin lantai 5
                 $i = 0;
                 if ($zk->connect()){
-                    $zk->setTime(date('Y-m-d H:i:s')); // Synchronize time
                     $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
                     $zk->disconnect();   
                     $breakId = null;

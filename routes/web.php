@@ -179,6 +179,7 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:HR']], functio
   Route::get('account_att/sync', [App\Http\Controllers\SettingController::class, 'account_att_sync'])->name('setting_account_att_sync');
   Route::get('account_att/data', [App\Http\Controllers\SettingController::class, 'account_att_data'])->name('setting_account_att_data');
   Route::any('account_att/edit/{id}', [App\Http\Controllers\SettingController::class, 'account_att_edit'])->name('setting_account_att_edit');
+  Route::delete('account_att/delete', [App\Http\Controllers\SettingController::class, 'account_att_delete'])->name('setting_account_att_delete');
 });
 
 

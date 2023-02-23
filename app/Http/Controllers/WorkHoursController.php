@@ -577,7 +577,7 @@ class WorkHoursController extends Controller
                 // 3 = nama (max 24 char)
                 // 4 = password
                 // 5 = role (14 : admin, 0 : user)
-                // $x = app('App\Http\Controllers\ZKTecoController')->setUser($zk, 217, 'S092021100001', 'ALI FIKRI S.Kom', '', 14);
+                // $x = app('App\Http\Controllers\ZKTecoController')->setUser($zk, 241, 'ERROR19010001', 'ERROR S.Kom', '', 0);
                     // $uid = 96;
                     // $cardno = 0;
                     // $role = 14;

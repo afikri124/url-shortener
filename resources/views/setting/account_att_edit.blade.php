@@ -35,7 +35,7 @@
                         <div class="mb-3 col-md-6">
                             <label for="name" class="form-label">Nama di Mesin</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                name="name" value="{{ $data->name }}" readonly maxlength="24"/>
+                                name="name" value="{{ $data->name }}"  maxlength="24"/>
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -63,6 +63,19 @@
                             <input type="username" class="form-control @error('username') is-invalid @enderror"
                                 id="user" name="username" value="{{ $data->username  }}"
                                 placeholder="Username (NIK)" readonly />
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label">Role</label>
+                            <select class="select2 form-select" name="role" id="select2Dark">
+                                <option value=0 {{ 0 ==$data->role ? 'selected' : '' }}>User</option>
+                                <option value=14 {{ 14 ==$data->role ? 'selected' : '' }}>Admin</option>
+                            </select>
+                            @error('status')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-3 col-md-6">

@@ -90,6 +90,18 @@ class ZKTecoController extends Controller
         // dd($command_string);
     }
 
+    static public function removeUser(ZKTeco $self, $uid)
+    {
+        $self->_section = __METHOD__;
+
+        $command = Util::CMD_DELETE_USER;
+        $byte1 = chr((int)($uid % 256));
+        $byte2 = chr((int)($uid >> 8));
+        $command_string = ($byte1 . $byte2);
+
+        return $self->_command($command, $command_string);
+    }
+
     public function getAttendance(ZKTeco $self)
     {
         $self->_section = __METHOD__;

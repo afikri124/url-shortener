@@ -238,7 +238,8 @@ class SettingController extends Controller
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
                 'name' => ['required', 'string','max:24'],
-                'status' => ['required', 'string','max:1']
+                'status' => ['required', 'string','max:1'],
+                'role' => ['required']
             ]);
             WhUser::where('uid', $id)->update([
                 'name'=> $request->name,
@@ -246,6 +247,16 @@ class SettingController extends Controller
                 'username_old' => $request->old,
                 'updated_at' => Carbon::now()
             ]);
+            try {
+                $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
+                if ($zk->connect()){
+                    $userid = ($request->username == null ? $request->old : $request->username);
+                    $x = app('App\Http\Controllers\ZKTecoController')->setUser($zk, $id, $userid, $request->name, '', $request->role); 
+                    $zk->disconnect();   
+                }
+            } catch (DecryptException $e) {
+                Log::info(Auth::user()->name." Failed update data user att in macchine uid = ".$id);
+            }
             Log::info(Auth::user()->name." update user att #".$id.", ".$request->name);
             return redirect()->route('setting_account_att', ['id'=>$idd])->with('msg','Profil '.$request->name.' diperbarui!');
         }
@@ -255,6 +266,32 @@ class SettingController extends Controller
             abort(403, "Access not allowed!");
         }
         return view('setting.account_att_edit', compact('data','status'));
+    }
+
+    public function account_att_delete(Request $request) {
+        $user = WhUser::where('uid', $request->uid)->first();
+        if($user){
+            Log::warning(Auth::user()->username." deleted WH-USER ATT #".$user->uid.", username : ".$user->username.", name : ".$user->name);
+            WhUser::where('uid', $request->uid)->delete();
+            try {
+                $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
+                if ($zk->connect()){
+                    $x = app('App\Http\Controllers\ZKTecoController')->removeUser($zk,$request->uid); 
+                    $zk->disconnect();   
+                }
+            } catch (DecryptException $e) {
+                Log::info(Auth::user()->name." Failed deleted data user att in macchine uid = ".$request->uid);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Akun berhasil dihapus!'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akun gagal dihapus!'
+            ]);
+        }
     }
 
 }

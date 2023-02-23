@@ -208,6 +208,8 @@
                         var html =
                             `<a class=" text-success" title="Ubah" href="{{ url('setting/account_att/edit/` +
                             row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
+                            html += ` <a class=" text-danger" title="Delete" style="cursor:pointer" onclick="DeleteId(` + row
+                            .uid + `)" ><i class="bx bx-trash"></i></a>`;
                         return html;
                     },
                     className: "text-center",
@@ -273,6 +275,40 @@
                     swal("Dibatalkan!", {
                         icon: "error",
                     });
+                }
+            })
+    }
+
+    function DeleteId(uid) {
+        swal({
+                title: "Apa kamu yakin? Data di mesin akan di hapus juga!",
+                text: "Setelah dihapus, UID ( "+uid+" ) tidak dapat dipulihkan!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "{{ route('setting_account_att_delete') }}",
+                        type: "DELETE",
+                        data: {
+                            "uid": uid,
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                        },
+                        success: function (data) {
+                            if (data['success']) {
+                                swal(data['message'], {
+                                    icon: "success",
+                                });
+                                $('#datatable').DataTable().ajax.reload();
+                            } else {
+                                swal(data['message'], {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    })
                 }
             })
     }

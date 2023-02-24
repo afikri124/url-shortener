@@ -244,6 +244,7 @@ class SettingController extends Controller
             WhUser::where('uid', $id)->update([
                 'name'=> $request->name,
                 'status'=> $request->status,
+                'role'=> $request->role,
                 'username_old' => $request->old,
                 'updated_at' => Carbon::now()
             ]);

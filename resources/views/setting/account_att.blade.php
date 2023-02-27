@@ -71,7 +71,7 @@
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
                                             class="bx bx-plus me-sm-2"></i>
-                                        <span>Tambah Baru</span></span>
+                                        <span>Tambah</span></span>
                                 </button>
                             </div>
                         </div>

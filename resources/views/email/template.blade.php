@@ -135,7 +135,12 @@
                             </tr>
                             <tr>
                                 <td style="text-align: center; font-size:10pt;">
-                                    <strong>@yield('title')</strong><br><br>
+                                    <strong>@yield('title')</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-size:10pt;color:red">
+                                    <i>[ email ini dikirimkan otomatis oleh sistem ]</i><br><br>
                                 </td>
                             </tr>
                         </tbody>

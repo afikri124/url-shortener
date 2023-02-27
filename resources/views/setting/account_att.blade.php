@@ -67,9 +67,61 @@
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>
                                 </button>
+                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                                    data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
+                                    aria-controls="DataTables_Table_0" type="button"><span><i
+                                            class="bx bx-plus me-sm-2"></i>
+                                        <span>Tambah Baru</span></span>
+                                </button>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            
+            <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
+                aria-labelledby="offcanvasEndLabel">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Pengguna Mesin Absensi</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body my-auto mx-0 flex-grow-1">
+                    <form class="add-new-record pt-0 row g-2 fv-plugins-bootstrap5 fv-plugins-framework"
+                        enctype="multipart/form-data" id="form-add-new-record" method="POST" action="">
+                        @csrf
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">NIK / Username</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('nik') is-invalid @enderror" name="nik"
+                                    placeholder="Nomor Induk Karyawan" value="{{ old('nik') }}">
+                                @error('nik')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Nama</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama"
+                                    placeholder="Nama (Maksimal 24 karakter)" value="{{ old('nama') }}" maxlength="24">
+                                @error('nama')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-4">
+                            <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
+                            <button type="reset" class="btn btn-outline-secondary"
+                                data-bs-dismiss="offcanvas">Batal</button>
+                        </div>
+                        <div></div><input type="hidden">
+                    </form>
+
                 </div>
             </div>
         </div>

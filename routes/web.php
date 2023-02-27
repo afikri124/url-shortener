@@ -175,7 +175,7 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:AD']], functio
   Route::delete('account/delete', [App\Http\Controllers\SettingController::class, 'account_delete'])->name('setting_account_delete');
 });
 Route::group(['prefix' => 'setting','middleware' => ['auth','role:HR']], function () {
-  Route::get('account_att', [App\Http\Controllers\SettingController::class, 'account_att'])->name('setting_account_att');
+  Route::any('account_att', [App\Http\Controllers\SettingController::class, 'account_att'])->name('setting_account_att');
   Route::get('account_att/sync', [App\Http\Controllers\SettingController::class, 'account_att_sync'])->name('setting_account_att_sync');
   Route::get('account_att/data', [App\Http\Controllers\SettingController::class, 'account_att_data'])->name('setting_account_att_data');
   Route::any('account_att/edit/{id}', [App\Http\Controllers\SettingController::class, 'account_att_edit'])->name('setting_account_att_edit');

@@ -123,13 +123,42 @@ class SettingController extends Controller
 
     public function account_att(Request $request)
     {
-            $status          = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
-            return view('setting.account_att', compact('status'));      
+        if ($request->isMethod('post')) {
+            $this->validate($request, [ 
+                'nama' => ['required', 'string','max:24'],
+                'nik' => ['required']
+            ]);
+            $latest = WhUser::orderByDesc('uid')->first();
+            $id = ($latest->uid + 1);
+            try {
+                $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
+                if ($zk->connect()){
+                    $x = app('App\Http\Controllers\ZKTecoController')
+                    ->setUser($zk, $id, $request->nik, $request->nama, '', 0); 
+                    $zk->disconnect();   
+                    $new = WhUser::create([
+                        'uid'=> $id,
+                        'name'=> $request->nama,
+                        'username'=> $request->nik,
+                        'status'=> 1,
+                        'role'=> 0
+                    ]);
+                    if($new){
+                        return redirect()->route('setting_account_att')->with('msg','Pengguna '.$request->nama.' BERHASIL dibuat!');
+                    }
+                }
+            } catch (DecryptException $e) {
+                Log::info(Auth::user()->name." Failed created data user att in machine uid = ".$id);
+                return redirect()->route('setting_account_att')->with('msg','Pengguna '.$request->nama.' GAGAL dibuat!');
+            }
+        }
+        $status          = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
+        return view('setting.account_att', compact('status'));      
     }
 
     public function account_att_data(Request $request)
     {
-        $data = WhUser::with('user')->select('*')->orderBy('name');
+        $data = WhUser::with('user')->select('*')->orderBy('uid');
         return Datatables::of($data)
                 ->filter(function ($instance) use ($request) {
                     if (!is_null($request->get('select_status'))) {

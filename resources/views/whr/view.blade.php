@@ -16,6 +16,9 @@
             display: none !important;
         }
     }
+    .table-sm>:not(caption)>*>* {
+        padding: 0.1rem 0.625rem;
+    }
 </style>
 @endsection
 
@@ -39,7 +42,7 @@
                         <td>
                             <div>
                                 <h5>{{ ($user->user != null? $user->user->name_with_title : $user->name) }}</h5>
-                                <i class='bx bx-id-card'></i> {{ $user->username }}
+                                {{ $user->username }}
                             </div>
                         </td>
                         <td style="text-align: right;">
@@ -71,9 +74,9 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <table class="table table-hover table-sm" width="100%">
+                        <table class="table table-hover table-sm" width="100%" style="padding:0 2px;">
                             <thead>
-                                <tr>
+                                <tr style="border-bottom: 2px double">
                                     <th width="70px">Hari</th>
                                     <th>Tanggal</th>
                                     <th class="d-none d-lg-table-cell text-center" width="100px">User Id</th>
@@ -94,11 +97,12 @@
                                     $totalCepat = 0;
                                     $totalLembur = 0; 
                                     $totalAbsen = 0;
+                                    $totalJamPerminggu = 0;
                                 @endphp
                                 @foreach($data as $key => $d)
                                 <tr
                                 @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
-                                    class="text-danger" style="background-color:rgba(67,89,113,.04)"
+                                    class="text-danger"
                                     @elseif((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SATURDAY)
                                     class="text-success"
                                     @endif
@@ -135,7 +139,7 @@
                                     </td>
                                     <td class="text-center">
                                         @php 
-                                            if(\Carbon\Carbon::parse($d->masuk) > \Carbon\Carbon::parse($d->tanggal." 08:00:00")){
+                                            if(\Carbon\Carbon::parse($d->masuk) > \Carbon\Carbon::parse($d->tanggal." 08:00:59")){
                                                 $telat = (\Carbon\Carbon::parse($d->masuk))->diff(\Carbon\Carbon::parse($d->tanggal." 08:00:00"))->format('%H:%I:%S');
                                                 $temp = explode(":", $telat);
                                                 $totalTelat += (int) $temp[0] * 3600;
@@ -182,13 +186,17 @@
                                             }
                                         @endphp
                                     </td>
-                                    <td class="text-end">
-                                        @php 
+                                    <td class="text-end"> 
+                                        @php
                                         $jam = \Carbon\Carbon::parse($d->total_jam)->translatedFormat("H:i:s");
                                         $temp = explode(":", $jam);
                                         $totalJam += (int) $temp[0] * 3600;
                                         $totalJam += (int) $temp[1] * 60;
                                         $totalJam += (int) $temp[2];
+
+                                        $totalJamPerminggu += (int) $temp[0] * 3600;
+                                        $totalJamPerminggu += (int) $temp[1] * 60;
+                                        $totalJamPerminggu += (int) $temp[2];
                                         @endphp
                                         {{$jam}}
                                     </td>
@@ -202,42 +210,64 @@
                                     <td></td>
                                     @endif
                                 </tr>
+                                @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
+                                <tr style="background-color:rgba(67,89,113,.04); border-bottom: 1px ridge yellow">
+                                <td class="d-none d-lg-table-cell text-center"></td>
+                                    <td colspan="6" class="text-light"><i>Total jam/minggu</i></td>
+                                    <td></td>
+                                    <td class="text-end">
+                                        @php 
+                                            $print = sprintf('%02d:%02d:%02d',
+                                                ($totalJamPerminggu / 3600),
+                                                ($totalJamPerminggu / 60 % 60),
+                                                $totalJamPerminggu % 60);
+                                            $x = explode(":", $print);
+                                            if (intval($x[0]) < 40) {
+                                                echo "<i class='text-danger' title='Jam kerja/minggu < 40'>".$print."<i>";
+                                            } else {
+                                                echo "<i class='text-success' title='Jam kerja/minggu >= 40'>".$print."<i>";
+                                            }
+                                            $totalJamPerminggu = 0;
+                                        @endphp
+                                    </td>
+                                </tr>
+                                @endif
                                 @endforeach
                             </tbody>
-                                <tr>
-                                    <th>Total</th>
-                                    <th class="text-center" title="Total Hari">
+                                <tr style="font-size: 13pt;">
+                                    <td>Total</td>
+                                    <td class="text-center" title="Total Hari">
                                         @if ($totalAbsen < 20)
                                             <b class='text-danger' title='Total < 20'>{{$totalAbsen}}<b>
                                         @else
                                             <b class='text-success' title='Total >= 20'>{{$totalAbsen}}<b>
                                         @endif
                                         / {{count($data)}} Hari
-                                    </th>
-                                    <th class="text-center d-none d-lg-table-cell" width="100px">
+                                    </td>
+                                    <td class="text-center d-none d-lg-table-cell" width="100px">
                                         @if ($totalAbsen < 20)
                                             <b class='text-danger' title='Total < 20'>{{$totalAbsen}}<b>
                                         @else
                                             <b title='Total >= 20'>{{$totalAbsen}}<b>
                                         @endif
-                                    </th>
-                                    <th class="text-center" title="Total Abensi Masuk">
+                                    </td>
+                                    <td class="text-center" title="Total Abensi Masuk">
                                         @if ($totalMasuk < 20)
                                             <b class='text-danger' title='Total < 20'>{{$totalMasuk}}<b>
                                         @else
                                             <b title='Total >= 20'>{{$totalMasuk}}<b>
                                         @endif
                                         x
-                                    </th>
-                                    <th class="text-center" title="Total Abensi Keluar">
+                                    </td>
+                                    <td class="text-center" title="Total Abensi Keluar">
                                         @if ($totalKeluar < 20)
                                             <b class='text-danger' title='Total < 20'>{{$totalKeluar}}<b>
                                         @else
                                             <b title='Total >= 20'>{{$totalKeluar}}<b>
                                         @endif
                                         x
-                                    </th>
-                                    <th class="text-center text-danger">
+                                    </td>
+                                    <td class="text-center text-danger">
                                         @php
                                             $print = sprintf('%02d:%02d',
                                                 ($totalTelat / 3600),
@@ -249,8 +279,8 @@
                                                 echo $print;
                                             }
                                         @endphp
-                                    </th>
-                                    <th class="text-center">
+                                    </td>
+                                    <td class="text-center">
                                         @php
                                             $print = sprintf('%02d:%02d',
                                                 ($totalCepat / 3600),
@@ -262,8 +292,8 @@
                                                 echo $print;
                                             }
                                         @endphp
-                                    </th>
-                                    <th class="text-center">
+                                    </td>
+                                    <td class="text-center">
                                         @php
                                             $print = sprintf('%02d:%02d',
                                                 ($totalLembur / 3600),
@@ -275,8 +305,8 @@
                                                 echo $print;
                                             }
                                         @endphp
-                                    </th>
-                                    <th class="text-end">
+                                    </td>
+                                    <td class="text-end">
                                         @php 
                                             $print = sprintf('%02d:%02d:%02d',
                                                 ($totalJam / 3600),
@@ -289,7 +319,7 @@
                                                 echo "<b class='text-success' title='Total Jam Kerja >= 160'>".$print."<b>";
                                             }
                                         @endphp
-                                    </th>
+                                    </td>
                                 </tr>
                         </table>
                         <br>

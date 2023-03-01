@@ -157,7 +157,7 @@ class WorkHoursController extends Controller
                     }
                 })
                 ->addColumn('telat', function($x){
-                    if(new Carbon($x->masuk) > new Carbon($x->tanggal." 08:00:00")){
+                    if(new Carbon($x->masuk) > new Carbon($x->tanggal." 08:00:59")){
                         return (new Carbon($x->masuk))->diff(new Carbon($x->tanggal." 08:00:00"))->format('%h:%I');
                     } else {
                         return null;

@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\WhUser;
+use App\Models\WhUserGroup;
 use App\Models\Role;
 use Yajra\DataTables\DataTables;
 use Auth;
@@ -126,7 +127,8 @@ class SettingController extends Controller
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
                 'nama' => ['required', 'string','max:24'],
-                'nik' => ['required']
+                'nik' => ['required'],
+                'grup' => ['required']
             ]);
             $latest = WhUser::orderByDesc('uid')->first();
             $id = ($latest->uid + 1);
@@ -141,7 +143,8 @@ class SettingController extends Controller
                         'name'=> $request->nama,
                         'username'=> $request->nik,
                         'status'=> 1,
-                        'role'=> 0
+                        'role'=> 0,
+                        'group_id' => $request->grup,
                     ]);
                     if($new){
                         return redirect()->route('setting_account_att')->with('msg','Pengguna '.$request->nama.' BERHASIL dibuat!');
@@ -153,16 +156,20 @@ class SettingController extends Controller
             }
         }
         $status          = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
-        return view('setting.account_att', compact('status'));      
+        $group          = WhUserGroup::get();
+        return view('setting.account_att', compact('status', 'group'));      
     }
 
     public function account_att_data(Request $request)
     {
-        $data = WhUser::with('user')->select('*')->orderBy('uid');
+        $data = WhUser::with('user')->with('group')->select('*')->orderBy('uid');
         return Datatables::of($data)
                 ->filter(function ($instance) use ($request) {
                     if (!is_null($request->get('select_status'))) {
                         $instance->where('status', $request->get('select_status'));
+                    }
+                    if (!is_null($request->get('select_group'))) {
+                        $instance->where('group_id', $request->get('select_group'));
                     }
                     if (!empty($request->get('search'))) {
                          $instance->where(function($w) use($request){
@@ -268,13 +275,15 @@ class SettingController extends Controller
             $this->validate($request, [ 
                 'name' => ['required', 'string','max:24'],
                 'status' => ['required', 'string','max:1'],
-                'role' => ['required']
+                'role' => ['required'],
+                'grup' => ['required']
             ]);
             WhUser::where('uid', $id)->update([
                 'name'=> $request->name,
                 'status'=> $request->status,
                 'role'=> $request->role,
                 'username_old' => $request->old,
+                'group_id' => $request->grup,
                 'updated_at' => Carbon::now()
             ]);
             try {
@@ -292,10 +301,11 @@ class SettingController extends Controller
         }
         $status   = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
         $data = WhUser::where('uid',$id)->first();
+        $group          = WhUserGroup::get();
         if($data == null){
             abort(403, "Access not allowed!");
         }
-        return view('setting.account_att_edit', compact('data','status'));
+        return view('setting.account_att_edit', compact('data','status','group'));
     }
 
     public function account_att_delete(Request $request) {

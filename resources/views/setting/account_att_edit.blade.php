@@ -42,16 +42,14 @@
                             </span>
                             @enderror
                         </div>
-
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Status</label>
-                            <select class="select2 form-select" name="status" id="select2Dark">
-                                @foreach($status as $s)
-                                <option value="{{$s->id}}" {{ $s->id==$data->status ? 'selected' : '' }}>
-                                    {{$s->title}}</option>
+                            <label class="form-label">Grup</label>
+                            <select class="select2 form-select" name="grup" >
+                                @foreach($group as $d)
+                                <option {{ $d->uid==$data->group_id ? 'selected' : '' }} value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
                                 @endforeach
                             </select>
-                            @error('status')
+                            @error('grup')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -67,7 +65,7 @@
 
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Role</label>
-                            <select class="select2 form-select" name="role" id="select2Dark">
+                            <select class="select2 form-select" name="role" >
                                 <option value=0 {{ 0 ==$data->role ? 'selected' : '' }}>User</option>
                                 <option value=14 {{ 14 ==$data->role ? 'selected' : '' }}>Admin</option>
                             </select>
@@ -84,6 +82,21 @@
                                 id="user" name="old" value="{{ $data->username_old  }}"
                                 placeholder="Old" />
                             @error('old')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label">Status</label>
+                            <select class="select2 form-select" name="status" >
+                                @foreach($status as $s)
+                                <option value="{{$s->id}}" {{ $s->id==$data->status ? 'selected' : '' }}>
+                                    {{$s->title}}</option>
+                                @endforeach
+                            </select>
+                            @error('status')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>

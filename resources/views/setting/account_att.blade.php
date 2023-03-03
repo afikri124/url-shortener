@@ -62,7 +62,15 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="offset-md-6 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                            <div class=" col-md-3">
+                                <select id="select_group" class="select2 form-select" data-placeholder="Grup">
+                                    <option value="">Grup</option>
+                                    @foreach($group as $d)
+                                    <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="offset-md-3 col-md-3 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-outline-dark" type="button" onclick="SyncUser()">
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>
@@ -114,6 +122,22 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Grup</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <select class="form-select @error('grup') is-invalid @enderror select2-modal" name="grup" data-placeholder="-- Pilih Grup --">
+                                    <option value="">-- Pilih Grup --</option>
+                                    @foreach($group as $d)
+                                    <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
+                                    @endforeach
+                                </select>
+                                @error('grup')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="col-sm-12 mt-4">
                             <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
                             <button type="reset" class="btn btn-outline-secondary"
@@ -133,7 +157,7 @@
                     <th data-priority="2">Nama [Nama di Mesin]</th>
                     <th>Username / [old]</th>
                     <th width="60px">Role</th>
-                    <!-- <th width="60px">Password</th> -->
+                    <th width="60px">Group</th>
                     <th width="80px">No Kartu</th>
                     <th data-priority="4" width="50px">Status</th>
                     <th width="40px" data-priority="3">Aksi</th>
@@ -183,6 +207,7 @@
                 url: "{{ route('setting_account_att_data') }}",
                 data: function (d) {
                     d.select_status = $('#select_status').val(),
+                    d.select_group = $('#select_group').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -241,10 +266,13 @@
                     data: 'role_name',
                     name: 'role'
                 },
-                // {
-                //     data: 'password',
-                //     name: 'password'
-                // },
+                {
+                    render: function (data, type, row, meta) {
+                        if(row.group != null){
+                            return row.group.title + (row.group.desc==null? "" : " (" + row.group.desc + ")");
+                        }
+                    },
+                },
                 {
                     data: 'cardno',
                     name: 'cardno'
@@ -270,6 +298,9 @@
             ]
         });
         $('#select_status').change(function () {
+            table.draw();
+        });
+        $('#select_group').change(function () {
             table.draw();
         });
     });

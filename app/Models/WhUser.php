@@ -18,11 +18,17 @@ class WhUser extends Model
         'password',
         'cardno',
         'status',
+        'group_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'username', 'username');
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(WhUserGroup::class, 'group_id', 'uid');
     }
 
     protected $appends = ['status_name', 'role_name'];

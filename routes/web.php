@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Mail\MailNotification;
+// use DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -193,24 +194,7 @@ Route::group(['prefix' => 'FILE'], function () {
 
 //Email
 Route::group(['prefix' => 'email','middleware' => ['auth','role:AD']], function () {
-  Route::get('/', function () {
-    $data['email'] = "safirafaizah@jgu.ac.id";
-    $data['name'] = "Safira";
-
-    $data['subject'] = "Dokumen Bukti "."Akreditasi";
-    $data['messages'] = "Dalam rangka <b>"."Akreditasi Prodi Manjemen"."</b>, Anda ditugaskan untuk mengunggah dokumen berikut:";
-    $data['item'] = ["S000000","Sssss"];
-
-    $data['catatan'] = "Langkah mengunggah dokumen:<br><ol>"
-    ."<li>Akses halaman <b><a href='".url('/DOC')."'>https://s.jgu.ac.id</a></b></li>"
-    ."<li>Masuk menggunakan email penerima pemberitahuan ini / Akun SSO penanggung jawab.</li>"
-    ."<li>Tekan menu <b>Dokumen > Unggah Bukti</b></li>"
-    ."<li>Pilih dan tekan nama Dokumen yang diperlukan</li> "
-    ."<li>Lalu tekan <b>Unggah Bukti Disini</b></li>"
-    ."<li>Jika sudah, maka segera tekan <b>Sudah Unggah</b>.</li>"
-    ."</ol>";
-    return new MailNotification($data);
-  });
+  Route::get('/', [\App\Http\Controllers\WorkHoursController::class, 'tes']);
 
   Route::get('/test', [App\Http\Controllers\DocSystemController::class, 'BroadCastNotification']);
 });

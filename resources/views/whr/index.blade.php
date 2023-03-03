@@ -222,8 +222,8 @@
         });
         $('#select_group').change(function () {
             var id = this.value;
-            table.draw();
             $("#select_user").html('');
+            table.draw();
             $.ajax({
                 url: "{{ route('WHR.user_by_id') }}",
                 type: "GET",

@@ -16,6 +16,9 @@ use DB;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use App\Mail\MailNotification;
+use Mail;
+
 
 class WorkHoursController extends Controller
 {
@@ -624,6 +627,37 @@ class WorkHoursController extends Controller
     //             dd($data);
                 $zk->disconnect();   
             }
+    }
+
+    public function tes(){
+        $data['email'] = "safirafaizah@jgu.ac.id";
+        $data['name'] = "Safira";
+    
+        $data['subject'] = "Informasi Absensi Karyawan";
+        $data['messages'] = "Berikut ini merupakan data karyawan yang pernah tidak masuk dalam minggu ini:";
+        $data['item'] = array();
+
+        $date_start = Carbon::now()->startOfWeek(Carbon::MONDAY);
+    
+        $x = DB::select( DB::raw("SELECT IFNULL(u.username,u.`username_old`) AS ID, u.name, IFNULL(tt.days,0) AS hari, u.group_id
+          FROM 
+          (SELECT u.username, COUNT(DISTINCT(DATE(a.`timestamp`))) AS days
+          FROM wh_users u
+          JOIN wh_attendances a ON u.`username` = a.`username` 
+          WHERE a.`timestamp` >= '".$date_start."'
+          GROUP BY u.`username`) AS tt
+          RIGHT JOIN wh_users u ON tt.username = u.username
+          WHERE u.`status` = 1 && IFNULL(tt.days,0) < 5 && (u.group_id = 'JF' OR u.group_id = 'JE')
+          ORDER BY u.group_id DESC, u.name ") );
+    
+        foreach($x as $d){
+          array_push($data['item'],$d->name." <i>(tidak masuk ".(5-$d->hari)." hari)</i>");
+        }
+    
+        $data['catatan'] = "Berikut ini link untuk melihat data secara detail:<br><ul>"
+        ."<li>Akses halaman <b><a href='".url('/WHR')."'>https://s.jgu.ac.id/WHR</a></b></li>"
+        ."</ul>";
+        return new MailNotification($data);
     }
 
 }

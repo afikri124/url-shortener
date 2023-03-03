@@ -228,7 +228,7 @@ class WorkHoursController extends Controller
             }
         }
 
-        if (!empty($request->get('select_user')) && !empty($request->get('select_group'))) {
+        if (!empty($request->get('select_user'))) {
             $user_id = $request->get('select_user');
             $old_user = WhUser::where('username',$user_id)->first();
             $old = ($old_user == null ? $user_id: $old_user->username_old);
@@ -237,13 +237,13 @@ class WorkHoursController extends Controller
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
-                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end' && (`username` = '$user_id' or `username` = '$old')
+                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end' 
                     GROUP BY DATE(`timestamp`),username
                     ORDER BY pulang DESC
                 ) a 
                 RIGHT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
                 LEFT JOIN users u ON u.username = a.username 
-                WHERE w.status = 1 ".$query."
+                WHERE w.status = 1 ".$query." && (w.`username` = '".$user_id."' or w.`username` = '".$old."')
                 GROUP BY w.username, w.name, u.name, u.id, w.group_id
                 ORDER BY w.name
                 ") );

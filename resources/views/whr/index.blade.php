@@ -64,6 +64,14 @@
                                         placeholder="Pilih Tanggal" autocomplete="off" />
                                 </div>
                                 <div class=" col-md-3">
+                                    <select id="select_group" class="select2 form-select" name="grup" data-placeholder="Grup">
+                                        <option value="">Grup</option>
+                                        @foreach($group as $d)
+                                        <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class=" col-md-3">
                                     <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
                                         <option value="">Pilih Akun</option>
                                         @foreach($user as $d)
@@ -72,7 +80,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6 text-md-end text-center pt-3 pt-md-0">
+                                <div class="col-md-3 text-md-end text-center pt-3 pt-md-0">
                                     <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
                                         <span><i class="bx bx-sync me-sm-2"></i>
                                             Sinkron</span>
@@ -150,6 +158,7 @@
                 url: "{{ route('WHR.data') }}",
                 data: function (d) {
                     d.select_user = $('#select_user').val(),
+                    d.select_group = $('#select_group').val(),
                         d.select_range = $('#select_range').val()
                     // d.search = $('input[type="search"]').val()
                 },
@@ -210,6 +219,32 @@
         });
         $('#select_user').change(function () {
             table.draw();
+        });
+        $('#select_group').change(function () {
+            var id = this.value;
+            table.draw();
+            $("#select_user").html('');
+            $.ajax({
+                url: "{{ route('WHR.user_by_id') }}",
+                type: "GET",
+                data: {
+                    id: id,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success: function (result) {
+                    // console.log(result);
+                    if (result.length != 0) {
+                        $('#select_user').html(
+                            '<option value="">Kategori</option>'
+                        );
+                        $.each(result, function (key, value) {
+                            $("#select_user").append('<option value="' + value
+                                .uid + '">' + value.name + '</option>');
+                        });
+                    }
+                }
+            });
         });
         $('#select_range').change(function () {
             table.draw();

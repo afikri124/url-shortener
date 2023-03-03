@@ -16,6 +16,9 @@
                     @if($periode != null)
                         <br>Periode : {{$periode}}
                     @endif
+                    @if($group_name != null)
+                        <br>Grup : {{$group_name->title}} {{$group_name->desc}}
+                    @endif
                 </td>
             </tr>
             <tr>

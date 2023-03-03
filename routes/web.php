@@ -105,6 +105,7 @@ Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR']], function
   Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'whr_data'])->name('WHR.data');
   Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'whr_print'])->name('WHR.print');
   Route::get('/view/{id}', [App\Http\Controllers\WorkHoursController::class, 'whr_view'])->name('WHR.view');
+  Route::get('/get_user/by_id', [App\Http\Controllers\WorkHoursController::class, 'user_by_id'])->name('WHR.user_by_id');
 });
 //JAM-KERJA tes
 Route::get('zk', [\App\Http\Controllers\WorkHoursController::class, 'zk'])->middleware(['auth', 'role:AD']);

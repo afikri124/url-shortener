@@ -55,18 +55,18 @@
                     <div class="col-12">
                         <div class="row">
                             <div class=" col-md-3">
-                                <select id="select_status" class="select2 form-select" data-placeholder="Status">
-                                    <option value="">Status</option>
-                                    @foreach($status as $d)
-                                    <option value="{{ $d->id }}">{{ $d->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class=" col-md-3">
                                 <select id="select_group" class="select2 form-select" data-placeholder="Grup">
                                     <option value="">Grup</option>
                                     @foreach($group as $d)
                                     <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class=" col-md-3">
+                                <select id="select_status" class="select2 form-select" data-placeholder="Status">
+                                    <option value="">Status</option>
+                                    @foreach($status as $d)
+                                    <option value="{{ $d->id }}">{{ $d->title }}</option>
                                     @endforeach
                                 </select>
                             </div>

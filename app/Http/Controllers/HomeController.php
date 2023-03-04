@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
+use DB;
+use App\Mail\WeeklyAttendanceReportMail;
+use App\Models\DocDepartment;
 
 class HomeController extends Controller
 {
@@ -182,6 +185,47 @@ class HomeController extends Controller
             $msg = $e->getMessage();
             return redirect()->route('login')->withErrors(['msg' => $msg]);
         }
+    }
+
+    public function tes(){
+        $hr   = DocDepartment::where('name','Wakil Rektor II')->first();
+        if($hr){
+            $data['email'] = $hr->email;
+            $data['name'] = $hr->name;
+        } else {
+            $data['email'] = "no-reply@jgu.ac.id";
+            $data['name'] = "(REPORT ATT ERROR)";
+        }
+        $data['item1'] = array();
+        $data['item2'] = array();
+        $date_start = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $date_end = Carbon::now()->startOfWeek(Carbon::FRIDAY);
+        $data['period'] = $date_start->format('Y-m-d')." - ".$date_end->format('Y-m-d');
+        $period = $date_start->format('d M Y')." s/d ".$date_end->format('d M Y');
+        $data['subject'] = "Absensi Karyawan (".$period.")";
+        $data['messages'] = "Berikut ini merupakan data karyawan yang pernah <b>TIDAK MASUK</b> berdasarkan mesin absen dalam minggu ini (<b>".$period."</b>) :";
+        $x = DB::select( DB::raw("SELECT IFNULL(u.username,u.`username_old`) AS ID, u.name, IFNULL(tt.days,0) AS hari, u.group_id
+          FROM 
+          (SELECT u.username, COUNT(DISTINCT(DATE(a.`timestamp`))) AS days
+          FROM wh_users u
+          JOIN wh_attendances a ON u.`username` = a.`username` 
+          WHERE a.`timestamp` >= '".$date_start."' && a.`timestamp` <= '".$date_end."'
+          GROUP BY u.`username`) AS tt
+          RIGHT JOIN wh_users u ON tt.username = u.username
+          WHERE u.`status` = 1 && IFNULL(tt.days,0) < 5 && (u.group_id = 'JF' OR u.group_id = 'JE')
+          ORDER BY u.group_id DESC, hari") );
+        foreach($x as $d){
+            $x = [$d->name,(5-$d->hari),$d->ID];
+            if($d->group_id == 'JF'){
+                array_push($data['item1'],$x);
+            } else {
+                array_push($data['item2'],$x);
+            }
+        }
+        $data['catatan'] = "<br>Untuk melihat data karyawan secara keseluruhan dapat diakses melalui tautan berikut ini:<br>"
+        ."<br><button><b><a target='_blank' href='".url('/WHR')."'>s.jgu.ac.id/WHR</a></b></button>";
+        return new WeeklyAttendanceReportMail($data);
+        // Mail::to($data['email'])->queue(new WeeklyAttendanceReportMail($data));
     }
 
 }

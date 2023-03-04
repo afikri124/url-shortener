@@ -16,9 +16,9 @@ use DB;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
-use App\Mail\MailNotification;
+use App\Mail\WeeklyAttendanceReportMail;
+use App\Models\DocDepartment;
 use Mail;
-
 
 class WorkHoursController extends Controller
 {
@@ -585,6 +585,47 @@ class WorkHoursController extends Controller
         ]);
     }
 
+    public function weeklyAttendanceReport(){
+        $hr   = DocDepartment::where('name','Wakil Rektor II')->first();
+        if($hr){
+            $data['email'] = $hr->email;
+            $data['name'] = $hr->name;
+        } else {
+            $data['email'] = "no-reply@jgu.ac.id";
+            $data['name'] = "(REPORT ATT ERROR)";
+        }
+        $data['item1'] = array();
+        $data['item2'] = array();
+        $date_start = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $date_end = Carbon::now()->startOfWeek(Carbon::FRIDAY);
+        $data['period'] = $date_start->format('Y-m-d')." - ".$date_end->format('Y-m-d');
+        $period = $date_start->format('d M Y')." s/d ".$date_end->format('d M Y');
+        $data['subject'] = "Absensi Karyawan (".$period.")";
+        $data['messages'] = "Berikut ini merupakan data karyawan yang pernah <b>TIDAK MASUK</b> berdasarkan mesin absen dalam minggu ini (<b>".$period."</b>) :";
+        $x = DB::select( DB::raw("SELECT IFNULL(u.username,u.`username_old`) AS ID, u.name, IFNULL(tt.days,0) AS hari, u.group_id
+          FROM 
+          (SELECT u.username, COUNT(DISTINCT(DATE(a.`timestamp`))) AS days
+          FROM wh_users u
+          JOIN wh_attendances a ON u.`username` = a.`username` 
+          WHERE a.`timestamp` >= '".$date_start."' && a.`timestamp` <= '".$date_end."'
+          GROUP BY u.`username`) AS tt
+          RIGHT JOIN wh_users u ON tt.username = u.username
+          WHERE u.`status` = 1 && IFNULL(tt.days,0) < 5 && (u.group_id = 'JF' OR u.group_id = 'JE')
+          ORDER BY u.group_id DESC, hari") );
+        foreach($x as $d){
+            $x = [$d->name,(5-$d->hari),$d->ID];
+            if($d->group_id == 'JF'){
+                array_push($data['item1'],$x);
+            } else {
+                array_push($data['item2'],$x);
+            }
+        }
+        $data['catatan'] = "<br>Untuk melihat data karyawan secara keseluruhan dapat diakses melalui tautan berikut ini:<br>"
+        ."<br><button><b><a target='_blank' href='".url('/WHR')."'>s.jgu.ac.id/WHR</a></b></button>";
+        Mail::to($data['email'])->queue(new WeeklyAttendanceReportMail($data));
+        // return new WeeklyAttendanceReportMail($data);
+    }
+
     public function zk(){
             $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
             if ($zk->connect()){
@@ -622,42 +663,12 @@ class WorkHoursController extends Controller
                     'data' => $data
                 ]);
 
-    //             $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));
+                //             $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));
 
-    //             dd($data);
+                //             dd($data);
                 $zk->disconnect();   
             }
     }
 
-    public function tes(){
-        $data['email'] = "safirafaizah@jgu.ac.id";
-        $data['name'] = "Safira";
-    
-        $data['subject'] = "Informasi Absensi Karyawan";
-        $data['messages'] = "Berikut ini merupakan data karyawan yang pernah tidak masuk dalam minggu ini:";
-        $data['item'] = array();
-
-        $date_start = Carbon::now()->startOfWeek(Carbon::MONDAY);
-    
-        $x = DB::select( DB::raw("SELECT IFNULL(u.username,u.`username_old`) AS ID, u.name, IFNULL(tt.days,0) AS hari, u.group_id
-          FROM 
-          (SELECT u.username, COUNT(DISTINCT(DATE(a.`timestamp`))) AS days
-          FROM wh_users u
-          JOIN wh_attendances a ON u.`username` = a.`username` 
-          WHERE a.`timestamp` >= '".$date_start."'
-          GROUP BY u.`username`) AS tt
-          RIGHT JOIN wh_users u ON tt.username = u.username
-          WHERE u.`status` = 1 && IFNULL(tt.days,0) < 5 && (u.group_id = 'JF' OR u.group_id = 'JE')
-          ORDER BY u.group_id DESC, u.name ") );
-    
-        foreach($x as $d){
-          array_push($data['item'],$d->name." <i>(tidak masuk ".(5-$d->hari)." hari)</i>");
-        }
-    
-        $data['catatan'] = "Berikut ini link untuk melihat data secara detail:<br><ul>"
-        ."<li>Akses halaman <b><a href='".url('/WHR')."'>https://s.jgu.ac.id/WHR</a></b></li>"
-        ."</ul>";
-        return new MailNotification($data);
-    }
 
 }

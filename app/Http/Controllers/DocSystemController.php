@@ -78,7 +78,7 @@ class DocSystemController extends Controller
                         $query->select('id', 'email', 'name');
                     }])
                     ->with('PIC.department')
-                    ->select('doc_systems.*', 'doc_categories.activity_id')->orderBy("category_id");
+                    ->select('doc_systems.*', 'doc_categories.activity_id')->orderByDesc("doc_categories.activity_id")->orderBy("category_id");
         return Datatables::of($data)
                 ->filter(function ($instance) use ($request) {
                     if (!empty($request->get('activity_id'))) {
@@ -282,10 +282,10 @@ class DocSystemController extends Controller
                 }])
                 ->with('PIC.department')->find($id);
 
-        $department = DocDepartment::select('*')->get();
+        $department = DocDepartment::select('*')->orderBy('name')->get();
         $user = User::whereHas('roles', function($q){
             $q->where('role_id', "ST");
-        })->select('id','name')->get();
+        })->select('id','name')->orderBy('name')->get();
         return view('doc.index_edit', compact('data','user','department'));
     }
 
@@ -636,7 +636,7 @@ class DocSystemController extends Controller
             ]);
     }
 
-    public function BroadCastNotification(){
+    public function broadCastNotification(){
         $now = Carbon::now();
         $dataPIC = DocPIC::with('department')->with('user')
         ->select('doc_p_i_c_s.department_id','doc_p_i_c_s.pic_id', DB::raw("COUNT('doc_systems.status_id') as total"))

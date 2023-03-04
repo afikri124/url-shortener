@@ -103,7 +103,7 @@
 
         .order-detail th {
             font-size: 10pt;
-            padding: 15px;
+            padding: 2px 10px;
             text-align: center;
             background: #fafafa;
         }

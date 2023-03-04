@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class BroadCastNotificationDoc implements ShouldQueue
+class WeeklyAttendanceReport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,6 +31,6 @@ class BroadCastNotificationDoc implements ShouldQueue
     public function handle()
     {
         //
-        app('App\Http\Controllers\DocSystemController')->broadCastNotification(); //notic Doc
+        app('App\Http\Controllers\WorkHoursController')->weeklyAttendanceReport(); //notif report att ke bu risma
     }
 }

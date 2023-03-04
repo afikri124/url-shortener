@@ -597,7 +597,7 @@ class WorkHoursController extends Controller
         $data['item1'] = array();
         $data['item2'] = array();
         $date_start = Carbon::now()->startOfWeek(Carbon::MONDAY);
-        $date_end = Carbon::now()->startOfWeek(Carbon::FRIDAY);
+        $date_end = Carbon::now()->endOfDay(Carbon::FRIDAY);
         $data['period'] = $date_start->format('Y-m-d')." - ".$date_end->format('Y-m-d');
         $period = $date_start->format('d M Y')." s/d ".$date_end->format('d M Y');
         $data['subject'] = "Absensi Karyawan (".$period.")";

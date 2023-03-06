@@ -199,7 +199,12 @@ class HomeController extends Controller
         $data['item1'] = array();
         $data['item2'] = array();
         $date_start = Carbon::now()->startOfWeek(Carbon::MONDAY);
-        $date_end =  Carbon::now()->startOfWeek(Carbon::MONDAY)->addDays(4)->endOfDay();
+        $today = new Carbon();
+        if($today->dayOfWeek != Carbon::FRIDAY){
+            $date_end = $today->endOfDay();
+        } else {
+            $date_end =  Carbon::now()->startOfWeek(Carbon::MONDAY)->addDays(4)->endOfDay();
+        }
         $diff = $date_start->diffInDays($date_end);
         $data['period'] = $date_start->format('Y-m-d')." - ".$date_end->format('Y-m-d');
         $period = $date_start->format('d M Y')." s/d ".$date_end->format('d M Y');
@@ -216,7 +221,7 @@ class HomeController extends Controller
           WHERE u.`status` = 1 && IFNULL(tt.days,0) <= ".$diff." && (u.group_id = 'JF' OR u.group_id = 'JE')
           ORDER BY u.group_id DESC, hari") );
         foreach($x as $d){
-            $x = [$d->name,(5-$d->hari),$d->ID];
+            $x = [$d->name,(($diff+1) - $d->hari),$d->ID];
             if($d->group_id == 'JF'){
                 array_push($data['item1'],$x);
             } else {

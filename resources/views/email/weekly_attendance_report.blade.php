@@ -34,7 +34,7 @@
         <tr>
             <th>No</th>
             <th>Nama</th>
-            <th>Total <br><i>(tidak masuk)</i></th>
+            <th>Total <br><i>tidak masuk</i></th>
         </tr>
     </thead>
     <tbody>

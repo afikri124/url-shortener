@@ -200,7 +200,7 @@ class HomeController extends Controller
         $data['item2'] = array();
         $date_start = Carbon::now()->startOfWeek(Carbon::MONDAY);
         $today = new Carbon();
-        if($today->dayOfWeek != Carbon::FRIDAY){
+        if($today->dayOfWeek <= Carbon::FRIDAY){
             $date_end = $today->endOfDay();
         } else {
             $date_end =  Carbon::now()->startOfWeek(Carbon::MONDAY)->addDays(4)->endOfDay();

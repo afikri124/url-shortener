@@ -629,7 +629,7 @@ class WorkHoursController extends Controller
         $data['catatan'] = "<br>Untuk melihat data karyawan secara keseluruhan dapat diakses melalui tautan berikut ini:<br>"
         ."<br><button><b><a target='_blank' href='".url('/WHR')."'>s.jgu.ac.id/WHR</a></b></button>";
         Mail::to($data['email'])->queue(new WeeklyAttendanceReportMail($data));
-        // return new WeeklyAttendanceReportMail($data);
+        Log::info("Weekly report Att sended!");
     }
 
     public function zk(){

@@ -639,7 +639,7 @@ class DocSystemController extends Controller
     public function broadCastNotification(){
         $now = Carbon::now();
         $dataPIC = DocPIC::with('department')->with('user')
-        ->select('doc_p_i_c_s.department_id','doc_p_i_c_s.pic_id', DB::raw("COUNT('doc_systems.status_id') as total"))
+        ->select('doc_p_i_c_s.department_id','doc_p_i_c_s.pic_id','doc_systems.category_id', DB::raw("COUNT('doc_systems.status_id') as total"))
         ->join('doc_systems','doc_systems.id','=','doc_p_i_c_s.doc_id')
         ->where(function ($query) use ($now) {
             $query->whereYear('deadline', '>=', $now->year)
@@ -649,7 +649,7 @@ class DocSystemController extends Controller
             $query->where('status_id','=','S1')
                 ->orWhere('status_id','=','S3');
         })
-        ->groupBy('department_id','pic_id')
+        ->groupBy('department_id','pic_id','category_id')
         ->get();
 
         foreach($dataPIC as $d){

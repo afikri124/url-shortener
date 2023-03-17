@@ -31,6 +31,6 @@ class WeeklyAttendanceReport implements ShouldQueue
     public function handle()
     {
         //
-        app('App\Http\Controllers\WorkHoursController')->weeklyAttendanceReport(); //notif report att ke bu risma
+        app('App\Http\Controllers\WorkHoursController')->weekly_attendance_report(); //notif report att ke bu risma
     }
 }

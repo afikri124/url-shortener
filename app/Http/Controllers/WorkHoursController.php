@@ -585,7 +585,7 @@ class WorkHoursController extends Controller
         ]);
     }
 
-    public function weeklyAttendanceReport(){
+    public function weekly_attendance_report(){
         $hr   = DocDepartment::where('name','Wakil Rektor II')->first();
         if($hr){
             $data['email'] = $hr->email;

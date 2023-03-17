@@ -195,7 +195,7 @@ Route::group(['prefix' => 'FILE'], function () {
 //Email
 Route::group(['prefix' => 'email','middleware' => ['auth','role:AD']], function () { //for testing only
   Route::get('/', [\App\Http\Controllers\HomeController::class, 'tes']);
-  Route::get('/test', [App\Http\Controllers\WorkHoursController::class, 'weeklyAttendanceReport']);
+  Route::get('/test', [App\Http\Controllers\WorkHoursController::class, 'weekly_attendance_report']);
 });
 
 

@@ -16,6 +16,7 @@ use Yajra\DataTables\DataTables;
 use DB;
 use App\Mail\WeeklyAttendanceReportMail;
 use App\Models\DocDepartment;
+use App\Models\DocPIC;
 
 class HomeController extends Controller
 {
@@ -232,6 +233,26 @@ class HomeController extends Controller
         ."<br><button><b><a target='_blank' href='".url('/WHR')."'>s.jgu.ac.id/WHR</a></b></button>";
         return new WeeklyAttendanceReportMail($data);
         // Mail::to($data['email'])->queue(new WeeklyAttendanceReportMail($data));
+    }
+
+    public function tes2(){
+        $now = Carbon::now();
+        $dataPIC = DocPIC::with('department')->with('user')
+        ->select('doc_p_i_c_s.department_id','doc_p_i_c_s.pic_id','doc_categories.activity_id', DB::raw("COUNT('doc_systems.status_id') as total"))
+        ->join('doc_systems','doc_systems.id','=','doc_p_i_c_s.doc_id')
+        ->join('doc_categories','doc_categories.id','=','doc_systems.category_id')
+        ->where(function ($query) use ($now) {
+            $query->whereYear('deadline', '>=', $now->year)
+                ->whereMonth('deadline', '>=', $now->month);
+        })
+        ->where(function ($query) {
+            $query->where('status_id','=','S1')
+                ->orWhere('status_id','=','S3');
+        })
+        ->groupBy('department_id','pic_id','activity_id')
+        ->get();
+
+        return response()->json($dataPIC);
     }
 
 }

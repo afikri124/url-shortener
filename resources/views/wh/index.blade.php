@@ -44,7 +44,7 @@
 
 @section('content')
 <div class="alert alert-secondary alert-dismissible" role="alert" id="lastupdate">
-    Data terakhir disinkronkan {{ \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i");}}
+    Data terakhir disinkronkan {{ ($lastData != null ? \Carbon\Carbon::parse($lastData->timestamp)->translatedFormat("l, d F Y H:i") : "");}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 

@@ -189,7 +189,9 @@ Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::cl
 
 //LINK FILE
 Route::group(['prefix' => 'FILE'], function () {
-
+});
+//LINK web
+Route::group(['prefix' => 'web'], function () {
 });
 
 //Email

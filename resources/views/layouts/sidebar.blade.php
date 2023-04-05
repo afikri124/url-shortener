@@ -159,7 +159,7 @@
         </li>
         @endif
 
-        @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR'))
+        @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR') || Auth::user()->hasRole('IT'))
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pengaturan</span>
         </li>
@@ -183,6 +183,14 @@
                     class="menu-item {{ Route::currentRouteName()=='setting_account_att' ? 'active' : '' }}">
                     <a href="{{ route('setting_account_att') }}" class="menu-link">
                         <div>Mesin Absen</div>
+                    </a>
+                </li>
+                @endif
+                @if(Auth::user()->hasRole('IT'))
+                <li
+                    class="menu-item {{ Route::currentRouteName()=='setting_account_wifi' ? 'active' : '' }}">
+                    <a href="{{ route('setting_account_wifi') }}" class="menu-link">
+                        <div>Portal Wifi</div>
                     </a>
                 </li>
                 @endif

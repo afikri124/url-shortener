@@ -56,6 +56,12 @@
                             <span class="align-middle">Edit Profil</span>
                         </a>
                     </li>
+                    <li class="">
+                        <a class="dropdown-item {{ Route::currentRouteName()=='wifi' ? 'active' : '' }}" href="{{ route('wifi') }}">
+                            <i class="bx bx-wifi  me-2"></i>
+                            <span class="align-middle">Portal Wifi</span>
+                        </a>
+                    </li>
                     <li>
                         <a class="dropdown-item" target="_blank" href="https://wa.me/6285159211558">
                             <i class="bx bx-support me-2"></i>

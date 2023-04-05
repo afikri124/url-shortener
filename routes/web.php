@@ -36,6 +36,11 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/profile/{id}', [App\Http\Controllers\UserController::class, 'profile_by_id'])->name('user.profile_by_id');
 });
 
+//User
+Route::group(['middleware' => ['auth']], function () {
+  Route::get('/wifi', [App\Http\Controllers\WifiUserController::class, 'wifi'])->name('wifi');
+});
+
 //URL Shortener
 Route::group(['prefix' => 'URL','middleware' => ['auth', 'role:ST,SD']], function () {
   Route::any('/', [App\Http\Controllers\DataController::class, 'index'])->name('url.index');
@@ -183,6 +188,10 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:HR']], functio
   Route::any('account_att/edit/{id}', [App\Http\Controllers\SettingController::class, 'account_att_edit'])->name('setting_account_att_edit');
   Route::delete('account_att/delete', [App\Http\Controllers\SettingController::class, 'account_att_delete'])->name('setting_account_att_delete');
 });
+Route::group(['prefix' => 'setting','middleware' => ['auth','role:IT']], function () {
+  Route::any('account_wifi', [App\Http\Controllers\WifiUserController::class, 'index'])->name('setting_account_wifi');
+  Route::get('account_wifi/data', [App\Http\Controllers\WifiUserController::class, 'data'])->name('setting_account_wifi_data');
+  });
 
 
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware(['auth', 'role:AD']);

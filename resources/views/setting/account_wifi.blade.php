@@ -120,7 +120,7 @@
                     <th data-priority="2">Nama</th>
                     <th width="60px">Username</th>
                     <th width="150px">Password</th>
-                    <th width="120px">Sudah Dilihat</th>
+                    <th width="130px">Terakhir Dilihat</th>
                     <th width="40px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
@@ -205,8 +205,8 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if(row.is_seen){
-                            return '<i class="bx bx-wifi text-success"></i> <small>' + moment(row.updated_at).format('d/m/y H:mm') + '</small>';
+                        if(row.is_seen == 1){
+                            return '<i class="bx bx-wifi text-success"></i> <small>' + moment(row.updated_at).format('d/M/y H:mm') + '</small>';
                         } else {
                             return '<i class="bx bx-low-vision text-light"></i>';
                         }

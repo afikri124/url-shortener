@@ -18,20 +18,21 @@ class WifiUserController extends Controller
 {
     //
     function wifi (){
-        $username = "AKUN ANDA BELUM TERDAFTAR";
-        $password = "PASTIKAN USERNAME ANDA BENAR";
+        $username = "USERNAME ANDA BELUM TERDAFTAR";
+        $password = "SILAHKAN HUBUNGI ITIC JGU";
         if(Auth::user()->hasRole('ST')){
             $data = WifiUser::where("username", Auth::user()->username)->first();
             if($data != null){
                 $username = $data->username;
                 $password = $data->password;
+                $update = WifiUser::where("username", Auth::user()->username)->update(['updated_at' => date('Y-m-d H:i:s'),'is_seen' => true]);
             }
-            WifiUser::where("username", Auth::user()->username)->update(['updated_at' => date('Y-m-d H:i:s')]);
         } else if (Auth::user()->hasRole('SD')){
             $data = WifiUser::where("username", "STUDENT")->first();
             if($data != null){
                 $username = $data->username;
                 $password = $data->password;
+                $update = WifiUser::where("username", "STUDENT")->update(['updated_at' => date('Y-m-d H:i:s'),'is_seen' => true]);
             }
         }
 

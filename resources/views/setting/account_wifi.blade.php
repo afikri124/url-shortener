@@ -67,7 +67,7 @@
                 </div>
             </div> --}}
             
-            <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
+            {{-- <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
                 aria-labelledby="offcanvasEndLabel">
                 <div class="offcanvas-header">
                     <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Pengguna Mesin Absensi</h5>
@@ -111,7 +111,7 @@
                     </form>
 
                 </div>
-            </div>
+            </div> --}}
         </div>
         <table class="table table-hover table-sm" id="datatable" width="100%">
             <thead>
@@ -121,7 +121,7 @@
                     <th width="60px">Username</th>
                     <th width="150px">Password</th>
                     <th width="130px">Terakhir Dilihat</th>
-                    <th width="40px" data-priority="3">Aksi</th>
+                    {{-- <th width="40px" data-priority="3">Aksi</th> --}}
                 </tr>
             </thead>
         </table>
@@ -206,20 +206,20 @@
                 {
                     render: function (data, type, row, meta) {
                         if(row.is_seen == 1){
-                            return '<i class="bx bx-wifi text-success"></i> <small>' + moment(row.updated_at).format('d/M/y H:mm') + '</small>';
+                            return '<i class="bx bx-wifi text-success"></i> <small>' + moment(row.updated_at).format('D/M/YYYY H:m') + '</small>';
                         } else {
                             return '<i class="bx bx-low-vision text-light"></i>';
                         }
                     },
                     className: "text-center"
                 },
-                {
-                    render: function (data, type, row, meta) {
-                        var html = ``;
-                        return html;
-                    },
-                    "orderable": false
-                }
+                // {
+                //     render: function (data, type, row, meta) {
+                //         var html = ``;
+                //         return html;
+                //     },
+                //     "orderable": false
+                // }
             ]
         });
     });

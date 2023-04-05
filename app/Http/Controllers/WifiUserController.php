@@ -12,19 +12,21 @@ use App\Models\WifiUser;
 use Auth;
 use Yajra\DataTables\DataTables;
 use DB;
+use Carbon\Carbon;
 
 class WifiUserController extends Controller
 {
     //
     function wifi (){
         $username = "AKUN ANDA BELUM TERDAFTAR";
-        $password = "";
+        $password = "PASTIKAN USERNAME ANDA BENAR";
         if(Auth::user()->hasRole('ST')){
             $data = WifiUser::where("username", Auth::user()->username)->first();
             if($data != null){
                 $username = $data->username;
                 $password = $data->password;
             }
+            WifiUser::where("username", Auth::user()->username)->update(['updated_at' => date('Y-m-d H:i:s')]);
         } else if (Auth::user()->hasRole('SD')){
             $data = WifiUser::where("username", "STUDENT")->first();
             if($data != null){

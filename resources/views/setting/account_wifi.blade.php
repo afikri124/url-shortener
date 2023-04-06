@@ -120,8 +120,8 @@
                     <th data-priority="2">Nama</th>
                     <th width="60px">Username</th>
                     <th width="150px">Password</th>
-                    <th width="130px">Terakhir Dilihat</th>
-                    {{-- <th width="40px" data-priority="3">Aksi</th> --}}
+                    <th width="130px" data-priority="3">Terakhir Dilihat</th>
+                    {{-- <th width="40px" >Aksi</th> --}}
                 </tr>
             </thead>
         </table>

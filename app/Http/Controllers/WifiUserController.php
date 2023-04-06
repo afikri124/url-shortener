@@ -34,6 +34,9 @@ class WifiUserController extends Controller
                 $password = $data->password;
                 $update = WifiUser::where("username", "STUDENT")->update(['updated_at' => date('Y-m-d H:i:s'),'is_seen' => true]);
             }
+        } else if (Auth::user()->hasRole('GS')){
+                $username = "GUEST";
+                $password = "GUEST";
         }
 
         return view('user.wifi', compact('username','password'));

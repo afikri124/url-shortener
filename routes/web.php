@@ -191,7 +191,8 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:HR']], functio
 Route::group(['prefix' => 'setting','middleware' => ['auth','role:IT']], function () {
   Route::any('account_wifi', [App\Http\Controllers\WifiUserController::class, 'index'])->name('setting_account_wifi');
   Route::get('account_wifi/data', [App\Http\Controllers\WifiUserController::class, 'data'])->name('setting_account_wifi_data');
-  });
+  Route::delete('account_wifi/delete', [App\Http\Controllers\WifiUserController::class, 'wifi_delete'])->name('setting_account_wifi_delete');
+});
 
 
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware(['auth', 'role:AD']);

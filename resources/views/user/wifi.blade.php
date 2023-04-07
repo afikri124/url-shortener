@@ -34,7 +34,7 @@
         @else
         @endif
         @else
-        <blockquote class="text-danger mt-3" style="font-size: 10pt"><b>Maaf!</b><br>Anda hanya mendapatkan akses terbatas, info lebih lanjut silahkan hubungi ITIC JGU.</blockquote>
+        <blockquote class="text-danger mt-3" style="font-size: 10pt"><b>Maaf!</b><br>Untuk sementara Anda hanya mendapatkan akses terbatas, info lebih lanjut silahkan hubungi ITIC JGU.</blockquote>
         @endif
         @else
         <blockquote class="text-danger mt-3" style="font-size: 15pt"><b>Maaf!</b><br>Anda tidak memiliki akses wifi Kampus, silahkan <i>login</i> sebagai <i>GUEST</i>.</blockquote>

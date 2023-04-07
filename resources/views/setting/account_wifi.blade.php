@@ -50,7 +50,7 @@
 <div class="card">
     <div class="card-datatable table-responsive">
         <div class="card-header flex-column flex-md-row pb-0">
-            {{-- <div class="row">
+            <div class="row">
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
                         <div class="row">
@@ -65,23 +65,22 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
             
-            {{-- <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
+            <div class="offcanvas offcanvas-end @if($errors->all()) show @endif" tabindex="-1" id="newrecord"
                 aria-labelledby="offcanvasEndLabel">
                 <div class="offcanvas-header">
-                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Pengguna Mesin Absensi</h5>
+                    <h5 id="offcanvasEndLabel" class="offcanvas-title">Tambah Pengguna Wifi</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body my-auto mx-0 flex-grow-1">
-                    <form class="add-new-record pt-0 row g-2 fv-plugins-bootstrap5 fv-plugins-framework"
-                        enctype="multipart/form-data" id="form-add-new-record" method="POST" action="">
+                    <form class="add-new-record pt-0 row g-2 fv-plugins-bootstrap5 fv-plugins-framework" id="form-add-new-record" method="POST" action="">
                         @csrf
                         <div class="col-sm-12 fv-plugins-icon-container">
                             <label class="form-label" for="basicDate">NIK / Username</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('nik') is-invalid @enderror" name="nik"
+                                <input type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" id="nik"
                                     placeholder="Nomor Induk Karyawan" value="{{ old('nik') }}">
                                 @error('nik')
                                 <span class="invalid-feedback" role="alert">
@@ -91,11 +90,48 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Nama</label>
+                            <label class="form-label" for="basicDate">Nama Depan</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama"
-                                    placeholder="Nama (Maksimal 24 karakter)" value="{{ old('nama') }}" maxlength="24">
-                                @error('nama')
+                                <input type="text" class="form-control @error('nama_depan') is-invalid @enderror" name="nama_depan" id="nama_depan" onkeyup="createPassword()" 
+                                    placeholder="Nama Depan" value="{{ old('nama_depan') }}" maxlength="24">
+                                @error('nama_depan')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Nama Belakang</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('nama_belakang') is-invalid @enderror" name="nama_belakang" id="nama_belakang"
+                                    placeholder="Nama Belakang" value="{{ old('nama_belakang') }}" maxlength="24">
+                                @error('nama_belakang')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Email</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                                    placeholder="Email" value="{{ old('email') }}" maxlength="24">
+                                @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Password Wifi</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="text" class="form-control @error('password') is-invalid @enderror" name="password" id="password"
+                                    placeholder="Password Portal Wifi" value="{{ old('password') }}" maxlength="24">
+                                @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -107,11 +143,15 @@
                             <button type="reset" class="btn btn-outline-secondary"
                                 data-bs-dismiss="offcanvas">Batal</button>
                         </div>
+                        <br>
+                        <span class="invalid-feedback" role="alert"><br>
+                            <strong>Setelah membuat disini,<br>harus ditambakan manual di ruijie<br>dengan username dan password diatas</strong>
+                        </span>
                         <div></div><input type="hidden">
                     </form>
 
                 </div>
-            </div> --}}
+            </div>
         </div>
         <table class="table table-hover table-sm" id="datatable" width="100%">
             <thead>
@@ -121,7 +161,7 @@
                     <th width="60px">Username</th>
                     <th width="150px">Password</th>
                     <th width="130px" data-priority="3">Terakhir Dilihat</th>
-                    {{-- <th width="40px" >Aksi</th> --}}
+                    <th width="40px" >Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -152,6 +192,18 @@
             });
         })(jQuery);
     }, 350);
+
+    function createPassword(){
+        var x = $('#nama_depan').val();
+        x = x.replace(/[^A-Z0-9]+/ig, "");
+        x = x.toUpperCase();
+        var init = x.substring(0, 5);
+        if(init.length < 5){
+            init = init.padEnd(5, 'X')
+        }
+        init = init + "" + Math.floor(100 + Math.random() * 900);
+        document.getElementById("password").value = init;
+    }
 
 </script>
 <script type="text/javascript">
@@ -213,16 +265,51 @@
                     },
                     className: "text-center"
                 },
-                // {
-                //     render: function (data, type, row, meta) {
-                //         var html = ``;
-                //         return html;
-                //     },
-                //     "orderable": false
-                // }
+                {
+                    render: function (data, type, row, meta) {
+                        var html = ` <a class=" text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
+                            .id + `)" ><i class="bx bx-trash"></i></a>`;
+                        return html;
+                    },
+                    "orderable": false
+                }
             ]
         });
     });
+
+    function DeleteId(id) {
+        swal({
+                title: "Apa kamu yakin?",
+                text: "Setelah dihapus, data tidak dapat dipulihkan!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "{{ route('setting_account_wifi_delete') }}",
+                        type: "DELETE",
+                        data: {
+                            "id": id,
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                        },
+                        success: function (data) {
+                            if (data['success']) {
+                                swal(data['message'], {
+                                    icon: "success",
+                                });
+                                $('#datatable').DataTable().ajax.reload();
+                            } else {
+                                swal(data['message'], {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    })
+                }
+            })
+    }
 
 </script>
 @endsection

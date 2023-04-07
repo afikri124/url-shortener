@@ -13,6 +13,7 @@ use Auth;
 use Yajra\DataTables\DataTables;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class WifiUserController extends Controller
 {
@@ -42,13 +43,30 @@ class WifiUserController extends Controller
         return view('user.wifi', compact('username','password'));
     }
 
-    function index (){
+    function index (Request $request){
+        if ($request->isMethod('post')) {
+            $this->validate($request, [ 
+                'nik' => ['required', 'string'],
+                'nama_depan' => ['required', 'string'],
+                'password' => ['required', 'string'],
+            ]);
+            $new = Wifiuser::create([
+                'username'=> $request->nik,
+                'password'=> $request->password,
+                'first_name'=> strtoupper($request->nama_depan),
+                'last_name'=> strtoupper($request->nama_belakang),
+                'email'=> $request->email
+            ]);
+            if($new){
+                return redirect()->route('setting_account_wifi')->with('msg','Pengguna '.$request->nik.', Kata sandi '.$request->password.' BERHASIL dibuat!');
+            }
+        }
         return view('setting.account_wifi');
     }
 
     public function data(Request $request)
     {
-        $data = WifiUser::select(DB::raw("CONCAT(first_name,' ',IFNULL(last_name,'')) AS name, username, password, is_seen, updated_at"))->orderBy("id");
+        $data = WifiUser::select(DB::raw("CONCAT(first_name,' ',IFNULL(last_name,'')) AS name, username, password, is_seen, updated_at, id"))->orderByDesc("updated_at")->orderBy("id");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
@@ -60,5 +78,22 @@ class WifiUserController extends Controller
                        }
                     })
                     ->make(true);
+    }
+
+    public function wifi_delete(Request $request) {
+        $user = WifiUser::find($request->id);
+        if($user){
+            Log::warning(Auth::user()->username." deleted wifi user #".$user->id.", username : ".$user->username.", password : ".$user->password);
+            $user->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Akun berhasil dihapus!'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akun gagal dihapus!'
+            ]);
+        }
     }
 }

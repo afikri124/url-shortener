@@ -55,6 +55,11 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
+                            @if(Auth::user()->username == null)
+                            <span class="text-danger">
+                                <strong>Isi Username/NIM Anda</strong>
+                            </span>
+                            @endif
                         </div>
 
                         <div class="mb-3 col-md-6">

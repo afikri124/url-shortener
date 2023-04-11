@@ -103,7 +103,11 @@ class GoogleController extends Controller
                 Session::forget('url.intended');
                 return redirect($link);
             } else {
-                return redirect()->route('home');
+                if(Auth::user()->username == null ){
+                    return redirect()->route('user.edit');
+                } else {
+                    return redirect()->route('home');
+                }
             }
         } catch (Exception $e) {
             return redirect()->route('login')->withErrors(['msg' => 'Sesi Kedaluwarsa, silakan ulangi lagi!']);

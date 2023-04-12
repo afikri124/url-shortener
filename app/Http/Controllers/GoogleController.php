@@ -110,7 +110,7 @@ class GoogleController extends Controller
                 }
             }
         } catch (Exception $e) {
-            return redirect()->route('login')->withErrors(['msg' => 'Sesi Kedaluwarsa, silakan ulangi lagi!']);
+            return redirect()->route('login')->withErrors(['msg' => 'Sesi kedaluwarsa, silakan ulangi lagi!']);
         }
     }
 }

@@ -242,8 +242,8 @@ class HomeController extends Controller
         ->join('doc_systems','doc_systems.id','=','doc_p_i_c_s.doc_id')
         ->join('doc_categories','doc_categories.id','=','doc_systems.category_id')
         ->where(function ($query) use ($now) {
-            $query->whereYear('deadline', '>=', $now->year)
-                ->whereMonth('deadline', '>=', $now->month);
+            $query->whereYear('deadline', '=', $now->year)
+                ->whereMonth('deadline', '=', $now->month);
         })
         ->where(function ($query) {
             $query->where('status_id','=','S1')

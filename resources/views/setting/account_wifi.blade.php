@@ -246,19 +246,19 @@
                         var html = `<code>` + row.username + `</code>`;
                         return html;
                     },
-                    className: "text-center",
+                    className: "text-md-center",
                 },
                 {
                     render: function (data, type, row, meta) {
                         var html = `<code>` + row.password + `</code>`;
                         return html;
                     },
-                    className: "text-center"
+                    className: "text-md-center"
                 },
                 {
                     render: function (data, type, row, meta) {
                         if(row.is_seen == 1){
-                            return '<i class="bx bx-wifi text-success"></i> <small>' + moment(row.updated_at).format('D/M/YYYY H:m') + '</small>';
+                            return '<i class="bx bx-wifi text-success"></i> <small>' + moment(row.updated_at).format('D/M/YYYY HH:mm') + '</small>';
                         } else {
                             return '<i class="bx bx-low-vision text-light"></i>';
                         }
@@ -271,7 +271,8 @@
                             .id + `)" ><i class="bx bx-trash"></i></a>`;
                         return html;
                     },
-                    "orderable": false
+                    "orderable": false,
+                    className: "text-md-center"
                 }
             ]
         });

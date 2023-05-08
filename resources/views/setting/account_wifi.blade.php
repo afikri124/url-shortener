@@ -80,9 +80,9 @@
                         <div class="col-sm-12 fv-plugins-icon-container">
                             <label class="form-label" for="basicDate">NIK / Username</label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" id="nik"
-                                    placeholder="Nomor Induk Karyawan" value="{{ old('nik') }}">
-                                @error('nik')
+                                <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="nik"
+                                    placeholder="Nomor Induk Karyawan" value="{{ old('username') }}">
+                                @error('username')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

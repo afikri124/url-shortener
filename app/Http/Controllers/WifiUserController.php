@@ -46,12 +46,12 @@ class WifiUserController extends Controller
     function index (Request $request){
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
-                'nik' => ['required', 'string'],
+                'username' => ['required', 'string', Rule::unique('wifi_users')],
                 'nama_depan' => ['required', 'string'],
                 'password' => ['required', 'string'],
             ]);
             $new = Wifiuser::create([
-                'username'=> $request->nik,
+                'username'=> $request->username,
                 'password'=> $request->password,
                 'first_name'=> strtoupper($request->nama_depan),
                 'last_name'=> strtoupper($request->nama_belakang),

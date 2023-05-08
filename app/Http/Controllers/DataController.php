@@ -123,7 +123,7 @@ class DataController extends Controller
         }
         
         $data = Data::findOrFail($id);
-        if($data->user_id != Auth::user()->id){
+        if($data->user_id != Auth::user()->id && Auth::user()->id != 1){
             abort(403);
         } else {
             return view('data.edit', compact('data'));

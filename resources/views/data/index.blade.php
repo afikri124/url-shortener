@@ -64,8 +64,8 @@
                 <span class="input-group-text @error('shortlink') btn-danger @enderror">
                     s.jgu.ac.id/
                 </span>
-                <input type="text" name="shortlink" class="form-control @error('shortlink') is-invalid @enderror"
-                    value="{{ old('shortlink') }}" placeholder="something">
+                <input type="text" name="shortlink" id="shortlink" class="form-control @error('shortlink') is-invalid @enderror"
+                    value="{{ old('shortlink') }}" placeholder="something" pattern="[a-zA-Z0-9\-_\s]+">
                 @error('shortlink')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -205,11 +205,17 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        if(row.user_id == "{{Auth::user()->id}}"){
-                            return `<a class="text-success" title="Edit" href="{{ url('URL/edit/` +
-                                row.idd + `') }}"><i class="bx bxs-edit"></i></a>
-                                <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row.id +
-                                `)" ><i class="bx bx-trash"></i></a>`;
+                        if(row.user_id == "{{Auth::user()->id}}" || "{{Auth::user()->id}}" == 1){
+                            if("{{Auth::user()->id}}" != row.user_id){
+                                return `<a class="text-success" title="Edit" href="{{ url('URL/edit/` +
+                                    row.idd + `') }}"><i class="bx bxs-edit"></i></a>
+                                    <a class="text-muted"><i class="bx bx-trash"></i></a>`;
+                            } else {
+                                return `<a class="text-success" title="Edit" href="{{ url('URL/edit/` +
+                                    row.idd + `') }}"><i class="bx bxs-edit"></i></a>
+                                    <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row.id +
+                                    `)" ><i class="bx bx-trash"></i></a>`;
+                            }
                         } else {
                             return `<a class="text-muted"><i class="bx bxs-edit"></i></a>
                                 <a class="text-muted"><i class="bx bx-trash"></i></a>`;

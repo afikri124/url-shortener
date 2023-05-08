@@ -29,7 +29,7 @@
                                 s.jgu.ac.id/
                             </span>
                             <input type="text" name="shortlink" class="form-control @error('shortlink') is-invalid @enderror"
-                                value="{{ (old('shortlink') != null ? old('shortlink') : $data->shortlink) }}" placeholder="something">
+                                value="{{ (old('shortlink') != null ? old('shortlink') : $data->shortlink) }}" placeholder="something" pattern="[a-zA-Z0-9\-_\s]+">
                             @error('shortlink')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

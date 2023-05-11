@@ -26,14 +26,14 @@
         @if(Auth::user()->hasRole('ST') || Auth::user()->hasRole('SD'))
         <li
             class="menu-item {{ Route::currentRouteName()=='url.index' ? 'active' : (request()->route()->getPrefix() == '/URL' ? 'active' : '') }}">
-            <a href="{{ route('url.index') }}" class="menu-link">
+            <a href="{{ route('url.index') }}" class="menu-link" title="URL Shortener">
                 <i class="menu-icon tf-icons bx bx-link"></i>
                 <div>Penyingkat URL</div>
             </a>
         </li>
         <li
             class="menu-item {{ Route::currentRouteName()=='MICROSITE.index' ? 'active' : (request()->route()->getPrefix() == '/MICROSITE' ? 'active' : '') }}">
-            <a href="{{ route('MICROSITE.index') }}" class="menu-link">
+            <a href="{{ route('MICROSITE.index') }}" class="menu-link" title="Microsite like linktree">
                 <i class="menu-icon tf-icons bx bx-sitemap"></i>
                 <div>Situs Mikro</div>
             </a>

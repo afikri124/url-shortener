@@ -81,7 +81,7 @@ class MtController extends Controller
                         return Crypt::encrypt($x['user_id']);
                       })
                     ->addColumn('token', function($x){
-                        return $x['type'].$x['user_id'].$x['id'];
+                        return $x['type'].$x['user_id'].($x['id']+3);
                       }) 
                     ->rawColumns(['idd','uid', 'token'])
                     ->make(true);

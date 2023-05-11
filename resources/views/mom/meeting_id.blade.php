@@ -37,7 +37,7 @@
                         <div class="swiper-slide" style='background-image:url("{{ asset($d->doc_path) }}")'></div>
                         @endforeach
                         <div class="swiper-slide"
-                            style="background-image:url(https://lpm.jgu.ac.id/public/assets/images/landing/screen2.jpg)">
+                            style="background-image:url(https://s.jgu.ac.id/public/assets/img/jgu.jpg)">
                         </div>
                     </div>
                     <!-- Add Arrows -->

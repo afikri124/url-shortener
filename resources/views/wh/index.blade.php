@@ -71,7 +71,7 @@
                                     <select id="select_user" name="select_user" class="select2 form-select @error('select_user') is-invalid @enderror" data-placeholder="Pilih Akun">
                                         <option value="">Pilih Akun</option>
                                         @foreach($user as $d)
-                                        <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
+                                        <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}" @if($d->username == Auth::user()->username) selected @endif>
                                             {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
                                         @endforeach
                                     </select>

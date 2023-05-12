@@ -34,8 +34,8 @@
                     <div class="app-brand justify-content-center mb-2">
                         <a href="{{asset($data->avatar)}}" class="app-brand-link gap-2">
                             <span class="app-brand-logo demo">
-                                <img src="{{asset($data->avatar)}}" class="rounded-circle" style="object-fit: cover;"
-                                    width="100px" height="100px">
+                                <img src="{{asset($data->avatar)}}" style="object-fit: cover;"
+                                    height="100px">
                             </span>
                         </a>
                     </div>

@@ -145,7 +145,7 @@
                         </div>
                         <br>
                         <span class="invalid-feedback" role="alert"><br>
-                            <strong>Setelah membuat disini,<br>harus ditambakan manual di ruijie<br>dengan username dan password diatas</strong>
+                            <strong>Setelah membuat disini,<br>harus ditambahkan manual di ruijie<br>dengan username dan password diatas</strong>
                         </span>
                         <div></div><input type="hidden">
                     </form>

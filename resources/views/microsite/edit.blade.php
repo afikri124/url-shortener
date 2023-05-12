@@ -69,6 +69,10 @@
                         <form action="" method="POST"  enctype="multipart/form-data">
                             @csrf
                             <div class="row">
+                                <div class="text-right mb-2">
+                                    <a class="btn m-0 p-0" title="Salin URL Anda" onclick=navigator.clipboard.writeText("{{ 's.jgu.ac.id/m/'.$data->shortlink }}")><i class="bx bx-copy"></i></a> 
+                                    <span class="text-muted">s.jgu.ac.id/</span><b>m/{{$data->shortlink}}</b><br>
+                                </div>
                                 <div class="col-md-5">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control @error('judul_tautan') is-invalid @enderror" name="judul_tautan" id="judul_tautan"

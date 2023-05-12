@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use PDF;
 
 class MicrositeController extends Controller
 {
@@ -229,5 +230,21 @@ class MicrositeController extends Controller
         } else {
             abort(404);
         }
+    }
+
+    public function print($idd) {
+        try {
+            $id = Crypt::decrypt($idd);
+        } catch (DecryptException $e) {
+            return redirect()->route('MICROSITE.index');
+        }
+        $x = Microsite::findOrFail($id);
+        $tok = $x->shortlink;
+            $data = Microsite::with('user')->findOrFail($id);
+            $link = route('MICROSITE.view', ['id' => $tok] );
+            $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
+            $pdf = PDF::loadview('microsite.qr', compact('qr','data','link','tok'));
+            return $pdf->stream("MICROSITE #".$data->id."-".$tok." - ".Carbon::now()->translatedFormat('j F Y').".pdf");
+            // return view('microsite.qr', compact('qr','data','link','tok'));
     }
 }

@@ -128,7 +128,7 @@
                             <tr>
                                 <td style="text-align: center;">
                                     <a target="_blank" href="{{ url('/home') }}">
-                                        <img src="https://s.jgu.ac.id/public/assets/img/logo-sjgu.png" alt="S-JGU"
+                                        <img src="https://s.jgu.ac.id/assets/img/logo-sjgu.png" alt="S-JGU"
                                             style="margin: 20px 0; width:150px;">
                                     </a>
                                 </td>

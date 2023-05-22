@@ -134,7 +134,7 @@ class MicrositeController extends Controller
                 if(isset($request->avatar)){
                     $name = str_replace(' ', '_', $request->avatar->getClientOriginalName());
                     $fileName = Auth::user()->id.'_'.$name; 
-                    $folderName =  "FILE/microsite/".Carbon::now()->format('Y/m');
+                    $folderName =  "storage/FILE/microsite/".Carbon::now()->format('Y/m');
                     $path = public_path()."/".$folderName;
                     if (!File::exists($path)) {
                         File::makeDirectory($path, 0755, true); //create folder

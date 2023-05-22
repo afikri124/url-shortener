@@ -72,7 +72,7 @@ class MoMController extends Controller
                 }    
                 $name = str_replace(' ', '_', $request->dokumen->getClientOriginalName());
                 $dokName = Auth::user()->id.'_'.$name; 
-                $folderName =  "MoM/".Carbon::now()->format('Y/m');
+                $folderName =  "storage/MoM/".Carbon::now()->format('Y/m');
                 $path = public_path()."/".$folderName;
                 if (!File::exists($path)) {
                     File::makeDirectory($path, 0755, true); //create folder

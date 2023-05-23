@@ -243,7 +243,7 @@ class MicrositeController extends Controller
             $data = Microsite::with('user')->findOrFail($id);
             $link = route('MICROSITE.view', ['id' => $tok] );
             $qr = "https://s.jgu.ac.id/qrcode?data=".$link;
-            $pdf = PDF::loadview('microsite.qr', compact('qr','data','link','tok'));
+            $pdf = PDF::loadview('microsite.qr', compact('qr','data','link','tok'))->setPaper('a5');
             return $pdf->stream("MICROSITE #".$data->id."-".$tok." - ".Carbon::now()->translatedFormat('j F Y').".pdf");
             // return view('microsite.qr', compact('qr','data','link','tok'));
     }

@@ -44,7 +44,7 @@
         {{-- <b style="font-size:50px">SCAN DISINI</b>
         <br> --}}
         <b style="font-size:30px">{{$data->title}}</b><br>
-        <i style="font-size:20px">{{$data->bio}}</i>
+        {{-- <i style="font-size:20px">{{$data->bio}}</i> --}}
         <br>
         <a href="{{$link}}" target="_blank"><img src="{!! $qr !!}" style="height: 300px;margin:40px 0 20px 0;"></a>
         <br>

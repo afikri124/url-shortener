@@ -22,7 +22,7 @@
         <div class="app-brand justify-content-center mb-4">
             <!-- <a href="https://jgu.ac.id/" target="_blank" class="app-brand-link gap-2"> -->
                 <span class="">
-                    <img src="{{asset('assets/img/girl-unlock-password-light.png')}}" style="width: 100%; max-width:700px">
+                    <img src="{{asset('assets/img/girl-unlock-password-light.png')}}" style="width: 100%; max-width:700px;">
                 </span>
             <!-- </a> -->
         </div>

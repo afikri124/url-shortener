@@ -44,9 +44,9 @@
         {{-- <b style="font-size:50px">SCAN DISINI</b>
         <br> --}}
         <b style="font-size:30px">{{$data->title}}</b><br>
-        {{-- <i style="font-size:20px">{{$data->bio}}</i> --}}
+        <i style="font-size:16px">Silahkan Scan Kode QR berikut ini</i>
         <br>
-        <a href="{{$link}}" target="_blank"><img src="{!! $qr !!}" style="height: 300px;margin:40px 0 20px 0;"></a>
+        <a href="{{$link}}" target="_blank"><img src="{!! $qr !!}" style="height: 300px;margin:20px 0 20px 0;"></a>
         <br>
         <h4>[ <code style="color:red">{{$link}}</code> ]</h4>
         <br>

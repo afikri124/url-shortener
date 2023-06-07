@@ -64,13 +64,13 @@ class User extends Authenticatable
       $has_valid_avatar = false;
       // if(env('APP_ENV') != 'local'){
         $hash = md5(strtolower(trim($this->email)));
-        $uri = "https://klas2.jgu.ac.id/sso/getImage.php?id=".$this->username;
+        // $uri = "https://klas2.jgu.ac.id/sso/getImage.php?id=".$this->username;
         // $uri = "https://klas.jgu.ac.id/employee_profile/image.php?id=".$this->username;
 
-        if(!@get_headers($uri) || !@getimagesize($uri)){
+        // if(!@get_headers($uri) || !@getimagesize($uri)){
             $hash = md5(strtolower(trim($this->email)));
             $uri = "https://www.gravatar.com/avatar/$hash".'?d=404';
-        }
+        // }
         $headers = @get_headers($uri);
         if($headers != false){
           if (preg_match("|200|", $headers[0])) {

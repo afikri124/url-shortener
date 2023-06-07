@@ -34,7 +34,7 @@
         <tr>
             <th>No</th>
             <th>Nama</th>
-            <th>Total <br><i>tidak masuk</i></th>
+            <th>Total <br><i style="color:red">tidak masuk</i></th>
         </tr>
     </thead>
     <tbody>
@@ -92,7 +92,7 @@
         <tr>
             <td><br>
                 <hr>
-                <p>Jika terdapat kendala <strong>jangan membalas email ini</strong>, silahkan menghubungi Tim ITIC JGU.</p>
+                <p>Jika terdapat kendala atau kesalahan data <strong>jangan membalas email ini</strong>,<br>silahkan menghubungi Tim ITIC JGU.</p>
                 <p>Terima Kasih.</p>
             </td>
         </tr>

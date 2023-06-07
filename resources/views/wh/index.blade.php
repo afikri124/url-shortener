@@ -231,7 +231,7 @@
                         var html = `<code>` + row.username + `</code>`;
                         if (row.user != null) {
                             html = `<a class="text-primary" title="` + row.user.name +
-                                `" href="{{ url('profile/` + row.userid + `') }}">` + row.user
+                                `" href="{{ url('profile/` + row.userid + `') }}" target="_blank">` + row.user
                                 .name + `</a><br>` + html;
                         } else {
                             html = `<small title='Nama di Mesin'>[` + row.name +

@@ -220,7 +220,7 @@ class HomeController extends Controller
           GROUP BY u.`username`) AS tt
           RIGHT JOIN wh_users u ON tt.username = u.username
           WHERE u.`status` = 1 && IFNULL(tt.days,0) <= ".$diff." && (u.group_id = 'JF' OR u.group_id = 'JE')
-          ORDER BY u.group_id DESC, hari") );
+          ORDER BY u.group_id DESC, hari, u.name") );
         foreach($x as $d){
             $x = [$d->name,(($diff+1) - $d->hari),$d->ID];
             if($d->group_id == 'JF'){

@@ -104,7 +104,7 @@
             <label class="form-label">Bio <i class="text-danger">*</i></label>
             <div class="input-group mb-3">
                 <input type="text" class="form-control @error('bio') is-invalid @enderror" name="bio"
-                    placeholder="Deskripsi Halaman" value="{{ old('bio') }}">
+                    placeholder="Deskripsi Halaman (support tag html, ex: </br>)" value="{{ old('bio') }}">
                 <button class="btn btn-outline-primary" type="submit" id="button-addon2">Buat Sekarang!</button>
                 @error('bio')
                 <span class="invalid-feedback" role="alert">
@@ -232,13 +232,14 @@
                 {
                     render: function (data, type, row, meta) {
                         if(row.user_id == "{{Auth::user()->id}}"){
-                            return `<a class="text-success" title="Edit" href="{{ url('MICROSITE/edit/` +
-                                row.idd + `') }}"><i class="bx bxs-edit"></i></a> <a class="text-info" target="_blank" title="Print" style="cursor:pointer" href="{{ url('MICROSITE/print/` +
-                                row.idd + `') }}"><i class="bx bxs-printer"></i></a>
+                            return `<a class="text-info" target="_blank" title="Print" style="cursor:pointer" href="{{ url('MICROSITE/print/` +
+                                row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-success" title="Edit" href="{{ url('MICROSITE/edit/` +
+                                row.idd + `') }}"><i class="bx bxs-edit"></i></a> 
                                 <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row.id +
                                 `)" ><i class="bx bx-trash"></i></a>`;
                         } else {
-                            return `<a class="text-muted"><i class="bx bxs-edit"></i></a>
+                            return `<a class="text-info" target="_blank" title="Print" style="cursor:pointer" href="{{ url('MICROSITE/print/` +
+                                row.idd + `') }}"><i class="bx bxs-printer"></i></a> <a class="text-muted"><i class="bx bxs-edit"></i></a>
                                 <a class="text-muted"><i class="bx bx-trash"></i></a>`;
                         }
                     },

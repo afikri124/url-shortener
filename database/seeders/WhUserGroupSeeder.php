@@ -17,7 +17,7 @@ class WhUserGroupSeeder extends Seeder
         //
         $data = [
             ["uid" => "JR", "title" => "JGU", "desc" => "Rektorat"],
-            ["uid" => "JF", "title" => "JGU", "desc" => "Penuh Waktu"],
+            ["uid" => "JF", "title" => "JGU", "desc" => "Purna Waktu"],
             ["uid" => "JP", "title" => "JGU", "desc" => "Paruh Waktu"],
             ["uid" => "JE", "title" => "JGU", "desc" => "Eksternal"],
             ["uid" => "E1", "title" => "MSU", "desc" => null],

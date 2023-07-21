@@ -17,6 +17,7 @@ use DB;
 use App\Mail\WeeklyAttendanceReportMail;
 use App\Models\DocDepartment;
 use App\Models\DocPIC;
+use App\Jobs\JobNotificationWA;
 
 class HomeController extends Controller
 {
@@ -236,23 +237,16 @@ class HomeController extends Controller
     }
 
     public function tes2(){
-        $now = Carbon::now();
-        $dataPIC = DocPIC::with('department')->with('user')
-        ->select('doc_p_i_c_s.department_id','doc_p_i_c_s.pic_id','doc_categories.activity_id', DB::raw("COUNT('doc_systems.status_id') as total"))
-        ->join('doc_systems','doc_systems.id','=','doc_p_i_c_s.doc_id')
-        ->join('doc_categories','doc_categories.id','=','doc_systems.category_id')
-        ->where(function ($query) use ($now) {
-            $query->whereYear('deadline', '=', $now->year)
-                ->whereMonth('deadline', '=', $now->month);
-        })
-        ->where(function ($query) {
-            $query->where('status_id','=','S1')
-                ->orWhere('status_id','=','S3');
-        })
-        ->groupBy('department_id','pic_id','activity_id')
-        ->get();
-
-        return response()->json($dataPIC);
+        echo "tes";
+                            //----------------WA-------------------------------
+                            $wa_to = "6281233933313";
+                            if($wa_to != null){
+                                $WA_DATA = array();
+                                $WA_DATA['wa_to'] = $wa_to;
+                                $WA_DATA['wa_text'] = "SJGU TES";
+                                dispatch(new JobNotificationWA($WA_DATA));
+                            }
+                            // ------------------end send to WA-----------------
     }
 
 }

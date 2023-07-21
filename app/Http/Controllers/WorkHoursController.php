@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use App\Mail\WeeklyAttendanceReportMail;
 use App\Models\DocDepartment;
 use Mail;
+use App\Jobs\JobNotificationWA;
 
 class WorkHoursController extends Controller
 {
@@ -618,7 +619,11 @@ class WorkHoursController extends Controller
           RIGHT JOIN wh_users u ON tt.username = u.username
           WHERE u.`status` = 1 && IFNULL(tt.days,0) <= ".$diff." && (u.group_id = 'JF' OR u.group_id = 'JE')
           ORDER BY u.group_id DESC, hari, u.name") );
+       
+        $list_wa = "";
         foreach($x as $d){
+            $list_wa = $list_wa."
+".$d->name." (".(($diff+1) - $d->hari)." hari)";
             $x = [$d->name,(($diff+1) - $d->hari),$d->ID];
             if($d->group_id == 'JF'){
                 array_push($data['item1'],$x);
@@ -630,6 +635,16 @@ class WorkHoursController extends Controller
         ."<br><button><b><a target='_blank' href='".url('/WHR')."'>s.jgu.ac.id/WHR</a></b></button>";
         Mail::to($data['email'])->queue(new WeeklyAttendanceReportMail($data));
         Log::info("Weekly report Att sended!");
+        //----------------WA-------------------------------
+        $wa_to = "6281284174900";
+        if($wa_to != null){
+            $WA_DATA = array();
+            $WA_DATA['wa_to'] = $wa_to;
+            $WA_DATA['wa_text'] = "Berikut ini merupakan data karyawan yang pernah TIDAK ABSEN berdasarkan mesin absen dalam minggu ini:
+".$list_wa;
+            dispatch(new JobNotificationWA($WA_DATA));
+        }
+        // ------------------end send to WA-----------------
     }
 
     public function zk(){

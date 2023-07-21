@@ -63,9 +63,7 @@ class JobNotificationWA implements ShouldQueue
             if(isset($response->status)){
                 if(!$response->status){
                     Log::warning($response->detail);
-                } else {
-                    Log::warning("No Response from Fontee API");
-                }
+                } 
             } else {
                 Log::warning($response);
             }

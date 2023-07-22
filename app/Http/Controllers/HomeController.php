@@ -243,7 +243,7 @@ class HomeController extends Controller
                             if($wa_to != null){
                                 $WA_DATA = array();
                                 $WA_DATA['wa_to'] = $wa_to;
-                                $WA_DATA['wa_text'] = "SJGU TES";
+                                $WA_DATA['wa_text'] = "SJGU TES\nbreak\nline\ntest lagi\n_ini miring_\n*ini tebal*";
                                 dispatch(new JobNotificationWA($WA_DATA));
                             }
                             // ------------------end send to WA-----------------

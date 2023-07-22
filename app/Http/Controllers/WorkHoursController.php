@@ -640,8 +640,7 @@ class WorkHoursController extends Controller
         if($wa_to != null){
             $WA_DATA = array();
             $WA_DATA['wa_to'] = $wa_to;
-            $WA_DATA['wa_text'] = "Berikut ini merupakan data karyawan yang pernah TIDAK ABSEN berdasarkan mesin absen dalam minggu ini:
-".$list_wa;
+            $WA_DATA['wa_text'] = "Berikut ini merupakan data karyawan yang pernah TIDAK ABSEN dalam minggu ini:\n".$list_wa;
             dispatch(new JobNotificationWA($WA_DATA));
         }
         // ------------------end send to WA-----------------

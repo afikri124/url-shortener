@@ -622,8 +622,7 @@ class WorkHoursController extends Controller
        
         $list_wa = "";
         foreach($x as $d){
-            $list_wa = $list_wa."
-".$d->name." (".(($diff+1) - $d->hari)." hari)";
+            $list_wa = $list_wa."\n".$d->name." (".(($diff+1) - $d->hari)." hari)";
             $x = [$d->name,(($diff+1) - $d->hari),$d->ID];
             if($d->group_id == 'JF'){
                 array_push($data['item1'],$x);

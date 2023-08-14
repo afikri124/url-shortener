@@ -235,6 +235,7 @@ class WorkHoursController extends Controller
         if (!empty($request->get('select_user'))) {
             $user_id = $request->get('select_user');
             $old_user = WhUser::where('username',$user_id)->first();
+            // $old = ($old_user == null ? Auth::user()->username: $old_user->username_old);
             $old = ($old_user == null ? $user_id: $old_user->username_old);
             $query = (empty($request->get('select_group')) ? "":" && w.group_id = '".$request->get('select_group')."'");
             $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, IFNULL(w.username,w.username_old) as username, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid, w.group_id
@@ -247,7 +248,7 @@ class WorkHoursController extends Controller
                 ) a 
                 RIGHT JOIN wh_users w ON a.username = w.username_old or a.username =  w.username
                 LEFT JOIN users u ON u.username = a.username 
-                WHERE w.status = 1 ".$query." && (w.`username` = '".$user_id."' or w.`username` = '".$old."')
+                WHERE w.status = 1 ".$query." && (w.`username` = '".$user_id."' or w.`username_old` = '".$old."')
                 GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id
                 ORDER BY hari desc
                 ") );

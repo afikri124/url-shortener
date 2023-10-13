@@ -636,7 +636,7 @@ class WorkHoursController extends Controller
         Mail::to($data['email'])->cc('eddy@jgu.ac.id')->queue(new WeeklyAttendanceReportMail($data));
         Log::info("Weekly report Att sended!");
         //----------------WA-------------------------------
-        $wa_to = "6281284174900";
+        $wa_to = "6281284174900,6281316495789";
         if($wa_to != null){
             $WA_DATA = array();
             $WA_DATA['wa_to'] = $wa_to;

@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="col-md-4 text-md-end text-center pt-3">
                                     <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
-                                        <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Singkron</span>
+                                        <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Sinkron</span>
                                     </button>
                                     <button class="btn btn-primary" type="submit" title="Ekspor ke Excel">
                                         <span><i class="bx bx-export me-sm-2"></i>

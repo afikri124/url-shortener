@@ -81,13 +81,13 @@
                                     </span>
                                     @enderror
                                 </div>
-                                <div class=" col-md-3">
+                                <div class=" col-md-2">
                                 </div>
                                 @else
-                                <div class=" col-md-6">
+                                <div class=" col-md-5">
                                 </div>
                                 @endif
-                                <div class="col-md-3 text-md-end text-center pt-3 pt-md-0">
+                                <div class="col-md-4 text-md-end text-center pt-3 pt-md-0">
                                     @if(Auth::user()->hasRole('HR'))
                                     <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
                                         <span><i class="bx bx-sync me-sm-2"></i>

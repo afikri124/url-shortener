@@ -172,10 +172,8 @@
                                     </div>
                                 </div>
                                 <div class="mb-3 col-md-12">
-                                    <label for="link" class="form-label">Bio <i class="text-danger">*</i></label>
-                                    <input type="text" name="bio"
-                                        value="{{ (old('bio') != null ? old('bio') : $data->bio) }}"
-                                        class="form-control @error('bio') is-invalid @enderror">
+                                    <label for="link" class="form-label">Bio <i class="text-danger">*</i> <small><i>support tag html</i></small></label>
+                                    <textarea name="bio" class="form-control @error('bio') is-invalid @enderror">{{ (old('bio') != null ? old('bio') : $data->bio) }}</textarea>
                                     @error('bio')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -315,7 +313,7 @@
 
     function EditId(id) {
         swal({
-                text: 'Silahkan masukkan tautan baru anda:',
+                text: 'Silahkan masukkan tautan pengganti (http://...)',
                 content: "input",
                 button: {
                     text: "Simpan",

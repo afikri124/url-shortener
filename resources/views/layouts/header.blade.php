@@ -63,7 +63,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" target="_blank" href="https://wa.me/6285159211558">
+                        <a class="dropdown-item" target="_blank" href="http://s.jgu.ac.id/m/itic">
                             <i class="bx bx-support me-2"></i>
                             <span class="align-middle">Bantuan</span>
                         </a>

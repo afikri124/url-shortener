@@ -62,7 +62,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class=" col-md-3">
+                            <div class=" col-md-2">
                                 <select id="select_unit" class="select2 form-select" data-placeholder="Unit">
                                     <option value="">Unit</option>
                                     @foreach($unit as $d)
@@ -70,7 +70,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class=" col-md-3">
+                            <div class=" col-md-2">
                                 <select id="select_status" class="select2 form-select" data-placeholder="Status">
                                     <option value="">Status</option>
                                     @foreach($status as $d)
@@ -78,7 +78,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class=" col-md-3 text-md-end text-center pt-3 pt-md-0">
+                            <div class=" col-md-5 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-outline-dark" type="button" onclick="SyncUser()">
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>

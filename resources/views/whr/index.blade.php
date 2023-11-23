@@ -58,20 +58,9 @@
                     <div class="col-12">
                         <form method="POST" action="">
                             @csrf
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <input type="text" id="select_range" name="range" class="form-control"
-                                        placeholder="Pilih Tanggal" autocomplete="off" />
-                                </div>
-                                <div class=" col-md-2">
-                                    <select id="select_group" class="select2 form-select" name="grup" data-placeholder="Grup">
-                                        <option value="">Grup</option>
-                                        @foreach($group as $d)
-                                        <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class=" col-md-2">
+                            <div class="row d-flex flex-row-reverse">
+
+                                <div class=" col-md-3">
                                     <select id="select_unit" class="select2 form-select" name="unit" data-placeholder="Unit">
                                         <option value="">Unit</option>
                                         @foreach($unit as $d)
@@ -79,7 +68,15 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class=" col-md-2">
+                                <div class=" col-md-3">
+                                    <select id="select_group" class="select2 form-select" name="grup" data-placeholder="Grup">
+                                        <option value="">Grup</option>
+                                        @foreach($group as $d)
+                                        <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class=" col-md-3">
                                     <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
                                         <option value="">Pilih Akun</option>
                                         @foreach($user as $d)
@@ -88,9 +85,13 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3 text-md-end text-center pt-3 pt-md-0">
+                                <div class="col-md-3">
+                                    <input type="text" id="select_range" name="range" class="form-control"
+                                        placeholder="Pilih Tanggal" autocomplete="off" />
+                                </div>
+                                <div class="col-md-4 text-md-end text-center pt-3">
                                     <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
-                                        <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i></span>
+                                        <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Singkron</span>
                                     </button>
                                     <button class="btn btn-primary" type="submit" title="Ekspor ke Excel">
                                         <span><i class="bx bx-export me-sm-2"></i>

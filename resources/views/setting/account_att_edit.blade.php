@@ -42,6 +42,20 @@
                             </span>
                             @enderror
                         </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label">Role</label>
+                            <select class="select2 form-select" name="role" >
+                                <option value=0 {{ 0 ==$data->role ? 'selected' : '' }}>User</option>
+                                <option value=14 {{ 14 ==$data->role ? 'selected' : '' }}>Admin</option>
+                            </select>
+                            @error('status')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Grup</label>
                             <select class="select2 form-select" name="grup" >
@@ -57,23 +71,25 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label for="user" class="form-label">Username / User ID</label>
-                            <input type="username" class="form-control @error('username') is-invalid @enderror"
-                                id="user" name="username" value="{{ $data->username  }}"
-                                placeholder="Username (NIK)" readonly />
-                        </div>
-
-                        <div class="mb-3 col-md-6">
-                            <label class="form-label">Role</label>
-                            <select class="select2 form-select" name="role" >
-                                <option value=0 {{ 0 ==$data->role ? 'selected' : '' }}>User</option>
-                                <option value=14 {{ 14 ==$data->role ? 'selected' : '' }}>Admin</option>
+                            <label class="form-label">Unit</label>
+                            <select class="select2 form-select" name="unit" >
+                                <option value="">- Belum ditentukan -</option>
+                                @foreach($unit as $d)
+                                <option {{ $d->uid==$data->unit_id ? 'selected' : '' }} value="{{ $d->uid }}">{{ $d->title }}</option>
+                                @endforeach
                             </select>
-                            @error('status')
+                            @error('unit')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label for="user" class="form-label">Username / User ID</label>
+                            <input type="username" class="form-control @error('username') is-invalid @enderror"
+                                id="user" name="username" value="{{ $data->username  }}"
+                                placeholder="Username (NIK)" readonly />
                         </div>
 
                         <div class="mb-3 col-md-6">

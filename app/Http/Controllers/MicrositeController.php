@@ -221,6 +221,25 @@ class MicrositeController extends Controller
         }
     }
 
+    public function edit_link(Request $request) 
+    {
+        $data = MicrositeLink::find($request->id);
+        if($data && $data->microsite_id == $request->microsite_id){
+            $data->update([ 
+                'link' => $request->link
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Tautan berhasil diedit!'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak diizinkan untuk mengedit Tautan ini!'
+            ]);
+        }
+    }
+
     public function view($id, Request $request) 
     {
         $data = Microsite::where("shortlink",$id)->first();

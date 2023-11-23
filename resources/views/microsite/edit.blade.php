@@ -56,30 +56,37 @@
             <div class="nav-align-top mb-4">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <button type="button" class="nav-link {{(old('bio') == null? 'active' : '')}}" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-1" aria-controls="navs-1" aria-selected="true">Daftar Tautan</button>
+                        <button type="button" class="nav-link {{(old('bio') == null? 'active' : '')}}" role="tab"
+                            data-bs-toggle="tab" data-bs-target="#navs-1" aria-controls="navs-1"
+                            aria-selected="true">Daftar Tautan</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link {{(old('bio') != null? 'active' : '')}}" role="tab" data-bs-toggle="tab" data-bs-target="#navs-2"
-                            aria-controls="navs-2" aria-selected="false" tabindex="-1">Kustomisasi Situs</button>
+                        <button type="button" class="nav-link {{(old('bio') != null? 'active' : '')}}" role="tab"
+                            data-bs-toggle="tab" data-bs-target="#navs-2" aria-controls="navs-2" aria-selected="false"
+                            tabindex="-1">Kustomisasi Situs</button>
                     </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade {{(old('bio') == null? 'active show' : '')}}" id="navs-1" role="tabpanel">
-                        <form action="" method="POST"  enctype="multipart/form-data">
+                        <form action="" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="text-right mb-2">
-                                    <a class="btn m-0 p-0" title="Salin URL Anda" onclick=navigator.clipboard.writeText("{{ 's.jgu.ac.id/m/'.$data->shortlink }}")><i class="bx bx-copy"></i></a> 
-                                    <span class="text-muted">s.jgu.ac.id/</span><b>m/{{$data->shortlink}}</b>     
-                                    <a class="btn m-0 p-0" title="Cetak" target="_blank" href="{{ url('MICROSITE/print/') }}/{{Crypt::encrypt($data->id)}}"><i class="bx bx-printer"></i></a> 
+                                    <a class="btn m-0 p-0" title="Salin URL Anda"
+                                        onclick=navigator.clipboard.writeText("{{ 's.jgu.ac.id/m/'.$data->shortlink }}")><i
+                                            class="bx bx-copy"></i></a>
+                                    <span class="text-muted">s.jgu.ac.id/</span><b>m/{{$data->shortlink}}</b>
+                                    <a class="btn m-0 p-0" title="Cetak" target="_blank"
+                                        href="{{ url('MICROSITE/print/') }}/{{Crypt::encrypt($data->id)}}"><i
+                                            class="bx bx-printer"></i></a>
                                     <span class="text-muted">Cetak</b>
-                                    <br>
+                                        <br>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control @error('judul_tautan') is-invalid @enderror" name="judul_tautan" id="judul_tautan"
-                                            placeholder="Judul Tautan">
+                                        <input type="text"
+                                            class="form-control @error('judul_tautan') is-invalid @enderror"
+                                            name="judul_tautan" id="judul_tautan" placeholder="Judul Tautan">
                                         @error('judul_tautan')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -91,8 +98,8 @@
                                     <div class="input-group mb-3">
                                         <input type="hidden" name="type_form" value="add">
                                         <input type="hidden" name="microsite_id" value="{{$data->id}}">
-                                        <input type="url" class="form-control @error('tautan') is-invalid @enderror" name="tautan" id="tautan"
-                                            placeholder="Tautan ( https://... )">
+                                        <input type="url" class="form-control @error('tautan') is-invalid @enderror"
+                                            name="tautan" id="tautan" placeholder="Tautan ( https://... )">
                                         <button class="btn btn-outline-primary" type="submit">Tambahkan!</button>
                                         @error('tautan')
                                         <span class="invalid-feedback" role="alert">
@@ -189,8 +196,8 @@
         </div>
     </div>
     <div class="col-md-5">
-        <iframe src="{{ route('MICROSITE.view', ['id' => $data->shortlink]) }}" 
-        id="iframe_view" width="100%" style="height: 75vh;">
+        <iframe src="{{ route('MICROSITE.view', ['id' => $data->shortlink]) }}" id="iframe_view" width="100%"
+            style="height: 75vh;">
         </iframe>
     </div>
 </div>
@@ -260,7 +267,9 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` +
+                        return `<a class="text-success" title="edit" style="cursor:pointer" onclick="EditId(` +
+                            row.id +
+                            `)" ><i class="bx bxs-edit"></i></a> <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` +
                             row.id +
                             `)" ><i class="bx bx-trash"></i></a>`;
                     },
@@ -301,6 +310,46 @@
                         }
                     })
                 }
+            })
+    }
+
+    function EditId(id) {
+        swal({
+                text: 'Silahkan masukkan tautan baru anda:',
+                content: "input",
+                button: {
+                    text: "Simpan",
+                },
+            })
+            .then(name => {
+                if (!name) {
+                    swal('Tidak boleh Kosong!', {
+                        icon: "error",
+                    });
+                } else {
+                    $.ajax({
+                        url: "{{ route('MICROSITE.edit_link') }}",
+                        type: "POST",
+                        data: {
+                            "id": id,
+                            "microsite_id": "{{$data->id}}",
+                            "link": name,
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                        },
+                        success: function (data) {
+                            if (data['success']) {
+                                swal(data['message'], {
+                                    icon: "success",
+                                });
+                                location.reload();
+                            } else {
+                                swal(data['message'], {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    })
+                };
             })
     }
 

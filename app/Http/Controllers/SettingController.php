@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\WhUser;
 use App\Models\WhUserGroup;
+use App\Models\WhUserUnit;
 use App\Models\Role;
 use Yajra\DataTables\DataTables;
 use Auth;
@@ -145,6 +146,7 @@ class SettingController extends Controller
                         'status'=> 1,
                         'role'=> 0,
                         'group_id' => $request->grup,
+                        'unit_id' => $request->unit,
                     ]);
                     if($new){
                         return redirect()->route('setting_account_att')->with('msg','Pengguna '.$request->nama.' BERHASIL dibuat!');
@@ -157,12 +159,13 @@ class SettingController extends Controller
         }
         $status          = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
         $group          = WhUserGroup::get();
-        return view('setting.account_att', compact('status', 'group'));      
+        $unit          = WhUserUnit::get();
+        return view('setting.account_att', compact('status', 'group', 'unit'));      
     }
 
     public function account_att_data(Request $request)
     {
-        $data = WhUser::with('user')->with('group')->select('*')->orderBy('uid');
+        $data = WhUser::with('user')->with('group')->with('unit')->select('*')->orderBy('uid');
         return Datatables::of($data)
                 ->filter(function ($instance) use ($request) {
                     if (!is_null($request->get('select_status'))) {
@@ -170,6 +173,9 @@ class SettingController extends Controller
                     }
                     if (!is_null($request->get('select_group'))) {
                         $instance->where('group_id', $request->get('select_group'));
+                    }
+                    if (!is_null($request->get('select_unit'))) {
+                        $instance->where('unit_id', $request->get('select_unit'));
                     }
                     if (!empty($request->get('search'))) {
                          $instance->where(function($w) use($request){
@@ -284,6 +290,7 @@ class SettingController extends Controller
                 'role'=> $request->role,
                 'username_old' => $request->old,
                 'group_id' => $request->grup,
+                'unit_id' => $request->unit,
                 'updated_at' => Carbon::now()
             ]);
             try {
@@ -302,10 +309,11 @@ class SettingController extends Controller
         $status   = json_decode(json_encode(array(['id' => "1", 'title' => "Aktif"], ['id' => "0", 'title' => "Tidak Aktif"])));
         $data = WhUser::where('uid',$id)->first();
         $group          = WhUserGroup::get();
+        $unit          = WhUserUnit::get();
         if($data == null){
             abort(403, "Access not allowed!");
         }
-        return view('setting.account_att_edit', compact('data','status','group'));
+        return view('setting.account_att_edit', compact('data','status','group','unit'));
     }
 
     public function account_att_delete(Request $request) {

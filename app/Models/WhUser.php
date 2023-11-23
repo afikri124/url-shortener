@@ -31,6 +31,11 @@ class WhUser extends Model
         return $this->belongsTo(WhUserGroup::class, 'group_id', 'uid');
     }
 
+    public function unit()
+    {
+        return $this->belongsTo(WhUserUnit::class, 'unit_id', 'uid');
+    }
+
     protected $appends = ['status_name', 'role_name'];
 
     public function getStatusNameAttribute(){

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Rekap Jam Kerja</title>
+    <title>Rekap Jam Kerja @if($unit_name != null) - {{$unit_name->title}} @endif</title>
 </head>
 
 <body>
@@ -18,6 +18,9 @@
                     @endif
                     @if($group_name != null)
                         <br>Grup : {{$group_name->title}} {{$group_name->desc}}
+                    @endif
+                    @if($unit_name != null)
+                        <br>Unit : {{$unit_name->title}}
                     @endif
                 </td>
             </tr>

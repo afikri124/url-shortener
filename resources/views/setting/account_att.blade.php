@@ -63,6 +63,14 @@
                                 </select>
                             </div>
                             <div class=" col-md-3">
+                                <select id="select_unit" class="select2 form-select" data-placeholder="Unit">
+                                    <option value="">Unit</option>
+                                    @foreach($unit as $d)
+                                    <option value="{{ $d->uid }}">{{ $d->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class=" col-md-3">
                                 <select id="select_status" class="select2 form-select" data-placeholder="Status">
                                     <option value="">Status</option>
                                     @foreach($status as $d)
@@ -70,7 +78,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="offset-md-3 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                            <div class=" col-md-3 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-outline-dark" type="button" onclick="SyncUser()">
                                     <span><i class="bx bx-sync me-sm-2"></i>
                                         Sinkron</span>
@@ -138,6 +146,22 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label" for="basicDate">Unit</label>
+                            <div class="input-group input-group-merge has-validation">
+                                <select class="form-select @error('unit') is-invalid @enderror select2-modal" name="unit" data-placeholder="-- Pilih Unit --">
+                                    <option value="">-- Pilih Unit --</option>
+                                    @foreach($unit as $d)
+                                    <option value="{{ $d->uid }}">{{ $d->title }}</option>
+                                    @endforeach
+                                </select>
+                                @error('unit')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="col-sm-12 mt-4">
                             <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
                             <button type="reset" class="btn btn-outline-secondary"
@@ -157,7 +181,8 @@
                     <th data-priority="2">Nama [Nama di Mesin]</th>
                     <th>Username / [old]</th>
                     <th width="60px">Role</th>
-                    <th width="60px">Group</th>
+                    <th width="60px">Grup</th>
+                    <th width="60px">Unit</th>
                     <th width="80px">No Kartu</th>
                     <th data-priority="4" width="50px">Status</th>
                     <th width="40px" data-priority="3">Aksi</th>
@@ -208,6 +233,7 @@
                 data: function (d) {
                     d.select_status = $('#select_status').val(),
                     d.select_group = $('#select_group').val(),
+                    d.select_unit = $('#select_unit').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -274,6 +300,13 @@
                     },
                 },
                 {
+                    render: function (data, type, row, meta) {
+                        if(row.unit != null){
+                            return row.unit.title ;
+                        }
+                    },
+                },
+                {
                     data: 'cardno',
                     name: 'cardno'
                 },
@@ -301,6 +334,9 @@
             table.draw();
         });
         $('#select_group').change(function () {
+            table.draw();
+        });
+        $('#select_unit').change(function () {
             table.draw();
         });
     });

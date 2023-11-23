@@ -57,6 +57,7 @@ Route::group(['prefix' => 'MICROSITE','middleware' => ['auth', 'role:ST,SD']], f
   Route::any('/edit/{id}', [App\Http\Controllers\MicrositeController::class, 'edit'])->name('MICROSITE.edit');
   Route::delete('/delete', [App\Http\Controllers\MicrositeController::class, 'delete'])->name('MICROSITE.delete');
   Route::delete('/delete_link', [App\Http\Controllers\MicrositeController::class, 'delete_link'])->name('MICROSITE.delete_link');
+  Route::post('/edit_link', [App\Http\Controllers\MicrositeController::class, 'edit_link'])->name('MICROSITE.edit_link');
   Route::get('/print/{id}', [App\Http\Controllers\MicrositeController::class, 'print'])->name('MICROSITE.print');
 });
 //Microsite Access Link

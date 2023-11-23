@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserRoleSeeder::class,
             DocStatusSeeder::class,
-            WhUserGroupSeeder::class
+            WhUserGroupSeeder::class,
+            WhUserUnitSeeder::class
         ]);
     }
 }

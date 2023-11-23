@@ -10,13 +10,14 @@ use Maatwebsite\Excel\Concerns\WithProperties;
 class RekapJamKerja implements FromView, WithProperties
 {
     use Exportable;
-    protected $data,$periode,$group_name;
+    protected $data,$periode,$group_name,$unit_name;
 
-    public function __construct($data,$periode, $group_name)
+    public function __construct($data,$periode, $group_name,$unit_name )
     {
         $this->data = $data;
         $this->periode = $periode;
         $this->group_name = $group_name;
+        $this->unit_name = $unit_name;
     }
 
     public function view(): View
@@ -26,6 +27,7 @@ class RekapJamKerja implements FromView, WithProperties
             'data' => $this->data,
             'periode' => $this->periode,
             'group_name' => $this->group_name,
+            'unit_name' => $this->unit_name,
         ]);
     }
 

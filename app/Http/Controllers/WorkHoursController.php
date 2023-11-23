@@ -84,7 +84,7 @@ class WorkHoursController extends Controller
                 GROUP BY w.username, w.name, u.name, u.id, w.group_id, w.unit_id
                 ORDER BY w.name
                 ") );
-            $periode = "_".Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
+            $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
             $group_name = WhUserGroup::where('uid',$request->grup)->first();
             $gg = "";
             if($request->grup != null){
@@ -95,7 +95,7 @@ class WorkHoursController extends Controller
             if($request->unit != null){
                 $uu = "_".$unit_name->title;
             }
-            return Excel::download(new RekapJamKerja($data,$periode,$group_name,$unit_name), 'Rekap Jam Kerja'.$gg.$uu.$periode.'.xlsx');
+            return Excel::download(new RekapJamKerja($data,$periode,$group_name,$unit_name), 'Rekap Jam Kerja'.$gg.$uu."_".$periode.'.xlsx');
         }
         $user = WhUser::where('status',1)->with('user')->select('*')->orderBy('name')->get();
         $lastData = WhAttendance::orderByDesc('timestamp')->first();

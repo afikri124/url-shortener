@@ -59,7 +59,15 @@
                         <form method="POST" action="">
                             @csrf
                             <div class="row d-flex flex-row-reverse">
-
+                                <div class=" col-md-3">
+                                    <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
+                                        <option value="">Pilih Akun</option>
+                                        @foreach($user as $d)
+                                        <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
+                                            {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class=" col-md-3">
                                     <select id="select_unit" class="select2 form-select" name="unit" data-placeholder="Unit">
                                         <option value="">Unit</option>
@@ -73,15 +81,6 @@
                                         <option value="">Grup</option>
                                         @foreach($group as $d)
                                         <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class=" col-md-3">
-                                    <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
-                                        <option value="">Pilih Akun</option>
-                                        @foreach($user as $d)
-                                        <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
-                                            {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
                                         @endforeach
                                     </select>
                                 </div>

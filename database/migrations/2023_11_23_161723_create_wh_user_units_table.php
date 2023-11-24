@@ -14,7 +14,7 @@ class CreateWhUserUnitsTable extends Migration
     public function up()
     {
         Schema::create('wh_user_units', function (Blueprint $table) {
-            $table->uuid('uid',2)->primary();
+            $table->uuid('uid')->primary();
             $table->string('title');
         });
     }

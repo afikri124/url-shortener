@@ -109,6 +109,7 @@
                     <th width="30px" data-priority="1">No</th>
                     <th data-priority="2">Nama<br><small>[Nama @ Mesin]</small></th>
                     <th>NIK</th>
+                    <th>Unit</th>
                     <th width="90px" data-priority="5">Total Hari</th>
                     <th width="100px" data-priority="3">Total Jam</th>
                     <th width="60px" data-priority="4">Aksi</th>
@@ -198,6 +199,11 @@
                 {
                     render: function (data, type, row, meta) {
                         return `<code title="UserId di Mesin">[` + row.username + `]</code>`;
+                    },
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return `<small>` + row.unit + `</small>`;
                     },
                 },
                 {

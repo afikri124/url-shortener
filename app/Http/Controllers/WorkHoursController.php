@@ -70,7 +70,7 @@ class WorkHoursController extends Controller
             $query = ($request->grup == null ? "":" && w.group_id = '".$request->grup."'");
             $query2 = ($request->unit == null ? "":" && w.unit_id = '".$request->unit."'");
             // dd($query)
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, w.username, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, w.username, wu.title as unit, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
@@ -80,9 +80,10 @@ class WorkHoursController extends Controller
                 ) a 
                 RIGHT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
                 LEFT JOIN users u ON u.username = a.username
+                LEFT JOIN wh_user_units wu ON w.unit_id = wu.uid
                 WHERE w.status = 1 ".$query.$query2."
-                GROUP BY w.username, w.name, u.name, u.id, w.group_id, w.unit_id
-                ORDER BY w.name
+                GROUP BY w.username, w.name, u.name, u.id, w.group_id, w.unit_id, wu.title
+                ORDER BY w.unit_id, w.name
                 ") );
             $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
             $group_name = WhUserGroup::where('uid',$request->grup)->first();
@@ -243,11 +244,10 @@ class WorkHoursController extends Controller
         if (!empty($request->get('select_user'))) {
             $user_id = $request->get('select_user');
             $old_user = WhUser::where('username',$user_id)->first();
-            // $old = ($old_user == null ? Auth::user()->username: $old_user->username_old);
             $old = ($old_user == null ? $user_id: $old_user->username_old);
             $query = (empty($request->get('select_group')) ? "":" && w.group_id = '".$request->get('select_group')."'");
             $query2 = (empty($request->get('select_unit')) ? "":" && w.unit_id = '".$request->get('select_unit')."'");
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, IFNULL(w.username,w.username_old) as username, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid, w.group_id
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, IFNULL(w.username,w.username_old) as username, wu.title as unit, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid, w.group_id
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
@@ -257,14 +257,15 @@ class WorkHoursController extends Controller
                 ) a 
                 RIGHT JOIN wh_users w ON a.username = w.username_old or a.username =  w.username
                 LEFT JOIN users u ON u.username = a.username 
+                LEFT JOIN wh_user_units wu ON w.unit_id = wu.uid
                 WHERE w.status = 1 ".$query.$query2." && (w.`username` = '".$user_id."' or w.`username_old` = '".$old."')
-                GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id, w.unit_id
+                GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id, w.unit_id, wu.title
                 ORDER BY hari desc
                 ") );
         } else {
             $query = (empty($request->get('select_group')) ? "":" && w.group_id = '".$request->get('select_group')."'");
             $query2 = (empty($request->get('select_unit')) ? "":" && w.unit_id = '".$request->get('select_unit')."'");
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, IFNULL(w.username,w.username_old) as username, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid, w.group_id
+            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, IFNULL(w.username,w.username_old) as username, wu.title as unit, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid, w.group_id
                 FROM (
                     SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
                     FROM wh_attendances
@@ -274,8 +275,9 @@ class WorkHoursController extends Controller
                 ) a 
                 RIGHT JOIN wh_users w ON a.username = w.username_old or a.username =  w.username
                 LEFT JOIN users u ON u.username = a.username
+                LEFT JOIN wh_user_units wu ON w.unit_id = wu.uid
                 WHERE w.status = 1 ".$query.$query2."
-                GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id, w.unit_id
+                GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id, w.unit_id, wu.title
                 ORDER BY hari desc
                 ") );
         }

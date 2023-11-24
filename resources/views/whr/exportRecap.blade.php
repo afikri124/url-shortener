@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Rekap Jam Kerja @if($unit_name != null) - {{(strlen($unit_name->title) > 13  ? substr($unit_name->title,0,13) : $unit_name->title)}} @endif</title>
+    <title>Rekap Jam Kerja</title>
 </head>
 
 <body>

@@ -58,13 +58,16 @@
                     <div class="col-12">
                         <form method="POST" action="">
                             @csrf
-                            <div class="row d-flex flex-row-reverse">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" id="select_range" name="range" class="form-control"
+                                        placeholder="Pilih Tanggal" autocomplete="off" />
+                                </div>
                                 <div class=" col-md-3">
-                                    <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
-                                        <option value="">Pilih Akun</option>
-                                        @foreach($user as $d)
-                                        <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
-                                            {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
+                                    <select id="select_group" class="select2 form-select" name="grup" data-placeholder="Grup">
+                                        <option value="">Grup</option>
+                                        @foreach($group as $d)
+                                        <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -77,17 +80,16 @@
                                     </select>
                                 </div>
                                 <div class=" col-md-3">
-                                    <select id="select_group" class="select2 form-select" name="grup" data-placeholder="Grup">
-                                        <option value="">Grup</option>
-                                        @foreach($group as $d)
-                                        <option value="{{ $d->uid }}">{{ $d->title }} {{ ($d->desc==null?"":"(".$d->desc.")") }}</option>
+                                    <select id="select_user" class="select2 form-select" data-placeholder="Pilih Akun">
+                                        <option value="">Pilih Akun</option>
+                                        @foreach($user as $d)
+                                        <option value="{{ ($d->username == null ? $d->username_old:$d->username) }}">
+                                            {{ ($d->user==null ? "[".$d->name."]" : $d->user->name )}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3">
-                                    <input type="text" id="select_range" name="range" class="form-control"
-                                        placeholder="Pilih Tanggal" autocomplete="off" />
-                                </div>
+                            </div>
+                            <div class="row d-flex flex-row-reverse">
                                 <div class="col-md-4 text-md-end text-center pt-3">
                                     <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
                                         <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Sinkron</span>

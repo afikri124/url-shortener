@@ -94,7 +94,7 @@ class WorkHoursController extends Controller
             $unit_name = WhUserUnit::where('uid',$request->unit)->first();
             $uu = "";
             if($request->unit != null){
-                $uu = "_".$unit_name->title;
+                $uu = "_".str_replace('/', '-', $unit_name->title);
             }
             return Excel::download(new RekapJamKerja($data,$periode,$group_name,$unit_name), 'Rekap Jam Kerja'.$gg.$uu."_".$periode.'.xlsx');
         }

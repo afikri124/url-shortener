@@ -404,7 +404,14 @@ class WorkHoursController extends Controller
             // dd($data);
             $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
             $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-            return view('whr.view', compact('user', 'data', 'periode','link')); 
+
+            $photo = 'assets/img/biophoto/face/'.$username.'.jpg';
+            if(file_exists(public_path($photo))){
+                $photo = asset($photo);
+            } else {
+                $photo = null;
+            }
+            return view('whr.view', compact('user', 'data', 'periode','link', 'photo')); 
         } else {
             abort(403, "User tidak ditemukan!");
         }

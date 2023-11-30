@@ -260,7 +260,7 @@ class WorkHoursController extends Controller
                 LEFT JOIN wh_user_units wu ON w.unit_id = wu.uid
                 WHERE w.status = 1 ".$query.$query2." && (w.`username` = '".$user_id."' or w.`username_old` = '".$old."')
                 GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id, w.unit_id, wu.title
-                ORDER BY hari desc
+                ORDER BY hari desc, total desc
                 ") );
         } else {
             $query = (empty($request->get('select_group')) ? "":" && w.group_id = '".$request->get('select_group')."'");
@@ -278,7 +278,7 @@ class WorkHoursController extends Controller
                 LEFT JOIN wh_user_units wu ON w.unit_id = wu.uid
                 WHERE w.status = 1 ".$query.$query2."
                 GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id, w.unit_id, wu.title
-                ORDER BY hari desc
+                ORDER BY hari desc, total desc
                 ") );
         }
         return Datatables::of($data)

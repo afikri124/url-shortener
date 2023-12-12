@@ -146,7 +146,7 @@ class SettingController extends Controller
                         'status'=> 1,
                         'role'=> 0,
                         'group_id' => $request->grup,
-                        'unit_id' => $request->unit,
+                        'unit_id' => $request->unit
                     ]);
                     if($new){
                         return redirect()->route('setting_account_att')->with('msg','Pengguna '.$request->nama.' BERHASIL dibuat!');

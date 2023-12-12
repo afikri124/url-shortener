@@ -19,6 +19,7 @@ class WhUser extends Model
         'cardno',
         'status',
         'group_id',
+        'unit_id',
     ];
 
     public function user()

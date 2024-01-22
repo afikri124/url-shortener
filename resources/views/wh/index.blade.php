@@ -129,6 +129,7 @@
                     <th width="60px"></th>
                     <th width="80px"></th>
                     <th width="60px"></th>
+                    <th width="60px"></th>
                     <th width="80px" id="Total_All" class="text-center"></th>
                 </tr>
             </tfoot>

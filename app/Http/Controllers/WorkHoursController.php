@@ -217,6 +217,13 @@ class WorkHoursController extends Controller
                         return null;
                     }
                   })
+                ->addColumn('kurang', function($x){
+                    if(new Carbon($x->total_jam) < new Carbon("08:00:00")){
+                        return (new Carbon($x->total_jam))->diff(new Carbon("08:00:00"))->format('%h:%I');
+                    } else {
+                        return null;
+                    }
+                  })
                 ->addColumn('userid', function($x){
                     if($x->user != null){
                         return Crypt::encrypt($x->user->id);

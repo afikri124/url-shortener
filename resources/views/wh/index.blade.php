@@ -115,8 +115,9 @@
                     <th width="60px">Keluar</th>
                     <th width="60px">Telat</th>
                     <th width="80px">Plg Cepat</th>
-                    <th width="60px">Lembur</th>
-                    <th width="80px" data-priority="3">Jam/Hari</th>
+                    <th width="60px">Jam Lembur</th>
+                    <th width="60px">Jam Kurang</th>
+                    <th width="80px" data-priority="3">Total Jam/Hari</th>
                 </tr>
             </thead>
             <tfoot>
@@ -275,7 +276,12 @@
                 {
                     data: 'lembur',
                     name: 'lembur'
-                }, {
+                },
+                {
+                    data: 'kurang',
+                    name: 'kurang'
+                }, 
+                {
                     data: 'total_jam',
                     name: 'total_jam'
                 }

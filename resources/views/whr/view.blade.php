@@ -17,7 +17,7 @@
         }
     }
     .table-sm>:not(caption)>*>* {
-        padding: 0.1rem 0.625rem;
+        padding: 0.1rem;
     }
 </style>
 @endsection
@@ -76,15 +76,16 @@
                         <table class="table table-hover table-sm" width="100%" style="padding:0 2px;">
                             <thead>
                                 <tr style="border-bottom: 2px double">
-                                    <th width="70px">Hari</th>
+                                    <th width="60px">Hari</th>
                                     <th>Tanggal</th>
                                     <th class="d-none d-lg-table-cell text-center" width="100px">User Id</th>
-                                    <th width="100px" class="text-center">Masuk</th>
-                                    <th width="100px" class="text-center">Keluar</th>
-                                    <th width="100px" class="text-center">Telat</th>
-                                    <th width="100px" class="text-center">P.Cepat</th>
-                                    <th width="100px" class="text-center">Lembur</th>
-                                    <th width="100px" data-priority="3" class="text-end">JAM/Hari</th>
+                                    <th width="90px" class="text-center">Masuk</th>
+                                    <th width="90px" class="text-center">Keluar</th>
+                                    <th width="90px" class="text-center">Telat</th>
+                                    <th width="90px" class="text-center">P.Cepat</th>
+                                    <th width="90px" class="text-center">Lembur</th>
+                                    <th width="90px" class="text-center">Kurang</th>
+                                    <th width="100px" data-priority="3" class="text-end">Total JAM/Hari</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -95,6 +96,7 @@
                                     $totalTelat = 0;
                                     $totalCepat = 0;
                                     $totalLembur = 0; 
+                                    $totalKurang = 0; 
                                     $totalAbsen = 0;
                                     $totalJamPerminggu = 0;
                                 @endphp
@@ -103,7 +105,7 @@
                                 @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
                                     class="text-danger"
                                     @elseif((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SATURDAY)
-                                    class="text-success"
+                                    class="text-primary"
                                     @endif
                                 >
                                     <td>
@@ -173,7 +175,7 @@
                                         }
                                         @endphp
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center text-success">
                                         @php 
                                             if(\Carbon\Carbon::parse($d->total_jam) > new \Carbon\Carbon("10:00:00")){
                                                 $lembur = (\Carbon\Carbon::parse($d->total_jam))->diff(new \Carbon\Carbon("10:00:00"))->format('%h:%I:%S');
@@ -182,6 +184,18 @@
                                                 $totalLembur += (int) $temp[1] * 60;
                                                 $totalLembur += (int) $temp[2];
                                                 echo \Carbon\Carbon::parse($lembur)->translatedFormat("H:i");
+                                            }
+                                        @endphp
+                                    </td>
+                                    <td class="text-center text-danger">
+                                        @php 
+                                            if(\Carbon\Carbon::parse($d->total_jam) < new \Carbon\Carbon("08:00:00")){
+                                                $kurang = (\Carbon\Carbon::parse($d->total_jam))->diff(new \Carbon\Carbon("08:00:00"))->format('%h:%I:%S');
+                                                $temp = explode(":", $kurang);
+                                                $totalKurang += (int) $temp[0] * 3600;
+                                                $totalKurang += (int) $temp[1] * 60;
+                                                $totalKurang += (int) $temp[2];
+                                                echo \Carbon\Carbon::parse($kurang)->translatedFormat("H:i");
                                             }
                                         @endphp
                                     </td>
@@ -207,12 +221,13 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     @endif
                                 </tr>
                                 @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
                                 <tr style="background-color:rgba(67,89,113,.04); border-bottom: 1px ridge yellow">
                                 <td class="d-none d-lg-table-cell text-center"></td>
-                                    <td colspan="6" class="text-light"><i>Total jam/minggu</i></td>
+                                    <td colspan="7" class="text-light "><i>Total jam/minggu</i></td>
                                     <td></td>
                                     <td class="text-end">
                                         @php 
@@ -300,6 +315,19 @@
                                                 $totalLembur % 60);
                                             if ($print != "00:00") {
                                                 echo "<b class='text-success' title='Total Jam Lembur'>".$print."<b>";
+                                            } else {
+                                                echo $print;
+                                            }
+                                        @endphp
+                                    </td>
+                                    <td class="text-center">
+                                        @php
+                                            $print = sprintf('%02d:%02d',
+                                                ($totalKurang / 3600),
+                                                ($totalKurang / 60 % 60),
+                                                $totalKurang % 60);
+                                            if ($print > "00:00") {
+                                                echo "<b class='text-danger' title='Total Jam Kurang'>".$print."<b>";
                                             } else {
                                                 echo $print;
                                             }

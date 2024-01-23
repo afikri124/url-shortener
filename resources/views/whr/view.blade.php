@@ -117,6 +117,7 @@
                                     @php $totalAbsen++; @endphp
                                     <td class="d-none d-lg-table-cell text-center"><code>{{$d->username}}</code></td>
                                     <td class="text-center">
+                                        {{-- MASUK --}}
                                         @if($d->masuk != $d->keluar)
                                             @php $totalMasuk++; @endphp
                                             {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
@@ -128,6 +129,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
+                                        {{-- KELUAR --}}
                                         @if($d->masuk != $d->keluar)
                                             @php $totalKeluar++; @endphp
                                             {{ \Carbon\Carbon::parse($d->keluar)->translatedFormat("H:i")}}
@@ -139,6 +141,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
+                                        {{-- TELAT --}}
                                         @php 
                                             if(\Carbon\Carbon::parse($d->masuk) > \Carbon\Carbon::parse($d->tanggal." 08:00:59")){
                                                 $telat = (\Carbon\Carbon::parse($d->masuk))->diff(\Carbon\Carbon::parse($d->tanggal." 08:00:00"))->format('%H:%I:%S');
@@ -151,6 +154,7 @@
                                         @endphp
                                     </td>
                                     <td class="text-center">
+                                        {{-- PULANG CEPAT --}}
                                         @php 
                                         if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SATURDAY){
                                             if((\Carbon\Carbon::parse($d->keluar) < \Carbon\Carbon::parse($d->tanggal." 14:00:00")) && $d->total_jam != '00:00:00'){
@@ -176,6 +180,7 @@
                                         @endphp
                                     </td>
                                     <td class="text-center text-success">
+                                        {{-- LEMBUR --}}
                                         @php 
                                             if(\Carbon\Carbon::parse($d->total_jam) > new \Carbon\Carbon("10:00:00")){
                                                 $lembur = (\Carbon\Carbon::parse($d->total_jam))->diff(new \Carbon\Carbon("10:00:00"))->format('%h:%I:%S');
@@ -188,6 +193,7 @@
                                         @endphp
                                     </td>
                                     <td class="text-center text-danger">
+                                        {{-- KURANG --}}
                                         @php 
                                         if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SATURDAY){
                                             if(\Carbon\Carbon::parse($d->total_jam) < new \Carbon\Carbon("06:00:00")){
@@ -213,6 +219,7 @@
                                         @endphp
                                     </td>
                                     <td class="text-end"> 
+                                        {{-- TOTAL --}}
                                         @php
                                         $jam = \Carbon\Carbon::parse($d->total_jam)->translatedFormat("H:i:s");
                                         $temp = explode(":", $jam);

@@ -218,10 +218,20 @@ class WorkHoursController extends Controller
                     }
                   })
                 ->addColumn('kurang', function($x){
-                    if(new Carbon($x->total_jam) < new Carbon("08:00:00")){
-                        return (new Carbon($x->total_jam))->diff(new Carbon("08:00:00"))->format('%h:%I');
-                    } else {
+                    if((new Carbon($x->tanggal))->dayOfWeek == Carbon::SATURDAY){
+                        if(new Carbon($x->total_jam) < new Carbon("06:00:00")){
+                            return (new Carbon($x->total_jam))->diff(new Carbon("06:00:00"))->format('%h:%I');
+                        } else {
+                            return null;
+                        }
+                    } elseif ((new Carbon($x->tanggal))->dayOfWeek == Carbon::SUNDAY){
                         return null;
+                    } else {
+                        if(new Carbon($x->total_jam) < new Carbon("08:00:00")){
+                            return (new Carbon($x->total_jam))->diff(new Carbon("08:00:00"))->format('%h:%I');
+                        } else {
+                            return null;
+                        }
                     }
                   })
                 ->addColumn('userid', function($x){

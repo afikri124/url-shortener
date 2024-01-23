@@ -189,6 +189,18 @@
                                     </td>
                                     <td class="text-center text-danger">
                                         @php 
+                                        if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SATURDAY){
+                                            if(\Carbon\Carbon::parse($d->total_jam) < new \Carbon\Carbon("06:00:00")){
+                                                $kurang = (\Carbon\Carbon::parse($d->total_jam))->diff(new \Carbon\Carbon("06:00:00"))->format('%h:%I:%S');
+                                                $temp = explode(":", $kurang);
+                                                $totalKurang += (int) $temp[0] * 3600;
+                                                $totalKurang += (int) $temp[1] * 60;
+                                                $totalKurang += (int) $temp[2];
+                                                echo \Carbon\Carbon::parse($kurang)->translatedFormat("H:i");
+                                            }
+                                        } elseif ((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY){
+                                            echo "";
+                                        } else {
                                             if(\Carbon\Carbon::parse($d->total_jam) < new \Carbon\Carbon("08:00:00")){
                                                 $kurang = (\Carbon\Carbon::parse($d->total_jam))->diff(new \Carbon\Carbon("08:00:00"))->format('%h:%I:%S');
                                                 $temp = explode(":", $kurang);
@@ -197,6 +209,7 @@
                                                 $totalKurang += (int) $temp[2];
                                                 echo \Carbon\Carbon::parse($kurang)->translatedFormat("H:i");
                                             }
+                                        }
                                         @endphp
                                     </td>
                                     <td class="text-end"> 

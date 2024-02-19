@@ -95,7 +95,7 @@ $api_key = Crypt::encrypt(env('APP_KEY').gmdate('Y/m/d'));
 Session::put('klas2_api_key', $api_key);
 $callback_url = route('sso_klas2');
 $token = md5($api_key.$callback_url);
-$url = "http://klas2.jgu.ac.id/sso/";
+$url = "http://klas2-vpn.jgu.ac.id/sso/";
 $link =
 $url."?login_to=".route('login')."&login_name=$login_name&api_key=$api_key&callback_url=$callback_url&token=$token&ip=".$_SERVER['REMOTE_ADDR'];
 @endphp

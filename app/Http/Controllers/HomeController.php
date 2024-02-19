@@ -236,14 +236,14 @@ class HomeController extends Controller
         // Mail::to($data['email'])->queue(new WeeklyAttendanceReportMail($data));
     }
 
-    public function tes2(){
-        echo "tes";
+    public function wa(){
+        echo "tes wa ke fikri";
                             //----------------WA-------------------------------
                             $wa_to = "6281233933313";
                             if($wa_to != null){
                                 $WA_DATA = array();
                                 $WA_DATA['wa_to'] = $wa_to;
-                                $WA_DATA['wa_text'] = "SJGU TES\nbreak\nline\ntest lagi\n_ini miring_\n*ini tebal*";
+                                $WA_DATA['wa_text'] = "SJGU TES WA\nbreak\nline\ntest lagi\n_ini miring_\n*ini tebal*";
                                 dispatch(new JobNotificationWA($WA_DATA));
                             }
                             // ------------------end send to WA-----------------

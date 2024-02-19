@@ -8,6 +8,7 @@ use App\Models\WhUser;
 use App\Models\WhAttendance;
 use App\Models\WhUserGroup;
 use App\Models\WhUserUnit;
+use App\Models\WhPublicHoliday;
 use Yajra\DataTables\DataTables;
 use Auth;
 use Illuminate\Contracts\Encryption\DecryptException;

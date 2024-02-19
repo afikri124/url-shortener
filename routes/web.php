@@ -211,6 +211,14 @@ Route::group(['prefix' => 'email','middleware' => ['auth','role:AD']], function 
   Route::get('/', [\App\Http\Controllers\HomeController::class, 'tes']);
   Route::get('/wa', [\App\Http\Controllers\HomeController::class, 'wa']);
   Route::get('/test', [App\Http\Controllers\WorkHoursController::class, 'weekly_attendance_report']);
+  Route::get('/clear', function() {
+      $exitCode = Artisan::call('config:cache');
+      $exitCode2 = Artisan::call('config:clear');
+      $exitCode3 = Artisan::call('cache:clear');
+      $exitCode4 = Artisan::call('route:clear');
+      $exitCode5 = Artisan::call('view:clear');
+      echo "clear cache!";
+  });
 });
 
 

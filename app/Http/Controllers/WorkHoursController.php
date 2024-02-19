@@ -382,7 +382,11 @@ class WorkHoursController extends Controller
                         UNION ALL 
                         SELECT dt + INTERVAL 1 DAY FROM all_dates WHERE dt <= '$endX'
                     )
-                    SELECT DATE(d.dt) AS tanggal, username, masuk, keluar, total_jam
+                    SELECT DATE(d.dt) AS tanggal, username, 
+                    IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(tanggal,'08:00:00'), a.masuk)) as masuk, 
+					IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(tanggal,'16:00:00'), a.keluar)) as keluar,  
+					IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('08:00:00'),a.total_jam,TIME('08:00:00'))) as total_jam, 
+					h.detail as libur
                     FROM all_dates d
                     LEFT JOIN (
                         SELECT DATE(`timestamp`) AS tanggal, username, MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS keluar, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS total_jam 
@@ -392,13 +396,19 @@ class WorkHoursController extends Controller
                         ORDER BY tanggal
                     ) a
                     ON d.dt = a.`tanggal`
+                    LEFT JOIN wh_public_holidays h on d.dt = h.date
                     GROUP BY d.dt, username, masuk, keluar, total_jam
                     ORDER BY d.dt
                 ") ;
                
             } catch (\Exception $e) {
                 $startX = Carbon::parse($start)->translatedFormat("Y-m-d");
-                $data = DB::select("SELECT v.tanggal, a.username, a.masuk, a.keluar, a.total_jam FROM 
+                $data = DB::select("SELECT v.tanggal, a.username, 
+                IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(v.tanggal,'08:00:00'), a.masuk)) as masuk, 
+                IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(v.tanggal,'16:00:00'), a.keluar)) as keluar,  
+                IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('08:00:00'),a.total_jam,TIME('08:00:00'))) as total_jam, 
+                h.detail as libur   
+                FROM  
                     (SELECT ADDDATE('$startX',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) tanggal FROM
                     (SELECT 0 i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t0,
                     (SELECT 0 i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t1,
@@ -414,8 +424,9 @@ class WorkHoursController extends Controller
                         ORDER BY tanggal
                     ) a
                     ON v.tanggal = a.`tanggal`
+                    LEFT JOIN wh_public_holidays h on v.tanggal = h.date
                     WHERE v.tanggal BETWEEN '$start' AND '$end'
-                    GROUP BY v.tanggal, username, masuk, keluar, total_jam
+                    GROUP BY v.tanggal, username, masuk, keluar, total_jam, h.detail
                     ORDER BY v.tanggal;
                 ") ;
             }

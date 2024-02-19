@@ -102,7 +102,9 @@
                                 @endphp
                                 @foreach($data as $key => $d)
                                 <tr
-                                @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
+                                @if($d->libur != null)
+                                    class="text-decoration-line-through"
+                                    @elseif((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
                                     class="text-danger"
                                     @elseif((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SATURDAY)
                                     class="text-primary"
@@ -113,7 +115,7 @@
                                     </td>
                                     <td class="d-lg-none text-end">{{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("d/m/Y")}}</td>
                                     <td class="d-none d-lg-table-cell">{{ \Carbon\Carbon::parse($d->tanggal)->translatedFormat("d F Y")}}</td>
-                                    @if($d->username != null)
+                                    @if($d->username != null OR $d->libur != null)
                                     @php $totalAbsen++; @endphp
                                     <td class="d-none d-lg-table-cell text-center"><code>{{$d->username}}</code></td>
                                     <td class="text-center">
@@ -244,6 +246,14 @@
                                     <td></td>
                                     @endif
                                 </tr>
+                                @if($d->libur != null)
+                                <tr class="mark">
+                                    <td></td>
+                                    <td class="text-danger" colspan="9">* 
+                                        {{ $d->libur }}
+                                    </td>
+                                </tr>
+                                @endif
                                 @if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek == \Carbon\Carbon::SUNDAY)
                                 <tr style="background-color:rgba(67,89,113,.04); border-bottom: 1px ridge yellow">
                                 <td class="d-none d-lg-table-cell text-center"></td>
@@ -279,11 +289,6 @@
                                         / {{count($data)}} Hari
                                     </td>
                                     <td class="text-center d-none d-lg-table-cell" width="100px">
-                                        @if ($totalAbsen < 20)
-                                            <b class='text-danger' title='Total < 20'>{{$totalAbsen}}<b>
-                                        @else
-                                            <b title='Total >= 20'>{{$totalAbsen}}<b>
-                                        @endif
                                     </td>
                                     <td class="text-center" title="Total Abensi Masuk">
                                         @if ($totalMasuk < 20)

@@ -213,15 +213,36 @@ class HomeController extends Controller
         $data['subject'] = "Absensi Karyawan (".$period.")";
         $data['messages'] = "Berikut ini merupakan data karyawan yang pernah <b>TIDAK MASUK</b> berdasarkan mesin absen dalam minggu ini (<b>".$period."</b>) :";
         $x = DB::select( DB::raw("SELECT IFNULL(u.username,u.`username_old`) AS ID, u.name, IFNULL(tt.days,0) AS hari, u.group_id
-          FROM 
-          (SELECT u.username, COUNT(DISTINCT(DATE(a.`timestamp`))) AS days
-          FROM wh_users u
-          JOIN wh_attendances a ON u.`username` = a.`username` 
-          WHERE a.`timestamp` >= '".$date_start."' && a.`timestamp` <= '".$date_end."'
-          GROUP BY u.`username`) AS tt
-          RIGHT JOIN wh_users u ON tt.username = u.username
-          WHERE u.`status` = 1 && IFNULL(tt.days,0) <= ".$diff." && (u.group_id = 'JF' OR u.group_id = 'JE')
-          ORDER BY u.group_id DESC, hari, u.name") );
+        FROM 
+        (
+				SELECT username, COUNT(hari) as days,
+                    CONCAT(FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/60)%60,':',SUM( TIME_TO_SEC( `total_jam` ))%60) AS total 
+                    from (
+                        SELECT tanggal, username, COUNT(total_jam) as hari, max(total_jam) as total_jam
+                        FROM (
+                            SELECT DATE(`timestamp`) AS tanggal, username, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`)) AS total_jam 
+                            FROM wh_attendances
+                            GROUP BY tanggal, username
+                            UNION ALL
+                            SELECT
+                                ph.date as tanggal,
+                                IFNULL(username,username_old) as username,
+                                TIME('08:00:00') as total_jam
+                            FROM
+                                wh_users u
+                                JOIN wh_public_holidays ph ON u.username != ph.id
+                            GROUP BY IFNULL(username,username_old), id, ph.date, total_jam
+                            ORDER BY tanggal, total_jam desc
+                        ) x
+                        WHERE tanggal >= '".$date_start."' && tanggal <= '".$date_end."'
+                        GROUP BY tanggal, username
+                    ) x2
+                    GROUP BY username
+				) AS tt
+        RIGHT JOIN wh_users u ON tt.username = u.username
+        WHERE u.`status` = 1 && IFNULL(tt.days,0) <= ".$diff." && (u.group_id = 'JF' OR u.group_id = 'JE')
+        ORDER BY u.group_id DESC, hari, u.name
+        ") );
         foreach($x as $d){
             $x = [$d->name,(($diff+1) - $d->hari),$d->ID];
             if($d->group_id == 'JF'){

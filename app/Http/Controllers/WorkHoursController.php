@@ -68,23 +68,43 @@ class WorkHoursController extends Controller
                     $start = date('Y-m-d 00:00',strtotime($x[0]));
                     $end = date('Y-m-d 23:59',strtotime($x[1]));
                 }
-            $query = ($request->grup == null ? "":" && w.group_id = '".$request->grup."'");
-            $query2 = ($request->unit == null ? "":" && w.unit_id = '".$request->unit."'");
+            $query = ($request->grup == null ? "":" && u.group_id = '".$request->grup."'");
+            $query2 = ($request->unit == null ? "":" && u.unit_id = '".$request->unit."'");
             // dd($query)
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, w.username, wu.title as unit, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid
-                FROM (
-                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
-                    FROM wh_attendances
-                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end'
-                    GROUP BY DATE(`timestamp`),username
-                    ORDER BY pulang DESC
-                ) a 
-                RIGHT JOIN wh_users w ON w.username_old = a.username or w.username = a.username
-                LEFT JOIN users u ON u.username = a.username
-                LEFT JOIN wh_user_units wu ON w.unit_id = wu.uid
-                WHERE w.status = 1 ".$query.$query2."
-                GROUP BY w.username, w.name, u.name, u.id, w.group_id, w.unit_id, wu.title
-                ORDER BY w.unit_id, w.name
+            $data = DB::select( DB::raw("SELECT users.name AS name2, u.name, IFNULL(u.username,u.username_old) as username, 
+                uu.title as unit, a.hari, a.total, users.id AS usrid, u.group_id
+                from wh_users u
+                LEFT JOIN wh_user_groups g on g.uid = u.group_id
+                LEFT JOIN wh_user_units uu on uu.uid = u.unit_id
+                LEFT JOIN users ON users.username = u.username
+                LEFT JOIN (
+                    SELECT username, COUNT(hari) as hari,
+                    CONCAT(FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/60)%60,':',SUM( TIME_TO_SEC( `total_jam` ))%60) AS total 
+                    from (
+                        SELECT tanggal, username, COUNT(total_jam) as hari, max(total_jam) as total_jam
+                        FROM (
+                            SELECT DATE(`timestamp`) AS tanggal, username, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`)) AS total_jam 
+                            FROM wh_attendances
+                            GROUP BY tanggal, username
+                            UNION ALL
+                            SELECT
+                                ph.date as tanggal,
+                                IFNULL(username,username_old) as username,
+                                TIME('08:00:00') as total_jam
+                            FROM
+                                wh_users u
+                                JOIN wh_public_holidays ph ON u.username != ph.id
+                            GROUP BY IFNULL(username,username_old), id, ph.date, total_jam
+                            ORDER BY tanggal, total_jam desc
+                        ) x
+                        WHERE tanggal >= '$start' && tanggal <= '$end'
+                        GROUP BY tanggal, username
+                    ) x2
+                    GROUP BY username
+                ) a on a.username = IFNULL(u.username,u.username_old)
+                WHERE u.status = 1 ".$query.$query2."
+                GROUP BY IFNULL(u.username,u.username_old), u.name, users.name, users.id, u.group_id, u.unit_id, uu.title, a.hari, a.total
+                ORDER BY hari desc, total desc
                 ") );
             $periode = Carbon::parse($start)->translatedFormat("d F Y")." - ".Carbon::parse($end)->translatedFormat("d F Y");
             $group_name = WhUserGroup::where('uid',$request->grup)->first();
@@ -263,41 +283,81 @@ class WorkHoursController extends Controller
             $user_id = $request->get('select_user');
             $old_user = WhUser::where('username',$user_id)->first();
             $old = ($old_user == null ? $user_id: $old_user->username_old);
-            $query = (empty($request->get('select_group')) ? "":" && w.group_id = '".$request->get('select_group')."'");
-            $query2 = (empty($request->get('select_unit')) ? "":" && w.unit_id = '".$request->get('select_unit')."'");
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, IFNULL(w.username,w.username_old) as username, wu.title as unit, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid, w.group_id
-                FROM (
-                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
-                    FROM wh_attendances
-                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end' 
-                    GROUP BY DATE(`timestamp`),username
-                    ORDER BY pulang DESC
-                ) a 
-                RIGHT JOIN wh_users w ON a.username = w.username_old or a.username =  w.username
-                LEFT JOIN users u ON u.username = a.username 
-                LEFT JOIN wh_user_units wu ON w.unit_id = wu.uid
-                WHERE w.status = 1 ".$query.$query2." && (w.`username` = '".$user_id."' or w.`username_old` = '".$old."')
-                GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id, w.unit_id, wu.title
+            $query = (empty($request->get('select_group')) ? "":" && u.group_id = '".$request->get('select_group')."'");
+            $query2 = (empty($request->get('select_unit')) ? "":" && u.unit_id = '".$request->get('select_unit')."'");
+            $data = DB::select( DB::raw("SELECT users.name AS name2, u.name, IFNULL(u.username,u.username_old) as username, 
+                uu.title as unit, a.hari, a.total, users.id AS usrid, u.group_id
+                from wh_users u
+                LEFT JOIN wh_user_groups g on g.uid = u.group_id
+                LEFT JOIN wh_user_units uu on uu.uid = u.unit_id
+                LEFT JOIN users ON users.username = u.username
+                LEFT JOIN (
+                    SELECT username, COUNT(hari) as hari,
+                    CONCAT(FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/60)%60,':',SUM( TIME_TO_SEC( `total_jam` ))%60) AS total 
+                    from (
+                        SELECT tanggal, username, COUNT(total_jam) as hari, max(total_jam) as total_jam
+                        FROM (
+                            SELECT DATE(`timestamp`) AS tanggal, username, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`)) AS total_jam 
+                            FROM wh_attendances
+                            GROUP BY tanggal, username
+                            UNION ALL
+                            SELECT
+                                ph.date as tanggal,
+                                IFNULL(username,username_old) as username,
+                                TIME('08:00:00') as total_jam
+                            FROM
+                                wh_users u
+                                JOIN wh_public_holidays ph ON u.username != ph.id
+                            GROUP BY IFNULL(username,username_old), id, ph.date, total_jam
+                            ORDER BY tanggal, total_jam desc
+                        ) x
+                        WHERE tanggal >= '$start' && tanggal <= '$end'
+                        GROUP BY tanggal, username
+                    ) x2
+                    GROUP BY username
+                ) a on a.username = IFNULL(u.username,u.username_old)
+                WHERE u.status = 1 ".$query.$query2." && (u.`username` = '".$user_id."' or u.`username_old` = '".$old."')
+                GROUP BY IFNULL(u.username,u.username_old), u.name, users.name, users.id, u.group_id, u.unit_id, uu.title, a.hari, a.total
                 ORDER BY hari desc, total desc
                 ") );
         } else {
-            $query = (empty($request->get('select_group')) ? "":" && w.group_id = '".$request->get('select_group')."'");
-            $query2 = (empty($request->get('select_unit')) ? "":" && w.unit_id = '".$request->get('select_unit')."'");
-            $data = DB::select( DB::raw("SELECT u.name AS name2, w.name, IFNULL(w.username,w.username_old) as username, wu.title as unit, count(jam) as hari, CONCAT(FLOOR(SUM( TIME_TO_SEC( `jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `jam` ))/60)%60,':',SUM( TIME_TO_SEC( `jam` ))%60) AS total, u.id AS usrid, w.group_id
-                FROM (
-                    SELECT username,MIN(`timestamp`) AS masuk, MAX(`timestamp`) AS pulang, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`))AS jam 
-                    FROM wh_attendances
-                    WHERE `timestamp` >= '$start' && `timestamp` <= '$end'
-                    GROUP BY DATE(`timestamp`),username
-                    ORDER BY pulang DESC
-                ) a 
-                RIGHT JOIN wh_users w ON a.username = w.username_old or a.username =  w.username
-                LEFT JOIN users u ON u.username = a.username
-                LEFT JOIN wh_user_units wu ON w.unit_id = wu.uid
-                WHERE w.status = 1 ".$query.$query2."
-                GROUP BY IFNULL(w.username,w.username_old), w.name, u.name, u.id, w.group_id, w.unit_id, wu.title
-                ORDER BY hari desc, total desc
-                ") );
+            $query = (empty($request->get('select_group')) ? "":" && u.group_id = '".$request->get('select_group')."'");
+            $query2 = (empty($request->get('select_unit')) ? "":" && u.unit_id = '".$request->get('select_unit')."'");
+            $data = DB::select( DB::raw("SELECT users.name AS name2, u.name, IFNULL(u.username,u.username_old) as username, 
+                uu.title as unit, a.hari, a.total, users.id AS usrid, u.group_id
+                from wh_users u
+                LEFT JOIN wh_user_groups g on g.uid = u.group_id
+                LEFT JOIN wh_user_units uu on uu.uid = u.unit_id
+                LEFT JOIN users ON users.username = u.username
+                LEFT JOIN (
+                    SELECT username, COUNT(hari) as hari,
+                    CONCAT(FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/60)%60,':',SUM( TIME_TO_SEC( `total_jam` ))%60) AS total 
+                    from (
+                        SELECT tanggal, username, COUNT(total_jam) as hari, max(total_jam) as total_jam
+                        FROM (
+                            SELECT DATE(`timestamp`) AS tanggal, username, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`)) AS total_jam 
+                            FROM wh_attendances
+                            GROUP BY tanggal, username
+                            UNION ALL
+                            SELECT
+                                ph.date as tanggal,
+                                IFNULL(username,username_old) as username,
+                                TIME('08:00:00') as total_jam
+                            FROM
+                                wh_users u
+                                JOIN wh_public_holidays ph ON u.username != ph.id
+                            GROUP BY IFNULL(username,username_old), id, ph.date, total_jam
+                            ORDER BY tanggal, total_jam desc
+                        ) x
+                        WHERE tanggal >= '$start' && tanggal <= '$end'
+                        GROUP BY tanggal, username
+                    ) x2
+                    GROUP BY username
+                ) a on a.username = IFNULL(u.username,u.username_old)
+                WHERE u.status = 1 ".$query.$query2."
+                GROUP BY IFNULL(u.username,u.username_old), u.name, users.name, users.id, u.group_id, u.unit_id, uu.title, a.hari, a.total
+                ORDER BY hari desc, total desc"
+                ) );
         }
         return Datatables::of($data)
         ->addColumn('userid', function($x){
@@ -382,7 +442,7 @@ class WorkHoursController extends Controller
                         UNION ALL 
                         SELECT dt + INTERVAL 1 DAY FROM all_dates WHERE dt <= '$endX'
                     )
-                    SELECT DATE(d.dt) AS tanggal, username, 
+                    SELECT DATE(d.dt) AS tanggal, IF(a.username IS NULL && h.detail IS NOT NULL,'$user->username',a.username) as username, 
                     IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(tanggal,'08:00:00'), a.masuk)) as masuk, 
 					IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(tanggal,'16:00:00'), a.keluar)) as keluar,  
 					IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('08:00:00'),a.total_jam,TIME('08:00:00'))) as total_jam, 
@@ -403,7 +463,7 @@ class WorkHoursController extends Controller
                
             } catch (\Exception $e) {
                 $startX = Carbon::parse($start)->translatedFormat("Y-m-d");
-                $data = DB::select("SELECT v.tanggal, a.username, 
+                $data = DB::select("SELECT v.tanggal, IF(a.username IS NULL && h.detail IS NOT NULL,'$user->username',a.username) as username, 
                 IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(v.tanggal,'08:00:00'), a.masuk)) as masuk, 
                 IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(v.tanggal,'16:00:00'), a.keluar)) as keluar,  
                 IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('08:00:00'),a.total_jam,TIME('08:00:00'))) as total_jam, 
@@ -425,7 +485,7 @@ class WorkHoursController extends Controller
                     ) a
                     ON v.tanggal = a.`tanggal`
                     LEFT JOIN wh_public_holidays h on v.tanggal = h.date
-                    WHERE v.tanggal BETWEEN '$start' AND '$end'
+                    WHERE v.tanggal BETWEEN '$startX' AND '$end'
                     GROUP BY v.tanggal, username, masuk, keluar, total_jam, h.detail
                     ORDER BY v.tanggal;
                 ") ;
@@ -659,15 +719,36 @@ class WorkHoursController extends Controller
         $data['subject'] = "Absensi Karyawan (".$period.")";
         $data['messages'] = "Berikut ini merupakan data karyawan yang pernah <b>TIDAK MASUK</b> berdasarkan mesin absen dalam minggu ini (<b>".$period."</b>) :";
         $x = DB::select( DB::raw("SELECT IFNULL(u.username,u.`username_old`) AS ID, u.name, IFNULL(tt.days,0) AS hari, u.group_id
-          FROM 
-          (SELECT u.username, COUNT(DISTINCT(DATE(a.`timestamp`))) AS days
-          FROM wh_users u
-          JOIN wh_attendances a ON u.`username` = a.`username` 
-          WHERE a.`timestamp` >= '".$date_start."' && a.`timestamp` <= '".$date_end."'
-          GROUP BY u.`username`) AS tt
-          RIGHT JOIN wh_users u ON tt.username = u.username
-          WHERE u.`status` = 1 && IFNULL(tt.days,0) <= ".$diff." && (u.group_id = 'JF' OR u.group_id = 'JE')
-          ORDER BY u.group_id DESC, hari, u.name") );
+        FROM 
+        (
+				SELECT username, COUNT(hari) as days,
+                    CONCAT(FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/3600),':',FLOOR(SUM( TIME_TO_SEC( `total_jam` ))/60)%60,':',SUM( TIME_TO_SEC( `total_jam` ))%60) AS total 
+                    from (
+                        SELECT tanggal, username, COUNT(total_jam) as hari, max(total_jam) as total_jam
+                        FROM (
+                            SELECT DATE(`timestamp`) AS tanggal, username, TIMEDIFF(MAX(`timestamp`), MIN(`timestamp`)) AS total_jam 
+                            FROM wh_attendances
+                            GROUP BY tanggal, username
+                            UNION ALL
+                            SELECT
+                                ph.date as tanggal,
+                                IFNULL(username,username_old) as username,
+                                TIME('08:00:00') as total_jam
+                            FROM
+                                wh_users u
+                                JOIN wh_public_holidays ph ON u.username != ph.id
+                            GROUP BY IFNULL(username,username_old), id, ph.date, total_jam
+                            ORDER BY tanggal, total_jam desc
+                        ) x
+                        WHERE tanggal >= '".$date_start."' && tanggal <= '".$date_end."'
+                        GROUP BY tanggal, username
+                    ) x2
+                    GROUP BY username
+				) AS tt
+        RIGHT JOIN wh_users u ON tt.username = u.username
+        WHERE u.`status` = 1 && IFNULL(tt.days,0) <= ".$diff." && (u.group_id = 'JF' OR u.group_id = 'JE')
+        ORDER BY u.group_id DESC, hari, u.name
+        ") );
        
         $list_wa = "";
         foreach($x as $d){

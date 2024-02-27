@@ -207,7 +207,7 @@
         @endif
         @if(Auth::user()->hasRole('HR'))
         <li
-            class="menu-item {{ Route::currentRouteName()=='setting_public_holiday' ? 'active' : '' }}">
+            class="menu-item {{ Route::currentRouteName() == 'setting_public_holiday' ? 'active' : '' }}">
             <a href="{{ route('setting_public_holiday') }}" class="menu-link" title="Cuti/Libur">
                 <i class="menu-icon tf-icons bx bx-calendar-edit"></i>
                 <div>Cuti/Libur</div>

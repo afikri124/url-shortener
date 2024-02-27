@@ -189,6 +189,11 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:HR']], functio
   Route::get('account_att/data', [App\Http\Controllers\SettingController::class, 'account_att_data'])->name('setting_account_att_data');
   Route::any('account_att/edit/{id}', [App\Http\Controllers\SettingController::class, 'account_att_edit'])->name('setting_account_att_edit');
   Route::delete('account_att/delete', [App\Http\Controllers\SettingController::class, 'account_att_delete'])->name('setting_account_att_delete');
+  //PUBLIC_HOLIDAY
+  Route::any('public_holiday', [App\Http\Controllers\PublicHolidayController::class, 'index'])->name('setting_public_holiday');
+  Route::get('public_holiday/data', [App\Http\Controllers\PublicHolidayController::class, 'data'])->name('setting_public_holiday_data');
+  Route::any('public_holiday/edit/{id}', [App\Http\Controllers\PublicHolidayController::class, 'edit'])->name('setting_public_holiday_edit');
+  Route::delete('public_holiday/delete', [App\Http\Controllers\PublicHolidayController::class, 'delete'])->name('setting_public_holiday_delete');
 });
 Route::group(['prefix' => 'setting','middleware' => ['auth','role:IT']], function () {
   Route::any('account_wifi', [App\Http\Controllers\WifiUserController::class, 'index'])->name('setting_account_wifi');

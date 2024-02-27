@@ -164,7 +164,15 @@
             <span class="menu-header-text">Pengaturan</span>
         </li>
 
-        <li class="menu-item {{ request()->route()->getPrefix() == '/setting' ? 'open' : '' }}">
+        <li class="menu-item 
+        @if(Route::currentRouteName() == 'setting_account')
+        {{ 'open' }}
+        @elseif(Route::currentRouteName() == 'setting_account_att')
+        {{ 'open' }}
+        @elseif(Route::currentRouteName() == 'setting_account_wifi')
+        {{ 'open' }}
+        @endif
+        ">
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Account">Akun</div>
@@ -195,6 +203,15 @@
                 </li>
                 @endif
             </ul>
+        </li>
+        @endif
+        @if(Auth::user()->hasRole('HR'))
+        <li
+            class="menu-item {{ Route::currentRouteName()=='setting_public_holiday' ? 'active' : '' }}">
+            <a href="{{ route('setting_public_holiday') }}" class="menu-link" title="Cuti/Libur">
+                <i class="menu-icon tf-icons bx bx-calendar-edit"></i>
+                <div>Cuti/Libur</div>
+            </a>
         </li>
         @endif
 

@@ -5,17 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WhManualAtd extends Model
+class WhManualType extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     protected $fillable = [
         'id', 
-        'date_start',
-        'date_end',
-        'username',
-        'remark',
-        'doc_path',
-        'created_id',
-        'type_id'
+        'title',
+        'absent'
     ];
 }

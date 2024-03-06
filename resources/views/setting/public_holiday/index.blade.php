@@ -58,7 +58,15 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="offset-md-6 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                            <div class=" col-md-3">
+                                <select id="select_bulan" class="select2 form-select" data-placeholder="Bulan">
+                                    <option value="">Bulan</option>
+                                    @for ($i = 1; $i <= 12; $i++)
+                                    <option value="{{ $i }}">{{ \Carbon\Carbon::parse(\Carbon\Carbon::create()->day(1)->month($i))->format('F')}}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="offset-md-3 col-md-3 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
@@ -174,6 +182,7 @@
                 url: "{{ route('setting_public_holiday_data') }}",
                 data: function (d) {
                     d.select_tahun = $('#select_tahun').val(),
+                    d.select_bulan = $('#select_bulan').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -217,6 +226,9 @@
         });
 
         $('#select_tahun').change(function () {
+            table.draw();
+        });
+        $('#select_bulan').change(function () {
             table.draw();
         });
     });

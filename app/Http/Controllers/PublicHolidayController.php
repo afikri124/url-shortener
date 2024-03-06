@@ -18,6 +18,7 @@ class PublicHolidayController extends Controller
 {
     //
     function index (Request $request){
+        Carbon::setLocale('id');
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
                 'nama'              => ['required'],
@@ -42,6 +43,9 @@ class PublicHolidayController extends Controller
                 ->filter(function ($instance) use ($request) {
                     if (!empty($request->get('select_tahun'))) {
                         $instance->whereYear("date", $request->get('select_tahun'));
+                    }
+                    if (!empty($request->get('select_bulan'))) {
+                        $instance->whereMonth("date", $request->get('select_bulan'));
                     }
                     if (!empty($request->get('search'))) {
                             $instance->where(function($w) use($request){

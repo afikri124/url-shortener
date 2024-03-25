@@ -175,13 +175,14 @@ class WorkHoursController extends Controller
                 DB::raw('DATE(`timestamp`) as tanggal'),
                 DB::raw('MIN(`timestamp`) as masuk'),
                 DB::raw('MAX(`timestamp`) as keluar'),
-                DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
+                DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),
+                'wh_user_units.time_in', 'wh_user_units.time_out', 'wh_user_units.time_total'                 
             )
             ->where(function ($query) use ($request,$old) {
                 $query->where('wh_attendances.username', Auth::user()->username)
                       ->orWhere('wh_attendances.username',$old);
             })->where('wh_users.status', 1)
-            ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
+            ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name','wh_user_units.time_in', 'wh_user_units.time_out', 'wh_user_units.time_total')
             ->orderByDesc('masuk');
         }
         return Datatables::of($data)

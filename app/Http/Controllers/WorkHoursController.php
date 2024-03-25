@@ -141,9 +141,12 @@ class WorkHoursController extends Controller
         $old = ($old_user == null ? Auth::user()->username: $old_user->username_old);
         if(Auth::user()->hasRole('HR')){
             $data = WhAttendance::
-                leftjoin('wh_users', function($join){
-                    $join->on('wh_users.username','=','wh_attendances.username');
-                    $join->orOn('wh_users.username_old','=','wh_attendances.username');
+                leftjoin('wh_users', function($x){
+                    $x->on('wh_users.username','=','wh_attendances.username');
+                    $x->orOn('wh_users.username_old','=','wh_attendances.username');
+                })
+                ->leftjoin('wh_user_units', function($x){
+                    $x->on('wh_users.unit_id','=','wh_user_units.uid');
                 })
                 ->with(['user' => function ($query) {
                     $query->select('id','username','name');
@@ -152,10 +155,13 @@ class WorkHoursController extends Controller
                     DB::raw('DATE(`timestamp`) as tanggal'),
                     DB::raw('MIN(`timestamp`) as masuk'),
                     DB::raw('MAX(`timestamp`) as keluar'),
-                    DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),                 
+                    DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),
+                    'wh_user_units.time_in', 'wh_user_units.time_out', 'wh_user_units.time_total'       
                 )
-                ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name')
+                // ->where('wh_attendances.username', 'S092021100001')
+                ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name','wh_user_units.time_in', 'wh_user_units.time_out', 'wh_user_units.time_total' )
                 ->orderByDesc('masuk');
+            // echo json_encode($data);
         } else {
             $data = WhAttendance::
             leftjoin('wh_users', function($join){
@@ -208,8 +214,8 @@ class WorkHoursController extends Controller
                     }
                 })
                 ->addColumn('telat', function($x){
-                    if(new Carbon($x->masuk) > new Carbon($x->tanggal." 08:00:59")){
-                        return (new Carbon($x->masuk))->diff(new Carbon($x->tanggal." 08:00:00"))->format('%h:%I');
+                    if(new Carbon($x->masuk) > new Carbon($x->tanggal." ".$x->time_in)){
+                        return (new Carbon($x->masuk))->diff(new Carbon($x->tanggal." ".$x->time_in))->format('%h:%I');
                     } else {
                         return null;
                     }
@@ -224,16 +230,17 @@ class WorkHoursController extends Controller
                     } elseif ((new Carbon($x->tanggal))->dayOfWeek == Carbon::SUNDAY){
                         return null;
                     } else {
-                        if((new Carbon($x->keluar) < new Carbon($x->tanggal." 16:00:00")) && $x->total_jam != '00:00:00'){
-                            return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." 16:00:00"))->format('-%h:%I');
+                        if((new Carbon($x->keluar) < new Carbon($x->tanggal." ".$x->time_out)) && $x->total_jam != '00:00:00'){
+                            return (new Carbon($x->keluar))->diff(new Carbon($x->tanggal." ".$x->time_out))->format('-%h:%I');
                         } else {
                             return null;
                         }
                     }
                   })
                 ->addColumn('lembur', function($x){
-                    if(new Carbon($x->total_jam) > new Carbon("10:00:00")){
-                        return (new Carbon($x->total_jam))->diff(new Carbon("10:00:00"))->format('%h:%I');
+                    $lemburSetelah = ((Carbon::parse($x->time_total) < new Carbon("10:00:00")) ? new Carbon("10:00:00") : Carbon::parse($x->time_total));
+                    if(new Carbon($x->total_jam) > new Carbon($lemburSetelah)){
+                        return (new Carbon($x->total_jam))->diff(new Carbon($lemburSetelah))->format('%h:%I');
                     } else {
                         return null;
                     }
@@ -248,8 +255,8 @@ class WorkHoursController extends Controller
                     } elseif ((new Carbon($x->tanggal))->dayOfWeek == Carbon::SUNDAY){
                         return null;
                     } else {
-                        if(new Carbon($x->total_jam) < new Carbon("08:00:00")){
-                            return (new Carbon($x->total_jam))->diff(new Carbon("08:00:00"))->format('%h:%I');
+                        if(new Carbon($x->total_jam) < new Carbon($x->time_total)){
+                            return (new Carbon($x->total_jam))->diff(new Carbon($x->time_total))->format('%h:%I');
                         } else {
                             return null;
                         }
@@ -432,8 +439,7 @@ class WorkHoursController extends Controller
             $start = Carbon::parse($x[0]." 00:00")->translatedFormat("Y-m-d H:i");
         }
 
-        $user = WhUser::where('username',$username)->orWhere('username_old',$username)->with('user')->first();
-
+        $user = WhUser::with('unit')->where('username',$username)->orWhere('username_old',$username)->with('user')->first();
         if($user != null){
             try {
                 $endX = Carbon::parse($end)->subDay(1)->translatedFormat("Y-m-d H:i");
@@ -443,9 +449,9 @@ class WorkHoursController extends Controller
                         SELECT dt + INTERVAL 1 DAY FROM all_dates WHERE dt <= '$endX'
                     )
                     SELECT DATE(d.dt) AS tanggal, IF(a.username IS NULL && h.detail IS NOT NULL,'$user->username',a.username) as username, 
-                    IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(tanggal,'08:00:00'), a.masuk)) as masuk, 
-					IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(tanggal,'16:00:00'), a.keluar)) as keluar,  
-					IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('08:00:00'),a.total_jam,TIME('08:00:00'))) as total_jam, 
+                    IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(tanggal,'".$user->unit->time_in."'), a.masuk)) as masuk, 
+					IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(tanggal,'".$user->unit->time_out."'), a.keluar)) as keluar,  
+					IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('".$user->unit->time_total."'),a.total_jam,TIME('".$user->unit->time_total."'))) as total_jam, 
 					h.detail as libur
                     FROM all_dates d
                     LEFT JOIN (
@@ -464,9 +470,9 @@ class WorkHoursController extends Controller
             } catch (\Exception $e) {
                 $startX = Carbon::parse($start)->translatedFormat("Y-m-d");
                 $data = DB::select("SELECT v.tanggal, IF(a.username IS NULL && h.detail IS NOT NULL,'$user->username',a.username) as username, 
-                IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(v.tanggal,'08:00:00'), a.masuk)) as masuk, 
-                IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(v.tanggal,'16:00:00'), a.keluar)) as keluar,  
-                IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('08:00:00'),a.total_jam,TIME('08:00:00'))) as total_jam, 
+                IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(v.tanggal,'".$user->unit->time_in."'), a.masuk)) as masuk, 
+                IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(v.tanggal,'".$user->unit->time_out."'), a.keluar)) as keluar,  
+                IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('".$user->unit->time_total."'),a.total_jam,TIME('".$user->unit->time_total."'))) as total_jam, 
                 h.detail as libur   
                 FROM  
                     (SELECT ADDDATE('$startX',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) tanggal FROM

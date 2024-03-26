@@ -168,9 +168,16 @@ class WorkHoursController extends Controller
                 $join->on('wh_users.username','=','wh_attendances.username');
                 $join->orOn('wh_users.username_old','=','wh_attendances.username');
             })
+            ->leftjoin('wh_user_units', function($x){
+                $x->on('wh_users.unit_id','=','wh_user_units.uid');
+            })
             ->with(['user' => function ($query) {
                 $query->select('id','username','name');
             }])
+            ->where(function ($query) use ($request,$old) {
+                $query->where('wh_attendances.username', Auth::user()->username)
+                      ->orWhere('wh_attendances.username',$old);
+            })->where('wh_users.status', 1)
             ->select('wh_attendances.username','name',
                 DB::raw('DATE(`timestamp`) as tanggal'),
                 DB::raw('MIN(`timestamp`) as masuk'),
@@ -178,10 +185,6 @@ class WorkHoursController extends Controller
                 DB::raw('TIMEDIFF(MAX(`timestamp`),MIN(`timestamp`)) as total_jam'),
                 'wh_user_units.time_in', 'wh_user_units.time_out', 'wh_user_units.time_total'                 
             )
-            ->where(function ($query) use ($request,$old) {
-                $query->where('wh_attendances.username', Auth::user()->username)
-                      ->orWhere('wh_attendances.username',$old);
-            })->where('wh_users.status', 1)
             ->groupBy( DB::raw('DATE(`timestamp`)'),'wh_attendances.username','wh_users.name','wh_user_units.time_in', 'wh_user_units.time_out', 'wh_user_units.time_total')
             ->orderByDesc('masuk');
         }

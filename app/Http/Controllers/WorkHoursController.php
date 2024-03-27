@@ -207,7 +207,7 @@ class WorkHoursController extends Controller
                         }
                     } else {
                         $instance->whereDate('timestamp', '<=', Carbon::now());
-                        $instance->whereDate('timestamp', '>=', Carbon::now()->startOfWeek());
+                        $instance->whereDate('timestamp', '>=', Carbon::now()->subMonth(1)->startOfDay()->day(20));
                     }
                     if (!empty($request->get('search'))) {
                          $instance->where(function($w) use($request){
@@ -266,14 +266,7 @@ class WorkHoursController extends Controller
                         }
                     }
                   })
-                ->addColumn('userid', function($x){
-                    if($x->user != null){
-                        return Crypt::encrypt($x->user->id);
-                    } else {
-                        return null;
-                    }
-                  })
-                ->rawColumns(['telat','cepat','lembur','userid'])
+                ->rawColumns(['telat','cepat','lembur'])
                 ->make(true);
     }
 

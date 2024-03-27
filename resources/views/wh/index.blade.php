@@ -360,7 +360,7 @@
     //DateRange Picker
     (function ($) {
         $(function () {
-            var start = moment().startOf('week');
+            var start = moment().subtract(1, 'month').set("date", 20);
             var end = moment();
 
             function cb() {

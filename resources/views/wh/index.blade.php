@@ -232,9 +232,8 @@
                     render: function (data, type, row, meta) {
                         var html = `<code>` + row.username + `</code>`;
                         if (row.user != null) {
-                            html = `<a class="text-primary" title="` + row.user.name +
-                                `" href="{{ url('profile/` + row.userid + `') }}" target="_blank">` + row.user
-                                .name + `</a><br>` + html;
+                            html = `<b>` + row.user
+                                .name + `</b><br>` + html;
                         } else {
                             html = `<small title='Nama di Mesin'>[` + row.name +
                                 `]</small><br>` + html;
@@ -361,7 +360,7 @@
     //DateRange Picker
     (function ($) {
         $(function () {
-            var start = moment().subtract(1, 'month').set("date", 20);
+            var start = moment().startOf('week');
             var end = moment();
 
             function cb() {

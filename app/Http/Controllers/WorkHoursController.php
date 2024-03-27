@@ -207,7 +207,7 @@ class WorkHoursController extends Controller
                         }
                     } else {
                         $instance->whereDate('timestamp', '<=', Carbon::now());
-                        $instance->whereDate('timestamp', '>=', Carbon::now()->subMonth(1)->startOfDay()->day(20));
+                        $instance->whereDate('timestamp', '>=', Carbon::now()->startOfWeek());
                     }
                     if (!empty($request->get('search'))) {
                          $instance->where(function($w) use($request){

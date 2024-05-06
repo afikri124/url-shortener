@@ -265,9 +265,11 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        return `<a class="text-success" title="edit" style="cursor:pointer" onclick="EditId(` +
+                        return `<a class="text-primary" title="edit title" style="cursor:pointer" onclick="EditTitleId(` +
                             row.id +
-                            `)" ><i class="bx bxs-edit"></i></a> <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` +
+                            `)" ><i class="bx bxs-pencil"></i></a> <a class="text-success" title="edit link" style="cursor:pointer" onclick="EditId(` +
+                            row.id +
+                            `)" ><i class="bx bxs-edit-alt"></i></a> <a class="text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` +
                             row.id +
                             `)" ><i class="bx bx-trash"></i></a>`;
                     },
@@ -332,6 +334,46 @@
                             "id": id,
                             "microsite_id": "{{$data->id}}",
                             "link": name,
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                        },
+                        success: function (data) {
+                            if (data['success']) {
+                                swal(data['message'], {
+                                    icon: "success",
+                                });
+                                location.reload();
+                            } else {
+                                swal(data['message'], {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    })
+                };
+            })
+    }
+
+    function EditTitleId(id) {
+        swal({
+                text: 'Silahkan masukkan judul pengganti',
+                content: "input",
+                button: {
+                    text: "Simpan",
+                },
+            })
+            .then(name => {
+                if (!name) {
+                    swal('Tidak boleh Kosong!', {
+                        icon: "error",
+                    });
+                } else {
+                    $.ajax({
+                        url: "{{ route('MICROSITE.edit_title') }}",
+                        type: "POST",
+                        data: {
+                            "id": id,
+                            "microsite_id": "{{$data->id}}",
+                            "title": name,
                             "_token": $("meta[name='csrf-token']").attr("content"),
                         },
                         success: function (data) {

@@ -437,6 +437,9 @@ class WorkHoursController extends Controller
         }
 
         $user = WhUser::with('unit')->where('username',$username)->orWhere('username_old',$username)->with('user')->first();
+        $time_in = ($user->unit_id == null ? "08:00:00" : $user->unit->time_in);
+        $time_out = ($user->unit_id == null ? "16:00:00" : $user->unit->time_out);
+        $time_total = ($user->unit_id == null ? "08:00:00" : $user->unit->time_total);
         if($user != null){
             try {
                 $endX = Carbon::parse($end)->subDay(1)->translatedFormat("Y-m-d H:i");
@@ -446,9 +449,9 @@ class WorkHoursController extends Controller
                         SELECT dt + INTERVAL 1 DAY FROM all_dates WHERE dt <= '$endX'
                     )
                     SELECT DATE(d.dt) AS tanggal, IF(a.username IS NULL && h.detail IS NOT NULL,'$user->username',a.username) as username, 
-                    IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(tanggal,'".$user->unit->time_in."'), a.masuk)) as masuk, 
-					IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(tanggal,'".$user->unit->time_out."'), a.keluar)) as keluar,  
-					IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('".$user->unit->time_total."'),a.total_jam,TIME('".$user->unit->time_total."'))) as total_jam, 
+                    IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(tanggal,'".$time_in."'), a.masuk)) as masuk, 
+					IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(tanggal,'".$time_out."'), a.keluar)) as keluar,  
+					IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('".$time_total."'),a.total_jam,TIME('".$time_total."'))) as total_jam, 
 					h.detail as libur
                     FROM all_dates d
                     LEFT JOIN (
@@ -467,9 +470,9 @@ class WorkHoursController extends Controller
             } catch (\Exception $e) {
                 $startX = Carbon::parse($start)->translatedFormat("Y-m-d");
                 $data = DB::select("SELECT v.tanggal, IF(a.username IS NULL && h.detail IS NOT NULL,'$user->username',a.username) as username, 
-                IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(v.tanggal,'".$user->unit->time_in."'), a.masuk)) as masuk, 
-                IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(v.tanggal,'".$user->unit->time_out."'), a.keluar)) as keluar,  
-                IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('".$user->unit->time_total."'),a.total_jam,TIME('".$user->unit->time_total."'))) as total_jam, 
+                IF(h.detail IS NULL, a.masuk, IF(a.masuk IS NULL,TIMESTAMP(v.tanggal,'".$time_in."'), a.masuk)) as masuk, 
+                IF(h.detail IS NULL, a.keluar, IF(a.keluar IS NULL,TIMESTAMP(v.tanggal,'".$time_out."'), a.keluar)) as keluar,  
+                IF(h.detail IS NULL, a.total_jam, IF(a.total_jam > TIME('".$time_total."'),a.total_jam,TIME('".$time_total."'))) as total_jam, 
                 h.detail as libur   
                 FROM  
                     (SELECT ADDDATE('$startX',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) tanggal FROM
@@ -503,7 +506,7 @@ class WorkHoursController extends Controller
             } else {
                 $photo = null;
             }
-            return view('whr.view', compact('user', 'data', 'periode','link', 'photo')); 
+            return view('whr.view', compact('user', 'data', 'periode','link', 'photo', 'time_in', 'time_out', 'time_total')); 
         } else {
             abort(403, "User tidak ditemukan!");
         }

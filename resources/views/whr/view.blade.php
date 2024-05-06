@@ -49,7 +49,7 @@
                         <td>
                             <div>
                                 <h5>{{ ($user->user != null? $user->user->name_with_title : $user->name) }}</h5>
-                                {{ $user->username }} </br><i class="text-light">{{ $user->unit->title }}</i>
+                                {{ $user->username }} </br><i class="text-light">{{ ($user->unit == null ? "" : $user->unit->title) }}</i>
                             </div>
                         </td>
                         <td style="text-align: right;">
@@ -90,17 +90,17 @@
                                     <th>Tanggal</th>
                                     <th class="d-none d-lg-table-cell text-center" width="100px">User Id</th>
                                     <th width="90px" class="text-center">
-                                        Masuk<br>({{ \Carbon\Carbon::parse($user->unit->time_in)->translatedFormat("H:i") }})
+                                        Masuk<br>({{ \Carbon\Carbon::parse($time_in)->translatedFormat("H:i") }})
                                     </th>
                                     <th width="90px" class="text-center">
-                                        Keluar<br>({{ \Carbon\Carbon::parse($user->unit->time_out)->translatedFormat("H:i") }})
+                                        Keluar<br>({{ \Carbon\Carbon::parse($time_out)->translatedFormat("H:i") }})
                                     </th>
                                     <th width="90px" class="text-center">Telat</th>
                                     <th width="90px" class="text-center">P.Cepat</th>
                                     <th width="90px" class="text-center">Lembur</th>
                                     <th width="90px" class="text-center">Kurang</th>
                                     <th width="100px" data-priority="3" class="text-center">Total
-                                        JAM/Hari<br>({{ \Carbon\Carbon::parse($user->unit->time_total)->translatedFormat("H:i") }})
+                                        JAM/Hari<br>({{ \Carbon\Carbon::parse($time_total)->translatedFormat("H:i") }})
                                     </th>
                                 </tr>
                             </thead>
@@ -115,9 +115,9 @@
                                 $totalKurang = 0;
                                 $totalAbsen = 0;
                                 $totalJamPerminggu = 0;
-                                $lemburSetelah = ((\Carbon\Carbon::parse($user->unit->time_total) < new
+                                $lemburSetelah = ((\Carbon\Carbon::parse($time_total) < new
                                     \Carbon\Carbon("10:00:00")) ? new \Carbon\Carbon("10:00:00") :
-                                    \Carbon\Carbon::parse($user->unit->time_total));
+                                    \Carbon\Carbon::parse($time_total));
                                     @endphp
                                     @foreach($data as $key => $d)
                                     <tr @if($d->libur != null)
@@ -147,7 +147,7 @@
                                             @php $totalMasuk++; @endphp
                                             {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
                                             @elseif($d->masuk <= \Carbon\Carbon::parse($d->tanggal."
-                                                ".$user->unit->time_out))
+                                                ".$time_out))
                                                 {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
                                                 @php $totalMasuk++; @endphp
                                                 @else
@@ -160,7 +160,7 @@
                                             @php $totalKeluar++; @endphp
                                             {{ \Carbon\Carbon::parse($d->keluar)->translatedFormat("H:i")}}
                                             @elseif($d->keluar > \Carbon\Carbon::parse($d->tanggal."
-                                            ".$user->unit->time_out))
+                                            ".$time_out))
                                             {{ \Carbon\Carbon::parse($d->keluar)->translatedFormat("H:i")}}
                                             @php $totalKeluar++; @endphp
                                             @else
@@ -171,10 +171,10 @@
                                             {{-- TELAT --}}
                                             @php
                                             if(\Carbon\Carbon::parse($d->masuk) > \Carbon\Carbon::parse($d->tanggal."
-                                            ".$user->unit->time_in)){
+                                            ".$time_in)){
                                             $telat =
                                             (\Carbon\Carbon::parse($d->masuk))->diff(\Carbon\Carbon::parse($d->tanggal."
-                                            ".$user->unit->time_in))->format('%H:%I:%S');
+                                            ".$time_in))->format('%H:%I:%S');
                                             $temp = explode(":", $telat);
                                             $totalTelat += (int) $temp[0] * 3600;
                                             $totalTelat += (int) $temp[1] * 60;
@@ -204,10 +204,10 @@
                                                 echo "";
                                                 } else {
                                                 if((\Carbon\Carbon::parse($d->keluar) < \Carbon\Carbon::parse($d->
-                                                    tanggal." ".$user->unit->time_out)) && $d->total_jam != '00:00:00'){
+                                                    tanggal." ".$time_out)) && $d->total_jam != '00:00:00'){
                                                     $cepat =
                                                     (\Carbon\Carbon::parse($d->keluar))->diff(\Carbon\Carbon::parse($d->tanggal."
-                                                    ".$user->unit->time_out))->format('%H:%I:%S');
+                                                    ".$time_out))->format('%H:%I:%S');
                                                     $temp = explode(":", $cepat);
                                                     $totalCepat += (int) $temp[0] * 3600;
                                                     $totalCepat += (int) $temp[1] * 60;
@@ -238,7 +238,7 @@
                                             if((\Carbon\Carbon::parse($d->tanggal))->dayOfWeek ==
                                             \Carbon\Carbon::SATURDAY){
                                             $totaljamharisabtu = (new
-                                            \Carbon\Carbon("14:00:00"))->diff(\Carbon\Carbon::parse($user->unit->time_in))->format('%h:%I:%S');
+                                            \Carbon\Carbon("14:00:00"))->diff(\Carbon\Carbon::parse($time_in))->format('%h:%I:%S');
                                             if(\Carbon\Carbon::parse($d->total_jam) < new
                                                 \Carbon\Carbon($totaljamharisabtu)){ $kurang=(\Carbon\Carbon::parse($d->
                                                 total_jam))->diff(new
@@ -253,10 +253,9 @@
                                                 \Carbon\Carbon::SUNDAY){
                                                 echo "";
                                                 } else {
-                                                if(\Carbon\Carbon::parse($d->total_jam) < \Carbon\Carbon::parse($user->
-                                                    unit->time_total)){
+                                                if(\Carbon\Carbon::parse($d->total_jam) < \Carbon\Carbon::parse($time_total)){
                                                     $kurang = (\Carbon\Carbon::parse($d->total_jam))->diff(
-                                                    \Carbon\Carbon::parse($user->unit->time_total))->format('%h:%I:%S');
+                                                    \Carbon\Carbon::parse($time_total))->format('%h:%I:%S');
                                                     $temp = explode(":", $kurang);
                                                     $totalKurang += (int) $temp[0] * 3600;
                                                     $totalKurang += (int) $temp[1] * 60;
@@ -434,18 +433,18 @@
     <div class="col-8">
         <div class="row p-2 px-4 ">
             <div class="page-break"></div>
-            <small class="text-muted"><u>Jam Kerja ({{ $user->unit->title }})</u>
+            <small class="text-muted"><u>Jam Kerja ({{ ($user->unit == null ? "USER BELUM DITENTUKAN UNITNYA" : $user->unit->title) }})</u>
                 <table>
                     <tr>
                         <td>-</td>
                         <td>Senin-Jumat</td>
-                        <td>: {{ \Carbon\Carbon::parse($user->unit->time_in)->translatedFormat("H:i") }} -
-                            {{ \Carbon\Carbon::parse($user->unit->time_out)->translatedFormat("H:i") }} WIB</td>
+                        <td>: {{ \Carbon\Carbon::parse($time_in)->translatedFormat("H:i") }} -
+                            {{ \Carbon\Carbon::parse($time_out)->translatedFormat("H:i") }} WIB</td>
                     </tr>
                     <tr>
                         <td>-</td>
                         <td>Sabtu</td>
-                        <td>: {{ \Carbon\Carbon::parse($user->unit->time_in)->translatedFormat("H:i") }} - 14:00 WIB
+                        <td>: {{ \Carbon\Carbon::parse($time_in)->translatedFormat("H:i") }} - 14:00 WIB
                         </td>
                     </tr>
                     <tr>

@@ -26,7 +26,8 @@ class PublicHolidayController extends Controller
             ]);
             $new = WhPublicHoliday::create([
                 'date'=> $request->tanggal,
-                'detail'=> $request->nama
+                'detail'=> $request->nama,
+                'created_id' => Auth::user()->id
             ]);
             if($new){
                 return redirect()->route('setting_public_holiday')->with('msg','Hari Cuti/Libur ('.$request->nama.') pada tanggal '.$request->tanggal.' BERHASIL ditambahkan!');

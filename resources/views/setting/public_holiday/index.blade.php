@@ -21,7 +21,7 @@
         vertical-align: middle;
     }
 
-    table.dataTable td:nth-child(2) {
+    table.dataTable td:nth-child(3) {
         max-width: 150px;
     }
 
@@ -132,8 +132,8 @@
             <thead>
                 <tr>
                     <th width="10px" data-priority="1">No</th>
-                    <th data-priority="2">Nama Cuti/Libur</th>
-                    <th width="60px">Tanggal</th>
+                    <th data-priority="2" width="60px">Tanggal</th>
+                    <th >Nama Cuti/Libur</th>
                     <th width="40px" >Aksi</th>
                 </tr>
             </thead>
@@ -200,16 +200,16 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = row.detail;
-                        return html;
-                    }
-                },
-                {
-                    render: function (data, type, row, meta) {
                         var html = `<code>` + row.date + `</code>`;
                         return html;
                     },
                     className: "text-md-center",
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        var html = row.detail;
+                        return html;
+                    }
                 },
                 {
                     render: function (data, type, row, meta) {

@@ -12,6 +12,7 @@ class WhPublicHoliday extends Model
     protected $fillable = [
         'id', 
         'date',
-        'detail'
+        'detail',
+        'created_id'
     ];
 }

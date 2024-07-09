@@ -79,7 +79,7 @@
                     </a>
                 </li>
                 @endif
-                @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR'))
+                @if(Auth::user()->hasRole('AD') || Auth::user()->hasRole('HR') || Auth::user()->hasRole('IT'))
                 <li
                     class="menu-item {{ Route::currentRouteName()=='attendance.index' ? 'active' : (request()->route()->getPrefix() == '/attendance' ? 'active' : '') }}">
                     <a href="{{ route('attendance.index') }}" class="menu-link">

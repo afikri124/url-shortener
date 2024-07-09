@@ -108,7 +108,7 @@ Route::group(['prefix' => 'WH','middleware' => ['auth','role:ST']], function () 
   Route::get('/total_h', [App\Http\Controllers\WorkHoursController::class, 'wh_total_h'])->name('WH.total_h');
 });
 //REKAP JAM KERJA
-Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR']], function () {
+Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR,IT']], function () {
   Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'whr'])->name('WHR.index');
   Route::get('/sync', [App\Http\Controllers\WorkHoursController::class, 'whr_sync'])->name('WHR.sync');
   Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'whr_data'])->name('WHR.data');

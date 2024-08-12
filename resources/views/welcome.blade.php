@@ -59,7 +59,7 @@
                             <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/google') }}"
                                 title="Log in with Email">
                                 <img style="max-height: 20px;"
-                                    src="https://avatars.githubusercontent.com/u/19180220?s=200&v=4">
+                                    src="{{asset('assets/img/icons/google.png')}}">
                                 <span>Google</span>
                             </a>
                         </div>

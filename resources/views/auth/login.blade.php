@@ -89,7 +89,7 @@
                             <div class="btn-showcase">
                                 <a class="btn btn-dark btn-block w-100" href="{{ url('login/google') }}" title="Login with (Email JGU / Gmail)">
                                     <img style="max-height: 20px;"
-                                        src="https://avatars.githubusercontent.com/u/19180220?s=200&v=4">
+                                        src="{{asset('assets/img/icons/google.png')}}">
                                     <span>Google</span>
                                 </a>
                             </div>

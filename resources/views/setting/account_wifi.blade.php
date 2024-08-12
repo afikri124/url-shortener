@@ -55,12 +55,12 @@
                     <div class="col-12">
                         <div class="row">
                             <div class="offset-md-9 col-md-3 text-md-end text-center pt-3 pt-md-0">
-                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                                {{-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
                                             class="bx bx-plus me-sm-2"></i>
                                         <span>Tambah</span></span>
-                                </button>
+                                </button> --}}
                             </div>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                     <th width="60px">Username</th>
                     <th width="150px">Password</th>
                     <th width="130px" data-priority="3">Terakhir Dilihat</th>
-                    <th width="40px" >Aksi</th>
+                    {{-- <th width="40px" >Aksi</th> --}}
                 </tr>
             </thead>
         </table>
@@ -265,15 +265,15 @@
                     },
                     className: "text-center"
                 },
-                {
-                    render: function (data, type, row, meta) {
-                        var html = ` <a class=" text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
-                            .id + `)" ><i class="bx bx-trash"></i></a>`;
-                        return html;
-                    },
-                    "orderable": false,
-                    className: "text-md-center"
-                }
+                // {
+                //     render: function (data, type, row, meta) {
+                //         var html = ` <a class=" text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
+                //             .id + `)" ><i class="bx bx-trash"></i></a>`;
+                //         return html;
+                //     },
+                //     "orderable": false,
+                //     className: "text-md-center"
+                // }
             ]
         });
     });

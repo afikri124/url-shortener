@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <br><small>
-                    <center><i>Jika terdapat kendala masuk atau belum memiliki akun SSO silakan menghubungi tim <a target="_blank" href="https://wa.me/6285159211558?text=S.JGU Login SSO, Infokan NIK/NIM, Nama, Email">HR / ITIC</a></i></center></small>
+                    <center><i>Jika terdapat kendala masuk atau belum memiliki akun SSO silakan menghubungi tim <a target="_blank" href="https://s.jgu.ac.id/m/itic">ITIC</a></i></center></small>
                 </div>
             </div>
         </div>

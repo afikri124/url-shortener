@@ -14,33 +14,101 @@ use Yajra\DataTables\DataTables;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+
 
 class WifiUserController extends Controller
 {
     //
     function wifi (){
+        if(Auth::user()->username == null){
+            return redirect()->route('user.edit')->with('msg','LENGKAPI DATA ANDA TERLEBIH DAHULU!');
+        }
         $username = "USERNAME ANDA BELUM TERDAFTAR";
         $password = "SILAHKAN HUBUNGI ITIC JGU";
-        if(Auth::user()->hasRole('ST')){
-            $data = WifiUser::where("username", Auth::user()->username)->first();
-            if($data != null){
-                $username = $data->username;
-                $password = $data->password;
-                $update = WifiUser::where("username", Auth::user()->username)->update(['updated_at' => date('Y-m-d H:i:s'),'is_seen' => true]);
-            }
-        } else if (Auth::user()->hasRole('SD')){
-            $data = WifiUser::where("username", "STUDENT")->first();
-            if($data != null){
-                $username = $data->username;
-                $password = $data->password;
-                $update = WifiUser::where("username", "STUDENT")->update(['updated_at' => date('Y-m-d H:i:s'),'is_seen' => true]);
-            }
-        } else if (Auth::user()->hasRole('GS')){
-                $username = "GUEST";
-                $password = "GUEST";
-        }
+        $group = "";
+            $radius = DB::connection('mysql2')->table('radcheck')->where('username',Auth::user()->username)->first();
+            // dd($radius);
+            if($radius == null){
+                $username = Auth::user()->username;
+                $password = strtoupper(Str::random(5)).rand(100,999);
+                DB::beginTransaction();
+                try {
+                    $radiusAdd = DB::connection('mysql2')->table('radcheck')->insert([
+                        'username'=> $username,
+                        'value'=> $password,
+                        'attribute'=> "Cleartext-Password",
+                        'op'=> ":="
+                    ]);
+                    if($radiusAdd){
+                        if(Auth::user()->hasRole('ST')){
+                            $groupRadius = "Dosen-Staff";
+                        } else if (Auth::user()->hasRole('SD')){
+                            $groupRadius = "Mahasiswa";
+                        } else {
+                            $groupRadius = "Tamu";
+                        }
+                        $group = $groupRadius;
+                        $radiusgroupAdd = DB::connection('mysql2')->table('radusergroup')->insert([
+                            'username'=> $username,
+                            'groupname'=> $groupRadius,
+                            'priority'=> 0
+                        ]);
+                        $radiusUserInfoAdd = DB::connection('mysql2')->table('userinfo')->insert([
+                            'username'=> $username,
+                            'firstname'=> Auth::user()->name,
+                            'lastname'=> Auth::user()->job,
+                            'email'=> Auth::user()->email,
+                            'creationdate' => date("Y-m-d H:i:s"),
+                            'updatedate' => date("Y-m-d H:i:s"),
+                            'creationby' => 'administrator'
+                        ]);
+                        $radiusUserBillInfoAdd = DB::connection('mysql2')->table('userbillinfo')->insert([
+                            'username'=> $username,
+                            'lastbill' => date("Y-m-d"),
+                            'nextbill' => date("Y-m-d"),
+                            'creationdate' => date("Y-m-d H:i:s"),
+                            'updatedate' => date("Y-m-d H:i:s"),
+                            'creationby' => 'administrator'
+                        ]);
 
-        return view('user.wifi', compact('username','password'));
+                        $wu = WifiUser::where('username',Auth::user()->username)->first();
+                        if($wu == null){
+                            $data = WifiUser::insert([
+                                'username'=> $username,
+                                'password'=> $password,
+                                'first_name'=> Auth::user()->name,
+                                'last_name'=> null,
+                                'email'=> Auth::user()->email,
+                                'created_at' => date('Y-m-d H:i:s'),
+                                'updated_at' => date('Y-m-d H:i:s')
+                            ]);
+                        } else {
+                            $data = WifiUser::where('username',Auth::user()->username)->update([
+                                'username'=> $username,
+                                'password'=> $password,
+                                'first_name'=> Auth::user()->name,
+                                'last_name'=> null,
+                                'email'=> Auth::user()->email,
+                                'updated_at' => date('Y-m-d H:i:s')
+                            ]);
+                        }
+                        
+                        DB::commit();
+                    }
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    echo "An error occurred, please notify the system developer!<br><br>";
+                    echo $e;
+                    Log::info("Wifi Radius error : ".$e);
+                }
+            } else {
+                $username = $radius->username;
+                $password = $radius->value;
+                $radiusGroup = DB::connection('mysql2')->table('radusergroup')->where('username',Auth::user()->username)->first();
+                $group = $radiusGroup->groupname;
+            }
+        return view('user.wifi', compact('username','password','group'));
     }
 
     function index (Request $request){

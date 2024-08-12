@@ -26,18 +26,16 @@
             <label for="user" class="form-label text-light">Password</label>
             <input type="text" class="form-control  text-center" value="{{$password}}"/>
         </div>
+        <div class="mb-3">
+            <label for="user" class="form-label text-light">Group</label>
+            <input type="text" class="form-control  text-center" value="{{$group}}"/>
+        </div>
         <br>
-        @if(Auth::user()->hasRole('ST'))
+
         @if($password != 'SILAHKAN HUBUNGI ITIC JGU')
         <blockquote class="text-danger"><b>Peringatan!</b><br>Jangan beritahukan <i>username</i> dan 
             <i>password</i> ini kepada siapapun, karena akan mempengaruhi kecepatan internet Anda.</blockquote>
-        @else
         @endif
-        @else
-        <blockquote class="text-danger mt-3" style="font-size: 10pt"><b>Maaf!</b><br>Untuk sementara Anda hanya mendapatkan akses terbatas, info lebih lanjut silahkan hubungi ITIC JGU.</blockquote>
-        @endif
-        @else
-        <blockquote class="text-danger mt-3" style="font-size: 15pt"><b>Maaf!</b><br>Anda tidak memiliki akses wifi Kampus, silahkan <i>login</i> sebagai <i>GUEST</i>.</blockquote>
         @endif
     </div>
 </div>

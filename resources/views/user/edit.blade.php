@@ -35,7 +35,7 @@
                     <div class="row">
                         @csrf
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Nama</label>
+                            <label class="form-label">Nama <small class="text-danger">*</small></label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                                 value="{{ Auth::user()->name }}" placeholder="Nama Lengkap" autofocus />
                             @error('name')
@@ -46,7 +46,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Username</label>
+                            <label class="form-label">Username <small class="text-danger">*</small></label>
                             <input type="text" class="form-control @error('username') is-invalid @enderror"
                                 name="username" value="{{ Auth::user()->username }}" placeholder="NIK/NIM"
                                 @if(Auth::user()->username != null ) readonly title="Silahkan hubungi Admin" @endif />
@@ -57,7 +57,7 @@
                             @enderror
                             @if(Auth::user()->username == null)
                             <span class="text-danger">
-                                <strong>Isi Username/NIM Anda</strong>
+                                <strong>Isi dengan Username/Matrix/NIM</strong>
                             </span>
                             @endif
                         </div>
@@ -85,9 +85,9 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Jabatan</label>
+                            <label class="form-label">Jabatan <small class="text-danger">*</small></label>
                             <input type="text" class="form-control @error('job') is-invalid @enderror" name="job"
-                                value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" />
+                                value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" placeholder="Dosen/Staf/Mahasiswa/Tamu"/>
                             @error('job')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -96,7 +96,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label">Email <small class="text-danger">*</small></label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                                 name="email"
                                 value="{{ (old('email') == null ? Auth::user()->email : old('email')) }}" />
@@ -108,7 +108,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Jenis Kelamin</label>
+                            <label class="form-label">Jenis Kelamin <small class="text-danger">*</small></label>
                             <select class="select2 form-select col-sm-12 @error('gender') is-invalid @enderror"
                                 name="gender">
                                 <option value="" {{ (Auth::user()->gender == null ? 'selected' : '') }} disabled>

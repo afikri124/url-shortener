@@ -22,7 +22,7 @@ class WifiUserController extends Controller
     //
     function wifi (){
         if(Auth::user()->username == null){
-            return redirect()->route('user.edit')->with('msg','LENGKAPI DATA ANDA TERLEBIH DAHULU!');
+            return redirect()->route('update_profile')->with('msg','LENGKAPI DATA ANDA TERLEBIH DAHULU!');
         }
 
         $group = "BELUM TERDAFTAR!";
@@ -59,6 +59,7 @@ class WifiUserController extends Controller
             ]);
         }
 
+        try {
         $radius = DB::connection('mysql2')->table('radcheck')->where('username',Auth::user()->username)->first();
             if($radius == null){                
                 DB::beginTransaction();
@@ -92,12 +93,10 @@ class WifiUserController extends Controller
                             'updatedate' => date("Y-m-d H:i:s"),
                             'creationby' => 'administrator'
                         ]);
-                        DB::commit();
                     }
+                    DB::commit();
                 } catch (\Exception $e) {
                     DB::rollback();
-                    echo "An error occurred, please notify the system developer!<br><br>";
-                    echo $e;
                     Log::info("Wifi Radius error : ".$e);
                 }
             } else {
@@ -113,6 +112,10 @@ class WifiUserController extends Controller
             }
             $radiusGroup = DB::connection('mysql2')->table('radusergroup')->where('username',Auth::user()->username)->first();
             $group = $radiusGroup->groupname;
+        } catch (\Exception $e) {
+            Log::info("Wifi Radius error : ".$e);
+            $group = "ERROR : SERVER RADIUS SEDANG DOWN!";
+        }
         return view('user.wifi', compact('username','password','group'));
     }
 
@@ -120,7 +123,7 @@ class WifiUserController extends Controller
     {
         if ($request->isMethod('post')) {
             $this->validate($request, [ 
-                'password_baru' => ['required', 'string'],
+                'password_baru' => ['required', 'string', 'max:16'],
             ]);
             WifiUser::where('username', Auth::user()->username)->update([
                 'password'=> $request->password_baru,
@@ -133,6 +136,30 @@ class WifiUserController extends Controller
             abort(403, "Access not allowed!");
         }
         return view('user.wifi_edit', compact('data'));
+    }
+
+    function update_profile(Request $request){
+        $roles   = Role::get();
+        if ($request->isMethod('post')) {
+            $this->validate($request, [ 
+                'email'=> ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore(Auth::user()->id, 'id')],
+                'username'=> ['required', 'string', 'max:255', Rule::unique('users')->ignore(Auth::user()->id, 'id')],
+                'job' => ['required', 'string'],
+                'name' => ['required', 'string'],
+                'gender' => ['required']
+            ]);
+            User::where('id', Auth::user()->id)->update([
+                'name'=> $request->name,
+                'username' => $request->username,
+                'job' => $request->job,
+                'email'=> $request->email,
+                'phone'=> $request->phone,
+                'gender'=> $request->gender,
+            ]);
+            return redirect()->route('wifi')->with('msg','Profil telah diperbarui!');
+        }
+        $gender = [['id' => 'M', 'title' => "Pria"], ['id' => 'F', 'title' => "Wanita"]];
+        return view('user.wifi_update_profile', compact('roles','gender'));
     }
 
     function index (Request $request){

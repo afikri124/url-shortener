@@ -25,6 +25,7 @@
         </div>
         @endif
         <div class="card mb-4">
+            <h5 class="card-header">Edit Password Portal Wifi</h5>
             <hr class="my-0">
             <div class="card-body">
                 <form action="" method="POST">
@@ -44,7 +45,7 @@
                             <label for="user" class="form-label">Password Baru</label>
                             <input type="text" class="form-control @error('password_baru') is-invalid @enderror"
                                 id="password_baru" name="password_baru" value=""
-                                placeholder="Password Wifi" autofocus />
+                                placeholder="Password baru untuk login portal Wifi" autofocus maxlength="16" />
                             @error('password_baru')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

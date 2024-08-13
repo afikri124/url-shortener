@@ -48,6 +48,9 @@
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-mail-send"></i><span
                             class="fw-semibold mx-2">Email:</span>
                         <span>{{ Auth::user()->email }}</span></li>
+                    <li class="d-flex align-items-center mb-3"><i class="bx bx-phone"></i><span
+                            class="fw-semibold mx-2">No HP:</span>
+                        <span>{{ Auth::user()->phone }}</span></li>
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-briefcase"></i><span
                             class="fw-semibold mx-2">Jabatan:</span>
                         <span>{{ Auth::user()->job }}</span></li>

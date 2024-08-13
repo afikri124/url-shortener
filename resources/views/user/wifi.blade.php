@@ -17,18 +17,20 @@
     <div class="mb-3 col-md-4">
         <i class="bx bx-wifi text-success" style="font-size: 50pt"></i>
         @if(Auth::user()->hasRole('ST') || Auth::user()->hasRole('SD') || Auth::user()->hasRole('GS'))
-        <h3 class="text-light">Silahkan gunakan akun berikut ini untuk terhubung ke Portal Wifi Jakarta Global University</h3><br>
+        <h3 class="text-light">Silahkan menggunakan akun berikut ini untuk terhubung ke Portal Wifi Jakarta Global University</h3>
+        <br>
+        
         <div class="mb-3">
             <label for="user" class="form-label text-light">Username</label>
-            <input type="text" class="form-control text-center" value="{{$username}}"/>
+            <input type="text" class="form-control text-center" value="{{$username}}" readonly/>
         </div>
         <div class="mb-3">
             <label for="user" class="form-label text-light">Password</label>
-            <input type="text" class="form-control  text-center" value="{{$password}}"/>
+            <input type="text" class="form-control  text-center" value="{{$password}}" readonly/>
         </div>
         <div class="mb-3">
             <label for="user" class="form-label text-light">Group</label>
-            <input type="text" class="form-control  text-center" value="{{$group}}"/>
+            <input type="text" class="form-control  text-center" value="{{$group}}" readonly/>
         </div>
         <br>
 

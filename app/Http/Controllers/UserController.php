@@ -83,6 +83,7 @@ class UserController extends Controller
                 'back_title' => $request->back_title,
                 'job' => $request->job,
                 'email'=> $request->email,
+                'phone'=> $request->phone,
                 'gender'=> $request->gender,
             ]);
             return redirect()->route('user.edit')->with('msg','Profil telah diperbarui!');

@@ -69,7 +69,7 @@
                        
                     </form> -->
                     <small>
-                    <center><p><b><u class="text-danger">Pengumuman!</u></b><br>Sivitas Akademika JGU (Mahasiswa/Staf/Dosen) <br>silakan masuk menggunakan<br>Single Sign-On (SSO) atau email @jgu.ac.id (Google),<br>sedangkan untuk tamu (eksternal) dapat masuk menggunakan akun Google.</p></center></small>
+                    <center class="alert alert-info"><p><b><u class="text-danger">Pengumuman!</u></b><br>Civitas Academica JGU (Mahasiswa/Staf/Dosen) <br>silahkan masuk dengan menekan tombol Google<br>lalu login menggunakan email resmi JGU <br>sedangkan tamu dapat masuk menggunakan gmail.</p></center></small>
                     <div class="row">
                         <div class="divider my-2">
                             <div class="divider-text mb-2">Pilih Metode Masuk</div>

@@ -1,7 +1,7 @@
 @extends('layouts.master')
-@section('title', 'Edit Profil')
+@section('title', 'Lengkapi Profil')
 @section('breadcrumb-items')
-<span class="text-muted fw-light">Akun / </span>
+<span class="text-muted fw-light">Akun Portal Wifi / </span>
 @endsection
 
 @section('css')
@@ -16,7 +16,6 @@
 
 @section('content')
 
-@include('user._header')
 <!-- User Profile Content -->
 <div class="row">
     <div class="col-md-12">
@@ -27,7 +26,7 @@
         </div>
         @endif
         <div class="card mb-4">
-            <h5 class="card-header">Edit Profil</h5>
+            <h5 class="card-header">Lengkapi Profil</h5>
             <!-- Account -->
             <hr class="my-0">
             <div class="card-body">
@@ -63,28 +62,6 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Gelar Depan</label>
-                            <input type="text" class="form-control @error('front_title') is-invalid @enderror"
-                                name="front_title" value="{{ Auth::user()->front_title }}" />
-                            @error('front_title')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3 col-md-6">
-                            <label class="form-label">Gelar Belakang</label>
-                            <input type="text" class="form-control @error('back_title') is-invalid @enderror"
-                                name="back_title" value="{{ Auth::user()->back_title }}" />
-                            @error('back_title')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">Email <small class="text-danger">*</small></label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                                 name="email"
@@ -99,7 +76,7 @@
                         <div class="mb-3 col-md-6">
                             <label for="phone" class="form-label">No HP.</label>
                             <input type="number" class="form-control @error('phone') is-invalid @enderror" id="phone"
-                                name="phone"
+                                name="phone" maxlength="15"
                                 value="{{ (old('phone') == null ? Auth::user()->phone : old('phone')) }}" />
                             @error('phone')
                             <span class="invalid-feedback" role="alert">
@@ -107,17 +84,17 @@
                             </span>
                             @enderror
                         </div>
-
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Jabatan <small class="text-danger">*</small></label>
                             <input type="text" class="form-control @error('job') is-invalid @enderror" name="job"
-                                value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" placeholder="Dosen/Staf/Mahasiswa/Tamu"/>
+                                value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" placeholder="Dosen/Staf/Mahasiswa/Tamu dll."/>
                             @error('job')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
                         </div>
+
 
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Jenis Kelamin <small class="text-danger">*</small></label>
@@ -126,25 +103,15 @@
                                 <option value="" {{ (Auth::user()->gender == null ? 'selected' : '') }} disabled>
                                     Select</option>
                                 @foreach($gender as $g)
-                                <option value="{{ $g['id'] }}"  {{ ((Auth::user()->gender == $g['id']) ? 'selected' : ''); }}> {{$g['title']}}</option>
+                                <option value="{{ $g['id'] }}" {{ ((Auth::user()->gender == $g['id']) ? 'selected' : ''); }}> {{$g['title']}}</option>
                                 @endforeach
+
                             </select>
                             @error('gender')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
-                        </div>
-
-                        <div class="mb-3 col-md-12">
-                            <label class="form-label">Hak Akses</label>
-                            <select class="select2 form-select" multiple="multiple" name="roles[]" id="select2Dark"
-                                disabled>
-                                @foreach($roles as $role)
-                                <option value="{{$role->id}}" {{ Auth::user()->hasRole($role->id) ? 'selected' : '' }}>
-                                    {{$role->title}}</option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
                     <div class="mt-2">

@@ -50,9 +50,9 @@ class WifiUserController extends Controller
             ]);
         } else {
             $password = $wu->password;
-            $updateWU = $wu->update([
-                'username'=> $username,
+            $updateWU = WifiUser::where('username', Auth::user()->username)->update([
                 'first_name'=> Auth::user()->name,
+                'last_name'=> null,
                 'email'=> Auth::user()->email,
                 'wifi_group' => $groupRadius,
                 'updated_at' => date('Y-m-d H:i:s')

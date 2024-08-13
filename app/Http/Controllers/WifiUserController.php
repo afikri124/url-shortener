@@ -44,7 +44,7 @@ class WifiUserController extends Controller
                 'first_name'=> Auth::user()->name,
                 'last_name'=> null,
                 'email'=> Auth::user()->email,
-                'group' => $groupRadius,
+                'wifi_group' => $groupRadius,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
@@ -54,7 +54,7 @@ class WifiUserController extends Controller
                 'username'=> $username,
                 'first_name'=> Auth::user()->name,
                 'email'=> Auth::user()->email,
-                'group' => $groupRadius,
+                'wifi_group' => $groupRadius,
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
         }

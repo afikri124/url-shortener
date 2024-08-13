@@ -25,6 +25,9 @@
                                     <i class='bx bx-mail-send'></i> {{ $data->email }}
                                 </li>
                                 <li class="list-inline-item fw-semibold">
+                                    <i class='bx bx-phone'></i> {{ $data->phone }}
+                                </li>
+                                <li class="list-inline-item fw-semibold">
                                     <i class='bx bx-briefcase'></i> {{ $data->job }}
                                 </li>
                                 <li class="list-inline-item fw-semibold">

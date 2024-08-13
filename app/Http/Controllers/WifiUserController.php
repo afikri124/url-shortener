@@ -21,7 +21,7 @@ class WifiUserController extends Controller
 {
     //
     function wifi (){
-        if(Auth::user()->username == null){
+        if(Auth::user()->username == null || Auth::user()->phone == null){
             return redirect()->route('update_profile')->with('msg','LENGKAPI DATA ANDA TERLEBIH DAHULU!');
         }
 

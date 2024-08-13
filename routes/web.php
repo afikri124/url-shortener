@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth']], function () {
 //User
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/wifi', [App\Http\Controllers\WifiUserController::class, 'wifi'])->name('wifi');
+  Route::any('/wifi/edit', [App\Http\Controllers\WifiUserController::class, 'wifi_edit'])->name('wifi.edit');
 });
 
 //URL Shortener

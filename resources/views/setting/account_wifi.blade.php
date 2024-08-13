@@ -160,6 +160,7 @@
                     <th data-priority="2">Nama</th>
                     <th width="60px">Username</th>
                     <th width="150px">Password</th>
+                    <th width="150px">Group</th>
                     <th width="130px" data-priority="3">Terakhir Dilihat</th>
                     {{-- <th width="40px" >Aksi</th> --}}
                 </tr>
@@ -251,6 +252,14 @@
                 {
                     render: function (data, type, row, meta) {
                         var html = `<code>` + row.password + `</code>`;
+                        return html;
+                    },
+                    className: "text-md-center"
+                },
+
+                {
+                    render: function (data, type, row, meta) {
+                        var html = `<code>` + row.wifi_group + `</code>`;
                         return html;
                     },
                     className: "text-md-center"

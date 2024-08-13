@@ -32,6 +32,7 @@
         </div>
         <br>
 
+        <a class="btn btn-outline-secondary" href="{{ route('wifi.edit') }}">Edit Password</a><br><br>
         @if($password != 'SILAHKAN HUBUNGI ITIC JGU')
         <blockquote class="text-danger"><b>Peringatan!</b><br>Jangan beritahukan <i>username</i> dan 
             <i>password</i> ini kepada siapapun, karena akan mempengaruhi kecepatan internet Anda.</blockquote>

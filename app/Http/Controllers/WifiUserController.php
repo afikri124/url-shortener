@@ -261,6 +261,24 @@ class WifiUserController extends Controller
                     ->make(true);
     }
 
+    function view ($username){
+        if($username == null){
+            abort(403, "Tidak diizinkan!");
+        }
+        $group = array();
+        $wifiuser = WifiUser::where('username', $username)->first();
+        $user = User::where('username', $username)->first();
+        $radius = null;
+        try {
+            $radius = DB::connection('mysql2')->table('radcheck')->where('username',$username)->first();
+            $group = DB::connection('mysql2')->table('radusergroup')->where('username',$username)->get();
+        } catch (\Exception $e) {
+            Log::info("Wifi Radius error : ".$e);
+            $radius = "ERROR";
+        }
+        return view('setting.account_wifi_view', compact('user','wifiuser','radius','group'));
+    }
+
     public function wifi_delete(Request $request) {
         $user = WifiUser::find($request->id);
         if($user){

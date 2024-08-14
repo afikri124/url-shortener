@@ -165,13 +165,7 @@
         </li>
 
         <li class="menu-item 
-        @if(Route::currentRouteName() == 'setting_account')
-        {{ 'open' }}
-        @elseif(Route::currentRouteName() == 'setting_account_att')
-        {{ 'open' }}
-        @elseif(Route::currentRouteName() == 'setting_account_wifi')
-        {{ 'open' }}
-        @endif
+        {{ request()->segment(1) == 'setting' ? 'open' : '' }}
         ">
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
@@ -180,7 +174,7 @@
             <ul class="menu-sub">
                 @if(Auth::user()->hasRole('AD'))
                 <li
-                    class="menu-item {{ Route::currentRouteName()=='setting_account' ? 'active' : '' }}">
+                    class="menu-item {{ request()->segment(2) == 'account' ? 'active' : '' }}">
                     <a href="{{ route('setting_account') }}" class="menu-link">
                         <div>S.jgu</div>
                     </a>
@@ -188,7 +182,7 @@
                 @endif
                 @if(Auth::user()->hasRole('HR'))
                 <li
-                    class="menu-item {{ Route::currentRouteName()=='setting_account_att' ? 'active' : '' }}">
+                    class="menu-item {{ request()->segment(2) == 'account_att' ? 'active' : '' }}">
                     <a href="{{ route('setting_account_att') }}" class="menu-link">
                         <div>Mesin Absen</div>
                     </a>
@@ -196,7 +190,7 @@
                 @endif
                 @if(Auth::user()->hasRole('IT'))
                 <li
-                    class="menu-item {{ Route::currentRouteName()=='setting_account_wifi' ? 'active' : '' }}">
+                    class="menu-item  {{ request()->segment(2) == 'account_wifi' ? 'active' : '' }}">
                     <a href="{{ route('setting_account_wifi') }}" class="menu-link">
                         <div>Portal Wifi</div>
                     </a>

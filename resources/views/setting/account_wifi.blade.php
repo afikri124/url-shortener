@@ -242,9 +242,11 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = row.name;
+                        var html = `<a class="text-primary" title="` + row.name +
+                            `" href="{{ url('setting/account_wifi/` +
+                            row.username + `') }}">` + row.name + `</a>`;
                         return html;
-                    }
+                    },
                 },
                 {
                     render: function (data, type, row, meta) {

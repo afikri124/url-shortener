@@ -55,12 +55,12 @@
                     <div class="col-12">
                         <div class="row">
                             <div class="offset-md-9 col-md-3 text-md-end text-center pt-3 pt-md-0">
-                                {{-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
                                             class="bx bx-plus me-sm-2"></i>
                                         <span>Tambah</span></span>
-                                </button> --}}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -78,10 +78,10 @@
                     <form class="add-new-record pt-0 row g-2 fv-plugins-bootstrap5 fv-plugins-framework" id="form-add-new-record" method="POST" action="">
                         @csrf
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">NIK / Username</label>
+                            <label class="form-label" for="basicDate">Username / NIK / NIM <small class="text-danger">*</small></label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="nik"
-                                    placeholder="Nomor Induk Karyawan" value="{{ old('username') }}">
+                                    placeholder="Nomor Induk Karyawan / NIM" value="{{ old('username') }}">
                                 @error('username')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -90,23 +90,11 @@
                             </div>
                         </div>
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Nama Depan</label>
+                            <label class="form-label" for="basicDate">Nama <small class="text-danger">*</small></label>
                             <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('nama_depan') is-invalid @enderror" name="nama_depan" id="nama_depan" onkeyup="createPassword()" 
-                                    placeholder="Nama Depan" value="{{ old('nama_depan') }}" maxlength="24">
-                                @error('nama_depan')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Nama Belakang</label>
-                            <div class="input-group input-group-merge has-validation">
-                                <input type="text" class="form-control @error('nama_belakang') is-invalid @enderror" name="nama_belakang" id="nama_belakang"
-                                    placeholder="Nama Belakang" value="{{ old('nama_belakang') }}" maxlength="24">
-                                @error('nama_belakang')
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama" onkeyup="createPassword()" 
+                                    placeholder="Nama" value="{{ old('nama') }}" maxlength="24">
+                                @error('nama')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -125,9 +113,8 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="col-sm-12 fv-plugins-icon-container">
-                            <label class="form-label" for="basicDate">Password Wifi</label>
+                            <label class="form-label" for="basicDate">Password Wifi <small class="text-danger">*</small></label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('password') is-invalid @enderror" name="password" id="password"
                                     placeholder="Password Portal Wifi" value="{{ old('password') }}" maxlength="24">
@@ -138,6 +125,23 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="col-sm-12 fv-plugins-icon-container">
+                            <label class="form-label">Wifi Group <small class="text-danger">*</small></label>
+                            <div class="input-group input-group-merge has-validation">
+                            <select class="form-select @error('wifi_group') is-invalid @enderror select2-modal" data-placeholder="-- Pilih Group --"
+                                name="wifi_group">
+                                @foreach($wifi_group as $g)
+                                <option value="{{ $g }}"> {{ $g }}</option>
+                                @endforeach
+                            </select>
+                            @error('wifi_group')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                            </div>
+                        </div>
                         <div class="col-sm-12 mt-4">
                             <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Submit</button>
                             <button type="reset" class="btn btn-outline-secondary"
@@ -145,7 +149,7 @@
                         </div>
                         <br>
                         <span class="invalid-feedback" role="alert"><br>
-                            <strong>Setelah membuat disini,<br>harus ditambahkan manual di ruijie<br>dengan username dan password diatas</strong>
+                            <strong>Setelah menambahkan disini,<br>maka akan diregisterkan otomatis ke server radius</strong>
                         </span>
                         <div></div><input type="hidden">
                     </form>
@@ -195,7 +199,7 @@
     }, 350);
 
     function createPassword(){
-        var x = $('#nama_depan').val();
+        var x = $('#nama').val();
         x = x.replace(/[^A-Z0-9]+/ig, "");
         x = x.toUpperCase();
         var init = x.substring(0, 5);

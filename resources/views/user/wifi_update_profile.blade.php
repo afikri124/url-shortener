@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label for="phone" class="form-label">No HP.</label>
+                            <label for="phone" class="form-label">No HP. <small class="text-danger">*</small></label>
                             <input type="number" class="form-control @error('phone') is-invalid @enderror" id="phone"
                                 name="phone" maxlength="15"
                                 value="{{ (old('phone') == null ? Auth::user()->phone : old('phone')) }}" />
@@ -85,7 +85,7 @@
                             @enderror
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Jabatan <small class="text-danger">*</small></label>
+                            <label class="form-label">Jabatan/Pekerjaan <small class="text-danger">*</small></label>
                             <input type="text" class="form-control @error('job') is-invalid @enderror" name="job"
                                 value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" placeholder="Dosen/Staf/Mahasiswa/Tamu dll."/>
                             @error('job')
@@ -94,8 +94,6 @@
                             </span>
                             @enderror
                         </div>
-
-
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Jenis Kelamin <small class="text-danger">*</small></label>
                             <select class="select2 form-select col-sm-12 @error('gender') is-invalid @enderror"
@@ -105,7 +103,6 @@
                                 @foreach($gender as $g)
                                 <option value="{{ $g['id'] }}" {{ ((Auth::user()->gender == $g['id']) ? 'selected' : ''); }}> {{$g['title']}}</option>
                                 @endforeach
-
                             </select>
                             @error('gender')
                             <span class="invalid-feedback" role="alert">

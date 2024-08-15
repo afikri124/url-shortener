@@ -635,8 +635,6 @@ class WorkHoursController extends Controller
             }
         } 
         
-        
-
         //mesin lantai 5
         if(env('IP_ATTENDANCE_MACHINE_5')){
             try {

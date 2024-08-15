@@ -166,7 +166,9 @@
                     <th width="150px">Password</th>
                     <th width="150px">Group</th>
                     <th width="130px" data-priority="3">Terakhir Dilihat</th>
-                    {{-- <th width="40px" >Aksi</th> --}}
+                    @if (Auth::user()->id == 1)
+                    <th width="40px" >Aksi</th>
+                    @endif
                 </tr>
             </thead>
         </table>
@@ -280,15 +282,17 @@
                     },
                     className: "text-center"
                 },
-                // {
-                //     render: function (data, type, row, meta) {
-                //         var html = ` <a class=" text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
-                //             .id + `)" ><i class="bx bx-trash"></i></a>`;
-                //         return html;
-                //     },
-                //     "orderable": false,
-                //     className: "text-md-center"
-                // }
+                @if (Auth::user()->id == 1)
+                {
+                    render: function (data, type, row, meta) {
+                        var html = ` <a class=" text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
+                            .id + `)" ><i class="bx bx-trash"></i></a>`;
+                        return html;
+                    },
+                    "orderable": false,
+                    className: "text-md-center"
+                }
+                @endif
             ]
         });
     });

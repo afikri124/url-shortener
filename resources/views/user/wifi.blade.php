@@ -37,7 +37,7 @@
         <a class="btn btn-outline-secondary" href="{{ route('wifi.edit') }}">Ganti Password</a><br><br>
         @if($password != 'SILAHKAN HUBUNGI ITIC JGU')
         <blockquote class="text-danger"><b>Peringatan!</b><br>Jangan beritahukan <i>username</i> dan 
-            <i>password</i> ini kepada siapapun, karena akan mempengaruhi kecepatan internet Anda.</blockquote>
+            <i>password</i> ini kepada siapa pun, karena kami membatasi limit login perangkat dan akan mempengaruhi kecepatan internet Anda.</blockquote>
         @endif
         @endif
     </div>

@@ -57,7 +57,7 @@
                             @enderror
                             @if(Auth::user()->username == null)
                             <span class="text-danger">
-                                <strong>Isi dengan Username/ID Staff/Matrix/NIM</strong>
+                                <strong>Isi dengan ID Staff/NIM</strong>
                             </span>
                             @endif
                         </div>

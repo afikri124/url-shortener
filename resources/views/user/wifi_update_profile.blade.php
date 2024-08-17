@@ -45,7 +45,15 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Username <small class="text-danger">*</small></label>
+                            <label class="form-label">
+                                @if(Auth::user()->hasRole('ST'))
+                                    Nomor ID Staf (Username)
+                                @elseif (Auth::user()->hasRole('SD'))
+                                    Nomor Induk Mahasiswa
+                                @else
+                                    Username
+                                @endif
+                                <small class="text-danger">*</small></label>
                             <input type="text" class="form-control @error('username') is-invalid @enderror"
                                 name="username" value="{{ Auth::user()->username }}" placeholder="ID Staff/NIM"
                                 @if(Auth::user()->username != null ) readonly title="Silahkan hubungi Admin" @endif />
@@ -56,7 +64,7 @@
                             @enderror
                             @if(Auth::user()->username == null)
                             <span class="text-danger">
-                                <strong>Isi dengan Username/ID Staff/Matrix/NIM</strong>
+                                <strong>Isi dengan ID Staff/NIM</strong>
                             </span>
                             @endif
                         </div>

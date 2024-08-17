@@ -66,6 +66,7 @@ class GoogleController extends Controller
                                 'name' => strtoupper($user->name),
                                 'email' => $user->email,
                                 'username' => $email[0],
+                                'google_id' => $user->id,
                                 'password'=> Hash::make($user->email),
                                 'email_verified_at' => Carbon::now(),
                                 'updated_at' => Carbon::now()
@@ -74,6 +75,7 @@ class GoogleController extends Controller
                             $data=User::create([
                                 'name' => strtoupper($user->name),
                                 'email' => $user->email,
+                                'google_id' => $user->id,
                                 'username' => null,
                                 'password'=> Hash::make($user->email),
                                 'email_verified_at' => Carbon::now(),

@@ -92,10 +92,11 @@ class GoogleController extends Controller
                         }  
                         Auth::loginUsingId($data->id);
                     } else {
+                        $usrnm = (strlen($user->email) > 36 ? substr($user->email,0,35) : $user->email);
                         $data=User::create([
                             'name' => strtoupper($user->name),
                             'email' => $user->email,
-                            'username' => $user->email,
+                            'username' => $usrnm,
                             'google_id' => $user->id,
                             'password'=> Hash::make($user->email),
                             'email_verified_at' => Carbon::now(),

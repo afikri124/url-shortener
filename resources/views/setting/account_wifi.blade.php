@@ -54,7 +54,15 @@
                 <div class="col-12 pt-3 pt-md-0">
                     <div class="col-12">
                         <div class="row">
-                            <div class="offset-md-9 col-md-3 text-md-end text-center pt-3 pt-md-0">
+                            <div class=" col-md-3">
+                                <select id="select_group" class="select2 form-select" data-placeholder="Wifi Group">
+                                    <option value="">Group</option>
+                                    @foreach($group as $d)
+                                    <option value="{{ $d->wifi_group }}">{{ $d->wifi_group }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="offset-md-6 col-md-3 text-md-end text-center pt-3 pt-md-0">
                                 <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#newrecord" aria-controls="offcanvasEnd" tabindex="0"
                                     aria-controls="DataTables_Table_0" type="button"><span><i
@@ -225,7 +233,8 @@
             ajax: {
                 url: "{{ route('setting_account_wifi_data') }}",
                 data: function (d) {
-                        d.search = $('input[type="search"]').val()
+                        d.search = $('input[type="search"]').val(),
+                        d.select_group = $('#select_group').val()
                 },
             },
             columnDefs: [{
@@ -290,6 +299,10 @@
                     className: "text-md-center"
                 }
             ]
+        });
+
+        $('#select_group').change(function () {
+            table.draw();
         });
     });
 

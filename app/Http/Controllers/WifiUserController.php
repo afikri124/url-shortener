@@ -242,7 +242,9 @@ class WifiUserController extends Controller
         }
 
         $wifi_group = ['Tamu','Mahasiswa', 'Dosen-Staff','VIP'];
-        return view('setting.account_wifi', compact('wifi_group'));
+
+        $group = WifiUser::select('wifi_group')->groupBy('wifi_group')->get();
+        return view('setting.account_wifi', compact('wifi_group', 'group'));
     }
 
     public function data(Request $request)
@@ -250,6 +252,9 @@ class WifiUserController extends Controller
         $data = WifiUser::select(DB::raw("CONCAT(first_name,' ',IFNULL(last_name,'')) AS name, username, password, wifi_group, is_seen, updated_at, id"))->orderByDesc("updated_at")->orderBy("id");
             return Datatables::of($data)
                     ->filter(function ($instance) use ($request) {
+                        if (!empty($request->get('select_group'))) {
+                            $instance->where('wifi_group', $request->get('select_group'));
+                        }
                         if (!empty($request->get('search'))) {
                             $instance->where(function($w) use($request){
                                $search = $request->get('search');

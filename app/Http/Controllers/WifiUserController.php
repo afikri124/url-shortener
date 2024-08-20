@@ -241,7 +241,7 @@ class WifiUserController extends Controller
             }
         }
 
-        $wifi_group = ['Tamu','Mahasiswa', 'Dosen-Staff','VIP'];
+        $wifi_group = ['Tamu', 'Tenant', 'Mahasiswa', 'Dosen-Staff','VIP'];
 
         $group = WifiUser::select('wifi_group')->groupBy('wifi_group')->get();
         return view('setting.account_wifi', compact('wifi_group', 'group'));

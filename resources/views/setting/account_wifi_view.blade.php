@@ -30,9 +30,35 @@
 @endsection
 
 @section('content')
+<!-- Header -->
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
+                <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
+                    <img src="{{ $photo }}"
+                        class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img" width="100px">
+                </div>
+                <div class="flex-grow-1 mt-4">
+                    <div
+                        class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-4 flex-md-row flex-column gap-4">
+                        <div class="user-profile-info">
+                            <h4>{{ $wifiuser->first_name }} {{ $wifiuser->last_name }}</h4>
+                            <small class="text-muted">{{ $wifiuser->username }}</small>
+                        </div>
+                        <a href="" class="btn btn-primary text-nowrap">
+                            <i class='bx bx-user-check'></i> {{ $wifiuser->username }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ Header -->
 <!-- User Profile Content -->
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4"> 
         <!-- Projects table -->
         <div class="card mb-4">
             <div class="card-body">
@@ -46,7 +72,7 @@
                         <span>{{ $wifiuser->username }}</span></li>
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-key"></i><span
                             class="fw-semibold mx-2">Password:</span>
-                        <span>{{ $wifiuser->password }}</span></li>
+                        <code class="text-black">{{ $wifiuser->password }}</code></li>
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-mail-send"></i><span
                             class="fw-semibold mx-2">Email:</span>
                         <span>{{ $wifiuser->email }}</span></li>

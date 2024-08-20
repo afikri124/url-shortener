@@ -283,7 +283,13 @@ class WifiUserController extends Controller
             Log::info("Wifi Radius error : ".$e);
             $radius = "ERROR";
         }
-        return view('setting.account_wifi_view', compact('user','wifiuser','radius','group','absen'));
+        $photo = 'assets/img/biophoto/face/'.$username.'.jpg';
+        if(file_exists(public_path($photo))){
+            $photo = asset($photo);
+        } else {
+            $photo = asset('assets/img/avatars/user.png');
+        }
+        return view('setting.account_wifi_view', compact('user','wifiuser','radius','group','absen', 'photo'));
     }
 
     public function wifi_delete(Request $request) {

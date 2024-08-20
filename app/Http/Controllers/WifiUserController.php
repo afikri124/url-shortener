@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\User;
+use App\Models\WhUser;
 use App\Models\Role;
 use App\Models\WifiUser;
 use Auth;
@@ -273,6 +274,7 @@ class WifiUserController extends Controller
         $group = array();
         $wifiuser = WifiUser::where('username', $username)->first();
         $user = User::where('username', $username)->first();
+        $absen = WhUser::with('group')->where('username', $username)->first();
         $radius = null;
         try {
             $radius = DB::connection('mysql2')->table('radcheck')->where('username',$username)->first();
@@ -281,7 +283,7 @@ class WifiUserController extends Controller
             Log::info("Wifi Radius error : ".$e);
             $radius = "ERROR";
         }
-        return view('setting.account_wifi_view', compact('user','wifiuser','radius','group'));
+        return view('setting.account_wifi_view', compact('user','wifiuser','radius','group','absen'));
     }
 
     public function wifi_delete(Request $request) {

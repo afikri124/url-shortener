@@ -71,7 +71,7 @@
         <!-- Projects table -->
         <div class="card mb-4">
             <div class="card-body">
-                <small class="text-muted text-uppercase">Data di Server Radius</small>
+                <small class="text-muted text-uppercase">Data Server Radius</small>
                 @if ($radius == null )
                 <div class="alert alert-info">User tidak terdaftar di server radius!</div>
                 @elseif ($radius == "ERROR")
@@ -82,7 +82,7 @@
                             class="fw-semibold mx-2">Username:</span>
                         <span>{{ $radius->username }}</span></li>
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-lock-open-alt"></i><span
-                            class="fw-semibold mx-2">Value:</span>
+                            class="fw-semibold mx-2">Password:</span>
                         <span>{{ $radius->value }}</span></li>
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-group"></i><span
                             class="fw-semibold mx-2">Group:</span>
@@ -91,6 +91,29 @@
                             {{ $g->groupname }}<br>
                             @endforeach
                         </span></li>
+                </ul>
+                @endif
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <small class="text-muted text-uppercase">Data Mesin Absen</small>
+                @if ($absen == null )
+                <div class="alert alert-info">User tidak terdaftar di mesin absen!</div>
+                @else
+                <ul class="list-unstyled mb-4 mt-3">
+                    <li class="d-flex align-items-center mb-3"><i class="bx bx-id-card"></i><span
+                            class="fw-semibold mx-2">Username:</span>
+                        <span>{{ ($absen->username == null ? $absen->username_old : $absen->username) }}</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-3"><i class="bx bx-user"></i><span
+                            class="fw-semibold mx-2">Nama di Mesin:</span>
+                        <span>{{ $absen->name }}</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-3"><i class="bx bx-group"></i><span
+                            class="fw-semibold mx-2">Group:</span>
+                            <span>{{ $absen->group->title }} {{ $absen->group->desc }}</span></li>
+                    </li>
                 </ul>
                 @endif
             </div>

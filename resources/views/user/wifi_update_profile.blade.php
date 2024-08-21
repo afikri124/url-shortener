@@ -25,6 +25,10 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
+        <div class="alert alert-secondary alert-dismissible" role="alert">
+            Jika mengalami kendala silahkan hubungi <a href="https://s.jgu.ac.id/m/itic">ITIC JGU</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="card mb-4">
             <h5 class="card-header">Lengkapi Profil</h5>
             <!-- Account -->

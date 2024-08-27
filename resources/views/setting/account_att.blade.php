@@ -321,7 +321,7 @@
                         var html =
                             `<a class=" text-success" title="Ubah" href="{{ url('setting/account_att/edit/` +
                             row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
-                            html += ` <a class=" text-danger" title="Delete" style="cursor:pointer" onclick="DeleteId(` + row
+                        html += ` <a class=" text-danger" title="Delete" style="cursor:pointer" onclick="DeleteId(` + row
                             .uid + `)" ><i class="bx bx-trash"></i></a>`;
                         return html;
                     },

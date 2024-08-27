@@ -82,7 +82,7 @@ class WifiUserController extends Controller
                         $radiusUserInfoAdd = DB::connection('mysql2')->table('userinfo')->insert([
                             'username'=> $username,
                             'firstname'=> Auth::user()->name,
-                            'lastname'=> Auth::user()->job,
+                            'lastname'=> null,
                             'email'=> Auth::user()->email,
                             'creationdate' => date("Y-m-d H:i:s"),
                             'updatedate' => date("Y-m-d H:i:s"),
@@ -204,7 +204,7 @@ class WifiUserController extends Controller
                                     $radiusUserInfoAdd = DB::connection('mysql2')->table('userinfo')->insert([
                                         'username'=> $request->username,
                                         'firstname'=> strtoupper($request->nama),
-                                        'lastname'=> $request->wifi_group,
+                                        'lastname'=> null,
                                         'email'=> $request->email,
                                         'creationdate' => date("Y-m-d H:i:s"),
                                         'updatedate' => date("Y-m-d H:i:s"),
@@ -242,7 +242,7 @@ class WifiUserController extends Controller
             }
         }
 
-        $wifi_group = ['Tamu', 'Tenant', 'Mahasiswa', 'Dosen-Staff','VIP'];
+        $wifi_group = ['Tamu', 'Tenant', 'Mahasiswa', 'Dosen-Staff', 'Event', 'VIP'];
 
         $group = WifiUser::select('wifi_group')->groupBy('wifi_group')->get();
         return view('setting.account_wifi', compact('wifi_group', 'group'));
@@ -292,8 +292,107 @@ class WifiUserController extends Controller
         return view('setting.account_wifi_view', compact('user','wifiuser','radius','group','absen', 'photo'));
     }
 
+    public function edit ($username, Request $request)
+    {
+        try {
+            $data = WifiUser::where('username',$username)->first();
+        } catch (DecryptException $e) {
+            abort(403, "Tidak diizinkan!");
+        }
+        if ($request->isMethod('post')) {
+            $this->validate($request, [ 
+                'password_baru' => ['required', 'string'],
+                'wifi_group' => ['required', 'string']
+            ]);
+            $edit = WifiUser::where('username', $username)->update([
+                'password'=> $request->password_baru,
+                'wifi_group' => $request->wifi_group,
+                'updated_at' => Carbon::now()
+            ]);
+
+            if($edit){
+                try {
+                    $radius = DB::connection('mysql2')->table('radcheck')->where('username',$username)->first();
+                        if($radius == null){                
+                            DB::beginTransaction();
+                            try {
+                                $radiusAdd = DB::connection('mysql2')->table('radcheck')->insert([
+                                    'username'=> $username,
+                                    'value'=> $request->password_baru,
+                                    'attribute'=> "Cleartext-Password",
+                                    'op'=> ":="
+                                ]);
+                                if($radiusAdd){
+                                    $radiusgroupAdd = DB::connection('mysql2')->table('radusergroup')->insert([
+                                        'username'=> $username,
+                                        'groupname'=> $request->wifi_group,
+                                        'priority'=> 0
+                                    ]);
+                                    $radiusUserInfoAdd = DB::connection('mysql2')->table('userinfo')->insert([
+                                        'username'=> $username,
+                                        'firstname'=> strtoupper($data->first_name),
+                                        'lastname'=> null,
+                                        'email'=> $data->email,
+                                        'creationdate' => date("Y-m-d H:i:s"),
+                                        'updatedate' => date("Y-m-d H:i:s"),
+                                        'creationby' => Auth::user()->username
+                                    ]);
+                                    $radiusUserBillInfoAdd = DB::connection('mysql2')->table('userbillinfo')->insert([
+                                        'username'=> $username,
+                                        'lastbill' => date("Y-m-d"),
+                                        'nextbill' => date("Y-m-d"),
+                                        'creationdate' => date("Y-m-d H:i:s"),
+                                        'updatedate' => date("Y-m-d H:i:s"),
+                                        'creationby' => Auth::user()->username
+                                    ]);
+                                }
+                                DB::commit();
+                            } catch (\Exception $e) {
+                                DB::rollback();
+                                Log::info("Wifi Radius add user error : ".$e);
+                            }
+                        } else {
+                            $radiusUpdate = DB::connection('mysql2')->table('radcheck')->where('username',$username)->update([
+                                'username'=> $username,
+                                'value'=> $request->password_baru
+                            ]);
+                            $radiusgroupUpdate = DB::connection('mysql2')->table('radusergroup')->where('username',$username)->update([
+                                'username'=> $username,
+                                'groupname'=> $request->wifi_group,
+                                'priority'=> 0
+                            ]);
+                        }
+                } catch (\Exception $e) {
+                    Log::info("Wifi Radius edit user error : ".$e);
+                }
+            }
+            Log::info(Auth::user()->name." update portal wifi #".$username.", ".$data->password." to ".$request->password_baru);
+            return redirect()->route('setting_account_wifi')->with('msg','Portal Wifi '.$data->username.' telah diperbarui!');
+        }
+        $wifi_group = ['Tamu', 'Tenant', 'Mahasiswa', 'Dosen-Staff', 'Event', 'VIP'];
+        return view('setting.account_wifi_edit', compact('data','wifi_group'));
+    }
+
     public function wifi_delete(Request $request) {
         $user = WifiUser::find($request->id);
+        try {
+            $radius = DB::connection('mysql2')->table('radcheck')->where('username',$user->username)->first();
+            if($radius != null){
+                DB::beginTransaction();
+                try {
+                    $radiusUserBillInfoDel = DB::connection('mysql2')->table('userbillinfo')->where('username',$user->username)->delete();
+                    $radiusUserInfoDel = DB::connection('mysql2')->table('userinfo')->where('username',$user->username)->delete();
+                    $radiusgroupDel = DB::connection('mysql2')->table('radusergroup')->where('username',$user->username)->delete();
+                    $radiusDel = DB::connection('mysql2')->table('radcheck')->where('username',$user->username)->delete();
+                    DB::commit();
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    Log::info("Wifi Radius Delete user error : ".$e);
+                }
+            }
+        } catch (\Exception $e) {
+            Log::info("Wifi Radius error : ".$e);
+        }
         if($user){
             Log::warning(Auth::user()->username." deleted wifi user #".$user->id.", username : ".$user->username.", password : ".$user->password);
             $user->delete();

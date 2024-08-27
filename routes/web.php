@@ -201,6 +201,7 @@ Route::group(['prefix' => 'setting','middleware' => ['auth','role:HR']], functio
 Route::group(['prefix' => 'setting','middleware' => ['auth','role:IT']], function () {
   Route::any('account_wifi', [App\Http\Controllers\WifiUserController::class, 'index'])->name('setting_account_wifi');
   Route::get('account_wifi/data', [App\Http\Controllers\WifiUserController::class, 'data'])->name('setting_account_wifi_data');
+  Route::any('account_wifi/edit/{username}', [App\Http\Controllers\WifiUserController::class, 'edit'])->name('setting_account_wifi_edit');
   Route::get('account_wifi/{id}', [App\Http\Controllers\WifiUserController::class, 'view'])->name('setting_account_wifi_view');
   Route::delete('account_wifi/delete', [App\Http\Controllers\WifiUserController::class, 'wifi_delete'])->name('setting_account_wifi_delete');
 });

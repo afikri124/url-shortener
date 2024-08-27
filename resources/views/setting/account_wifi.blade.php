@@ -291,7 +291,9 @@
                 },
                 {
                     render: function (data, type, row, meta) {
-                        var html = ` <a class=" text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
+                        var html = `<a class=" text-success" title="Ubah" href="{{ url('setting/account_wifi/edit/` +
+                            row.username + `') }}"><i class="bx bxs-edit"></i></a>`;
+                        html += ` <a class=" text-danger" title="Hapus" style="cursor:pointer" onclick="DeleteId(` + row
                             .id + `)" ><i class="bx bx-trash"></i></a>`;
                         return html;
                     },

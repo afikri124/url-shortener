@@ -558,16 +558,12 @@ class WorkHoursController extends Controller
                             Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                         }
                         $i_total += $i;
-                        if ($zk->connect()){
+                        if (env('APP_ENV') != 'local' && $zk->connect()){
                             $zk->clearAttendance(); // Remove attendance log only if not empty
                             $zk->disconnect();
                         }
                 } else {
                     Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
-                    // return response()->json([
-                    //     'success' => false,
-                    //     'total' => $i,
-                    // ]);
                 }
             } else {
                 Log::info($info." machine ".$idmesin." Not Connect!");
@@ -620,26 +616,22 @@ class WorkHoursController extends Controller
                                 Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                             }
                         $i_total += $i;
-                        if ($zk->connect()){
+                        if (env('APP_ENV') != 'local' && $zk->connect()){
                             $zk->clearAttendance(); // Remove attendance log only if not empty
                             $zk->disconnect();
                         }
                     } else {
                         Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId);
-                        return response()->json([
-                            'success' => false,
-                            'total' => $i,
-                        ]);
                     }
                 } else {
                     Log::info($info." machine ".$idmesin." Not Connect!");
                 } 
             } catch (DecryptException $e) {
                 Log::info($info." failed sync from machine 2");
-                // return response()->json([
-                //     'success' => false,
-                //     'total' => $i,
-                // ]);
+                return response()->json([
+                    'success' => false,
+                    'total' => $i,
+                ]);
             }
         } 
         
@@ -683,16 +675,12 @@ class WorkHoursController extends Controller
                                 Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                             }
                         $i_total += $i;
-                        if ($zk->connect()){
+                        if (env('APP_ENV') != 'local' && $zk->connect()){
                             $zk->clearAttendance(); // Remove attendance log only if not empty
                             $zk->disconnect();
                         }
                     } else {
                         Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
-                        // return response()->json([
-                        //     'success' => false,
-                        //     'total' => $i,
-                        // ]);
                     }
                 } else {
                     Log::info($info." machine ".$idmesin." Not Connect!");

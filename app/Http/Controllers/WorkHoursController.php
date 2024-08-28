@@ -563,13 +563,13 @@ class WorkHoursController extends Controller
                             $zk->disconnect();
                         }
                 } else {
-                    Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
+                    Log::warning($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
                 }
             } else {
                 Log::info($info." machine ".$idmesin." Not Connect!");
             } 
         } catch (DecryptException $e) {
-            Log::info($info." failed sync from machine 1");
+            Log::error($info." failed sync from machine 1");
             return response()->json([
                 'success' => false,
                 'total' => $i,
@@ -621,13 +621,13 @@ class WorkHoursController extends Controller
                             $zk->disconnect();
                         }
                     } else {
-                        Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId);
+                        Log::warning($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
                     }
                 } else {
                     Log::info($info." machine ".$idmesin." Not Connect!");
                 } 
             } catch (DecryptException $e) {
-                Log::info($info." failed sync from machine 2");
+                Log::error($info." failed sync from machine 2");
                 return response()->json([
                     'success' => false,
                     'total' => $i,
@@ -680,13 +680,13 @@ class WorkHoursController extends Controller
                             $zk->disconnect();
                         }
                     } else {
-                        Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
+                        Log::warning($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
                     }
                 } else {
                     Log::info($info." machine ".$idmesin." Not Connect!");
                 }  
             } catch (DecryptException $e) {
-                Log::info($info." failed sync from machine 5");
+                Log::error($info." failed sync from machine 5");
                 return response()->json([
                     'success' => false,
                     'total' => $i,

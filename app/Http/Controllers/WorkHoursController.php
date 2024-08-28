@@ -522,7 +522,7 @@ class WorkHoursController extends Controller
         //mesin lantai 1
         try {
             $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE'));
-            $idmesin = 1; //mesin lt 1
+            $idmesin = intval("1".Carbon::now()->translatedFormat("ymdH")); //mesin lt 1
             $i = 0;
             if ($zk->connect()){
                 $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
@@ -558,12 +558,16 @@ class WorkHoursController extends Controller
                             Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                         }
                         $i_total += $i;
+                        if ($zk->connect()){
+                            $zk->clearAttendance(); // Remove attendance log only if not empty
+                            $zk->disconnect();
+                        }
                 } else {
                     Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
-                    return response()->json([
-                        'success' => false,
-                        'total' => $i,
-                    ]);
+                    // return response()->json([
+                    //     'success' => false,
+                    //     'total' => $i,
+                    // ]);
                 }
             } else {
                 Log::info($info." machine ".$idmesin." Not Connect!");
@@ -580,7 +584,7 @@ class WorkHoursController extends Controller
         if(env('IP_ATTENDANCE_MACHINE_2')){
             try {
                 $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE_2'));
-                $idmesin = 2; //mesin lantai 2
+                $idmesin = intval("2".Carbon::now()->translatedFormat("ymdH")); //mesin lantai 2
                 $i = 0;
                 if ($zk->connect()){
                     $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
@@ -616,6 +620,10 @@ class WorkHoursController extends Controller
                                 Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                             }
                         $i_total += $i;
+                        if ($zk->connect()){
+                            $zk->clearAttendance(); // Remove attendance log only if not empty
+                            $zk->disconnect();
+                        }
                     } else {
                         Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId);
                         return response()->json([
@@ -628,10 +636,10 @@ class WorkHoursController extends Controller
                 } 
             } catch (DecryptException $e) {
                 Log::info($info." failed sync from machine 2");
-                return response()->json([
-                    'success' => false,
-                    'total' => $i,
-                ]);
+                // return response()->json([
+                //     'success' => false,
+                //     'total' => $i,
+                // ]);
             }
         } 
         
@@ -639,7 +647,7 @@ class WorkHoursController extends Controller
         if(env('IP_ATTENDANCE_MACHINE_5')){
             try {
                 $zk = new ZKTeco(env('IP_ATTENDANCE_MACHINE_5'));
-                $idmesin = 5; //mesin lantai 5
+                $idmesin = intval("5".Carbon::now()->translatedFormat("ymdH")); //mesin lantai 5
                 $i = 0;
                 if ($zk->connect()){
                     $data = array_reverse(app('App\Http\Controllers\ZKTecoController')->getAttendance($zk), true);
@@ -675,12 +683,16 @@ class WorkHoursController extends Controller
                                 Log::info($info." sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new : ".$i);
                             }
                         $i_total += $i;
+                        if ($zk->connect()){
+                            $zk->clearAttendance(); // Remove attendance log only if not empty
+                            $zk->disconnect();
+                        }
                     } else {
                         Log::info($info." failed sync data att from machine ".$idmesin.", breakid : ".$breakId.", total new: ".$i);
-                        return response()->json([
-                            'success' => false,
-                            'total' => $i,
-                        ]);
+                        // return response()->json([
+                        //     'success' => false,
+                        //     'total' => $i,
+                        // ]);
                     }
                 } else {
                     Log::info($info." machine ".$idmesin." Not Connect!");
@@ -809,12 +821,18 @@ class WorkHoursController extends Controller
 
                 // $zk->removeUser(219); 
                 // return "Add user success";
+                $zk->testVoice();
+                // echo $zk->setTime(); 
+                // echo $zk->getTime();
+                echo intval("1".Carbon::now()->translatedFormat("ymdH"));
 
-                $data = app('App\Http\Controllers\ZKTecoController')->getUser($zk);
-                return response()->json([
-                    'success' => true,
-                    'data' => $data
-                ]);
+                        // $zk->clearAttendance(); // Remove attendance log only if not empty
+
+                // $data = app('App\Http\Controllers\ZKTecoController')->getAttendance($zk);
+                // return response()->json([
+                //     'success' => true,
+                //     'data' => $data
+                // ]);
 
                 //             $data = json_decode(json_encode(app('App\Http\Controllers\ZKTecoController')->getUser($zk)));
 

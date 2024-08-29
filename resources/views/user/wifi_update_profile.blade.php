@@ -47,11 +47,10 @@
                             </span>
                             @enderror
                         </div>
-
                         <div class="mb-3 col-md-6">
                             <label class="form-label">
                                 @if(Auth::user()->hasRole('ST'))
-                                    Nomor ID Staf (Username)
+                                    Username (Nomor ID Staf )
                                 @elseif (Auth::user()->hasRole('SD'))
                                     Nomor Induk Mahasiswa
                                 @else

@@ -81,8 +81,7 @@
                         <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                                name="email" value="{{ (old('email') == null ? 
-                                    ( strstr($data->email, $data->username) == false ? $data->email : '') 
+                                name="email" value="{{ (old('email') == null ? $data->email  
                                     : old('email')) }}" placeholder="Email"  />
                             @error('email')
                             <span class="invalid-feedback" role="alert">

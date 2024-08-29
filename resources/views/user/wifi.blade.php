@@ -34,7 +34,7 @@
         </div>
         <br>
         <a class="btn btn-outline-secondary mb-3" target="_blank" href="https://auth.jgu.ac.id">Login Portal</a> 
-        <a class="btn btn-outline-secondary mb-3" href="{{ route('wifi.edit') }}">Ganti Password</a><br><br>
+        <a class="btn btn-outline-secondary mb-3" href="{{ route('wifi.edit') }}">Ubah Password</a><br><br>
         @if($password != 'SILAHKAN HUBUNGI ITIC JGU')
         <blockquote class="text-danger"><b>Peringatan!</b><br><small>Jangan beritahukan <i>username</i> dan 
             <i>password</i> ini kepada siapapun, kami membatasi limit login perangkat sehingga mempengaruhi kecepatan internet Anda.</small></blockquote>

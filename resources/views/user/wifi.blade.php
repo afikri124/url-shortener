@@ -33,13 +33,17 @@
             <input type="text" class="form-control  text-center" value="{{$group}}" readonly/>
         </div>
         <br>
-        <a class="btn btn-outline-secondary mb-3" target="_blank" href="https://auth.jgu.ac.id">Login Portal</a> 
+        <a class="btn btn-outline-secondary mb-3" target="_blank" href="https://auth.jgu.ac.id/login?username={{$username}}&password={{$password}}">Login Portal</a> 
         <a class="btn btn-outline-secondary mb-3" href="{{ route('wifi.edit') }}">Ubah Password</a><br><br>
         @if($password != 'SILAHKAN HUBUNGI ITIC JGU')
         <blockquote class="text-danger"><b>Peringatan!</b><br><small>Jangan beritahukan <i>username</i> dan 
             <i>password</i> ini kepada siapapun, kami membatasi limit login perangkat sehingga mempengaruhi kecepatan internet Anda.</small></blockquote>
         @endif
         @endif
+
+        @php
+            echo Request::ip();
+        @endphp
     </div>
 </div>
 @endsection

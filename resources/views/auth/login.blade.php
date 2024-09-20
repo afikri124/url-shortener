@@ -81,7 +81,7 @@
                             <div class="btn-showcase">
                                 <button class="btn btn-dark btn-block w-100" onclick="Klas2Login()" title="Single Sign-On JGU (User Klas)">
                                     <img style="max-height: 20px;" src="{{asset('assets/img/favicon.png')}}">
-                                    <span>SSO JGU</span>
+                                    <span>Klas2</span>
                                 </button>
                             </div>
                         </div>

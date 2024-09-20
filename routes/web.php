@@ -19,6 +19,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('index');
 
+Route::get('privacy-policy', function () {
+  return view('privacy-policy');
+});
+
 Auth::routes([
   'register' => false, // Registration Routes...
 ]);

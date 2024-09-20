@@ -34,7 +34,7 @@
                 @if (Route::has('login'))
                 @auth
                 <a href="{{ route('home') }}" class="btn btn-danger text-white text-center w-50"><i
-                        class="bx bx-home me-2"></i>Halaman Utama</a>
+                        class="bx bx-home me-2"></i>Dashboard</a>
                 @else
                 <!-- <a href="{{ route('login') }}" class="btn btn-dark text-white text-center w-50"><i
                         class="bx bx-log-in-circle me-2"></i>Masuk</a> -->

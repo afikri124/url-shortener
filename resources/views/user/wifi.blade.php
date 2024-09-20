@@ -40,10 +40,6 @@
             <i>password</i> ini kepada siapapun, kami membatasi limit login perangkat sehingga mempengaruhi kecepatan internet Anda.</small></blockquote>
         @endif
         @endif
-
-        @php
-            echo Request::ip();
-        @endphp
     </div>
 </div>
 @endsection

@@ -18,6 +18,7 @@ use App\Mail\WeeklyAttendanceReportMail;
 use App\Models\DocDepartment;
 use App\Models\DocPIC;
 use App\Jobs\JobNotificationWA;
+use Mail;
 
 class HomeController extends Controller
 {
@@ -258,7 +259,7 @@ class HomeController extends Controller
     }
 
     public function wa(){
-        echo "tes wa ke fikri";
+        echo "tes wa $ email ke fikri";
                             //----------------WA-------------------------------
                             $wa_to = "6281233933313";
                             if($wa_to != null){
@@ -268,6 +269,7 @@ class HomeController extends Controller
                                 dispatch(new JobNotificationWA($WA_DATA));
                             }
                             // ------------------end send to WA-----------------
+                            Mail::raw('Hello World!', function($msg) {$msg->to('fikri@jgu.ac.id')->subject('Test Email'); });
     }
 
 }

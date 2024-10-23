@@ -45,7 +45,7 @@
                     <div class="row p-2">
                         @foreach($links as $l)
                         <a href="{{$l->link}}" target="_blank"
-                            class="btn btn-block rounded-pill btn-outline-danger my-2">{{$l->title}}</a>
+                            class="btn btn-block rounded-pill btn-outline-danger my-2">{!!$l->title!!}</a>
                         @endforeach
                     </div>
                 </div>

@@ -77,7 +77,11 @@ class MicrositeController extends Controller
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
                             $search = $request->get('search');
-                            $instance->where('title', 'LIKE', "%$search%");
+                            $instance->where('title', 'LIKE', "%$search%")
+                            ->orWhere('shortlink', 'LIKE', "%$search%")
+                            ->orWhereHas('user', function($query) use ($search) {
+                                $query->where('name', 'LIKE', "%$search%");
+                            });
                         }
                     })
                     ->addColumn('idd', function($x){

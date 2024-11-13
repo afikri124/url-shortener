@@ -101,7 +101,7 @@
                             <label class="form-label" for="basicDate">Nama <small class="text-danger">*</small></label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama" onkeyup="createPassword()" 
-                                    placeholder="Nama" value="{{ old('nama') }}" maxlength="24">
+                                    placeholder="Nama" value="{{ old('nama') }}" >
                                 @error('nama')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -113,7 +113,7 @@
                             <label class="form-label" for="basicDate">Email</label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                                    placeholder="Email" value="{{ old('email') }}" maxlength="24">
+                                    placeholder="Email" value="{{ old('email') }}">
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

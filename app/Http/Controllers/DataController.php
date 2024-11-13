@@ -63,7 +63,11 @@ class DataController extends Controller
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
                             $search = $request->get('search');
-                            $instance->where('shortlink', 'LIKE', "%$search%");
+                            $instance->where('shortlink', 'LIKE', "%$search%")
+                            ->orWhere('url', 'LIKE', "%$search%")
+                            ->orWhereHas('user', function($query) use ($search) {
+                                $query->where('name', 'LIKE', "%$search%");
+                            });
                         }
                     })
                     ->addColumn('idd', function($x){

@@ -383,11 +383,11 @@
                     'Minggu ini': [moment().startOf('week'), moment().endOf('week')],
                     'Minggu lalu': [moment().subtract(1, 'week').startOf('week'), moment().subtract(
                         1, 'week').endOf('week')],
-                    '20 ke 19 bln ini': [moment().subtract(1, 'month').set("date", 20), moment()
-                        .set("date", 19)
+                    '20 ke 20 bln ini': [moment().subtract(1, 'month').set("date", 20), moment()
+                        .set("date", 20)
                     ],
-                    '20 ke 19 bln lalu': [moment().subtract(2, 'month').set("date", 20), moment()
-                        .subtract(1, 'month').set("date", 19)
+                    '20 ke 20 bln lalu': [moment().subtract(2, 'month').set("date", 20), moment()
+                        .subtract(1, 'month').set("date", 20)
                     ],
                 }
             }, cb);

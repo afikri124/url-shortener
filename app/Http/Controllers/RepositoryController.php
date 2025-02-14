@@ -60,7 +60,7 @@ class RepositoryController extends Controller
             }
         }else{
             $data = "";
-            return view('REPOSITORY.index', compact('data'));
+            return view('repository.index', compact('data'));
         }
     }
 

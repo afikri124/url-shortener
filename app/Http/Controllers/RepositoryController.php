@@ -111,13 +111,7 @@ class RepositoryController extends Controller
     {
         $data = Repository::where("uid",$id)->first();
         if($data){
-            if($data->type == "Image"){
-                return '<img src="' . url($data->file_path) . '"/>';
-            } else if($data->type == "Pdf") {
-                return response()->file($data->file_path);
-            } else {
-                abort(404);
-            }
+            return response()->file($data->file_path);
         } else {
             abort(404);
         }

@@ -71,6 +71,15 @@ Route::group(['prefix' => 'MICROSITE','middleware' => ['auth', 'role:ST,SD']], f
 Route::get('/M/{id}', [App\Http\Controllers\MicrositeController::class, 'view']);
 Route::get('/m/{id}', [App\Http\Controllers\MicrositeController::class, 'view'])->name('MICROSITE.view');
 
+//Repository
+Route::group(['prefix' => 'REPOSITORY','middleware' => ['auth', 'role:ST']], function () {
+  Route::any('/', [App\Http\Controllers\RepositoryController::class, 'index'])->name('REPOSITORY.index');
+  Route::get('/data', [App\Http\Controllers\RepositoryController::class, 'data'])->name('REPOSITORY.data');
+  Route::delete('/delete', [App\Http\Controllers\RepositoryController::class, 'delete'])->name('REPOSITORY.delete');
+});
+//Repo link
+Route::get('/repo/{id}', [App\Http\Controllers\RepositoryController::class, 'repo']);
+
 //ACT ATT
 Route::group(['prefix' => 'ATT','middleware' => ['auth', 'role:ST,AD']], function () {
   Route::any('/', [App\Http\Controllers\AttController::class, 'index'])->name('att.index');

@@ -38,14 +38,14 @@
                 @else
                 <!-- <a href="{{ route('login') }}" class="btn btn-dark text-white text-center w-50"><i
                         class="bx bx-log-in-circle me-2"></i>Masuk</a> -->
-                <div class="row">
+                <div class="row d-flex justify-content-center">
                     <div class="my-2">
                         <div class="mb-2">Metode Masuk</div>
                         @error('msg')
                         <br><span class="text-danger text-center">{!! $message !!}</span>
                         @enderror
                     </div>
-                    <div class="col-6 mb-1">
+                    {{-- <div class="col-6 mb-1">
                         <div class="btn-showcase">
                             <button class="btn btn-outline-dark btn-block w-100" onclick="Klas2Login()"
                                 title="Single Sign-On JGU">
@@ -53,7 +53,7 @@
                                 <span>SSO JGU</span>
                             </button>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-6 mb-1">
                         <div class="btn-showcase">
                             <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/google') }}"
@@ -95,7 +95,7 @@ $api_key = Crypt::encrypt(env('APP_KEY').gmdate('Y/m/d'));
 Session::put('klas2_api_key', $api_key);
 $callback_url = route('sso_klas2');
 $token = md5($api_key.$callback_url);
-$url = "http://klas2.jgu.ac.id/sso/";
+$url = "http://klas2id.msu.edu.my/sso/";
 $link =
 $url."?login_to=".route('login')."&login_name=$login_name&api_key=$api_key&callback_url=$callback_url&token=$token&ip=".$_SERVER['REMOTE_ADDR'];
 @endphp

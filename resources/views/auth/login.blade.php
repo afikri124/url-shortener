@@ -69,22 +69,22 @@
                        
                     </form> -->
                     <small>
-                    <center class="alert alert-info"><p><b><u class="text-danger">Pengumuman!</u></b><br>Civitas Academica JGU (Mahasiswa/Staf/Dosen) <br>silahkan masuk dengan menekan tombol Google<br>lalu login menggunakan email resmi JGU <br>sedangkan tamu dapat masuk menggunakan gmail.</p></center></small>
-                    <div class="row">
+                    <center class="alert alert-info"><p><b><u class="text-danger">Pengumuman!</u></b><br>Civitas Academica JGU (Mahasiswa/Staf/Dosen) <br>silahkan masuk menggunakan email resmi JGU <br> dan untuk tamu dapat masuk menggunakan gmail.</p></center></small>
+                    <div class="row d-flex justify-content-center">
                         <div class="divider my-2">
                             <div class="divider-text mb-2">Pilih Metode Masuk</div>
                             @error('msg')
                             <br><span class="text-danger text-center">{!! $message !!}</span>
                             @enderror
                         </div>
-                        <div class="col-6 mb-1">
+                        {{-- <div class="col-6 mb-1">
                             <div class="btn-showcase">
                                 <button class="btn btn-dark btn-block w-100" onclick="Klas2Login()" title="Single Sign-On JGU (User Klas)">
                                     <img style="max-height: 20px;" src="{{asset('assets/img/favicon.png')}}">
                                     <span>Klas2</span>
                                 </button>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-6 mb-1">
                             <div class="btn-showcase">
                                 <a class="btn btn-dark btn-block w-100" href="{{ url('login/google') }}" title="Login with (Email JGU / Gmail)">
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <br><small>
-                    <center><i>Jika terdapat kendala masuk atau belum memiliki akun SSO silakan menghubungi tim <a target="_blank" href="https://s.jgu.ac.id/m/itic">ITIC</a></i></center></small>
+                    <center><i>Jika terdapat kendala masuk atau belum memiliki akun silakan menghubungi tim <a target="_blank" href="https://s.jgu.ac.id/m/itic">ITIC</a></i></center></small>
                 </div>
             </div>
         </div>

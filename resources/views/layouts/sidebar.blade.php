@@ -44,6 +44,14 @@
                 <div>Pembuat QR-Code</div>
             </a>
         </li>
+        @if(Auth::user()->hasRole('ST'))
+        <li class="menu-item {{ Route::currentRouteName()=='REPOSITORY.index' ? 'active' : '' }}">
+            <a href="{{ route('REPOSITORY.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-folder-open"></i>
+                <div>Repositori Digital</div>
+            </a>
+        </li>
+        @endif
         @endif
         @if(Auth::user()->hasRole('ST'))
         <li

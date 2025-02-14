@@ -186,7 +186,7 @@
                 {
                     render: function (data, type, row, meta) {
                         return '<button class="btn m-0 p-0" title="Salin" onclick=navigator.clipboard.writeText("{{ url('') }}/repo/' + row.uid + '")><i class="bx bx-copy"></i></button> ' + 
-                        `<span class="text-muted">{{ url('') }}/repo/</span>` +  row.uid ;
+                        `<a target="_blank" href="{{ url('') }}/repo/`+row.uid +`"> <span class="text-muted">{{ url('') }}/repo/</span>` +  row.uid + `</a>`;
                     },
                 },
                 {

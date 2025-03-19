@@ -842,8 +842,7 @@ class WorkHoursController extends Controller
 
             from wh_attendances
             JOIN wh_users on wh_users.username = wh_attendances.username
-            WHERE `status` = 1 
-            and `timestamp` >= '$start' and `timestamp` <= '$end'
+            WHERE `timestamp` >= '$start' and `timestamp` <= '$end'
             GROUP BY wh_attendances.username, wh_attendances.timestamp
             ") );
 

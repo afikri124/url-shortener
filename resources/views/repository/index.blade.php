@@ -106,6 +106,7 @@
                     <th>Path</th>
                     <th width="50px" >Tipe</th>
                     <th width="50px" >Dipublikasikan</th>
+                    <th width="50px">QRCode</th>
                     <th>Pembuat</th>
                     <th width="85px" data-priority="3">Aksi</th>
                 </tr>
@@ -205,7 +206,21 @@
                         }
                     },
                 },
-                
+                {
+                    render: function (data, type, row, meta) {
+                        var x = `{{ url('`+ `repo/` + row.uid + `') }}`;
+                        var l = row.name;
+                        if(l.length > 30) {
+                            l = row.name;
+                            if(l.length > 30) {
+                                l = "";
+                            }
+                        }
+                        return `<a class="text-dark" target="_blank" href="{{ url('qrcode?data=` +
+                            x + `&label=` + l + `') }}" title="Lihat QR-Code"><i class="bx bx-qr-scan"></i></a>`;
+                    },
+                    className: "text-md-center"
+                },
                 {
                     render: function (data, type, row, meta) {
                         if(row.user != null){

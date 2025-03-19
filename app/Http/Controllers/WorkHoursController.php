@@ -763,7 +763,8 @@ class WorkHoursController extends Controller
         Mail::to($data['email'])->cc('eddy@jgu.ac.id')->queue(new WeeklyAttendanceReportMail($data));
         Log::info("Weekly report Att sended!");
         //----------------WA-------------------------------
-        $wa_to = "6281284174900";
+        //$wa_to = "6281284174900"; //bu risma
+        $wa_to = "6283802434392"; //revita
         if($wa_to != null){
             $WA_DATA = array();
             $WA_DATA['wa_to'] = $wa_to;
@@ -823,5 +824,34 @@ class WorkHoursController extends Controller
             }
     }
 
+    public function api_presensi(Request $request)
+    {
+        $today = Carbon::now();
+        $start = $today->copy()->startOfday();
+        $end = $today->copy()->endOfday();
+
+        if (!empty($request->get('date_start')) && !empty($request->get('date_end'))) {
+            $start = Carbon::createFromFormat('Y-m-d H:i:s',$request->get('date_start'));
+            $end = Carbon::createFromFormat('Y-m-d H:i:s',$request->get('date_end'));
+        }
+
+
+        $data = DB::select( DB::raw("SELECT wh_attendances.username as NIP, wh_attendances.username as akun, 
+            DATE_FORMAT(`timestamp`, '%d-%m-%Y') as tanggal, 
+            TIME_FORMAT(MIN(`timestamp`), '%h%i') as masuk, TIME_FORMAT(MAX(`timestamp`), '%h%i') as keluar
+
+            from wh_attendances
+            JOIN wh_users on wh_users.username = wh_attendances.username
+            WHERE `status` = 1 
+            and `timestamp` >= '$start' and `timestamp` <= '$end'
+            GROUP BY wh_attendances.username, wh_attendances.timestamp
+            ") );
+
+        return response()->json([
+            'date_start' => $start,
+            'date_end' => $end,
+            'data' => $data
+        ]);
+    }
 
 }

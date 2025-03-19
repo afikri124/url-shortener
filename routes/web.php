@@ -131,6 +131,8 @@ Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR,IT']], funct
   Route::get('/view/{id}', [App\Http\Controllers\WorkHoursController::class, 'whr_view'])->name('WHR.view');
   Route::get('/get_user/by_id', [App\Http\Controllers\WorkHoursController::class, 'user_by_id'])->name('WHR.user_by_id');
 });
+//API SIAP tes
+Route::get('api/presensi', [\App\Http\Controllers\WorkHoursController::class, 'api_presensi']);
 //JAM-KERJA tes
 Route::get('zk', [\App\Http\Controllers\WorkHoursController::class, 'zk'])->middleware(['auth', 'role:AD']);
 

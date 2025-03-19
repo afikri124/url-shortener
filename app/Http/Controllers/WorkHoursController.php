@@ -848,8 +848,9 @@ class WorkHoursController extends Controller
             ") );
 
         return response()->json([
-            'date_start' => $start,
-            'date_end' => $end,
+            'info' => "untuk memfilter tanggal silahkan kirimkan get request date_start dan date_end dengan format Y-m-d H:i:s",
+            'date_start' => $start->format('Y-m-d H:i:s'),
+            'date_end' => $end->format('Y-m-d H:i:s'),
             'data' => $data
         ]);
     }

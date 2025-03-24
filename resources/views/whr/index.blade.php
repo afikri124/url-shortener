@@ -322,7 +322,7 @@
                         },
                         beforeSend: function (xhr) {
                             $.blockUI({
-                                message: '<div class="spinner-border text-white" role="status">s.jgu</div><br>Tunggu Sebentar..<br>Menyinkronkan data dari mesin Absensi.',
+                                message: '<div class="spinner-border text-white" role="status">s.jgu</div><br>Tunggu Sebentar..<br>Menyinkronkan ke SiakadCloud (SIAP).',
                                 css: {
                                     backgroundColor: "transparent",
                                     border: "0"

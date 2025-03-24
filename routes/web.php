@@ -126,6 +126,7 @@ Route::group(['prefix' => 'WH','middleware' => ['auth','role:ST']], function () 
 Route::group(['prefix' => 'WHR','middleware' => ['auth','role:AD,HR,IT']], function () {
   Route::any('/', [App\Http\Controllers\WorkHoursController::class, 'whr'])->name('WHR.index');
   Route::get('/sync', [App\Http\Controllers\WorkHoursController::class, 'whr_sync'])->name('WHR.sync');
+  Route::get('/siap_sync', [App\Http\Controllers\WorkHoursController::class, 'siap_sync'])->name('WHR.siap_sync');
   Route::get('/data', [App\Http\Controllers\WorkHoursController::class, 'whr_data'])->name('WHR.data');
   Route::get('/print/{id}', [App\Http\Controllers\WorkHoursController::class, 'whr_print'])->name('WHR.print');
   Route::get('/view/{id}', [App\Http\Controllers\WorkHoursController::class, 'whr_view'])->name('WHR.view');

@@ -33,5 +33,8 @@ class SyncAttOnlyJob implements ShouldQueue
         //
         //jalankan fungsi dari controller ini
         app('App\Http\Controllers\WorkHoursController')->whr_sync(); //absen pada mesin
+
+        //jalankan fungsi dari controller ini
+        app('App\Http\Controllers\WorkHoursController')->siap_sync(); //sync data absen ke Siakadcloud (SIAP)
     }
 }

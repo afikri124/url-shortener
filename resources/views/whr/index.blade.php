@@ -90,9 +90,12 @@
                                 </div>
                             </div>
                             <div class="row d-flex flex-row-reverse">
-                                <div class="col-md-4 text-md-end text-center pt-3">
+                                <div class="col-md-12 text-md-end text-center pt-3">
                                     <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
-                                        <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Sinkron</span>
+                                        <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Sinkron dari Mesin</span>
+                                    </button>
+                                    <button class="btn btn-warning" type="button" onclick="SyncSiap()">
+                                        <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Sinkron ke SIAP</span>
                                     </button>
                                     <button class="btn btn-primary" type="submit" title="Ekspor ke Excel">
                                         <span><i class="bx bx-export me-sm-2"></i>
@@ -299,6 +302,63 @@
                 }
             })
     }
+
+    function SyncSiap() {
+        swal({
+                title: "Konfirmasi Sinkronisasi Data",
+                text: "Sistem akan mengirim data Absensi ke siakadcloud (SIAP)",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((x) => {
+                if (x) {
+                    $.ajax({
+                        url: "{{ route('WHR.siap_sync') }}",
+                        type: "GET",
+                        data: {
+                            "_token": $("meta[name='csrf-token']").attr("content"),
+                            'select_range' : document.getElementById("select_range").value
+                        },
+                        beforeSend: function (xhr) {
+                            $.blockUI({
+                                message: '<div class="spinner-border text-white" role="status">s.jgu</div><br>Tunggu Sebentar..<br>Menyinkronkan data dari mesin Absensi.',
+                                css: {
+                                    backgroundColor: "transparent",
+                                    border: "0"
+                                },
+                                overlayCSS: {
+                                    opacity: .5
+                                }
+                            })
+                        },
+                        complete: function () {
+                            $('#datatable').DataTable().ajax.reload();
+                            document.getElementById('lastupdate').style.display = 'none';
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            const obj = JSON.parse(data);
+                            // alert (obj['status']);
+                            if (typeof obj['status'] !== 'undefined') {
+                                swal(obj['message'], {
+                                    icon: "success",
+                                });
+                            } else {
+                                swal("Sinkronisasi Gagal.. Total Data = " + obj['message'], {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    })
+                } else {
+                    swal("Dibatalkan!", {
+                        icon: "error",
+                    });
+                }
+            })
+    }
+
 
     function View(username) {
         var range = $('#select_range').val();

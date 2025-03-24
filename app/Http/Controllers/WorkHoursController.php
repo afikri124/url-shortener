@@ -693,6 +693,100 @@ class WorkHoursController extends Controller
         ]);
     }
 
+    //sync data to Siakadcloud (siap.jgu.ac.id)
+    public function siap_sync(Request $request){
+        $date_start = null;
+        $date_end = null;
+        if (!empty($request->get('select_range'))) {
+            if($request->get('select_range') != "" && $request->get('select_range') != null 
+                && $request->get('select_range') != "Invalid date - Invalid date"){
+                $x = explode(" - ",$request->get('select_range'));
+                $date_start = date('Y-m-d',strtotime($x[0]));
+                $date_end = date('Y-m-d',strtotime($x[1]));
+            }
+        }
+
+        $conf['token_siakad'] = env('token_siakad');
+        $conf['action'] = 'updatemany';
+        $conf['url_siakad'] = env('url_siakad'); 
+        $conf['attend_upload'] = date('Y-m-d'); // set desire date by default it today
+
+        $start = microtime(true);
+        $now = date('Y-m-d');
+        if (!empty($request->get('date'))) {
+            $now  = $request->get('date');
+        }
+
+        if($date_start != null){ //manual
+            $result = DB::select( DB::raw("SELECT DISTINCT(a.username) AS idfinger, DATE_FORMAT(a.timestamp,'%Y-%m-%d') AS tglabsensi, 
+	             concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MIN(a.timestamp), '%H:%i:%s')) AS waktumasuk, 
+				 concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MAX(a.timestamp), '%H:%i:%s')) AS waktukeluar, idmesin AS nomesin
+                    FROM wh_attendances a 
+                    WHERE DATE_FORMAT(a.timestamp,'%Y-%m-%d') >= '". $date_start ."' AND DATE_FORMAT(a.timestamp,'%Y-%m-%d')  <= '". $date_end ."'
+                    GROUP BY a.username, a.timestamp, idmesin
+                    ORDER BY tglabsensi"
+                ) );
+        } else { //(-7 hari) - hari ini
+            $result = DB::select( DB::raw("SELECT DISTINCT(a.username) AS idfinger, DATE_FORMAT(a.timestamp,'%Y-%m-%d') AS tglabsensi, 
+            concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MIN(a.timestamp), '%H:%i:%s')) AS waktumasuk, 
+            concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MAX(a.timestamp), '%H:%i:%s')) AS waktukeluar, idmesin AS nomesin
+               FROM wh_attendances a 
+               WHERE DATE_FORMAT(a.timestamp,'%Y-%m-%d') >= DATE_SUB('". $now ."', INTERVAL 7 DAY) AND DATE_FORMAT(a.timestamp,'%Y-%m-%d')  <= '". $now ."'
+               GROUP BY a.username, a.timestamp, idmesin
+               ORDER BY tglabsensi"
+           ) );
+        }
+        
+        $respon_message = null;
+        if( (count($result) == 0) ){
+            echo json_encode(['message' => 'Tidak ada data.']);
+            $respon_message = 'Tidak ada data.';
+        } else {
+            $request2 = [];
+            foreach($result AS $rows) {
+                foreach($rows AS $key => $row) {
+                    $res[$key] = $row;
+                }
+                $res['nomesin'] = null;
+                $request2[] = $res;
+            }
+
+            // var_dump($request2);
+            $body['token'] = $conf['token_siakad'];
+            $body['action'] = $conf['action'];
+            $body['data'] = $request2;
+
+            $header[] = 'Content-type: application/json';
+
+            $response = array();
+            $curl = curl_init($conf['url_siakad']);
+            curl_setopt($curl, CURLOPT_HEADER, false);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
+
+            $json_response = curl_exec($curl);
+            $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+            curl_close($curl);
+
+            $response = json_decode($json_response, true);
+            $end = microtime(true);
+            $response['time'] = round($end - $start, 4);
+
+            echo json_encode($response);
+            $resp = json_decode(json_encode($response));
+            $respon_message = $resp->message;
+        }
+        if(Auth::check()){
+            $info = (Auth::check() ? Auth::user()->username." : ".Auth::user()->name : "CronJob");
+            Log::info($info." - sync data att to Siakadcloud (SIAP), response : ".$respon_message);
+        } else {
+            Log::info("auto sync data att to Siakadcloud (SIAP), response : ".$respon_message);
+        }
+    }
+
     public function weekly_attendance_report(){
         $hr   = DocDepartment::where('name','Wakil Rektor II')->first();
         if($hr){

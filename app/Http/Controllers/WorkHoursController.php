@@ -723,16 +723,17 @@ class WorkHoursController extends Controller
 				 concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MAX(a.timestamp), '%H:%i:%s')) AS waktukeluar, idmesin AS nomesin
                     FROM wh_attendances a 
                     WHERE DATE_FORMAT(a.timestamp,'%Y-%m-%d') >= '". $date_start ."' AND DATE_FORMAT(a.timestamp,'%Y-%m-%d')  <= '". $date_end ."'
-                    GROUP BY a.username, a.timestamp, idmesin
+                    GROUP BY a.username, DATE_FORMAT(a.timestamp,'%Y-%m-%d')
                     ORDER BY tglabsensi"
                 ) );
         } else { //(-7 hari) - hari ini
             $result = DB::select( DB::raw("SELECT DISTINCT(a.username) AS idfinger, DATE_FORMAT(a.timestamp,'%Y-%m-%d') AS tglabsensi, 
             concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MIN(a.timestamp), '%H:%i:%s')) AS waktumasuk, 
-            concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MAX(a.timestamp), '%H:%i:%s')) AS waktukeluar, idmesin AS nomesin
+            concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MAX(a.timestamp), '%H:%i:%s')) AS waktukeluar, 
+            idmesin AS nomesin
                FROM wh_attendances a 
                WHERE DATE_FORMAT(a.timestamp,'%Y-%m-%d') >= DATE_SUB('". $now ."', INTERVAL 7 DAY) AND DATE_FORMAT(a.timestamp,'%Y-%m-%d')  <= '". $now ."'
-               GROUP BY a.username, a.timestamp, idmesin
+               GROUP BY a.username, DATE_FORMAT(a.timestamp,'%Y-%m-%d')
                ORDER BY tglabsensi"
            ) );
         }
@@ -937,7 +938,7 @@ class WorkHoursController extends Controller
             from wh_attendances
             JOIN wh_users on wh_users.username = wh_attendances.username
             WHERE `timestamp` >= '$start' and `timestamp` <= '$end'
-            GROUP BY wh_attendances.username, wh_attendances.timestamp
+            GROUP BY wh_attendances.username, DATE_FORMAT(`timestamp`, '%d-%m-%Y')
             ") );
 
         return response()->json([

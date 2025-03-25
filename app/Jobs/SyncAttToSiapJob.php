@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Http\Request;
 
-class SyncAttOnlyJob implements ShouldQueue
+class SyncAttToSiapJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,8 +32,9 @@ class SyncAttOnlyJob implements ShouldQueue
     public function handle()
     {
         //
-        //jalankan fungsi dari controller ini
-        app('App\Http\Controllers\WorkHoursController')->whr_sync(); //absen pada mesin
 
+        //jalankan fungsi dari controller ini
+        $a = new Request();
+        app('App\Http\Controllers\WorkHoursController')->siap_sync($a); //sync data absen ke Siakadcloud (SIAP)
     }
 }

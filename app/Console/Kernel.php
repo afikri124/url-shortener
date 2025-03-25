@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\SyncAttendanceJob;
 use App\Jobs\SyncAttOnlyJob;
+use App\Jobs\SyncAttToSiapJob;
 use App\Jobs\BroadCastNotificationDoc;
 use App\Jobs\WeeklyAttendanceReport;
 
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
         ->withoutOverlapping();
         $schedule->job(new SyncAttendanceJob)->twiceDailyAt(3, 12, 30)->runInBackground()->withoutOverlapping(); //jam 03:30 dan 12:30
         $schedule->job(new SyncAttOnlyJob)->hourly()->runInBackground()->withoutOverlapping();
+        $schedule->job(new SyncAttToSiapJob)->hourlyAt(1)->runInBackground()->withoutOverlapping();
         $schedule->job(new BroadCastNotificationDoc)->days([1,2,3,4,5,6])->at('16:30')->runInBackground()->withoutOverlapping();
         $schedule->job(new WeeklyAttendanceReport)->weeklyOn(5, '17:30')->runInBackground()->withoutOverlapping();
     }

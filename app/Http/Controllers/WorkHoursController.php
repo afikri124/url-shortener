@@ -731,7 +731,7 @@ class WorkHoursController extends Controller
             concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MIN(a.timestamp), '%H:%i:%s')) AS waktumasuk, 
             concat(DATE_FORMAT(a.timestamp,'%Y-%m-%d'),' ',DATE_FORMAT(MAX(a.timestamp), '%H:%i:%s')) AS waktukeluar
                FROM wh_attendances a 
-               WHERE DATE_FORMAT(a.timestamp,'%Y-%m-%d') >= DATE_SUB('". $now ."', INTERVAL 7 DAY) AND DATE_FORMAT(a.timestamp,'%Y-%m-%d')  <= '". $now ."'
+               WHERE DATE_FORMAT(a.timestamp,'%Y-%m-%d') >= DATE_SUB('". $now ."', INTERVAL 3 DAY) AND DATE_FORMAT(a.timestamp,'%Y-%m-%d')  <= '". $now ."'
                GROUP BY a.username, DATE_FORMAT(a.timestamp,'%Y-%m-%d')
                ORDER BY tglabsensi"
            ) );
@@ -739,7 +739,7 @@ class WorkHoursController extends Controller
         
         $respon_message = null;
         if( (count($result) == 0) ){
-            echo json_encode(['message' => 'Tidak ada data.']);
+            echo json_encode(['message' => 'Tidak ada data absensi.']);
             $respon_message = 'Tidak ada data.';
         } else {
             $request2 = [];

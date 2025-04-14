@@ -24,8 +24,8 @@ class Kernel extends ConsoleKernel
         ->twiceDaily(10, 15)
         ->withoutOverlapping();
         $schedule->job(new SyncAttendanceJob)->twiceDailyAt(3, 12, 30)->runInBackground()->withoutOverlapping(); //jam 03:30 dan 12:30
-        $schedule->job(new SyncAttOnlyJob)->hourly()->unlessBetween('1:00', '3:00')->runInBackground()->withoutOverlapping();
-        $schedule->job(new SyncAttToSiapJob)->hourlyAt(1)->unlessBetween('1:00', '3:00')->runInBackground()->withoutOverlapping(); //tiap jam, kecuali jam 1-4
+        $schedule->job(new SyncAttOnlyJob)->hourly()->unlessBetween('1:00', '4:00')->runInBackground()->withoutOverlapping();
+        $schedule->job(new SyncAttToSiapJob)->hourlyAt(1)->unlessBetween('1:00', '4:00')->runInBackground()->withoutOverlapping(); //tiap jam, kecuali jam 1-4
         $schedule->job(new BroadCastNotificationDoc)->days([1,2,3,4,5,6])->at('16:30')->runInBackground()->withoutOverlapping();
         $schedule->job(new WeeklyAttendanceReport)->weeklyOn(5, '17:30')->runInBackground()->withoutOverlapping();
     }

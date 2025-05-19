@@ -14,6 +14,32 @@
             page-break-after: always;
         }
 
+        .header,
+        .footer {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+        }
+
+        .header {
+            right: -20px;
+            top: -20px;
+            bottom: 300px;
+        }
+
+        .footer {
+            bottom: -60px;
+        }
+
+        .pagenum:before {
+            content: counter(page);
+        }
+
+        body {
+            margin-top: 45px;
+            margin-bottom: 25px;
+        }
+
     </style>
     <style>
         tbody td {
@@ -29,16 +55,22 @@
 </head>
 
 <body style="font-size: 11pt;">
-    <table width="100%">
-        <tr>
-            <td width="50%" valign="top">
+    <div class="header">
+        <table width="100%">
+            <tr>
+                <td width="50%" valign="top">
 
-            </td>
-            <td width="50%" style="text-align: right;">
-                <img src="{{ public_path('assets/img/jgu.png') }}" style="height: 60px;" alt="">
-            </td>
-        </tr>
-    </table>
+                </td>
+                <td width="50%" style="text-align: right;">
+                    <img src="{{ public_path('assets/img/jgu.png') }}" style="height: 60px;" alt="">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="footer">
+        {{-- Page <span class="pagenum"></span> --}}
+        <img src="{{ public_path('assets/img/footer_jgu_2025.png') }}" style="width:127%" alt="">
+    </div>
     <br>
     <center>
         {{-- <b style="font-size:50px">SCAN DISINI</b>
@@ -50,9 +82,9 @@
         <br>
         <h4>[ <code style="color:red">{{$link}}</code> ]</h4>
         <br>
-        
+
     </center>
-   
+
 </body>
 
 </html>

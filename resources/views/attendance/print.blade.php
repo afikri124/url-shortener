@@ -14,6 +14,30 @@
             page-break-after: always;
         }
 
+        .header,
+        .footer {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+        }
+
+        .header {
+            top: 0px;
+        }
+        .footer {
+            bottom: -63px;
+        }
+
+        .pagenum:before {
+            content: counter(page);
+        }
+
+        body {
+            margin-top: 150px;
+            margin-bottom: 25px;
+        }
+
+
         p {
             margin: 0 5px;
         }
@@ -38,145 +62,155 @@
 </head>
 
 <body style="font-size: 10pt;">
+    <div class="header" >
+        <table width="100%" border="1px solid">
+            <tr>
+                <td style="text-align:center; vertical-align:middle;" rowspan='6' width="25%">
+                    <img src="{{ public_path('assets/img/jgu.png') }}" style="height: 60px;" alt="">
+                </td>
+                <td valign="top" colspan="2" style="text-align:center;" width="55%">
+                    <p><b>Presensi Kehadiran @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif<b></p>
+                </td>
+                <td style="text-align:center; vertical-align:middle;" rowspan='6' width="20%">
+                    <p style="margin-bottom: 5px;">FM/JGU/L.007</p>
+                    <a href="{{ $link }}"><img src="{{ $qr }}" style="height: 85px;"></a>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" colspan="2" style="text-align:center;">
+                    <p><b>{{$data->title}}</b></p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" width="20%">
+                    <p>Hari/Tgl.</p>
+                </td>
+                <td valign="top" width="35%">
+                    <p>{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}</p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <p>Tempat</p>
+                </td>
+                <td valign="top">
+                    <p> {{$data->location}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <p>Pimpinan @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif</p>
+                </td>
+                <td valign="top">
+                    <p> {{$data->host}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <p>Peserta @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif</p>
+                </td>
+                <td valign="top">
+                    <p> {{$data->participant}}</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="footer">
+        {{-- Page <span class="pagenum"></span> --}}
+        <img src="{{ public_path('assets/img/footer_jgu_2025.png') }}" style="width:117%" alt="">
+    </div>
     <table width="100%" border="1px solid">
-        <tr>
-            <td style="text-align:center; vertical-align:middle;" rowspan='6' width="25%">
-                <img src="{{ public_path('assets/img/jgu.png') }}" style="height: 60px;" alt="">
-            </td>
-            <td valign="top" colspan="2" style="text-align:center;" width="55%">
-                <p><b>Presensi Kehadiran @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif<b></p>
-            </td>
-            <td style="text-align:center; vertical-align:middle;" rowspan='6' width="20%">
-                <p style="margin-bottom: 5px;">FM/JGU/L.007</p>
-                <a href="{{ $link }}"><img src="{{ $qr }}" style="height: 85px;"></a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" colspan="2" style="text-align:center;">
-                <p><b>{{$data->title}}</b></p>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" width="20%">
-                <p>Hari/Tgl.</p>
-            </td>
-            <td valign="top" width="35%">
-                <p>{{ \Carbon\Carbon::parse($data->date)->translatedFormat("l, d F Y"); }}</p>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <p>Tempat</p>
-            </td>
-            <td valign="top">
-                <p> {{$data->location}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <p>Pimpinan @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif</p>
-            </td>
-            <td valign="top">
-                <p> {{$data->host}}</p>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <p>Peserta @if($data->type =='E') Acara @elseif($data->type =='M') Rapat @endif</p>
-            </td>
-            <td valign="top">
-                <p> {{$data->participant}}</p>
-            </td>
-        </tr>
-    </table>
-    <table width="100%" border="1px solid">
-    <thead>
-        <tr style="vertical-align:middle">
-            <td style="text-align:center;vertical-align:middle" width="5%">
-                <b>No</b>
-            </td>
-            <td style="text-align:center;" width="40%">
-                <b>Nama</b>
-            </td>
-            <td style="text-align:center;" width="35%">
-                <b>Jabatan</b>
-            </td>
-            <td style="text-align:center;" width="20%">
-                <b>Paraf</b>
-            </td>
-        </tr>
-    </thead>
-    <tbody>
-        @php $i = 1; $datamerah = false; @endphp
-        @foreach($al->sortBy('user.name') as $d)
-        <tr style="vertical-align:middle">
-            <td style="text-align:center;padding:0; margin:0; white-space: nowrap;
+        <thead>
+            <tr style="vertical-align:middle">
+                <td style="text-align:center;vertical-align:middle" width="5%">
+                    <b>No</b>
+                </td>
+                <td style="text-align:center;" width="40%">
+                    <b>Nama</b>
+                </td>
+                <td style="text-align:center;" width="35%">
+                    <b>Jabatan</b>
+                </td>
+                <td style="text-align:center;" width="20%">
+                    <b>Paraf</b>
+                </td>
+            </tr>
+        </thead>
+        <tbody> 
+            @php $i = 1; $datamerah = false; @endphp
+            @foreach($al->sortBy('user.name') as $d)
+            <tr style="vertical-align:middle">
+                <td style="text-align:center;padding:0; margin:0; white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;">
-                <p>{{$i++}}</p>
-            </td>
-            <td>
-                @if($d->longitude == null)
-                @php $datamerah = true; @endphp
-                <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}<i style="color:red;" title="Lokasi">*</i> 
-                </p>
-                @else
-                <p>
-                    <a style="color:black;" target='_BLANK'
-                        href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
-                        {{($d->user != null ? $d->user->name_with_title : $d->username)}}
-                    </a>
-                </p>
-                @endif
+                    <p>{{$i++}}</p>
+                </td>
+                <td>
+                    @if($d->longitude == null)
+                    @php $datamerah = true; @endphp
+                    <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}<i style="color:red;"
+                            title="Lokasi">*</i>
+                    </p>
+                    @else
+                    <p>
+                        <a style="color:black;" target='_BLANK'
+                            href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
+                            {{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                        </a>
+                    </p>
+                    @endif
 
-            </td>
-            <td>
-                <p>{{($d->user != null ? $d->user->job : "-")}}</p>
-            </td>
-            <td style="text-align:center;">
-                <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;" /></p>
-            </td>
-        </tr>
-        @endforeach
-        @if(count($al2) != 0)
+                </td>
+                <td>
+                    <p>{{($d->user != null ? $d->user->job : "-")}}</p>
+                </td>
+                <td style="text-align:center;">
+                    <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;" /></p>
+                </td>
+            </tr>
+            @endforeach
+            @if(count($al2) != 0)
             <tr style="background-color: #000; color:#fff">
                 <td colspan="4" style="text-align: center;"><small>Non Karyawan JGU</small></td>
             </tr>
-        @endif
-        @foreach($al2->sortBy('user.name_with_title') as $d)
-        <tr style="vertical-align:middle">
-            <td style="text-align:center;padding:0; margin:0; white-space: nowrap;
+            @endif
+            @foreach($al2->sortBy('user.name_with_title') as $d)
+            <tr style="vertical-align:middle">
+                <td style="text-align:center;padding:0; margin:0; white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;">
-                <p>{{$i++}}</p>
-            </td>
-            <td>
-                @if($d->longitude == null)
-                @php $datamerah = true; @endphp
-                <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}<i style="color:red;" title="Lokasi">*</i> 
-                </p>
-                @else
-                <p>
-                    <a style="color:black;" target='_blank'
-                        href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
-                        {{($d->user != null ? $d->user->name_with_title : $d->username)}}
-                    </a>
-                </p>
-                @endif
+                    <p>{{$i++}}</p>
+                </td>
+                <td>
+                    @if($d->longitude == null)
+                    @php $datamerah = true; @endphp
+                    <p>{{($d->user != null ? $d->user->name_with_title : $d->username)}}<i style="color:red;"
+                            title="Lokasi">*</i>
+                    </p>
+                    @else
+                    <p>
+                        <a style="color:black;" target='_blank'
+                            href='https://www.google.com/maps?q={{ $d->latitude}},{{$d->longitude}}'>
+                            {{($d->user != null ? $d->user->name_with_title : $d->username)}}
+                        </a>
+                    </p>
+                    @endif
 
-            </td>
-            <td>
-                <p><i>{{($d->user != null ? $d->user->job : "-")}}</i></p>
-            </td>
-            <td style="text-align:center;">
-                <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;" /></p>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
+                </td>
+                <td>
+                    <p><i>{{($d->user != null ? $d->user->job : "-")}}</i></p>
+                </td>
+                <td style="text-align:center;">
+                    <p><img src="{!! $d->signature_img !!}" style="height:40px; margin:0px;" /></p>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
     </table>
     @if($datamerah)
-        <small><p style="color:red;font-size:6pt">* Titik lokasi Absensi tidak ditemukan.</p></small>
+    <small>
+        <p style="color:red;font-size:6pt">* Titik lokasi Absensi tidak ditemukan.</p>
+    </small>
     @endif
     <br>
     <table width="100%">
@@ -189,8 +223,8 @@
     </table>
     <script type="text/php">
         if (isset($pdf)) {
-            $x = 40;
-            $y = 800;
+            $x = 17;
+            $y = 785;
             $text = "Halaman {PAGE_NUM} dari {PAGE_COUNT}";
             $font = null;
             $size = 8;

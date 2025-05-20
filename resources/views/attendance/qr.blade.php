@@ -113,10 +113,8 @@
         <blockquote>
             <small style="font-size: 8pt;color:#999">
                 <center><i>
-                        Sivitas Akademika JGU (Mahasiswa/Staf/Dosen) silakan masuk melalui Single Sign-On (SSO) dengan
-                        menggunakan akun Klas atau masuk melalui Google dengan menggunakan email @jgu.ac.id, sedangkan
-                        untuk
-                        tamu (eksternal) dapat masuk menggunakan akun Google.<br>
+                        Civitas Akademica JGU (Mahasiswa/Staf/Dosen) silakan masuk melalui Single Sign-On (SSO) Google dengan menggunakan email @jgu.ac.id, sedangkan
+                        untuk tamu (eksternal) dapat masuk menggunakan akun Gmail.<br>
                         Jika terdapat kendala login atau belum memiliki akun SSO silakan menghubungi tim HR / ITIC.</i>
                 </center>
             </small>

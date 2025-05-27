@@ -17,29 +17,46 @@
     <div class="mb-3 col-md-4">
         <i class="bx bx-wifi text-success" style="font-size: 50pt"></i>
         @if(Auth::user()->hasRole('ST') || Auth::user()->hasRole('SD') || Auth::user()->hasRole('GS'))
-        <h3 class="text-light">Silahkan menggunakan akun berikut ini untuk terhubung ke Portal Wifi <b>Jakarta Global University</b></h3>
+        <h4 class="text-light">Silahkan menggunakan akun berikut ini untuk terhubung ke Portal Wifi <b>Jakarta Global
+                University</b></h4>
         <br>
-        
+
         <div class="mb-3">
             <label for="user" class="form-label text-light">Username</label>
-            <input type="text" class="form-control text-center" value="{{$username}}" disabled/>
+            <input type="text" class="form-control text-center" value="{{$username}}" disabled />
         </div>
         <div class="mb-3">
             <label for="user" class="form-label text-light">Password</label>
-            <input type="text" class="form-control  text-center" value="{{$password}}" disabled/>
+            <input type="text" class="form-control  text-center" value="{{$password}}" disabled />
         </div>
         <div class="mb-3">
             <label for="user" class="form-label text-light">GRUP</label>
-            <input type="text" class="form-control  text-center" value="{{$group}}" disabled/>
+            <input type="text" class="form-control  text-center" value="{{$group}}" disabled />
         </div>
         <br>
-        <a class="btn btn-outline-secondary mb-3" target="_blank" href="https://auth.jgu.ac.id/login?username={{$username}}&password={{$password}}">Login Portal</a> 
-        <a class="btn btn-outline-secondary mb-3" href="{{ route('wifi.edit') }}">Ubah Password</a><br><br>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6 col-xs-12 mb-2">
+                <div class="btn-showcase">
+                    <a class="btn btn-block w-100 btn-outline-secondary mb-3" target="_blank"
+                        href="https://auth.jgu.ac.id/login?username={{$username}}&password={{$password}}">
+                        <i class="bx bx-log-in-circle me-2"></i> Login Portal
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12 mb-2">
+                <div class="btn-showcase">
+                    <a class="btn btn-block w-100 btn-outline-secondary mb-3" href="{{ route('wifi.edit') }}">
+                        <i class="bx bx-key me-2"></i> Ubah Password</a>
+                </div>
+            </div>
+        </div>
         @if($password != 'SILAHKAN HUBUNGI ITIC JGU')
-        <blockquote class="text-danger"><b>Peringatan!</b><br><small>Jangan memberikan <i>username</i> dan 
-            <i>password</i> ini kepada siapapun, kami membatasi jumlah login perangkat dan kecepatan internet berdasarkan grup yang Anda dapatkan.</small></blockquote>
+        <blockquote class="text-danger"><b>Peringatan!</b><br><small>Jangan memberikan <i>username</i> dan
+                <i>password</i> ini kepada siapapun, kami membatasi jumlah login perangkat dan kecepatan internet
+                berdasarkan grup yang Anda dapatkan.</small></blockquote>
         @endif
         @endif
+        <small>{{ $agent_log }}</small>
     </div>
 </div>
 @endsection

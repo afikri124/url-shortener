@@ -70,7 +70,7 @@
                     </form> -->
                     <small>
                     <center class="alert alert-secondary"><p><b><i class="text-danger"><i class="fa fa-info-circle"></i> Informasi !</i></b>
-                        <br>Civitas Academica JGU (Mahasiswa/Karyawan/Dosen) <br>silakan menggunakan Single Sign-On Siakad (SIAP) atau email resmi JGU, sedangkan untuk tamu dapat masuk menggunakan google (gmail).</p>
+                        <br>Civitas Academica JGU masuk menggunakan <i>Single Sign-On SIAP</i> atau email JGU, sedangkan untuk tamu dapat masuk menggunakan google.</p>
                         {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
                     </center>
                     </small>
@@ -81,7 +81,7 @@
                             <br><span class="text-danger text-center">{!! $message !!}</span>
                             @enderror
                         </div>
-                        {{-- <div class="col-6 mb-2">
+                        {{-- <div class="col-md-6 col-xs-12 mb-2">
                             <div class="btn-showcase">
                                 <button class="btn btn-outline-dark btn-block w-100" onclick="Klas2Login()" title="Single Sign-On JGU (User Klas)">
                                     <img style="max-height: 15px;" src="{{asset('assets/img/favicon.png')}}">
@@ -89,7 +89,7 @@
                                 </button>
                             </div>
                         </div> --}}
-                        <div class="col-6 mb-2">
+                        <div class="col-md-6 col-xs-12 mb-2">
                             <div class="btn-showcase">
                                 <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/siap') }}" title="Login dengan SSO Siakad (SIAP)">
                                     <img style="max-height: 15px; margin-right: 3px" src="{{asset('assets/img/icons/sevima.png')}}">
@@ -98,7 +98,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-6 mb-2">
+                        <div class="col-md-6 col-xs-12 mb-2">
                             <div class="btn-showcase">
                                 <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/google') }}" title="Login dengan (Email JGU / Gmail)">
                                     <img style="max-height: 15px; margin-right: 3px" src="{{asset('assets/img/icons/google.png')}}">

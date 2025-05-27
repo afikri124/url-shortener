@@ -114,6 +114,13 @@
         </table>
     </div>
 </div>
+<div class="mt-2">
+    <small class="text-light">Keterangan: <br>
+        <ul>
+            <li>Jika Status Publikasi "Ya", maka repositori dapat dilihat oleh semua pengguna yang mempunyai akses ke menu ini.</li>
+            <li>Jika Status Publikasi "Tidak", maka repositori hanya dapat dilihat oleh pembuat repositori dan yang memiliki tautan path-nya.</li>
+        </ul></small>
+</div>
 @endsection
 
 @section('script')

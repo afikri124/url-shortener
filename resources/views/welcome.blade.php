@@ -48,7 +48,7 @@
                         <br><span class="text-danger text-center">{!! $message !!}</span>
                         @enderror
                     </div>
-                    {{-- <div class="col-6 mb-2">
+                    {{-- <div class="col-md-6 col-xs-12 mb-2">
                                 <div class="btn-showcase">
                                     <button class="btn btn-outline-dark btn-block w-100" onclick="Klas2Login()"
                                         title="Single Sign-On JGU">
@@ -57,7 +57,7 @@
                             </button>
                         </div>
                     </div> --}}
-                    <div class="col-6 mb-2">
+                    <div class="col-md-6 col-xs-12 mb-2">
                         <div class="btn-showcase">
                             <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/siap') }}"
                                 title="Log in with SSO SIAP">
@@ -66,7 +66,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-6 mb-2">
+                    <div class="col-md-6 col-xs-12 mb-2">
                         <div class="btn-showcase">
                             <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/google') }}"
                                 title="Log in with Email">
@@ -78,7 +78,6 @@
                 </div>
             @endauth
             @endif
-            <br><br>
             <div class="divider mt-3">
                 <div class="divider-text">© {{ (date('Y')=="2022"?date('Y'):"2022-".date('Y')) }}</div>
             </div>

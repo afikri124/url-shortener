@@ -16,12 +16,13 @@ use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Jenssegers\Agent\Agent;
 
 
 class WifiUserController extends Controller
 {
     //
-    function wifi (){
+    function wifi (Request $request){
         if(Auth::user()->username == null || Auth::user()->phone == null){
             return redirect()->route('update_profile')->with('msg','LENGKAPI DATA ANDA TERLEBIH DAHULU!');
         }
@@ -119,7 +120,16 @@ class WifiUserController extends Controller
             Log::info("Wifi Radius error : ".$e);
             $group = "ERROR : SERVER RADIUS SEDANG DOWN!";
         }
-        return view('user.wifi', compact('username','password','group'));
+        $ip = $request->ip();
+
+        $agent = new Agent();
+        $ip = $request->ip();
+        $browser = $agent->browser();
+        $platform = $agent->platform();
+        $device = $agent->device();
+
+        $agent_log = "Pastikan WiFi Anda disambungkan ke SSID Jakarta Global University untuk login portal. Anda terdeteksi menggunakan IP $ip dengan browser $browser, $device $platform.";
+        return view('user.wifi', compact('username','password','group','agent_log'));
     }
 
     public function wifi_edit (Request $request)

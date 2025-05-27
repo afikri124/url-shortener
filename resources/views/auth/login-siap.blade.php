@@ -57,7 +57,7 @@
                             <label for="email" class="form-label">Email</label>
                             <input type="text" class="form-control @error('email') is-invalid @enderror"
                                 id="email" name="email" value="{{ old('email') }}"
-                                placeholder="Masukkan email yang terdaftar di SIAP JGU" autofocus />
+                                placeholder="Masukkan email yang terdaftar di SIAP" autofocus />
                             @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -72,7 +72,7 @@
                             <div class="input-group input-group-merge">
                                 <input type="password" id="password"
                                     class="form-control @error('password') is-invalid @enderror" name="password"
-                                    placeholder="Masukkan password" aria-describedby="password" />
+                                    placeholder="Masukkan password SIAP" aria-describedby="password" />
                                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">

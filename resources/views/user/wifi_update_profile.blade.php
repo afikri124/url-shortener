@@ -25,10 +25,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
-        <div class="alert alert-secondary alert-dismissible" role="alert">
-            Jika mengalami kendala silahkan hubungi <a href="https://s.jgu.ac.id/m/itic">ITIC JGU</a>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
         <div class="card mb-4">
             <h5 class="card-header">Lengkapi Profil</h5>
             <!-- Account -->
@@ -96,16 +92,6 @@
                             @enderror
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label class="form-label">Jabatan/Pekerjaan <small class="text-danger">*</small></label>
-                            <input type="text" class="form-control @error('job') is-invalid @enderror" name="job"
-                                value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" placeholder="Dosen/Staf/Mahasiswa/Tamu dll."/>
-                            @error('job')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="mb-3 col-md-6">
                             <label class="form-label">Jenis Kelamin <small class="text-danger">*</small></label>
                             <select class="select2 form-select col-sm-12 @error('gender') is-invalid @enderror"
                                 name="gender">
@@ -116,6 +102,17 @@
                                 @endforeach
                             </select>
                             @error('gender')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label">Jabatan/Pekerjaan <small class="text-danger">*</small></label>
+                            <input type="text" class="form-control @error('job') is-invalid @enderror" name="job"
+                                value="{{ (old('job') == null ? Auth::user()->job : old('job')) }}" placeholder="Dosen/Staf/Mahasiswa/Tamu dll."/>
+                            @error('job')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>

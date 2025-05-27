@@ -20,6 +20,7 @@ use App\Models\DocPIC;
 use App\Jobs\JobNotificationWA;
 use Illuminate\Support\Facades\Log;
 use Mail;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -111,143 +112,145 @@ class HomeController extends Controller
                 if($request->urlintended != null){
                     session(['url.intended' => $request->urlintended]); //link redirect
                 }
-
-                $client = new \GuzzleHttp\Client();
                 $url = env('SevimaAPI_url').'/siakadcloud/v1/user/login';
-                $response = $client->post(
-                    $url,
-                    [
-                        'headers' => [
-                            'Content-Type' => 'application/json',
-                            'Accept' => 'application/json',
-                            'X-App-Key' => env('SevimaAPI_key'),
-                            'X-Secret-Key' => env('SevimaAPI_secret'),
-                        ],
-                        'json' => [
-                            'email' => $request->email,
-                            'password' => $request->password,
-                        ],
-                    ]
-                );
-                $data = json_decode($response->getBody()->getContents());
-                if($data->attributes->status_aktif){
-                    // dd($data->attributes);
-                    $username = null;
-                    $role = null;
-                    $job = null;
-                    foreach ($data->attributes->role as $item) {
-                        if ($item->id_role === 'mhs') {
-                            $username = $item->nim;
-                            $role = "SD";
-                            $job = $item->nama_role;
-                            break;
-                        } else if ($item->id_role === 'dosen') {
-                            $username = $item->nip;
-                            $role = "ST";
-                            $job = $item->nama_role;
-                            break;
-                        } else if ($item->id_role === 'peg') {
-                            $username = $item->nip;
-                            $role = "ST";
-                            $job = $item->nama_role;
-                            break;
-                        } else {
-                            $username = $item->nip;
-                            $role = "GS";
-                            $job = $item->nama_role;
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'X-App-Key' => env('SevimaAPI_key'),
+                    'X-Secret-Key' => env('SevimaAPI_secret'),
+                ])->post($url, [
+                    'email' => $request->email,
+                    'password' => $request->password,
+                ]);
+
+                if ($response->successful()) {
+                    $data = json_decode(json_encode($response->json())); // atau redirect/simpan token
+                    if(is_object($data) && isset($data->attributes) && $data->attributes->status_aktif){ //mengecek akun apakah masih aktif
+                        // dd($data->attributes);//test
+                        $username = null;
+                        $jobName = null;
+
+                        foreach ($data->attributes->role as $role) {
+                            if (is_object($role) && isset($role->nama_role)) {
+                                $jobName = $role->nama_role;
+                            }
+
+                            if (is_object($role) && isset($role->nip)) {
+                                $username = $role->nip;
+                                break; // Ambil hanya nip yang pertama
+                            } else if (is_object($role) && isset($role->nim)) {
+                                $username = $role->nim;
+                                break; // Ambil hanya nim yang pertama
+                            }
                         }
-                    }
-                    if ($username != null){ // nim/nip tidak null
-                        $user = User::where('username', $username)->first();
-                        if ($user != null) { //login
-                            if($data->attributes->email != $user->email){
-                                $email = explode("@",$data->attributes->email);
-                                if($email[1] == "jgu.ac.id" || $email[1] == "student.jgu.ac.id"){
-                                    $emailcheck = User::where('email',$data->attributes->email)->first();
-                                    if($emailcheck != null){ //update username base on email
-                                        User::where('id',$user->id)->update([
-                                            'username' => $username."x",
-                                        ]);
-                                        User::where('email',$data->attributes->emai)->update([
-                                            'username' => $username,
-                                        ]);
-                                    } else { //update email
-                                        User::where('id',$user->id)->update([
-                                            'email' => $data->attributes->email,
-                                        ]);
+                        $roles = collect($data->attributes->role); // Ambil bagian role saja
+                        $hasMhs = $roles->contains(function ($role) {
+                            return is_object($role) && $role->id_role === 'mhs';
+                        });
+                        $hasPeg = $roles->contains(function ($role) {
+                            return is_object($role) && $role->id_role === 'peg';
+                        });
+                        $hasDosen = $roles->contains(function ($role) {
+                            return is_object($role) && $role->id_role === 'dosen';
+                        });
+
+                        if ($username != null){ // nim/nip tidak null
+                            $user = User::where('username', $username)->first(); //cari user by username
+                            if ($user != null) { //login
+                                if($data->attributes->email != $user->email){
+                                    $email = explode("@",$data->attributes->email);
+                                    if($email[1] == "jgu.ac.id" || $email[1] == "student.jgu.ac.id"){
+                                        $emailcheck = User::where('email',$data->attributes->email)->first();
+                                        if($emailcheck != null){ //update username base on email
+                                            User::where('id',$user->id)->update([
+                                                'username' => $username."x", //jika bentrok username diganti
+                                            ]);
+                                            User::where('email',$data->attributes->emai)->update([
+                                                'username' => $username,
+                                            ]);
+                                        } else { //update email
+                                            User::where('id',$user->id)->update([
+                                                'email' => $data->attributes->email,
+                                            ]);
+                                        }
                                     }
                                 }
-                            }
-                            Auth::loginUsingId($user->id);
-                        } else { //register
-                            $user = User::where('email',$data->attributes->email)->first();
-                            if($user == null){
-                                $new_user = User::insert([
+                                Auth::loginUsingId($user->id);
+                            } else { //register jika username blm terdaftar
+                                $user = User::where('email',$data->attributes->email)->first(); //cari user by email
+                                if($user == null){ //jika user tdk ada
+                                    $new_user = User::insert([
+                                            'name' => $data->attributes->nama,
+                                            'email' => $data->attributes->email,
+                                            'username' => $username,
+                                            'password'=> Hash::make($username),
+                                            'job'=> $jobName,
+                                            'email_verified_at' => Carbon::now(),
+                                            'created_at' => Carbon::now()
+                                    ]);
+                                    
+                                    if($new_user){
+                                        $user = User::where('username', $username)->first();
+                                        if($hasDosen || $hasPeg){
+                                            $user->roles()->attach(Role::where('id', 'ST')->first());
+                                        } else {
+                                            if ($hasMhs) {
+                                                $user->roles()->attach(Role::where('id', 'SD')->first());
+                                            } else {
+                                                $user->roles()->attach(Role::where('id', 'GS')->first());
+                                            }
+                                        }
+                                    }  
+                                } else { //jika user ada
+                                    $old_user = $user->update([
                                         'name' => $data->attributes->nama,
-                                        'email' => $data->attributes->email,
                                         'username' => $username,
                                         'password'=> Hash::make($username),
-                                        'job'=> $job,
-                                        'email_verified_at' => Carbon::now(),
-                                        'created_at' => Carbon::now()
-                                ]);
-                                
-                                if($new_user){
-                                    if($job == "ST"){
-                                        $user->roles()->attach(Role::where('id', 'ST')->first());
-                                    } elseif ($job == "SD") {
-                                        $user->roles()->attach(Role::where('id', 'SD')->first());
-                                    } else {
-                                        $user->roles()->attach(Role::where('id', 'GS')->first());
-                                    }
-                                }  
-                            } else {
-                                $old_user = $user->update([
-                                    'name' => $data->attributes->nama,
-                                    'username' => $username,
-                                    'password'=> Hash::make($username),
-                                    'job'=> $job,
-                                    'updated_at' => Carbon::now()
-                                ]);
-                                
-                                if($old_user){
-                                    $user = User::where('username', $username)->first();
-                                    if(($job == "ST") && !$user->hasRole('ST')){
-                                        $user->roles()->attach(Role::where('id', 'ST')->first());
-                                    } else if($job == "SD" && !$user->hasRole('SD')){
-                                        $user->roles()->attach(Role::where('id', 'SD')->first());
-                                    }
-                                }  
+                                        'updated_at' => Carbon::now()
+                                    ]);
+                                    
+                                    if($old_user){
+                                        $user = User::where('username', $username)->first();
+                                        if(($hasDosen || $hasPeg) && !$user->hasRole('ST')){
+                                            $user->roles()->attach(Role::where('id', 'ST')->first());
+                                        } 
+                                        if($hasMhs && !$user->hasRole('SD')){
+                                            $user->roles()->attach(Role::where('id', 'SD')->first());
+                                        }
+                                    }  
+                                }
+                                Auth::loginUsingId($user->id);
                             }
-                            Auth::loginUsingId($user->id);
-                        }
-                        if(session()->has('url.intended')){
-                            $link = session('url.intended');
-                            session(['url.intended' => null]);
-                            Session::forget('url.intended');
-                            return redirect($link);
+                            if(session()->has('url.intended')){
+                                $link = session('url.intended');
+                                session(['url.intended' => null]);
+                                Session::forget('url.intended');
+                                return redirect($link);
+                            } else {
+                                return redirect()->route('home');
+                            }
                         } else {
-                            return redirect()->route('home');
+                            $msg = "Akun anda tidak ditemukan!";
+                            return redirect()->route('sso_siap')->withErrors(['msg' => $msg]);
                         }
                     } else {
-                        $msg = "Akun anda tidak ditemukan!";
+                        $msg = "Akun anda sudah tidak aktif !";
                         return redirect()->route('sso_siap')->withErrors(['msg' => $msg]);
                     }
                 } else {
-                    $msg = "Akun anda sudah tidak aktif !";
+                    $responseBody = $response->json();
+                    if($responseBody['errors']['code'] == 500){
+                        $msg = "<b>".$responseBody['errors']['detail']." (".$responseBody['errors']['code']."):</b><br>Koneksi API ke Sevima gagal, coba beberapa saat lagi..";
+                    } else {
+                        $msg = "<b>Login gagal (".$responseBody['errors']['code']."):</b><br>".$responseBody['errors']['detail'];
+                    }
                     return redirect()->route('sso_siap')->withErrors(['msg' => $msg]);
                 }
-             } catch (\Exception $e) {
-                Log::info($e);
-                if ($e->getResponse()) {
-                    $errorBody = json_decode($e->getResponse()->getBody(), true);
-                    $msg = $errorBody['errors']['detail'];
-                    return redirect()->route('sso_siap')->withErrors(['msg' => $msg]);
-                } else {
-                    return redirect()->route('sso_siap')->withErrors(['msg' => $e->getMessage()]);
-                }
+            } catch (\Exception $e) {
+                Log::warning($e);
+                return redirect()->route('sso_siap')->withErrors(['msg' => $e->getMessage()]);
             }
-        }else{
+        } else {
             return view('auth.login-siap');
         }
     }

@@ -46,7 +46,7 @@
             <div class="col-md-6 col-xs-12 mb-2">
                 <div class="btn-showcase">
                     <a class="btn btn-block w-100 btn-outline-secondary mb-3" href="{{ route('wifi.edit') }}">
-                        <i class="bx bx-key me-2"></i> Ubah Password</a>
+                        <i class="bx bx-key me-2"></i> Ubah Sandi</a>
                 </div>
             </div>
         </div>

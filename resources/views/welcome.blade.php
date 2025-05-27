@@ -30,7 +30,8 @@
                     domain resmi <strong>s.jgu.ac.id</strong>,<br>
                     <strong>QR-Code</strong> resmi dari JGU,<br>
                     dan Anda juga bisa membuat
-                    <strong>absensi</strong> acara/rapat.</i><br><br>
+                    <strong>absensi</strong> acara/rapat.</i><br>
+                <br>
                 @if (Route::has('login'))
                 @auth
                 <a href="{{ route('home') }}" class="btn btn-danger text-white text-center w-50"><i
@@ -40,47 +41,57 @@
                         class="bx bx-log-in-circle me-2"></i>Masuk</a> -->
                 <div class="row d-flex justify-content-center">
                     <div class="my-2">
-                        <div class="mb-2">Metode Masuk</div>
+                        <div class="divider">
+                            <div class="divider-text"><a href="/login" class="text-dark">Pilih Metode Masuk</a></div>
+                        </div>
                         @error('msg')
                         <br><span class="text-danger text-center">{!! $message !!}</span>
                         @enderror
                     </div>
-                    {{-- <div class="col-6 mb-1">
-                        <div class="btn-showcase">
-                            <button class="btn btn-outline-dark btn-block w-100" onclick="Klas2Login()"
-                                title="Single Sign-On JGU">
-                                <img style="max-height: 20px;" src="{{asset('assets/img/favicon.png')}}">
-                                <span>SSO JGU</span>
+                    {{-- <div class="col-6 mb-2">
+                                <div class="btn-showcase">
+                                    <button class="btn btn-outline-dark btn-block w-100" onclick="Klas2Login()"
+                                        title="Single Sign-On JGU">
+                                        <img style="max-height: 20px;" src="{{asset('assets/img/favicon.png')}}">
+                            <span>SSO Klas</span>
                             </button>
                         </div>
                     </div> --}}
-                    <div class="col-6 mb-1">
+                    <div class="col-6 mb-2">
+                        <div class="btn-showcase">
+                            <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/siap') }}"
+                                title="Log in with SSO SIAP">
+                                <img style="max-height: 15px; margin-right: 3px" src="{{asset('assets/img/icons/sevima.png')}}">
+                                <span>SSO SIAP</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-2">
                         <div class="btn-showcase">
                             <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/google') }}"
                                 title="Log in with Email">
-                                <img style="max-height: 20px;"
-                                    src="{{asset('assets/img/icons/google.png')}}">
+                                <img style="max-height: 15px; margin-right: 3px" src="{{asset('assets/img/icons/google.png')}}">
                                 <span>Google</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                @endauth
-                @endif
-                <br><br>
-                <div class="divider mt-3">
-                    <div class="divider-text">© {{ (date('Y')=="2022"?date('Y'):"2022-".date('Y')) }}</div>
-                </div>
-                <div class="footer">
-                    <span class="mr-2">Dikembangkan oleh </span>
-                    <a href="https://itic.jgu.ac.id/" target="_blank" class="footer-link fw-bolder ml-2">ITIC JGU</a>
-                </div>
-                <small class="ml-4 text-center text-sm text-light sm:text-right sm:ml-0">
-                    v{{ Illuminate\Foundation\Application::VERSION }} (v{{ PHP_VERSION }})
-                </small>
+            @endauth
+            @endif
+            <br><br>
+            <div class="divider mt-3">
+                <div class="divider-text">© {{ (date('Y')=="2022"?date('Y'):"2022-".date('Y')) }}</div>
             </div>
+            <div class="footer">
+                <span class="mr-2">Dikembangkan oleh </span>
+                <a href="https://itic.jgu.ac.id/" target="_blank" class="footer-link fw-bolder ml-2">ITIC JGU</a>
+            </div>
+            <small class="ml-4 text-center text-sm text-light sm:text-right sm:ml-0">
+                v{{ Illuminate\Foundation\Application::VERSION }} (v{{ PHP_VERSION }})
+            </small>
         </div>
-        <!-- /Login -->
+    </div>
+    <!-- /Login -->
 
     </div>
 </div>

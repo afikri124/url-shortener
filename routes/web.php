@@ -28,6 +28,7 @@ Auth::routes([
 ]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['auth']);
 Route::get('/login/sso_klas2/', [App\Http\Controllers\HomeController::class, 'sso_klas2'])->name('sso_klas2');
+Route::any('/login/siap/', [App\Http\Controllers\HomeController::class, 'sso_siap'])->name('sso_siap');
 Route::get('/login/google', [App\Http\Controllers\GoogleController::class, 'redirectToGoogle']);
 Route::get('/login/google/callback', [App\Http\Controllers\GoogleController::class, 'handleCallback']);
 

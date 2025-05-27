@@ -69,7 +69,11 @@
                        
                     </form> -->
                     <small>
-                    <center class="alert alert-info"><p><b><u class="text-danger">Pengumuman!</u></b><br>Civitas Academica JGU (Mahasiswa/Staf/Dosen) <br>silahkan masuk menggunakan email resmi JGU <br> dan untuk tamu dapat masuk menggunakan gmail.</p></center></small>
+                    <center class="alert alert-secondary"><p><b><i class="text-danger"><i class="fa fa-info-circle"></i> Informasi !</i></b>
+                        <br>Civitas Academica JGU (Mahasiswa/Karyawan/Dosen) <br>silakan menggunakan Single Sign-On Siakad (SIAP) atau email resmi JGU, sedangkan untuk tamu dapat masuk menggunakan google (gmail).</p>
+                        {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
+                    </center>
+                    </small>
                     <div class="row d-flex justify-content-center">
                         <div class="divider my-2">
                             <div class="divider-text mb-2">Pilih Metode Masuk</div>
@@ -77,20 +81,29 @@
                             <br><span class="text-danger text-center">{!! $message !!}</span>
                             @enderror
                         </div>
-                        {{-- <div class="col-6 mb-1">
+                        {{-- <div class="col-6 mb-2">
                             <div class="btn-showcase">
-                                <button class="btn btn-dark btn-block w-100" onclick="Klas2Login()" title="Single Sign-On JGU (User Klas)">
-                                    <img style="max-height: 20px;" src="{{asset('assets/img/favicon.png')}}">
-                                    <span>Klas2</span>
+                                <button class="btn btn-outline-dark btn-block w-100" onclick="Klas2Login()" title="Single Sign-On JGU (User Klas)">
+                                    <img style="max-height: 15px;" src="{{asset('assets/img/favicon.png')}}">
+                                    <span>SSO Klas2</span>
                                 </button>
                             </div>
                         </div> --}}
-                        <div class="col-6 mb-1">
+                        <div class="col-6 mb-2">
                             <div class="btn-showcase">
-                                <a class="btn btn-dark btn-block w-100" href="{{ url('login/google') }}" title="Login with (Email JGU / Gmail)">
-                                    <img style="max-height: 20px;"
-                                        src="{{asset('assets/img/icons/google.png')}}">
+                                <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/siap') }}" title="Login dengan SSO Siakad (SIAP)">
+                                    <img style="max-height: 15px; margin-right: 3px" src="{{asset('assets/img/icons/sevima.png')}}">
+                                    <span>SSO SIAP</span>
+                                    {{-- <img style="max-height: 20px;" src="{{asset('assets/img/icons/siakadcloud2018.png')}}"> --}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="btn-showcase">
+                                <a class="btn btn-outline-dark btn-block w-100" href="{{ url('login/google') }}" title="Login dengan (Email JGU / Gmail)">
+                                    <img style="max-height: 15px; margin-right: 3px" src="{{asset('assets/img/icons/google.png')}}">
                                     <span>Google</span>
+                                    {{-- <img style="max-height: 20px;" src="{{asset('assets/img/icons/google2.png')}}"> --}}
                                 </a>
                             </div>
                         </div>

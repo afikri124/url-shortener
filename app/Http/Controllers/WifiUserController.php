@@ -120,16 +120,19 @@ class WifiUserController extends Controller
             Log::info("Wifi Radius error : ".$e);
             $group = "ERROR : SERVER RADIUS SEDANG DOWN!";
         }
-        $ip = $request->ip();
 
         $agent = new Agent();
-        $ip = $request->ip();
+        $ip = ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? $request->server('HTTP_CF_CONNECTING_IP'));
         $browser = $agent->browser();
         $platform = $agent->platform();
         $device = $agent->device();
 
-        $agent_log = "Pastikan WiFi Anda disambungkan ke SSID Jakarta Global University untuk login portal. Anda terdeteksi menggunakan IP $ip dengan browser $browser, $device $platform.";
-        return view('user.wifi', compact('username','password','group','agent_log'));
+        if(isset($request->auto_login_wifi) && ($ip == "43.225.65.161" || $ip == "43.225.65.162" || $ip == "43.225.65.163")){
+            return redirect()->away("https://auth.jgu.ac.id/login?username=$username&password=$password"); //link auto redirect ke auth wifi
+        }
+
+        $agent_log = "Pastikan WiFi Anda disambungkan ke SSID Jakarta Global University agar bisa login portal. $ip, $browser, $device $platform.";
+        return view('user.wifi', compact('username','password','group','agent_log','ip'));
     }
 
     public function wifi_edit (Request $request)

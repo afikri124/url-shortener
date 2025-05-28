@@ -35,7 +35,7 @@
         </div>
         <br>
         <div class="row d-flex justify-content-center">
-            @if (($ip == "43.225.65.161" || $ip == "43.225.65.162" || $ip == "43.225.65.163" || $ip == null))
+            {{-- @if ($ip == "43.225.65.161" || $ip == "43.225.65.162" || $ip == "43.225.65.163") --}}
             <div class="col-md-6 col-xs-12 mb-2">
                 <div class="btn-showcase">
                     <a class="btn btn-block w-100 btn-primary mb-3" target="_blank"
@@ -44,10 +44,10 @@
                     </a>
                 </div>
             </div>
-            @endif
+            {{-- @endif --}}
             <div class="col-md-6 col-xs-12 mb-2">
                 <div class="btn-showcase">
-                    <a class="btn btn-block w-100 btn-outline-secondary mb-3" href="{{ route('wifi.edit') }}">
+                    <a class="btn btn-block w-100 btn-secondary mb-3" href="{{ route('wifi.edit') }}">
                         <i class="bx bx-key me-2"></i> Ubah Sandi</a>
                 </div>
             </div>

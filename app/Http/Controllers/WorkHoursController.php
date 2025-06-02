@@ -779,7 +779,7 @@ class WorkHoursController extends Controller
 
             echo json_encode($response);
             $resp = json_decode(json_encode($response));
-            $respon_message = $resp->message;
+            $respon_message = (isset($resp->message) ? $resp->message : $resp );
         }
         if(Auth::check()){
             $info = (Auth::check() ? Auth::user()->username." : ".Auth::user()->name : "CronJob");

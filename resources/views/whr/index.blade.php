@@ -91,13 +91,13 @@
                             </div>
                             <div class="row d-flex flex-row-reverse">
                                 <div class="col-md-12 text-md-end text-center pt-3">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="SyncAtt()">
+                                    <button class="btn btn-outline-secondary mb-2" type="button" onclick="SyncAtt()">
                                         <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Sinkron dari Mesin</span>
                                     </button>
-                                    <button class="btn btn-warning" type="button" onclick="SyncSiap()">
+                                    <button class="btn btn-warning mb-2" type="button" onclick="SyncSiap()">
                                         <span title="Sinkronkan" ><i class="bx bx-sync me-sm-2"></i> Sinkron ke SIAP</span>
                                     </button>
-                                    <button class="btn btn-primary" type="submit" title="Ekspor ke Excel">
+                                    <button class="btn btn-primary mb-2" type="submit" title="Ekspor ke Excel">
                                         <span><i class="bx bx-export me-sm-2"></i>
                                             Ekspor</span>
                                     </button>

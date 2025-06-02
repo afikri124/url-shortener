@@ -240,7 +240,7 @@ class HomeController extends Controller
                 } else {
                     $responseBody = $response->json();
                     if($responseBody['errors']['code'] == 500){
-                        $msg = "<b>".$responseBody['errors']['detail']." (".$responseBody['errors']['code']."):</b><br>Koneksi API ke Sevima gagal, coba beberapa saat lagi..";
+                        $msg = "<b>".$responseBody['errors']['detail']." (".$responseBody['errors']['code']."):</b><br>Koneksi API ke Sevima gagal, silahkan coba lagi..";
                     } else {
                         $msg = "<b>Login gagal (".$responseBody['errors']['code']."):</b><br>".$responseBody['errors']['detail'];
                     }

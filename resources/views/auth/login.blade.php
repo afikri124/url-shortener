@@ -70,7 +70,7 @@
                     </form> -->
                     <small>
                     <center class="alert alert-secondary"><p><b><i class="text-danger"><i class="fa fa-info-circle"></i> Informasi !</i></b>
-                        <br>Civitas Academica JGU masuk menggunakan <i>Single Sign-On SIAP</i> atau email JGU, sedangkan untuk tamu dapat masuk menggunakan google.</p>
+                        <br>Sivitas Academika JGU silakan masuk menggunakan <i>Single Sign-On SIAP</i> atau email JGU, sedangkan untuk tamu dapat masuk menggunakan email google.</p>
                         {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
                     </center>
                     </small>

@@ -16,6 +16,7 @@ use Yajra\DataTables\DataTables;
 use Auth;
 use Rats\Zkteco\Lib\ZKTeco;
 use DB;
+use Illuminate\Support\Facades\Http;
 
 use Carbon\Carbon;
 
@@ -26,6 +27,59 @@ class SettingController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function test(Request $request)
+    {
+        try {
+            $url = env('SevimaAPI_url').'/siakadcloud/v1/pegawai';
+            $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'X-App-Key' => env('SevimaAPI_key'),
+                    'X-Secret-Key' => env('SevimaAPI_secret'),
+                ])->get($url);
+            if ($response->successful()) {
+                $data = json_decode(json_encode($response->json()));
+                if(is_object($data)){ 
+                    // return $data;
+                    foreach ($data->data as $d) {
+                        $user_update = User::where('username',$d->attributes->nip)->update([
+                            'birth_date' => $d->attributes->tanggal_lahir,
+                            ]);
+                        if($user_update){
+                            echo $d->attributes->nip." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
+                        }
+                    }
+                }
+            }
+
+            $url = env('SevimaAPI_url').'/siakadcloud/v1/dosen';
+            $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'X-App-Key' => env('SevimaAPI_key'),
+                    'X-Secret-Key' => env('SevimaAPI_secret'),
+                ])->get($url);
+            if ($response->successful()) {
+                $data = json_decode(json_encode($response->json()));
+                if(is_object($data)){ 
+                    // return $data;
+                    foreach ($data->data as $d) {
+                        $user_update = User::where('username',$d->attributes->nip)->update([
+                            'birth_date' => $d->attributes->tanggal_lahir,
+                            ]);
+                        if($user_update){
+                            echo $d->attributes->nip." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
+                        }
+                    }
+                }
+            }
+            
+        } catch (\Exception $e) {
+            Log::warning($e);
+            // return redirect()->route('sso_siap')->withErrors(['msg' => $e->getMessage()]);
+        }
     }
 
     public function account(Request $request)

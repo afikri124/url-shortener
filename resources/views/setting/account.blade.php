@@ -85,6 +85,7 @@
                     <th data-priority="2">Nama</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th width="50px">TL</th>
                     <th>Jabatan</th>
                     <th>Hak Akses</th>
                     <th width="40px" data-priority="3">Aksi</th>
@@ -170,7 +171,13 @@
                         return html;
                     },
                 },
-
+                {
+                    render: function (data, type, row, meta) {
+                        if (row.birth_date != null) {
+                            return row.birth_date;
+                        }
+                    },
+                },
                 {
                     render: function (data, type, row, meta) {
                         if (row.job != null) {

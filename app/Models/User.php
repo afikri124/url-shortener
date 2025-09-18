@@ -28,6 +28,7 @@ class User extends Authenticatable
         'gender',
         'front_title',
         'back_title',
+        'birth_date'
     ];
     protected $appends = ['name_with_title'];
     /**

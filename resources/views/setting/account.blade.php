@@ -73,6 +73,15 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                            <div class=" col-md-6 text-md-end text-center pt-3 pt-md-0">
+                                <a href="{{ route('setting_sync_birth_date') }}"  target="_blank">
+                                <button class="btn btn-outline-dark" type="button">
+                                    <span><i class="bx bx-sync me-sm-2"></i>
+                                        Sinkron Tanggal Lahir</span>
+                                </button>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

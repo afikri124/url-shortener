@@ -198,7 +198,7 @@ Route::group(['prefix' => 'DOC','middleware' => ['auth','role:ST']], function ()
 
 //Pengaturan
 Route::group(['prefix' => 'setting','middleware' => ['auth','role:AD']], function () {
-  Route::any('test', [App\Http\Controllers\SettingController::class, 'test'])->name('test');
+  Route::any('sync_birth_date', [App\Http\Controllers\SettingController::class, 'sync_birth_date'])->name('setting_sync_birth_date');
   Route::get('account', [App\Http\Controllers\SettingController::class, 'account'])->name('setting_account');
   Route::get('account/data', [App\Http\Controllers\SettingController::class, 'account_data'])->name('setting_account_data');
   Route::any('account/edit/{id}', [App\Http\Controllers\SettingController::class, 'account_edit'])->name('setting_account_edit');

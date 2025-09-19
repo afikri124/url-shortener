@@ -29,56 +29,49 @@ class SettingController extends Controller
         $this->middleware('auth');
     }
 
-    public function test(Request $request)
+    public function update_birth_date($data){
+         foreach ($data as $d) {
+            $nip_or_nim = $d->attributes->nip ?? $d->attributes->nim;
+            echo $nip_or_nim."<br>";
+            $user_update = User::where('username',$nip_or_nim)->update([
+                'birth_date' => $d->attributes->tanggal_lahir,
+            ]);
+            if($user_update){
+                 echo $nip_or_nim." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
+            }
+        }
+    }
+
+    public function callSevimaAPI($url){
+        $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'X-App-Key' => env('SevimaAPI_key'),
+                    'X-Secret-Key' => env('SevimaAPI_secret'),
+                ])->get($url);
+        if ($response->successful()) {
+            $data = json_decode(json_encode($response->json()));
+            if(is_object($data)){ 
+                $update = $this->update_birth_date($data->data);
+                if($data->meta->last_page != $data->meta->current_page){
+                    echo "next----------------------------".$data->urls->next."<br>";
+                    self::callSevimaAPI($data->urls->next);
+                }
+            }
+        }
+    }
+    public function sync_birth_date(Request $request)
     {
         try {
             $url = env('SevimaAPI_url').'/siakadcloud/v1/pegawai';
-            $response = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'X-App-Key' => env('SevimaAPI_key'),
-                    'X-Secret-Key' => env('SevimaAPI_secret'),
-                ])->get($url);
-            if ($response->successful()) {
-                $data = json_decode(json_encode($response->json()));
-                if(is_object($data)){ 
-                    // return $data;
-                    foreach ($data->data as $d) {
-                        $user_update = User::where('username',$d->attributes->nip)->update([
-                            'birth_date' => $d->attributes->tanggal_lahir,
-                            ]);
-                        if($user_update){
-                            echo $d->attributes->nip." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
-                        }
-                    }
-                }
-            }
-
+            $update = $this->callSevimaAPI($url);
             $url = env('SevimaAPI_url').'/siakadcloud/v1/dosen';
-            $response = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'X-App-Key' => env('SevimaAPI_key'),
-                    'X-Secret-Key' => env('SevimaAPI_secret'),
-                ])->get($url);
-            if ($response->successful()) {
-                $data = json_decode(json_encode($response->json()));
-                if(is_object($data)){ 
-                    // return $data;
-                    foreach ($data->data as $d) {
-                        $user_update = User::where('username',$d->attributes->nip)->update([
-                            'birth_date' => $d->attributes->tanggal_lahir,
-                            ]);
-                        if($user_update){
-                            echo $d->attributes->nip." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
-                        }
-                    }
-                }
-            }
+            $update = $this->callSevimaAPI($url);
+            $url = env('SevimaAPI_url').'/siakadcloud/v1/mahasiswa';
+            $update = $this->callSevimaAPI($url);
             
         } catch (\Exception $e) {
             Log::warning($e);
-            // return redirect()->route('sso_siap')->withErrors(['msg' => $e->getMessage()]);
         }
     }
 

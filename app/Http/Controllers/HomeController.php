@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
 use DB;
 use App\Mail\WeeklyAttendanceReportMail;
+use App\Mail\MailBirthday;
 use App\Models\DocDepartment;
 use App\Models\DocPIC;
 use App\Jobs\JobNotificationWA;
@@ -428,6 +429,44 @@ class HomeController extends Controller
                             }
                             // ------------------end send to WA-----------------
                             Mail::raw('Hello World!', function($msg) {$msg->to('fikri@jgu.ac.id')->subject('Test Email'); });
+    }
+
+    public function ultah(){
+        // ambil tanggal & bulan hari ini
+        $today = Carbon::now();
+
+        // filter user yang tanggal lahir (bulan & hari) sama dengan hari ini
+        $users = User::with('roles')
+                    ->whereMonth('birth_date', $today->month)
+                    ->whereDay('birth_date', $today->day)
+                    ->get();
+        if($users){
+            foreach ($users as $u){
+                echo "tes wa $ email ke fikri";
+                $data['email'] = $u->email;
+                $data['name'] = $u->name;
+                $data['subject'] = "🎉Birthday Greetings from JGU!🎉";
+                $data['is_mhs'] = $u->roles->contains('id', 'SD') ?? false;
+                $data['is_staf'] = $u->roles->contains('id', 'ST') ?? false;
+                if($data['is_staf']){
+                    Mail::to($data['email'])->send(new MailBirthday($data));
+                    //----------------WA-------------------------------
+                    if($u->phone){
+                        $WA_DATA = array();
+                        $WA_DATA['wa_to'] = $u->phone;
+                        $WA_DATA['wa_text'] = "\n\n🎂 Selamat Ulang Tahun 🎉\n
+Halo ".$u->name.",\n
+Keluarga besar _Jakarta Global University_ mengucapkan selamat ulang tahun. 
+Semoga panjang umur, sehat selalu, dan sukses dalam setiap langkah. 
+Terima kasih atas dedikasi dan kontribusi yang telah diberikan. 🌟\n\nSalam hangat,\n*JGU*";
+                        dispatch(new JobNotificationWA($WA_DATA));
+                    }
+                    // ------------------end send to WA-----------------
+                } else if ($data['is_mhs']){
+                    Mail::to($data['email'])->send(new MailBirthday($data));
+                }
+            }
+        }
     }
 
 }

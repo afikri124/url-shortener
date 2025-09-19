@@ -49,7 +49,7 @@ class JobNotificationWA implements ShouldQueue
                 CURLOPT_POSTFIELDS => array(
             //   'target' => '087750431397,+6281233933313',
                 'target' => $this->data['wa_to'],
-                'message' => "[_Pesan ini dikirimkan otomatis oleh sistem_]\n".$this->data['wa_text'],
+                'message' => "[_Pesan ini otomatis oleh sistem_]\n".$this->data['wa_text'],
             ),
             CURLOPT_HTTPHEADER => array(
                 'Authorization: '.env('WA_TOKEN')

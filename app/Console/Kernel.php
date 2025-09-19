@@ -9,6 +9,7 @@ use App\Jobs\SyncAttOnlyJob;
 use App\Jobs\SyncAttToSiapJob;
 use App\Jobs\BroadCastNotificationDoc;
 use App\Jobs\WeeklyAttendanceReport;
+use App\Jobs\SendBirthdayGreeting;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SyncAttToSiapJob)->hourlyAt(1)->unlessBetween('1:00', '4:00')->runInBackground()->withoutOverlapping(); //tiap jam, kecuali jam 1-4
         $schedule->job(new BroadCastNotificationDoc)->days([1,2,3,4,5,6])->at('16:30')->runInBackground()->withoutOverlapping();
         $schedule->job(new WeeklyAttendanceReport)->weeklyOn(5, '17:30')->runInBackground()->withoutOverlapping();
+        $schedule->job(new SendBirthdayGreeting)->dailyAt('06:00')->runInBackground()->withoutOverlapping();
     }
 
     /**

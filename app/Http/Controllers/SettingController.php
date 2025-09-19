@@ -105,6 +105,7 @@ class SettingController extends Controller
                                 ->orWhere('name', 'LIKE', "%$search%")
                                 ->orWhere('email', 'LIKE', "%$search%")
                                 ->orWhere('job', 'LIKE', "%$search%")
+                                ->orWhere('birth_date', 'LIKE', "%$search%")
                                 ->orWhere('phone', 'LIKE', "%$search%");
                         });
                     }

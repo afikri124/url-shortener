@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -127,8 +128,8 @@
                         <tbody>
                             <tr>
                                 <td style="text-align: center;">
-                                    <a target="_blank" href="{{ url('/home') }}">
-                                        <img src="{{URL::asset('assets/img/logo-sjgu.png')}}" alt="S-JGU"
+                                    <a target="_blank" href="https://www.jgu.ac.id/">
+                                        <img src="{{URL::asset('assets/img/jgu.png')}}" alt="S-JGU"
                                             style="margin: 20px 0; width:150px;">
                                     </a>
                                 </td>
@@ -138,14 +139,15 @@
                                     <strong>@yield('title')</strong>
                                 </td>
                             </tr>
-                            <tr>
-                                <td style="text-align: center; font-size:10pt;color:red">
-                                    <i>[ email ini dikirimkan otomatis oleh sistem ]</i><br><br>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                     @yield('content')
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: center; font-size:10pt;color:red">
+                    <i>[ email ini dikirimkan otomatis oleh sistem ]</i><br><br>
                 </td>
             </tr>
         </tbody>
@@ -159,6 +161,10 @@
                         <tbody>
                             <tr>
                                 <td>
+                                    <a target="_blank" href="{{ url('/home') }}">
+                                        <img src="{{URL::asset('assets/img/logo-sjgu.png')}}" alt="S-JGU"
+                                            style="margin: 20px 0; width:100px;">
+                                    </a><br>
                                     <b style="font-size:8pt; margin:0; color:#444">Copyright by <a
                                             href="https://itic.jgu.ac.id" style="color:#444">ITIC JGU</a></b>
                                 </td>
@@ -185,4 +191,5 @@
         </tbody>
     </table>
 </body>
+
 </html>

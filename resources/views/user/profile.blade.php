@@ -57,6 +57,9 @@
                     <li class="d-flex align-items-center mb-3"><i class="bx bx-male-sign"></i><span
                             class="fw-semibold mx-2">Jenis Kelamin:</span>
                         <span>{{ Auth::user()->getJK() }}</span></li>
+                    <li class="d-flex align-items-center mb-3"><i class="bx bx-calendar"></i><span
+                            class="fw-semibold mx-2">Tanggal Lahir:</span>
+                        <span>{{ Auth::user()->birth_date }}</span></li>
                 </ul>
             </div>
         </div>

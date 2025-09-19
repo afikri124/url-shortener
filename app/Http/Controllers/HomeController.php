@@ -442,7 +442,7 @@ class HomeController extends Controller
                     ->get();
         if($users){
             foreach ($users as $u){
-                echo "tes wa $ email ke fikri";
+                echo "kirim wa dan email ulang tahun ke ".$u->name."<br>";
                 $data['email'] = $u->email;
                 $data['name'] = $u->name;
                 $data['subject'] = "🎉Birthday Greetings from JGU!🎉";

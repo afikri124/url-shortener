@@ -439,10 +439,13 @@ class HomeController extends Controller
         $users = User::with('roles')
                     ->whereMonth('birth_date', $today->month)
                     ->whereDay('birth_date', $today->day)
+                    ->where('status', true)
                     ->get();
+        // dd($users);
         if($users){
             foreach ($users as $u){
                 echo "kirim wa dan email ulang tahun ke ".$u->name."<br>";
+                $umur = Carbon::parse($u->birth_date)->age;
                 $data['email'] = $u->email;
                 $data['name'] = $u->name;
                 $data['subject'] = "🎉Birthday Greetings from JGU!🎉";
@@ -456,9 +459,9 @@ class HomeController extends Controller
                     if($u->phone){
                         $WA_DATA = array();
                         $WA_DATA['wa_to'] = $u->phone;
-                        $WA_DATA['wa_text'] = "\n\n🎂 Selamat Ulang Tahun 🎉\n
+                        $WA_DATA['wa_text'] = "\n🎂 Selamat Ulang Tahun 🎉\n
 Halo ".$u->name.",\n
-Keluarga besar _Jakarta Global University_ mengucapkan selamat ulang tahun. 
+Keluarga besar _Jakarta Global University_ mengucapkan selamat ulang tahun ke-".$umur.". 
 Semoga panjang umur, sehat selalu, dan sukses dalam setiap langkah. 
 Terima kasih atas dedikasi dan kontribusi yang telah diberikan. 🌟\n\nSalam hangat,\n*JGU*";
                         dispatch(new JobNotificationWA($WA_DATA));

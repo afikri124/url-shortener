@@ -73,13 +73,29 @@
                                     @endforeach
                                 </select>
                             </div>
-
-                            <div class=" col-md-6 text-md-end text-center pt-3 pt-md-0">
-                                <a href="{{ route('setting_sync_birth_date') }}"  target="_blank">
-                                <button class="btn btn-outline-dark" type="button">
-                                    <span><i class="bx bx-sync me-sm-2"></i>
-                                        Sinkron Tanggal Lahir</span>
-                                </button>
+                            <div class=" col-md-3">
+                                <select id="select_month" class="select2 form-select" data-placeholder="Bulan Lahir">
+                                    <option value="">Bulan Lahir</option>
+                                    <option value="1">Januari</option>
+                                    <option value="2">Februari</option>
+                                    <option value="3">Maret</option>
+                                    <option value="4">April</option>
+                                    <option value="5">Mei</option>
+                                    <option value="6">Juni</option>
+                                    <option value="7">Juli</option>
+                                    <option value="8">Agustus</option>
+                                    <option value="9">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                            </div>
+                            <div class=" col-md-3 text-md-end text-center pt-3 pt-md-0">
+                                <a href="{{ route('setting_sync_birth_date') }}" target="_blank">
+                                    <button class="btn btn-outline-dark" type="button">
+                                        <span><i class="bx bx-sync me-sm-2"></i>
+                                            Sinkron SIAP</span>
+                                    </button>
                                 </a>
                             </div>
                         </div>
@@ -94,9 +110,10 @@
                     <th data-priority="2">Nama</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th width="50px">TL</th>
+                    <th width="50px">Tgl. Lahir</th>
                     <th>Jabatan</th>
                     <th>Hak Akses</th>
+                    <th width="50px">Status</th>
                     <th width="40px" data-priority="3">Aksi</th>
                 </tr>
             </thead>
@@ -144,6 +161,7 @@
                 data: function (d) {
                     d.select_role = $('#select_role').val(),
                         d.select_job = $('#select_job').val(),
+                        d.month = $('#select_month').val(),
                         d.search = $('input[type="search"]').val()
                 },
             },
@@ -213,12 +231,24 @@
                 },
                 {
                     render: function (data, type, row, meta) {
+                        if (row.status == 1) {
+                            return '<i class="badge rounded-pill bg-success"  style="font-size:8pt;">Active</i>';
+                        } else if (row.status == 0) {
+                            return '<i class="badge rounded-pill bg-dark"  style="font-size:8pt;">No</i>';
+                        }
+                    },
+                    className: "text-center"
+                },
+                {
+                    render: function (data, type, row, meta) {
                         var html =
                             `<a class=" text-success" title="Edit" href="{{ url('setting/account/edit/` +
-                            row.idd + `') }}"><i class="bx bxs-edit"></i></a>`; 
-                        if("{{Auth::user()->id}}" == 1){
-                            html += ` <a class=" text-danger" title="Delete" style="cursor:pointer" onclick="DeleteId(` + row
-                            .id + `)" ><i class="bx bx-trash"></i></a>`;
+                            row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
+                        if ("{{Auth::user()->id}}" == 1) {
+                            html +=
+                                ` <a class=" text-danger" title="Delete" style="cursor:pointer" onclick="DeleteId(` +
+                                row
+                                .id + `)" ><i class="bx bx-trash"></i></a>`;
                         }
                         if (row.id != 1) {
                             return html;
@@ -234,6 +264,9 @@
             table.draw();
         });
         $('#select_job').change(function () {
+            table.draw();
+        });
+        $('#select_month').change(function () {
             table.draw();
         });
     });

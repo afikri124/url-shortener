@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Role;
 use Auth;
 use Yajra\DataTables\DataTables;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -44,7 +45,8 @@ class UserController extends Controller
             return redirect()->route('user.profile');
         }
         if($data){
-            return view('user.profile_by_id', compact('data'));
+            $umur = Carbon::parse($data->birth_date)->age;
+            return view('user.profile_by_id', compact('data', 'umur'));
         } else {
             return redirect()->route('user.profile');
         }

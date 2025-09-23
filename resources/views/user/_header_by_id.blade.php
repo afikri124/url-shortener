@@ -33,6 +33,9 @@
                                 <li class="list-inline-item fw-semibold">
                                     <i class='bx bx-male-sign'></i> {{ $data->getJK() }}
                                 </li>
+                                <li class="list-inline-item fw-semibold">
+                                    <i class='bx bx-user'></i> Umur ({{ $umur }})
+                                </li>
                             </ul>
                         </div>
                     </div>

@@ -64,7 +64,7 @@ class User extends Authenticatable
     function image()
     { 
       $has_valid_avatar = false;
-      // if(env('APP_ENV') != 'local'){
+      if(env('APP_ENV') != 'local'){
         
         // $uri = "https://klas2.jgu.ac.id/sso/image.php?id=".$this->username; //yg dipake
         $uri = $this->user_avatar;
@@ -83,7 +83,7 @@ class User extends Authenticatable
           }
         }
        
-      // }
+      }
 
       if($has_valid_avatar){
         return $uri;

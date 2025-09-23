@@ -17,6 +17,7 @@ use Auth;
 use Rats\Zkteco\Lib\ZKTeco;
 use DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
 
 use Carbon\Carbon;
 
@@ -33,11 +34,35 @@ class SettingController extends Controller
          foreach ($data as $d) {
             $nip_or_nim = $d->attributes->nip ?? $d->attributes->nim;
             echo $nip_or_nim."<br>";
-            $user_update = User::where('username',$nip_or_nim)->update([
-                'birth_date' => $d->attributes->tanggal_lahir,
-            ]);
-            if($user_update){
-                 echo $nip_or_nim." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
+            $id_status = $d->attributes->id_status_aktif ?? $d->attributes->id_status_mahasiswa;
+            $status = false;
+            if($id_status == "A" || $id_status == "AA" ){
+                $status = true;
+            }
+            $check_user = User::where('username', $nip_or_nim)->exists();
+            if ($status && !$check_user){
+                $check_email = User::where('email', $d->attributes->email)->exists();
+                if(!$check_email){
+                    $new_user = User::insert([
+                        'name' => $d->attributes->nama,
+                        'email' => $d->attributes->email,
+                        'username' => $nip_or_nim,
+                        'password'=> Hash::make($nip_or_nim),
+                        'email_verified_at' => Carbon::now(),
+                        'created_at' => Carbon::now(),
+                        'birth_date' => $d->attributes->tanggal_lahir,
+                        'status' => $status,
+                    ]);
+                    echo $nip_or_nim." berhasil dibuat otomatis dengan email ".$d->attributes->email."<br>";
+                }
+            } else {
+                $user_update = User::where('username',$nip_or_nim)->update([
+                    'birth_date' => $d->attributes->tanggal_lahir,
+                    'status' => $status,
+                ]);
+                if($user_update){
+                    echo $nip_or_nim." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
+                }
             }
         }
     }
@@ -97,6 +122,8 @@ class SettingController extends Controller
                     }
                     if (!empty($request->get('select_job'))) {
                         $instance->where('job', $request->get('select_job'));
+                    }if (!empty($request->get('month'))) {
+                        $instance->whereMonth('birth_date', $request->get('month'));
                     }
                     if (!empty($request->get('search'))) {
                          $instance->where(function($w) use($request){

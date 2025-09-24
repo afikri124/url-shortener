@@ -67,13 +67,18 @@ class SettingController extends Controller
                     }
                 }
             } else {
+                $user = User::where('username', $nip_or_nim)->first();
+                $hp = $user->phone ?? null;
+                if($hp == null){
+                    $hp = $d->attributes->telepon ?? ($d->attributes->nomor_hp ?? $d->attributes->hp);
+                }
                 $user_update = User::where('username',$nip_or_nim)->update([
                     'birth_date' => $d->attributes->tanggal_lahir,
+                    'phone' => $hp,
                     'name' => $d->attributes->nama,
                     'status' => $status,
                 ]);
                 if($user_update){
-                    $user = User::where('username', $nip_or_nim)->first();
                     if($id_status == "A" && !$user->hasRole('SD')){
                         $user->roles()->attach(Role::where('id', 'SD')->first());
                     } else if($id_status == "AA" && !$user->hasRole('ST')){

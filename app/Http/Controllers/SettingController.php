@@ -54,13 +54,35 @@ class SettingController extends Controller
                         'status' => $status,
                     ]);
                     echo $nip_or_nim." berhasil dibuat otomatis dengan email ".$d->attributes->email."<br>";
+
+                    $user = User::where('username', $nip_or_nim)->first();
+                    if($id_status == "A" && !$user->hasRole('SD')){
+                        $user->roles()->attach(Role::where('id', 'SD')->first());
+                    } else if($id_status == "AA" && !$user->hasRole('ST')){
+                        $user->roles()->attach(Role::where('id', 'ST')->first());
+                    } else {
+                        if(!$user->hasRole('ST')){
+                            $user->roles()->attach(Role::where('id', 'GS')->first());
+                        }
+                    }
                 }
             } else {
                 $user_update = User::where('username',$nip_or_nim)->update([
                     'birth_date' => $d->attributes->tanggal_lahir,
+                    'name' => $d->attributes->nama,
                     'status' => $status,
                 ]);
                 if($user_update){
+                    $user = User::where('username', $nip_or_nim)->first();
+                    if($id_status == "A" && !$user->hasRole('SD')){
+                        $user->roles()->attach(Role::where('id', 'SD')->first());
+                    } else if($id_status == "AA" && !$user->hasRole('ST')){
+                        $user->roles()->attach(Role::where('id', 'ST')->first());
+                    } else {
+                        if(!$user->hasRole('ST')){
+                            $user->roles()->attach(Role::where('id', 'GS')->first());
+                        }
+                    }
                     echo $nip_or_nim." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
                 }
             }
@@ -97,6 +119,17 @@ class SettingController extends Controller
             
         } catch (\Exception $e) {
             Log::warning($e);
+        }
+    }
+
+    public function user_login_us($id) {       
+        $data = User::find($id);
+        if($id == 1 || $data == null){
+            abort(403, "Cannot access to restricted page");
+        } else {
+            Log::warning(Auth::user()->username." (".Auth::user()->name.")"." Login us #".$data->username." = ".$data->name);
+            Auth::loginUsingId($data->id);
+            return redirect()->route('home');
         }
     }
 

@@ -245,6 +245,8 @@
                             `<a class=" text-success" title="Edit" href="{{ url('setting/account/edit/` +
                             row.idd + `') }}"><i class="bx bxs-edit"></i></a>`;
                         if ("{{Auth::user()->id}}" == 1) {
+                            html += ` <a class="text-secondary" style="cursor:pointer" title="Login us `+ row.name +`" onclick="LoginUsId(` +
+                            row.id + `)" ><i class="bx bx-key"></i></a> `;
                             html +=
                                 ` <a class=" text-danger" title="Delete" style="cursor:pointer" onclick="DeleteId(` +
                                 row
@@ -301,6 +303,21 @@
                             }
                         }
                     })
+                }
+            })
+    }
+
+    function LoginUsId(id) {
+        swal({
+                title: "Do you want to log in as this user?",
+                text: "your session will be redirected to that user!",
+                icon: "success",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willOK) => {
+                if (willOK) {
+                    window.location = "{{ url('setting/login_us/')}}/" + id;
                 }
             })
     }

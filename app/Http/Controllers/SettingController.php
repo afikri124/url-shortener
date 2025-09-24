@@ -78,9 +78,14 @@ class SettingController extends Controller
                         $user->roles()->attach(Role::where('id', 'SD')->first());
                     } else if($id_status == "AA" && !$user->hasRole('ST')){
                         $user->roles()->attach(Role::where('id', 'ST')->first());
+                    }
+                    if($user->roles->isEmpty()){
+                        $user->roles()->attach(Role::where('id', 'GS')->first());
                     } else {
-                        if(!$user->hasRole('GS')){
-                            $user->roles()->attach(Role::where('id', 'GS')->first());
+                        if($user->hasRole('GS')){
+                            $user->roles()->detach(
+                                Role::where('id', 'GS')->first()
+                            );
                         }
                     }
                     echo $nip_or_nim." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";

@@ -61,7 +61,7 @@ class SettingController extends Controller
                     } else if($id_status == "AA" && !$user->hasRole('ST')){
                         $user->roles()->attach(Role::where('id', 'ST')->first());
                     } else {
-                        if(!$user->hasRole('ST')){
+                        if(!$user->hasRole('GS')){
                             $user->roles()->attach(Role::where('id', 'GS')->first());
                         }
                     }
@@ -79,7 +79,7 @@ class SettingController extends Controller
                     } else if($id_status == "AA" && !$user->hasRole('ST')){
                         $user->roles()->attach(Role::where('id', 'ST')->first());
                     } else {
-                        if(!$user->hasRole('ST')){
+                        if(!$user->hasRole('GS')){
                             $user->roles()->attach(Role::where('id', 'GS')->first());
                         }
                     }

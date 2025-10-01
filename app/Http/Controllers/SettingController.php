@@ -33,12 +33,13 @@ class SettingController extends Controller
     public function update_birth_date($data){
          foreach ($data as $d) {
             $nip_or_nim = $d->attributes->nip ?? $d->attributes->nim;
-            echo $nip_or_nim."<br>";
             $id_status = $d->attributes->id_status_aktif ?? $d->attributes->id_status_mahasiswa;
             $status = false;
             if($id_status == "A" || $id_status == "AA" ){
                 $status = true;
             }
+            $nama_x = $d->attributes->nama ?? "-";
+            echo $nip_or_nim." $nama_x <br>";
             $check_user = User::where('username', $nip_or_nim)->exists();
             if ($status && !$check_user){
                 $check_email = User::where('email', $d->attributes->email)->exists();
@@ -53,7 +54,7 @@ class SettingController extends Controller
                         'birth_date' => $d->attributes->tanggal_lahir,
                         'status' => $status,
                     ]);
-                    echo $nip_or_nim." berhasil dibuat otomatis dengan email ".$d->attributes->email."<br>";
+                    echo $nip_or_nim." ------ berhasil dibuat otomatis dengan email ".$d->attributes->email."<br>";
 
                     $user = User::where('username', $nip_or_nim)->first();
                     if($id_status == "A" && !$user->hasRole('SD')){
@@ -93,7 +94,7 @@ class SettingController extends Controller
                             );
                         }
                     }
-                    echo $nip_or_nim." berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
+                    echo $nip_or_nim." ------ berhasil update TL ".$d->attributes->tanggal_lahir."<br>";
                 }
             }
         }
@@ -120,6 +121,7 @@ class SettingController extends Controller
     public function sync_birth_date(Request $request)
     {
         try {
+            $change_status_to_false = User::query()->update(['status' => false]);
             $url = env('SevimaAPI_url').'/siakadcloud/v1/pegawai';
             $update = $this->callSevimaAPI($url);
             $url = env('SevimaAPI_url').'/siakadcloud/v1/dosen';

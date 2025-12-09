@@ -459,8 +459,7 @@ class HomeController extends Controller
                     if($u->phone){
                         $WA_DATA = array();
                         $WA_DATA['wa_to'] = $u->phone;
-                        $WA_DATA['wa_text'] = "\n🎂 Selamat Ulang Tahun 🎉\n
-Halo ".$u->name.",\n
+                        $WA_DATA['wa_text'] = "\n🎂 HBD ".$u->name." 🎉\n
 Keluarga besar _Jakarta Global University_ mengucapkan selamat ulang tahun ke-".$umur.". 
 Semoga panjang umur, sehat selalu, dan sukses dalam setiap langkah. 
 Terima kasih atas dedikasi dan kontribusi yang telah diberikan. 🌟\n\nSalam hangat,\n*JGU*";
@@ -471,6 +470,17 @@ Terima kasih atas dedikasi dan kontribusi yang telah diberikan. 🌟\n\nSalam ha
                     // Mail::to($data['email'])->send(new MailBirthday($data));
                     Mail::to($data['email'])->queue(new MailBirthday($data));
                     Log::info("berhasil mengirim ucapan HBD ke ".$u->name);
+                    //----------------WA-------------------------------
+                    if($u->phone){
+                        $WA_DATA = array();
+                        $WA_DATA['wa_to'] = $u->phone;
+                        $WA_DATA['wa_text'] = "\n🎂 HBD ".$u->name."🎉 \n
+Seluruh civitas akademika _Jakarta Global University_ mengucapkan selamat ulang tahun ke-".$umur.". 
+Semoga panjang umur, sehat selalu, dan semakin berprestasi dalam perjalanan studi serta kehidupanmu. 
+Teruslah bersemangat dalam meraih mimpi dan cita-citamu. 🌟\n\nSalam hangat,\n*JGU*";
+                        dispatch(new JobNotificationWA($WA_DATA));
+                    }
+                    // ------------------end send to WA-----------------
                 }
             }
         }

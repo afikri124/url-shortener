@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class WeeklySyncUserSIAPJob implements ShouldQueue
 {
@@ -32,7 +33,8 @@ class WeeklySyncUserSIAPJob implements ShouldQueue
     public function handle()
     {
         //
-        app('App\Http\Controllers\SettingController')->sync_birth_date(); //sync user from SIAP
+        $a = new Request();
+        app('App\Http\Controllers\SettingController')->sync_birth_date($a); //sync user from SIAP
         Log::info('Running weekly sync user from SIAP JGU');
     }
 }

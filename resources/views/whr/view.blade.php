@@ -144,12 +144,18 @@
                                         <td class="text-center">
                                             {{-- MASUK --}}
                                             @if($d->masuk != $d->keluar)
+
+                                            {{ $d->masuk }}
+
                                             @php $totalMasuk++; @endphp
                                             {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
                                             @elseif($d->masuk <= \Carbon\Carbon::parse($d->tanggal."
                                                 ".$time_out))
-                                                <u>{{ $d->masuk." <= ".\Carbon\Carbon::parse($d->tanggal."
-                                                ".$time_out) }}</u>
+
+
+                                            <u>{{ $d->masuk }}</u>
+
+
                                                 {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
                                                 @php $totalMasuk++; @endphp
                                                 @else

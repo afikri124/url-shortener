@@ -147,6 +147,10 @@
                                                 @php $d->masuk = \Carbon\Carbon::parse($d->tanggal."
                                                 ".$time_in) @endphp
                                             @endif
+                                            @if ($d->keluar == null)
+                                                @php $d->keluar = \Carbon\Carbon::parse($d->tanggal."
+                                                ".$time_out) @endphp
+                                            @endif
                                             @if($d->masuk != $d->keluar)
                                             @php $totalMasuk++; @endphp
                                             {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}

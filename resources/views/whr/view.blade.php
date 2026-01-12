@@ -144,8 +144,8 @@
                                         <td class="text-center">
                                             {{-- MASUK --}}
                                             @if ($d->masuk == null)
-                                                $d->masuk == \Carbon\Carbon::parse($d->tanggal."
-                                                ".$time_in)
+                                                @php $d->masuk = \Carbon\Carbon::parse($d->tanggal."
+                                                ".$time_in) @endphp
                                             @endif
                                             @if($d->masuk != $d->keluar)
                                             @php $totalMasuk++; @endphp

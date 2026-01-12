@@ -143,18 +143,15 @@
                                         </td>
                                         <td class="text-center">
                                             {{-- MASUK --}}
+                                            @if ($d->masuk == null)
+                                                $d->masuk == \Carbon\Carbon::parse($d->tanggal."
+                                                ".$time_in)
+                                            @endif
                                             @if($d->masuk != $d->keluar)
-
-                                            {{ $d->masuk }}
-
                                             @php $totalMasuk++; @endphp
                                             {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
                                             @elseif($d->masuk <= \Carbon\Carbon::parse($d->tanggal."
                                                 ".$time_out))
-
-
-                                            <u>{{ $d->masuk }}</u>
-
 
                                                 {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
                                                 @php $totalMasuk++; @endphp

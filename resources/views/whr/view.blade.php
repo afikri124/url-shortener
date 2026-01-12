@@ -146,10 +146,10 @@
                                             @if($d->masuk != $d->keluar)
                                             @php $totalMasuk++; @endphp
                                             {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
-                                            <u>{{ $d->masuk." <= ".\Carbon\Carbon::parse($d->tanggal."
-                                                ".$time_out) }}</u>
                                             @elseif($d->masuk <= \Carbon\Carbon::parse($d->tanggal."
                                                 ".$time_out))
+                                                <u>{{ $d->masuk." <= ".\Carbon\Carbon::parse($d->tanggal."
+                                                ".$time_out) }}</u>
                                                 {{ \Carbon\Carbon::parse($d->masuk)->translatedFormat("H:i")}}
                                                 @php $totalMasuk++; @endphp
                                                 @else

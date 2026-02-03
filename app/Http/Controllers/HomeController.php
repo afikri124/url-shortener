@@ -166,7 +166,7 @@ class HomeController extends Controller
                                             User::where('id',$user->id)->update([
                                                 'username' => $username."x", //jika bentrok username diganti
                                             ]);
-                                            User::where('email',$data->attributes->emai)->update([
+                                            User::where('email',$data->attributes->email)->update([
                                                 'username' => $username,
                                             ]);
                                         } else { //update email
